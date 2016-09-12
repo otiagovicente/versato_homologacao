@@ -1,0 +1,211 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Requests\ProductRequest;
+
+use App\Product;
+use App\Brand;
+use App\Grid;
+use App\Line;
+use App\Reference;
+use App\Material;
+use App\Color;
+use App\Tag;
+
+class ProductsController extends Controller
+{
+
+    private $imagesPath;
+    private $brand_id;
+
+    public function __construct(){
+
+        $this->middleware(function ($request, $next) {
+             $this->imagesPath = "images/products";
+             $this->brand_id = session()->get('brand')->id;
+
+            return $next($request);
+        });
+
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $products = Product::
+            with('brand')
+            ->with('line')
+            ->with('reference')
+            ->with('material')
+            ->with('color')
+            ->with('grids')
+            ->with('tags')
+            ->where('brand_id', $this->brand_id)
+            ->paginate(10);
+            //->get();
+
+        //return $products;
+
+        return view('products.index', compact('products'));
+
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        $grids  = Grid::where('brand_id', $this->brand_id)->get();
+        $tags = Tag::where('brand_id', $this->brand_id)->get();
+        return view('products.create',[
+            'grids' =>$grids,
+            'tags' => $tags
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(ProductRequest $request)
+    {
+
+        //instancia um novo Produto com os dados do request
+        $product = new Product($request->all());
+        $product->brand_id = $this->brand_id;
+        $product->save();
+
+        //algo muda o código do produto
+
+
+        $tags = $request->tags;
+        foreach ($tags as $tag){
+            $product->tags()->attach($tag);
+        }
+
+        foreach ($request->grids as $grid) {
+            $product->grids()->attach($grid);
+        }
+
+        return response($product);
+
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Product $product)
+    {
+        return view('products.show', compact('product'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Product $product)
+    {
+        $grids  = Grid::where('brand_id', $this->brand_id)->get();
+        $tags = Tag::where('brand_id', $this->brand_id)->get();
+        return view('products.edit',[
+            'grids' =>$grids,
+            'tags' => $tags,
+            'product'=> $product
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(ProductRequest $request, Product $product)
+    {
+
+
+        //instancia um novo Produto com os dados do request
+        $product->fill($request->all());
+        $product->brand_id = (int) session()->get('brand')->id;
+        $product->save();
+
+        $product->tags()->sync($request->tags);
+        $product->grids()->sync($request->grids);
+
+        return response($product);
+
+
+
+
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Product $product)
+    {
+        //
+    }
+
+    public function addPhoto(Request $request){
+        $this->validate($request,[
+            'photo' => 'required|mimes:jpg,png,jpeg'
+        ]);
+
+        $file = $request->file('photo');
+
+        $name= time().'.jpg';
+
+        $file->move($this->imagesPath, $name);
+
+        //atualiza o path da imagem
+        $image = "/".$this->imagesPath."/".$name;
+
+        return $image;
+    }
+
+
+    public function api_list(){
+
+        $products = Product::
+                    with('brand')
+                    ->with('line')
+                    ->with('reference')
+                    ->with('material')
+                    ->with('color')
+                    ->with('gridsAndSizes')
+                    ->with('tags')
+                    ->groupBy('brand_id')
+                    ->get();
+
+        return $products;
+
+
+    }
+
+}
