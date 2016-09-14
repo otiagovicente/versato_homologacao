@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Size;
+use App\Size;
 
 class SizesTableSeeder extends Seeder
 {

@@ -121,4 +121,9 @@ class UsersController extends Controller
 
     }
 
+    public function passport(){
+
+        return view('users.passport');
+    }
+
 }

@@ -2,14 +2,14 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
-use Versato\Product;
-use Versato\Brand;
-use Versato\Grid;
-use Versato\Line;
-use Versato\Reference;
-use Versato\Material;
-use Versato\Color;
-use Versato\Tag;
+use App\Product;
+use App\Brand;
+use App\Grid;
+use App\Line;
+use App\Reference;
+use App\Material;
+use App\Color;
+use App\Tag;
 
 class ProductsTableSeeder extends Seeder
 {

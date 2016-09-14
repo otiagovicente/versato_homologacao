@@ -323,7 +323,7 @@
                                     <li class="nav-item">
                                         <a href="/users/create" class="nav-link nav-toggle">
                                             <i class="icon-user-follow"></i>
-                                            <span class="title">Criar Novo</span>
+                                            <span class="title">Crear Novo</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
@@ -334,7 +334,13 @@
                                             <span class="selected"></span>
                                         </a>
                                     </li>
-                                 
+                                    <li class="nav-item">
+                                        <a href="/users/passport" class="nav-link nav-toggle">
+                                            <i class="icon-user"></i>
+                                            <span class="title">Passport API Keys</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
                               
                      
                                 </ul>

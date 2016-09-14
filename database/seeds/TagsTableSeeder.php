@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Tag;
+use App\Tag;
 
 class TagsTableSeeder extends Seeder
 {

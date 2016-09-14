@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Reference;
-use Versato\Brand;
+use App\Reference;
+use App\Brand;
 
 
 class ReferencesTableSeeder extends Seeder

@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Color;
-use Versato\Brand;
+use App\Color;
+use App\Brand;
 
 class ColorsTableSeeder extends Seeder
 {

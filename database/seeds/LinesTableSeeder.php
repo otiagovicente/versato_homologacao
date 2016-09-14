@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Line;
-use Versato\Brand;
+use App\Line;
+use App\Brand;
 
 class LinesTableSeeder extends Seeder
 {

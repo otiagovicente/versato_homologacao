@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Brand;
+use App\Brand;
 
 class BrandsTableSeeder extends Seeder
 {
@@ -28,7 +28,7 @@ class BrandsTableSeeder extends Seeder
                 'name' => 'Mambo',
                 'description' => 'Agência brasileira de Comportamento e Conceito',
                 'image' => '/images/brands/mambo.png'
-            ],
+            ]
 
         ];
 
@@ -39,4 +39,3 @@ class BrandsTableSeeder extends Seeder
 
     }
 }
-;

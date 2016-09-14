@@ -53,7 +53,7 @@ class CreateProductsTable extends Migration
             $table->string('code')->index();
             $table->string('description');
             $table->string('color');
-            $table->string('pantone');
+            $table->string('pantone')->nullable();
             $table->integer('brand_id');
             $table->timestamps();
             $table->softDeletes();

@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Material;
-use Versato\Brand;
+use App\Material;
+use App\Brand;
 
 class MaterialsTableSeeder extends Seeder
 {

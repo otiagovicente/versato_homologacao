@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::get('/profile','UsersController@profile');
+    Route::get('/users/passport','UsersController@passport');
     Route::post('/users/photo', 'UsersController@addPhoto');
     Route::post('/users/changepassword', 'UsersController@changePassword');
     Route::resource('users','UsersController',['parameters' => 'singular']);

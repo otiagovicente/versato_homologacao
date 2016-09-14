@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Versato\Size;
-use Versato\Grid;
+use App\Size;
+use App\Grid;
 
 class GridsTableSeeder extends Seeder
 {
@@ -39,7 +39,7 @@ class GridsTableSeeder extends Seeder
 
        	];
 
-       	$sizes = Versato\Size::all();
+       	$sizes = Size::all();
 
        	foreach ($grids as $key => $record) {
 
