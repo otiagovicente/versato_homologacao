@@ -1,6 +1,6 @@
-
 window._ = require('lodash');
-
+window.moment = require('moment');
+require('moment/locale/ar');
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -9,6 +9,13 @@ window._ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
+require('bootstrap-switch');
+window.cookie = require('js-cookie');
+require('jquery-slimscroll');
+
+window.toastr = require('toastr');
+
+window.bootbox = require('bootbox');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces

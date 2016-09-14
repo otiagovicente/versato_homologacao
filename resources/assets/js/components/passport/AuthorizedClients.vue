@@ -57,6 +57,7 @@
         /*
          * The component's data.
          */
+
         data() {
             return {
                 tokens: []

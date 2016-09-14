@@ -94,5 +94,23 @@ class TagsController extends Controller
 
     }
 
+    public function api_selectList($brand_id){
+
+        $tags = Tag::where('brand_id', $brand_id)->get();
+
+        $selectList = [];
+        $i = 0;
+        foreach($tags as $tag){
+
+            $selectItem['value'] = $tag->id;
+            $selectItem['option'] = $tag->description;
+            $selectList['options'][$i] = $selectItem;
+            $i++;
+        }
+
+        return $selectList;
+
+    }
+
 
 }
