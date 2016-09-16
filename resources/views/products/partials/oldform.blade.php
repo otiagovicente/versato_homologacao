@@ -376,30 +376,6 @@
                 },
                 ready: function(){
 
-                    {{--data.grids_select = {--}}
-                        {{--options: [--}}
-                                {{--@foreach($grids as $grid)--}}
-                            {{--{--}}
-                                {{--value: {{$grid->id}},--}}
-                                {{--label:'{{$grid->description}}'--}}
-                            {{--},--}}
-                            {{--@endforeach--}}
-
-                        {{--]--}}
-                    {{--};--}}
-
-                    {{--data.tags_select =  {--}}
-                        {{--options: [--}}
-                                {{--@foreach($tags as $tag)--}}
-                            {{--{--}}
-                                {{--value: {{$tag->id}},--}}
-                                {{--label:'{{$tag->description}}'--}}
-                            {{--},--}}
-                            {{--@endforeach--}}
-
-                        {{--]--}}
-                    {{--};--}}
-
 
 
                     //initializes algolia

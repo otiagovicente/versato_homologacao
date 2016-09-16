@@ -114,7 +114,7 @@ class GridsController extends Controller
 
             $selectItem['value'] = $grid->id;
             $selectItem['option'] = $grid->description;
-            $selectList['options'][$i] = $selectItem;
+            $selectList[$i] = $selectItem;
             $i++;
         }
 

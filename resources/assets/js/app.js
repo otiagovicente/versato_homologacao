@@ -16,8 +16,8 @@ require('./bootstrap');
 Vue.component('example', require('./components/Example.vue'));
 
 Vue.component(
-    'create-products',
-    require('./components/products/CreateProducts.vue')
+    'product-form',
+    require('./components/products/ProductForm.vue')
 );
 
 Vue.component(

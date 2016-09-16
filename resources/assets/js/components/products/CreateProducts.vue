@@ -8,7 +8,7 @@
 
 </style>
 <template>
-    <div id="app" class="content-fluid">
+    <div class="content">
         <div class="portlet light">
 
             <div class="portlet-title">
@@ -37,10 +37,7 @@
                             <small>Imagem</small>
                             <div id="photo-input" class="form-group">
                                 <div class="">
-
                                     <img id="photo-image"  v-bind:src="product.photo" class="figure-img img-fluid img-rounded" alt="sem imagem do produto." style="width:200px;">
-                                    <input id="photo-path" type="hidden" name="photo" value="" v-model="product.photo">
-
                                 </div>
                             </div>
                             <div class="form-group">
@@ -85,8 +82,8 @@
                             </div>
                             <div class="form-group form-line-input" id="launch-input">
                                 <small>Lançamento</small><br>
-                                <datepicker :value.sync="product.launch" format="dd/MM/yyyy" width="280px">
-                                </datepicker>
+                                <!--<datepicker :value.sync="product.launch" format="dd/MM/yyyy" width="280px">-->
+                                <!--</datepicker>-->
                             </div>
                             <div class="form-group form-line-input" id="published-input">
                                 <small>Publicado?</small><br>
@@ -106,11 +103,11 @@
                             </div>
                             <div class="form-group form-line-input">
                                 <small>Tareas</small>
-                                <v-select url="/api/tags/selectlist/1" :value.sync="product.grids" placeholder="Elije as grades"  multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>
+                                <!--<v-select url="/api/tags/selectlist/1" :value.sync="product.grids" placeholder="Elije as grades"  multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>-->
                             </div>
                             <div class="form-group form-line-input">
                                 <small>Tags</small>
-                                <v-select url="/api/tags/selectlist/1" :value.sync="product.tags"  placeholder="Elije as tags" multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>
+                                <!--<v-select url="/api/tags/selectlist/1" :value.sync="product.tags"  placeholder="Elije as tags" multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>-->
 
                             </div>
                         </div>
@@ -141,6 +138,7 @@
     import VueTypeahead from 'vue-typeahead'
     import AlgoliaSearch from 'algoliasearch'
     import moment from 'moment'
+    import FileUpload from 'vue-upload-component'
 
     export default{
         extends: VueTypeahead,

@@ -104,7 +104,7 @@ class TagsController extends Controller
 
             $selectItem['value'] = $tag->id;
             $selectItem['option'] = $tag->description;
-            $selectList['options'][$i] = $selectItem;
+            $selectList[$i] = $selectItem;
             $i++;
         }
 
