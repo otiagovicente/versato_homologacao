@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all);
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -5765,5 +5766,9 @@ button.close {
 @media print {
   .hidden-print {
     display: none !important; } }
+
+.sidebar-logo {
+  width: 220px;
+  height: auto; }
 
 /*# sourceMappingURL=app.css.map */

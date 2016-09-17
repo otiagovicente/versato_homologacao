@@ -19,7 +19,6 @@ Vue.component(
     'product-form',
     require('./components/products/ProductForm.vue')
 );
-
 Vue.component(
     'passport-clients',
     require('./components/passport/Clients.vue')

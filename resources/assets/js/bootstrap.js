@@ -1,6 +1,7 @@
 window._ = require('lodash');
+
 window.moment = require('moment');
-require('moment/locale/ar');
+require('moment/locale/es');
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -13,6 +14,7 @@ require('bootstrap-switch');
 window.cookie = require('js-cookie');
 require('jquery-slimscroll');
 
+// window.typeahead = require('typeahead');
 window.toastr = require('toastr');
 
 window.bootbox = require('bootbox');
