@@ -102,7 +102,7 @@
                     <ul class="nav child_menu">
                         <li><a href="/profile">Perfil</a></li>
                         <li><a href="/users/create">Criar Novo</a></li>
-                         <li><a href="/users/1/edit">Editar Informações</a></li>
+                         <li><a href="/users/{{Auth::user()['id']}}/edit">Editar Informações</a></li>
                     </ul>
                 </ul>
                 <ul class="nav side-menu">
