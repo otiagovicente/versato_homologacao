@@ -6,14 +6,23 @@
     <meta content="" name="description" />
     <meta content="" name="author" />
 @yield('metatags')
-
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link rel="stylesheet" href="/fonts/css/font-awesome.min.css">
-    <link href="/css/app.css" rel="stylesheet">
-    <link href="/css/custom.css" rel="stylesheet">
-    <link href="/css/all.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="/dashboard/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="/dashboard/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/dashboard/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/dashboard/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+    <link href="/dashboard/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
-
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href="/dashboard/global/css/components-rounded.min.css" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="/dashboard/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href="/dashboard/layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
+    <link href="/dashboard/layouts/layout/css/themes/blue.min.css" rel="stylesheet" type="text/css" id="style_color" />
+    <link href="/dashboard/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
+    <!-- END THEME LAYOUT STYLES -->
     <!-- BEGIN PAGE STYLES -->
 @yield('styles')
 <!-- END PAGE STYLES -->
@@ -21,7 +30,3 @@
 
     @yield('scripts.header')
 </head>
-
-
-
-
