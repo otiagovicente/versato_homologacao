@@ -2,6 +2,7 @@
 <script src="/dashboard/global/plugins/respond.min.js"></script>
 <script src="/dashboard/global/plugins/excanvas.min.js"></script> 
 <![endif]-->
+
         <script>
                 window.Laravel = <?php echo json_encode([
                         'csrfToken' => csrf_token(),

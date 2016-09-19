@@ -3,6 +3,7 @@
 
 @include('general.pageheader',[
     'section' => 'Productos',
+    'sectionUrl' => '/products',
     'pageTitle' => 'Crear Producto',
     'url' => '/products/create',
     'actions' => [
