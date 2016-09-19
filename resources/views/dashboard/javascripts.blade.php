@@ -13,7 +13,7 @@
         </script>
         <!-- BEGIN CORE PLUGINS -->
         <script src="/js/app.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+        {{--<script src="/dashboard/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>--}}
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="/dashboard/global/scripts/app.min.js" type="text/javascript"></script>

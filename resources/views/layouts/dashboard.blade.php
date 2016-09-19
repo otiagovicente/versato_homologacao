@@ -10,7 +10,6 @@
 
         @include('dashboard.header')
         @include('dashboard.sidebar')
-
         @include('dashboard.quicksidebar')
         @include('dashboard.content')
         @include('dashboard.footer')
