@@ -1,4 +1,4 @@
-                <!-- BEGIN SIDEBAR -->
+<!-- BEGIN SIDEBAR -->
                 <div class="page-sidebar-wrapper">
                     <!-- BEGIN SIDEBAR -->
                     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->

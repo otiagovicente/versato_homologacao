@@ -16,6 +16,10 @@ require('./bootstrap');
 Vue.component('example', require('./components/Example.vue'));
 
 Vue.component(
+    'product-form',
+    require('./components/products/ProductForm.vue')
+);
+Vue.component(
     'passport-clients',
     require('./components/passport/Clients.vue')
 );

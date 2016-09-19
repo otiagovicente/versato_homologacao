@@ -9,6 +9,15 @@ use App\Grid;
 
 class GridsController extends Controller
 {
+
+    /*
+     * Executa toda vez que a classe é instanciada/chamada
+     */
+     public function __construct(){
+
+     }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -95,9 +104,9 @@ class GridsController extends Controller
 
     }
 
-    public function api_selectList(){
+    public function api_selectList($brand_id){
 
-        $grids = Grid::where('brand_id', session()->get('brand')->id)->get();
+        $grids = Grid::where('brand_id', $brand_id)->get();
 
         $selectList = [];
         $i = 0;
@@ -105,7 +114,7 @@ class GridsController extends Controller
 
             $selectItem['value'] = $grid->id;
             $selectItem['option'] = $grid->description;
-            $selectList['options'][$i] = $selectItem;
+            $selectList[$i] = $selectItem;
             $i++;
         }
 

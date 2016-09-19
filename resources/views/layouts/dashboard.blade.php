@@ -6,9 +6,11 @@
 
 	@include('dashboard.head')
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white page-sidebar-opened">
+
+
         @include('dashboard.header')
         @include('dashboard.sidebar')
-        {{--@include('dashboard.quicksidebar')--}}
+        @include('dashboard.quicksidebar')
         @include('dashboard.content')
         @include('dashboard.footer')
         @include('dashboard.javascripts')

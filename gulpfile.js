@@ -15,5 +15,12 @@ require('laravel-elixir-vue');
 
 elixir(mix => {
     mix.sass('app.scss')
-       .webpack('app.js');
+        .sass('custom.scss')
+        .styles(['../../../node_modules/animate.css/animate.min.css',
+            '../../../node_modules/google-code-prettify/bin/prettify.min.css'
+        ])
+        .webpack('app.js')
+        .webpack('custom.js')
+        .webpack('helper.js');
+
 });
