@@ -1,23 +1,22 @@
 @extends('layouts.dashboard')
 @section('content')
-@include('products.partials.header',[
-    'pageTitle' => 'Criar Produto',
+
+@include('general.pageheader',[
+    'section' => 'Productos',
+    'pageTitle' => 'Crear Producto',
     'url' => '/products/create',
-    'actions' => []
+    'actions' => [
+        'Mostrar Todos' => '/products',
+        'Crear Producto' => '/products/create'
+    ]
 ])
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-10">
-            
-            @include('products.partials.form', [
-            	'action' => 'create', 
-            	'sendButtonText' => 'Criar Produto',
+<div class="x_content">
+    @include('products.partials.form', [
+        'action' => 'create',
+        'sendButtonText' => 'Criar Produto',
 
-            ])    
-
-        </div>
-    </div>
+    ])
 </div>
 
 @stop

@@ -15,7 +15,7 @@
         <script src="/js/app.js" type="text/javascript"></script>
         <script src="/js/custom.js" type="text/javascript"></script>
         <script src="/js/helper.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+        {{--<script src="/dashboard/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>--}}
         <!-- END CORE PLUGINS -->
 
         @yield('scripts')
