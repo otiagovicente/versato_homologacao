@@ -22,7 +22,8 @@
     "lodash": "^4.14.0",
     "simple-line-icons": "^2.3.2",
     "vue": "^1.0.26",
-    "vue-resource": "^0.9.3"
+    "vue-resource": "^0.9.3",
+    "vue-select2": "^0.2.6"
   },
   "dependencies": {
     "algoliasearch": "^3.18.1",

@@ -17,6 +17,8 @@ require('jquery-slimscroll');
 // window.typeahead = require('typeahead');
 window.toastr = require('toastr');
 
+window.algoliasearch = require('algoliasearch/dist/algoliasearch.js');
+
 window.bootbox = require('bootbox');
 
 /**

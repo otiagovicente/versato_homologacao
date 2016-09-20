@@ -108,17 +108,14 @@ class GridsController extends Controller
 
         $grids = Grid::where('brand_id', $brand_id)->get();
 
-        $selectList = [];
-        $i = 0;
         foreach($grids as $grid){
 
             $selectItem['value'] = $grid->id;
             $selectItem['option'] = $grid->description;
-            $selectList[$i] = $selectItem;
-            $i++;
+            $selectList[] = $selectItem;
         }
 
-        return $selectList;
+        return response()->json($selectList);
 
     }
 

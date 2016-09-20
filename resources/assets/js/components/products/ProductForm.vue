@@ -59,38 +59,40 @@
                         <div class="col-md-4">
 
 
-                            <div class="form-group form-line-input" id="line-input">
+                            <div class="form-group form-line-input typeahead" id="line-input">
                                 <small>Linha</small>
-                                <input id="line" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
-                                       v-model="linesQuery"
-                                       v-on:keyup.enter="searchLines"
-                                       debounce="500">
+                                <input id="line" data-provide="typeahead" class="typeahead form-control input-sm" type="text" />
+                                       <!--v-model="linesQuery"-->
+                                       <!--v-on:keyup.enter="searchLines"-->
+                                       <!--debounce="500">-->
 
                             </div>
-                            <div class="form-group form-line-input " id="reference-input">
+                            <div class="form-group form-line-input typeahead" id="reference-input">
 
                                 <small>Referência</small>
 
-                                <input id="reference" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
-                                       v-model="referencesQuery"
-                                       v-on:keyup.enter="searchReferences"
-                                       debounce="500">
+                                <input id="reference" data-provide="typeahead" class="typeahead form-control input-sm" type="text"/>
+                                       <!--v-model="referencesQuery"-->
+                                       <!--v-on:keyup.enter="searchReferences"-->
+                                       <!--debounce="500">-->
 
                             </div>
-                            <div class="form-group form-line-input " id="material-input">
+                            <div class="form-group form-line-input typeahead" id="material-input">
                                 <small>Material</small>
-                                <input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
-                                       v-model="materialsQuery"
-                                       v-on:keyup.enter="searchMaterials"
-                                       debounce="500">
+                                <input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text">
+                                <!--<input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text"-->
+                                       <!--v-model="materialsQuery"-->
+                                       <!--v-on:keyup.enter="searchMaterials"-->
+                                       <!--debounce="500">-->
 
                             </div>
-                            <div class="form-group form-line-input" id="color-input">
+                            <div class="form-group form-line-input typeahead" id="color-input">
                                 <small>Cor</small>
-                                <input id="color" class="typeahead form-control input-sm" type="text"
-                                       v-model="colorsQuery"
-                                       v-on:keyup.enter="searchColors"
-                                       debounce="500">
+                                <input id="color" class="typeahead form-control input-sm" type="text" />
+                                <!--<input id="color" class="typeahead form-control input-sm" type="text"-->
+                                       <!--v-model="colorsQuery"-->
+                                       <!--v-on:keyup.enter="searchColors"-->
+                                       <!--debounce="500">-->
 
                             </div>
                             <div class="form-group form-line-input" id="launch-input">
@@ -127,16 +129,18 @@
                                        class="form-control"
                                        id="price-input">
                             </div>
-                            <!--<div class="form-group form-line-input">-->
-                                <!--<small>Tareas</small>-->
-                                <!--<v-select v-bind:options.sync="grids_select.options" :value.sync="product.gri-->
-                                <!--ds" placeholder="Elije as grades"  multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>-->
-                            <!--</div>-->
-                            <!--<div class="form-group form-line-input">-->
-                                <!--<small>Tags</small>-->
-                                <!--<v-select v-bind:options.sync="tags_select.options" :value.sync="product.tags"  placeholder="Elije as tags" multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>-->
 
-                            <!--</div>-->
+                            <div class="form-group form-line-input">
+                                <small>Tareas</small>
+
+
+                            </div>
+
+                            <div class="form-group form-line-input">
+                                <small>Tags</small>
+                                <v-select v-bind:options.sync="tags_select" :value.sync="product.tags"  placeholder="Elije as tags" multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>
+
+                            </div>
 
                         </div>
 
@@ -160,6 +164,7 @@ import algoliasearch from 'algoliasearch'
 import Dropzone from 'dropzone'
 import toastr from 'toastr'
 import bootbox from 'bootbox'
+//import $ from 'jquery'
 import typeahead from 'bootstrap-3-typeahead'
 
 export default{
@@ -189,34 +194,35 @@ export default{
                 published: false
             },
 
+            client: '',
             lines: [],
             linesQuery: '',
+            linesIndex: '',
             references: [],
             referencesQuery:'',
+            referencesIndex: '',
             materials: [],
             materialsQuery: '',
+            materialsIndex: '',
             colors: [],
             colorsQuery: '',
-            grids_select: [
-                options => []
-            ],
-            tags_select: [
-                options => []
-            ]
+            colorsIndex: '',
+            tags_select: new Array(),
+            grids_select: new Array()
+
+
 
 
         }
     },
     ready(){
-
-
-        this.product.launch = moment().format('DD/MM/YYYY');
-        this.configureDropbox(this.product);
-        this.configureAlgolia();
-        this.configureTypeahead();
+        window._this = this;
         this.getTags();
         this.getGrids();
-
+        this.product.launch = moment().format('DD/MM/YYYY');
+        this.configureDropbox(this.product);
+       // this.configureAlgolia();
+//        configureTypeahead();
 
 
 
@@ -228,14 +234,17 @@ export default{
         getGrids: function(){
             this.$http.get('/api/grids/selectlist/1')
                     .then(response => {
-                this.grids_select = response.data;
-                console.log(response);
-            });
+                        this.grids_select = response.json();
+                    });
         },
         getTags: function(){
             this.$http.get('/api/tags/selectlist/1')
                     .then(response => {
-                this.tags_select = response.data;
+                $.each( response.json(), function( key, obj ) {
+                    _this.tags_select[key] = [value => obj.value, option => obj.option];
+                });
+                console.log(_this.tags_select);
+
             });
         },
         configureDropbox: function(callback){
@@ -289,12 +298,12 @@ export default{
 
         configureAlgolia: function(){
             //initializes algolia
-            this.client = algoliasearch('Y9WBZIWMX0', '463bcdaf034272d4a26167c5f82ba45e');
+            this.client = window.algoliasearch('Y9WBZIWMX0', '463bcdaf034272d4a26167c5f82ba45e');
             this.linesIndex = this.client.initIndex('lines');
             this.referencesIndex = this.client.initIndex('references');
             this.materialsIndex = this.client.initIndex('materials');
             this.colorsIndex = this.client.initIndex('colors');
-        },
+        }.bind(this),
         configureTypeahead: function(){
 
                 //Lines Typeahead
@@ -378,37 +387,37 @@ export default{
                         this.product.color_code = suggestion.code;
                     }).bind(this);
         },
-        searchLines: function(){
-            this.linesIndex.search(this.linesQuery,{
-                filters: 'brand_id='+this.product.brand_id
-            }, function(error, results){
-                this.lines = results.hits;
-            }.bind(this));
-        },
-        searchReferences: function(){
-
-            this.referencesIndex.search(this.referencesQuery,{
-                filters: 'brand_id='+this.product.brand_id
-            }, function(error, results){
-                this.references = results.hits;
-            }.bind(this));
-        },
-        searchMaterials: function(){
-
-            this.materialsIndex.search(this.materialsQuery, {
-                filters: 'brand_id='+this.product.brand_id
-            },function(error, results){
-                this.materials = results.hits;
-            }.bind(this));
-        },
-        searchColors: function(){
-
-            this.colorsIndex.search(this.colorsQuery, {
-                filters: 'brand_id='+this.product.brand_id
-            },function(error, results){
-                this.colors = results.hits;
-            }.bind(this));
-        }
+//        searchLines: function(){
+//            this.linesIndex.search(this.linesQuery,{
+//                filters: 'brand_id='+this.product.brand_id
+//            }, function(error, results){
+//                this.lines = results.hits;
+//            }.bind(this));
+//        },
+//        searchReferences: function(){
+//
+//            this.referencesIndex.search(this.referencesQuery,{
+//                filters: 'brand_id='+this.product.brand_id
+//            }, function(error, results){
+//                this.references = results.hits;
+//            }.bind(this));
+//        },
+//        searchMaterials: function(){
+//
+//            this.materialsIndex.search(this.materialsQuery, {
+//                filters: 'brand_id='+this.product.brand_id
+//            },function(error, results){
+//                this.materials = results.hits;
+//            }.bind(this));
+//        },
+//        searchColors: function(){
+//
+//            this.colorsIndex.search(this.colorsQuery, {
+//                filters: 'brand_id='+this.product.brand_id
+//            },function(error, results){
+//                this.colors = results.hits;
+//            }.bind(this));
+//        }
 
     },
     filters: {
