@@ -321,65 +321,8 @@ export default{
 
                     }).bind(this);
 
-                //References Typeahead
-                $('#reference-input .typeahead')
-                    .typeahead({hint: false},{
-                        source: _this.referencesIndex.ttAdapter({
-                            filters: 'brand_id='+_this.product.brand_id
-                        }),
-                        displayKey: 'description',
-                        templates:{
-                            suggestion: function(hit){
-                                return '<div><strong>' + hit._highlightResult.description.value + '</strong> <small>'
-                                        + hit.code + '</small></div>';
-                            }
-                        }
-                    })
-                    .on('typeahead:select',function(e, suggestion){
-                        _this.referencesQuery = suggestion.description;
-                        _this.product.reference_id = suggestion.id;
-                        _this.product.reference_code = suggestion.code;
-                    }).bind(this);
-
-                //Materials Typeahead
-                $('#material-input .typeahead')
-                    .typeahead({hint: false},{
-                        source: _this.materialsIndex.ttAdapter({
-                            filters: 'brand_id='+_this.product.brand_id
-                        }),
-                        displayKey: 'description',
-                        templates:{
-                            suggestion: function(hit){
-                                return '<div><strong>' + hit._highlightResult.description.value + '</strong> <small>'
-                                        + hit.code + '</small></div>';
-                            }
-                        }
-                    })
-                    .on('typeahead:select',function(e, suggestion){
-                        _this.materialsQuery = suggestion.description;
-                        _this.product.material_id = suggestion.id;
-                        _this.product.material_code = suggestion.code;
-                    }).bind(this);
 
 
-                //References Typeahead
-                $('#color-input .typeahead')
-                    .typeahead({hint: false},{
-                        source: _this.colorsIndex.ttAdapter({
-                            filters: 'brand_id='+_this.product.brand_id
-                        }),
-                        displayKey: 'description',
-                        templates:{
-                            suggestion: function(hit){
-                                return '<div><div style="display:inline-block;height:20px; width:20px; margin:5px; background-color:'+hit.color+';"></div><strong>'+hit.code+'</strong> – '+hit.description+'</div>';
-                            }
-                        }
-                    })
-                    .on('typeahead:select',function(e, suggestion){
-                        _this.colorsQuery = suggestion.description;
-                        _this.product.color_id = suggestion.id;
-                        _this.product.color_code = suggestion.code;
-                    }).bind(this);
         },
         searchLines: function(){
             _this.linesIndex.search(_this.linesQuery,{
