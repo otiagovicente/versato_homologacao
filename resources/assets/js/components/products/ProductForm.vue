@@ -61,38 +61,36 @@
 
                             <div class="form-group form-line-input typeahead" id="line-input">
                                 <small>Linha</small>
-                                <input id="line" data-provide="typeahead" class="typeahead form-control input-sm" type="text" />
-                                       <!--v-model="linesQuery"-->
-                                       <!--v-on:keyup.enter="searchLines"-->
-                                       <!--debounce="500">-->
+                                <input id="line" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
+                                       v-model="linesQuery"
+                                       v-on:keyup.enter="searchLines"
+                                       debounce="500">
 
                             </div>
                             <div class="form-group form-line-input typeahead" id="reference-input">
 
                                 <small>Referência</small>
 
-                                <input id="reference" data-provide="typeahead" class="typeahead form-control input-sm" type="text"/>
-                                       <!--v-model="referencesQuery"-->
-                                       <!--v-on:keyup.enter="searchReferences"-->
-                                       <!--debounce="500">-->
+                                <input id="reference" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
+                                       v-model="referencesQuery"
+                                       v-on:keyup.enter="searchReferences"
+                                       debounce="500">
 
                             </div>
                             <div class="form-group form-line-input typeahead" id="material-input">
                                 <small>Material</small>
-                                <input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text">
-                                <!--<input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text"-->
-                                       <!--v-model="materialsQuery"-->
-                                       <!--v-on:keyup.enter="searchMaterials"-->
-                                       <!--debounce="500">-->
+                                <input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
+                                       v-model="materialsQuery"
+                                       v-on:keyup.enter="searchMaterials"
+                                       debounce="500">
 
                             </div>
                             <div class="form-group form-line-input typeahead" id="color-input">
                                 <small>Cor</small>
-                                <input id="color" class="typeahead form-control input-sm" type="text" />
-                                <!--<input id="color" class="typeahead form-control input-sm" type="text"-->
-                                       <!--v-model="colorsQuery"-->
-                                       <!--v-on:keyup.enter="searchColors"-->
-                                       <!--debounce="500">-->
+                                <input id="color" class="typeahead form-control input-sm" type="text"
+                                       v-model="colorsQuery"
+                                       v-on:keyup.enter="searchColors"
+                                       debounce="500">
 
                             </div>
                             <div class="form-group form-line-input" id="launch-input">
@@ -132,13 +130,14 @@
 
                             <div class="form-group form-line-input">
                                 <small>Tareas</small>
+                                <v-select v-bind:options.sync="grids_select" :value.sync="product.grids"  placeholder="Elije las tareas" multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>
 
 
                             </div>
 
                             <div class="form-group form-line-input">
                                 <small>Tags</small>
-                                <v-select v-bind:options.sync="tags_select" :value.sync="product.tags"  placeholder="Elije as tags" multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>
+                                <v-select v-bind:options.sync="tags_select" :value.sync="product.tags"  placeholder="Elije las tags" multiple class="form-control" id="tags-input" name="tags[]" search justified required close-on-select></v-select>
 
                             </div>
 
@@ -164,7 +163,6 @@ import algoliasearch from 'algoliasearch'
 import Dropzone from 'dropzone'
 import toastr from 'toastr'
 import bootbox from 'bootbox'
-//import $ from 'jquery'
 import typeahead from 'bootstrap-3-typeahead'
 
 export default{
@@ -221,8 +219,8 @@ export default{
         this.getGrids();
         this.product.launch = moment().format('DD/MM/YYYY');
         this.configureDropbox(this.product);
-       // this.configureAlgolia();
-//        configureTypeahead();
+        this.configureAlgolia();
+        this.configureTypeahead();
 
 
 
@@ -233,18 +231,14 @@ export default{
         },
         getGrids: function(){
             this.$http.get('/api/grids/selectlist/1')
-                    .then(response => {
-                        this.grids_select = response.json();
-                    });
+            .then(response => {
+                _this.grids_select = response.json();
+            });
         },
         getTags: function(){
             this.$http.get('/api/tags/selectlist/1')
-                    .then(response => {
-                $.each( response.json(), function( key, obj ) {
-                    _this.tags_select[key] = [value => obj.value, option => obj.option];
-                });
-                console.log(_this.tags_select);
-
+            .then(response => {
+                _this.tags_select = response.json();
             });
         },
         configureDropbox: function(callback){
@@ -298,19 +292,19 @@ export default{
 
         configureAlgolia: function(){
             //initializes algolia
-            this.client = window.algoliasearch('Y9WBZIWMX0', '463bcdaf034272d4a26167c5f82ba45e');
-            this.linesIndex = this.client.initIndex('lines');
-            this.referencesIndex = this.client.initIndex('references');
-            this.materialsIndex = this.client.initIndex('materials');
-            this.colorsIndex = this.client.initIndex('colors');
+            _this.client = window.algoliasearch('Y9WBZIWMX0', '463bcdaf034272d4a26167c5f82ba45e');
+            _this.linesIndex = _this.client.initIndex('lines');
+            _this.referencesIndex = _this.client.initIndex('references');
+            _this.materialsIndex = _this.client.initIndex('materials');
+            _this.colorsIndex = _this.client.initIndex('colors');
         }.bind(this),
         configureTypeahead: function(){
 
                 //Lines Typeahead
                 $('#line-input .typeahead')
                     .typeahead({hint: false},{
-                        source: this.linesIndex.ttAdapter({
-                            filters: 'brand_id='+this.product.brand_id
+                        source: _this.linesIndex.ttAdapter({
+                            filters: 'brand_id='+_this.product.brand_id
                         }),
                         displayKey: 'description',
                         templates:{
@@ -321,17 +315,17 @@ export default{
                         }
                     })
                     .on('typeahead:select',function(e, suggestion){
-                        this.linesQuery = suggestion.description;
-                        this.product.line_id = suggestion.id;
-                        this.product.line_code = suggestion.code;
+                        _this.linesQuery = suggestion.description;
+                        _this.product.line_id = suggestion.id;
+                        _this.product.line_code = suggestion.code;
 
                     }).bind(this);
 
                 //References Typeahead
                 $('#reference-input .typeahead')
                     .typeahead({hint: false},{
-                        source: this.referencesIndex.ttAdapter({
-                            filters: 'brand_id='+this.product.brand_id
+                        source: _this.referencesIndex.ttAdapter({
+                            filters: 'brand_id='+_this.product.brand_id
                         }),
                         displayKey: 'description',
                         templates:{
@@ -342,16 +336,16 @@ export default{
                         }
                     })
                     .on('typeahead:select',function(e, suggestion){
-                        this.referencesQuery = suggestion.description;
-                        this.product.reference_id = suggestion.id;
-                        this.product.reference_code = suggestion.code;
+                        _this.referencesQuery = suggestion.description;
+                        _this.product.reference_id = suggestion.id;
+                        _this.product.reference_code = suggestion.code;
                     }).bind(this);
 
                 //Materials Typeahead
                 $('#material-input .typeahead')
                     .typeahead({hint: false},{
-                        source: this.materialsIndex.ttAdapter({
-                            filters: 'brand_id='+this.product.brand_id
+                        source: _this.materialsIndex.ttAdapter({
+                            filters: 'brand_id='+_this.product.brand_id
                         }),
                         displayKey: 'description',
                         templates:{
@@ -362,17 +356,17 @@ export default{
                         }
                     })
                     .on('typeahead:select',function(e, suggestion){
-                        this.materialsQuery = suggestion.description;
-                        this.product.material_id = suggestion.id;
-                        this.product.material_code = suggestion.code;
+                        _this.materialsQuery = suggestion.description;
+                        _this.product.material_id = suggestion.id;
+                        _this.product.material_code = suggestion.code;
                     }).bind(this);
 
 
                 //References Typeahead
                 $('#color-input .typeahead')
                     .typeahead({hint: false},{
-                        source: this.colorsIndex.ttAdapter({
-                            filters: 'brand_id='+this.product.brand_id
+                        source: _this.colorsIndex.ttAdapter({
+                            filters: 'brand_id='+_this.product.brand_id
                         }),
                         displayKey: 'description',
                         templates:{
@@ -382,42 +376,42 @@ export default{
                         }
                     })
                     .on('typeahead:select',function(e, suggestion){
-                        this.colorsQuery = suggestion.description;
-                        this.product.color_id = suggestion.id;
-                        this.product.color_code = suggestion.code;
+                        _this.colorsQuery = suggestion.description;
+                        _this.product.color_id = suggestion.id;
+                        _this.product.color_code = suggestion.code;
                     }).bind(this);
         },
-//        searchLines: function(){
-//            this.linesIndex.search(this.linesQuery,{
-//                filters: 'brand_id='+this.product.brand_id
-//            }, function(error, results){
-//                this.lines = results.hits;
-//            }.bind(this));
-//        },
-//        searchReferences: function(){
-//
-//            this.referencesIndex.search(this.referencesQuery,{
-//                filters: 'brand_id='+this.product.brand_id
-//            }, function(error, results){
-//                this.references = results.hits;
-//            }.bind(this));
-//        },
-//        searchMaterials: function(){
-//
-//            this.materialsIndex.search(this.materialsQuery, {
-//                filters: 'brand_id='+this.product.brand_id
-//            },function(error, results){
-//                this.materials = results.hits;
-//            }.bind(this));
-//        },
-//        searchColors: function(){
-//
-//            this.colorsIndex.search(this.colorsQuery, {
-//                filters: 'brand_id='+this.product.brand_id
-//            },function(error, results){
-//                this.colors = results.hits;
-//            }.bind(this));
-//        }
+        searchLines: function(){
+            _this.linesIndex.search(_this.linesQuery,{
+                filters: 'brand_id='+_this.product.brand_id
+            }, function(error, results){
+                _this.lines = results.hits;
+            });
+        },
+        searchReferences: function(){
+
+            _this.referencesIndex.search(_this.referencesQuery,{
+                filters: 'brand_id='+_this.product.brand_id
+            }, function(error, results){
+                _this.references = results.hits;
+            });
+        },
+        searchMaterials: function(){
+
+            _this.materialsIndex.search(_this.materialsQuery, {
+                filters: 'brand_id='+_this.product.brand_id
+            },function(error, results){
+                _this.materials = results.hits;
+            });
+        },
+        searchColors: function(){
+
+            _this.colorsIndex.search(_this.colorsQuery, {
+                filters: 'brand_id='+_this.product.brand_id
+            },function(error, results){
+                _this.colors = results.hits;
+            });
+        }
 
     },
     filters: {

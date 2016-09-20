@@ -101,11 +101,11 @@ class TagsController extends Controller
         foreach($tags as $tag){
 
             $selectItem['value'] = $tag->id;
-            $selectItem['option'] = $tag->description;
+            $selectItem['label'] = $tag->description;
             $selectList[] = $selectItem;
         }
 
-        return $selectList;
+        return response()->json($selectList);
 
     }
 

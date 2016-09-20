@@ -111,7 +111,7 @@ class GridsController extends Controller
         foreach($grids as $grid){
 
             $selectItem['value'] = $grid->id;
-            $selectItem['option'] = $grid->description;
+            $selectItem['label'] = $grid->description;
             $selectList[] = $selectItem;
         }
 
