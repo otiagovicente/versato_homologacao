@@ -98,17 +98,14 @@ class TagsController extends Controller
 
         $tags = Tag::where('brand_id', $brand_id)->get();
 
-        $selectList = [];
-        $i = 0;
         foreach($tags as $tag){
 
             $selectItem['value'] = $tag->id;
-            $selectItem['option'] = $tag->description;
-            $selectList[$i] = $selectItem;
-            $i++;
+            $selectItem['label'] = $tag->description;
+            $selectList[] = $selectItem;
         }
 
-        return $selectList;
+        return response()->json($selectList);
 
     }
 
