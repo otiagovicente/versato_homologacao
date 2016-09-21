@@ -59,40 +59,40 @@
                         <div class="col-md-4">
 
 
-                            <div class="form-group form-line-input typeahead" id="line-input">
+                            <div class="form-group form-line-input" id="line">
                                 <small>Linha</small>
-                                <input id="line" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
+                                <input id="line-input" data-provide="typeahead" class="form-control input-sm" type="text"
                                        v-model="linesQuery"
                                        v-on:keyup.enter="searchLines"
                                        debounce="500">
 
                             </div>
-                            <div class="form-group form-line-input typeahead" id="reference-input">
+                            <!--<div class="form-group form-line-input typeahead" id="reference-input">-->
 
-                                <small>Referência</small>
+                                <!--<small>Referência</small>-->
 
-                                <input id="reference" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
-                                       v-model="referencesQuery"
-                                       v-on:keyup.enter="searchReferences"
-                                       debounce="500">
+                                <!--<input id="reference" data-provide="typeahead" class="typeahead form-control input-sm" type="text"-->
+                                       <!--v-model="referencesQuery"-->
+                                       <!--v-on:keyup.enter="searchReferences"-->
+                                       <!--debounce="500">-->
 
-                            </div>
-                            <div class="form-group form-line-input typeahead" id="material-input">
-                                <small>Material</small>
-                                <input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text"
-                                       v-model="materialsQuery"
-                                       v-on:keyup.enter="searchMaterials"
-                                       debounce="500">
+                            <!--</div>-->
+                            <!--<div class="form-group form-line-input typeahead" id="material-input">-->
+                                <!--<small>Material</small>-->
+                                <!--<input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text"-->
+                                       <!--v-model="materialsQuery"-->
+                                       <!--v-on:keyup.enter="searchMaterials"-->
+                                       <!--debounce="500">-->
 
-                            </div>
-                            <div class="form-group form-line-input typeahead" id="color-input">
-                                <small>Cor</small>
-                                <input id="color" class="typeahead form-control input-sm" type="text"
-                                       v-model="colorsQuery"
-                                       v-on:keyup.enter="searchColors"
-                                       debounce="500">
+                            <!--</div>-->
+                            <!--<div class="form-group form-line-input typeahead" id="color-input">-->
+                                <!--<small>Cor</small>-->
+                                <!--<input id="color" class="typeahead form-control input-sm" type="text"-->
+                                       <!--v-model="colorsQuery"-->
+                                       <!--v-on:keyup.enter="searchColors"-->
+                                       <!--debounce="500">-->
 
-                            </div>
+                            <!--</div>-->
                             <div class="form-group form-line-input" id="launch-input">
                                 <small>Lançamento</small><br>
                                 <datepicker :value.sync="product.launch" format="dd/MM/yyyy" width="280px">
@@ -321,8 +321,70 @@ export default{
 
                     }).bind(this);
 
+<<<<<<< Updated upstream
 
 
+=======
+//                //References Typeahead
+//                $('#reference-input .typeahead')
+//                    .typeahead({hint: false},{
+//                        source: _this.referencesIndex.ttAdapter({
+//                            filters: 'brand_id='+_this.product.brand_id
+//                        }),
+//                        displayKey: 'description',
+//                        templates:{
+//                            suggestion: function(hit){
+//                                return '<div><strong>' + hit._highlightResult.description.value + '</strong> <small>'
+//                                        + hit.code + '</small></div>';
+//                            }
+//                        }
+//                    })
+//                    .on('typeahead:select',function(e, suggestion){
+//                        _this.referencesQuery = suggestion.description;
+//                        _this.product.reference_id = suggestion.id;
+//                        _this.product.reference_code = suggestion.code;
+//                    }).bind(this);
+//
+//                //Materials Typeahead
+//                $('#material-input .typeahead')
+//                    .typeahead({hint: false},{
+//                        source: _this.materialsIndex.ttAdapter({
+//                            filters: 'brand_id='+_this.product.brand_id
+//                        }),
+//                        displayKey: 'description',
+//                        templates:{
+//                            suggestion: function(hit){
+//                                return '<div><strong>' + hit._highlightResult.description.value + '</strong> <small>'
+//                                        + hit.code + '</small></div>';
+//                            }
+//                        }
+//                    })
+//                    .on('typeahead:select',function(e, suggestion){
+//                        _this.materialsQuery = suggestion.description;
+//                        _this.product.material_id = suggestion.id;
+//                        _this.product.material_code = suggestion.code;
+//                    }).bind(this);
+//
+//
+//                //References Typeahead
+//                $('#color-input .typeahead')
+//                    .typeahead({hint: false},{
+//                        source: _this.colorsIndex.ttAdapter({
+//                            filters: 'brand_id='+_this.product.brand_id
+//                        }),
+//                        displayKey: 'description',
+//                        templates:{
+//                            suggestion: function(hit){
+//                                return '<div><div style="display:inline-block;height:20px; width:20px; margin:5px; background-color:'+hit.color+';"></div><strong>'+hit.code+'</strong> – '+hit.description+'</div>';
+//                            }
+//                        }
+//                    })
+//                    .on('typeahead:select',function(e, suggestion){
+//                        _this.colorsQuery = suggestion.description;
+//                        _this.product.color_id = suggestion.id;
+//                        _this.product.color_code = suggestion.code;
+//                    }).bind(this);
+>>>>>>> Stashed changes
         },
         searchLines: function(){
             _this.linesIndex.search(_this.linesQuery,{
