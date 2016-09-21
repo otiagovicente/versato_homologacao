@@ -29,6 +29,7 @@ class ProductRequest extends Request
             case 'POST':
                 $rules = [
                     'code' => 'required|unique:products,code,NULL,NULL,brand_id,'.$this->brand_id.'',
+                    'code_beirario' => 'required|unique:products,code_beirario,NULL,NULL,brand_id,'.$this->brand_id.'',
                     'brand_id' => 'required',
                     'line_id' => 'required',
                     'reference_id' => 'required',

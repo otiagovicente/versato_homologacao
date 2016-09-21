@@ -1,4 +1,4 @@
-<style scoped>
+<style>
     .dropzone {
         min-height: 150px;
         border: 2px dashed #eaeaea;
@@ -12,8 +12,46 @@
         font-weight: 300;
         font-size: 18px;
     }
+    .datepicker-input {
+        width: 100%;
+    }
     .product-photo {
         width:200px;
+    }
+
+    .algolia-autocomplete {
+        width: 100%;
+    }
+    .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+        width: 100%;
+        min-height: 30px;
+        text-indent: 10px;
+    }
+    .algolia-autocomplete .aa-hint {
+        color: #999;
+    }
+    .algolia-autocomplete .aa-dropdown-menu {
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #999;
+        border-top: none;
+    }
+    .algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+        cursor: pointer;
+        padding: 5px 4px;
+    }
+    .algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+        background: #f8f8f8;
+    }
+    .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+        font-weight: bold;
+        font-style: normal;
+    }
+    .algolia-autocomplete .category {
+        text-align: left;
+        background: #efefef;
+        padding: 10px 5px;
+        font-weight: bold;
     }
 
 </style>
@@ -31,12 +69,20 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <h3>Código:</h3>
-                            <span class="h4" id="line-code">{{ product.line_code }}</span>
-                            <span class="h4"  id="reference-code">{{ product.reference_code }}</span>
-                            <span class="h4"  id="material-code">{{ product.material_code }}</span>
-                            <span class="h4"  id="color-code">{{ product.color_code }}</span>
-                            <input v-model="product.code" type="hidden" name="code" value="" id="code">
+                            <h3>Códigos:</h3>
+
+                        </div>
+                        <div class="col-md-4">
+                            <small>Código</small>
+                            <div class="form-group form-line-input" id="code">
+                                <input id="code-input" class="form-control input-sm" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <small>Código Beira Rio</small>
+                            <div class="form-group form-line-input" id="code_beirario">
+                                <input id="code_beirario-input" class="form-control input-sm" type="text" />
+                            </div>
                         </div>
                     </div>
                     <hr/>
@@ -58,51 +104,35 @@
 
                         <div class="col-md-4">
 
-
-                            <div class="form-group form-line-input" id="line">
-                                <small>Linha</small>
-                                <input id="line-input" data-provide="typeahead" class="form-control input-sm" type="text"
-                                       v-model="linesQuery"
-                                       v-on:keyup.enter="searchLines"
-                                       debounce="500">
-
+                            <small>Línea</small>
+                            <div class="form-group form-line-input" id="line_id">
+                                <input id="line-input" class="form-control input-sm" type="text" />
                             </div>
-                            <!--<div class="form-group form-line-input typeahead" id="reference-input">-->
 
-                                <!--<small>Referência</small>-->
+                            <small>Modelo</small>
+                            <div class="form-group form-line-input" id="reference_id">
+                                <input id="reference-input"class="form-control input-sm" type="text"/>
+                            </div>
 
-                                <!--<input id="reference" data-provide="typeahead" class="typeahead form-control input-sm" type="text"-->
-                                       <!--v-model="referencesQuery"-->
-                                       <!--v-on:keyup.enter="searchReferences"-->
-                                       <!--debounce="500">-->
+                            <small>Material</small>
+                            <div class="form-group form-line-input" id="material_id">
+                                <input id="material-input"class="form-control input-sm" type="text"/>
+                            </div>
 
-                            <!--</div>-->
-                            <!--<div class="form-group form-line-input typeahead" id="material-input">-->
-                                <!--<small>Material</small>-->
-                                <!--<input id="material" data-provide="typeahead" class="typeahead form-control input-sm" type="text"-->
-                                       <!--v-model="materialsQuery"-->
-                                       <!--v-on:keyup.enter="searchMaterials"-->
-                                       <!--debounce="500">-->
+                            <small>Color</small>
+                            <div class="form-group form-line-input" id="color_id">
+                                <input id="color-input"class="form-control input-sm" type="text"/>
+                            </div>
 
-                            <!--</div>-->
-                            <!--<div class="form-group form-line-input typeahead" id="color-input">-->
-                                <!--<small>Cor</small>-->
-                                <!--<input id="color" class="typeahead form-control input-sm" type="text"-->
-                                       <!--v-model="colorsQuery"-->
-                                       <!--v-on:keyup.enter="searchColors"-->
-                                       <!--debounce="500">-->
-
-                            <!--</div>-->
-                            <div class="form-group form-line-input" id="launch-input">
-                                <small>Lançamento</small><br>
-                                <datepicker :value.sync="product.launch" format="dd/MM/yyyy" width="280px">
+                            <small>Lanzamiento</small>
+                            <div class="form-group form-line-input" id="launch">
+                                <datepicker :value.sync="product.launch" format="dd/MM/yyyy" width="100%">
                                 </datepicker>
                             </div>
-                            <div class="form-group form-line-input" id="published-input">
-                                <small>Publicado?</small><br>
+                            <small>Publicado?</small>
+                            <div class="form-group form-line-input" id="published">
                                 <input type="checkbox" name="published" v-model="product.published">
                             </div>
-
 
                         </div>
 
@@ -110,32 +140,32 @@
 
                         <div class="col-md-4">
 
-                            <div class="form-group form-line-input">
+                            <div class="form-group form-line-input" id="cost">
                                 <small>Costo</small>
                                 <input name="cost"
                                        type="text"
                                        v-model="product.cost | currencyDisplay"
-                                       class="form-control"
+                                       class="form-control input-sm"
                                        id="cost-input">
 
                             </div>
-                            <div class="form-group form-line-input">
+                            <div class="form-group form-line-input" id="price">
                                 <small>Precio</small>
                                 <input name="price"
                                        type="text"
                                        v-model="product.price | currencyDisplay"
-                                       class="form-control"
+                                       class="form-control input-sm"
                                        id="price-input">
                             </div>
 
-                            <div class="form-group form-line-input">
+                            <div class="form-group form-line-input" id="grids">
                                 <small>Tareas</small>
                                 <v-select v-bind:options.sync="grids_select" :value.sync="product.grids"  placeholder="Elije las tareas" multiple class="form-control" id="grids-input" name="grids[]" search justified required close-on-select></v-select>
 
 
                             </div>
 
-                            <div class="form-group form-line-input">
+                            <div class="form-group form-line-input" id="tags">
                                 <small>Tags</small>
                                 <v-select v-bind:options.sync="tags_select" :value.sync="product.tags"  placeholder="Elije las tags" multiple class="form-control" id="tags-input" name="tags[]" search justified required close-on-select></v-select>
 
@@ -145,7 +175,22 @@
 
 
                     </div>
+                    <hr/>
 
+                    <div class="row">
+                        <div class="container-fluid">
+                            <div class="col-md-3 pull-right">
+                                <div class="form-group">
+                                    <button type="button" @click="submitData()" class="btn blue btn-block" id="send-btn">Salvar</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3 pull-right">
+                                <div class="form-group">
+                                    <a href="/products/"><button type="button" class="btn grey btn-block" id="cancel-btn">Cancel</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -163,7 +208,6 @@ import algoliasearch from 'algoliasearch'
 import Dropzone from 'dropzone'
 import toastr from 'toastr'
 import bootbox from 'bootbox'
-import typeahead from 'bootstrap-3-typeahead'
 
 export default{
     components: {
@@ -175,6 +219,7 @@ export default{
         return{
             product: {
                 code: '',
+                code_beirario: '',
                 line_id: '',
                 line_code: '',
                 reference_id: '',
@@ -187,7 +232,7 @@ export default{
                 price: 0.00,
                 grids: [],
                 photo: '/images/default-placeholder.jpg',
-                brand_id: '',
+                brand_id: Versato.brand_id,
                 launch: '',
                 published: false
             },
@@ -215,18 +260,29 @@ export default{
     },
     ready(){
         window._this = this;
-        this.getTags();
-        this.getGrids();
-        this.product.launch = moment().format('DD/MM/YYYY');
-        this.configureDropbox(this.product);
-        this.configureAlgolia();
-        this.configureTypeahead();
-
+        _this.product.brand_id = Versato.brand_id;
+        _this.product.launch = moment().format('DD/MM/YYYY');
+        _this.getGrids();
+        _this.getTags();
+        _this.configureDropbox(_this.product);
+        _this.configureAlgolia();
+        _this.configureAutocomplete();
+        _this.validateInputs();
 
 
     },
     methods:{
         submitData: function(){
+            this.$http.post('/products', _this.product)
+            .then(function (response) {
+                console.log(response);
+            }).catch(function (response) {
+                $.each(response.data, function (key, value) {
+                    toastr.error(value);
+                    $('#'+key).addClass('has-error');
+                });
+                toastr.error('cabecalho','mensagem');
+            });
             console.log('submitData');
         },
         getGrids: function(){
@@ -289,7 +345,6 @@ export default{
 
 
         },
-
         configureAlgolia: function(){
             //initializes algolia
             _this.client = window.algoliasearch('Y9WBZIWMX0', '463bcdaf034272d4a26167c5f82ba45e');
@@ -297,126 +352,94 @@ export default{
             _this.referencesIndex = _this.client.initIndex('references');
             _this.materialsIndex = _this.client.initIndex('materials');
             _this.colorsIndex = _this.client.initIndex('colors');
-        }.bind(this),
-        configureTypeahead: function(){
+        },
+        configureAutocomplete: function(){
 
-                //Lines Typeahead
-                $('#line-input .typeahead')
-                    .typeahead({hint: false},{
-                        source: _this.linesIndex.ttAdapter({
-                            filters: 'brand_id='+_this.product.brand_id
-                        }),
-                        displayKey: 'description',
-                        templates:{
-                            suggestion: function(hit){
-                                return '<div><strong>' + hit._highlightResult.description.value + '</strong> <small>'
-                                        + hit.code + '</small></div>';
-                            }
+            autocomplete('#line-input', { hint: false }, [
+                {
+                    source: autocomplete.sources.hits(_this.linesIndex, {
+                        hitsPerPage: 5,
+                        filters: 'brand_id='+Versato.brand_id
+                    }),
+                    displayKey: 'description',
+                    templates: {
+                        suggestion: function(suggestion) {
+                            return '<div><strong>' + suggestion._highlightResult.description.value + '</strong> <small>'
+                                    + suggestion.code + '</small></div>';
                         }
-                    })
-                    .on('typeahead:select',function(e, suggestion){
-                        _this.linesQuery = suggestion.description;
-                        _this.product.line_id = suggestion.id;
-                        _this.product.line_code = suggestion.code;
-
-                    }).bind(this);
-
-<<<<<<< Updated upstream
-
-
-=======
-//                //References Typeahead
-//                $('#reference-input .typeahead')
-//                    .typeahead({hint: false},{
-//                        source: _this.referencesIndex.ttAdapter({
-//                            filters: 'brand_id='+_this.product.brand_id
-//                        }),
-//                        displayKey: 'description',
-//                        templates:{
-//                            suggestion: function(hit){
-//                                return '<div><strong>' + hit._highlightResult.description.value + '</strong> <small>'
-//                                        + hit.code + '</small></div>';
-//                            }
-//                        }
-//                    })
-//                    .on('typeahead:select',function(e, suggestion){
-//                        _this.referencesQuery = suggestion.description;
-//                        _this.product.reference_id = suggestion.id;
-//                        _this.product.reference_code = suggestion.code;
-//                    }).bind(this);
-//
-//                //Materials Typeahead
-//                $('#material-input .typeahead')
-//                    .typeahead({hint: false},{
-//                        source: _this.materialsIndex.ttAdapter({
-//                            filters: 'brand_id='+_this.product.brand_id
-//                        }),
-//                        displayKey: 'description',
-//                        templates:{
-//                            suggestion: function(hit){
-//                                return '<div><strong>' + hit._highlightResult.description.value + '</strong> <small>'
-//                                        + hit.code + '</small></div>';
-//                            }
-//                        }
-//                    })
-//                    .on('typeahead:select',function(e, suggestion){
-//                        _this.materialsQuery = suggestion.description;
-//                        _this.product.material_id = suggestion.id;
-//                        _this.product.material_code = suggestion.code;
-//                    }).bind(this);
-//
-//
-//                //References Typeahead
-//                $('#color-input .typeahead')
-//                    .typeahead({hint: false},{
-//                        source: _this.colorsIndex.ttAdapter({
-//                            filters: 'brand_id='+_this.product.brand_id
-//                        }),
-//                        displayKey: 'description',
-//                        templates:{
-//                            suggestion: function(hit){
-//                                return '<div><div style="display:inline-block;height:20px; width:20px; margin:5px; background-color:'+hit.color+';"></div><strong>'+hit.code+'</strong> – '+hit.description+'</div>';
-//                            }
-//                        }
-//                    })
-//                    .on('typeahead:select',function(e, suggestion){
-//                        _this.colorsQuery = suggestion.description;
-//                        _this.product.color_id = suggestion.id;
-//                        _this.product.color_code = suggestion.code;
-//                    }).bind(this);
->>>>>>> Stashed changes
-        },
-        searchLines: function(){
-            _this.linesIndex.search(_this.linesQuery,{
-                filters: 'brand_id='+_this.product.brand_id
-            }, function(error, results){
-                _this.lines = results.hits;
+                    }
+                }
+            ]).on('autocomplete:selected', function(event, suggestion, dataset) {
+                _this.product.line_id = suggestion.id;
+                _this.product.line_code = suggestion.code;
+                $('#line_id').removeClass('has-error');
             });
-        },
-        searchReferences: function(){
 
-            _this.referencesIndex.search(_this.referencesQuery,{
-                filters: 'brand_id='+_this.product.brand_id
-            }, function(error, results){
-                _this.references = results.hits;
+            autocomplete('#reference-input', { hint: false }, [
+                {
+                    source: autocomplete.sources.hits(_this.referencesIndex, {
+                        hitsPerPage: 5,
+                        filters: 'brand_id='+Versato.brand_id
+                    }),
+                    displayKey: 'description',
+                    templates: {
+                        suggestion: function(suggestion) {
+                            return '<div><strong>' + suggestion._highlightResult.description.value + '</strong> <small>'
+                                    + suggestion.code + '</small></div>';
+                        }
+                    }
+                }
+            ]).on('autocomplete:selected', function(event, suggestion, dataset) {
+                _this.product.reference_id = suggestion.id;
+                _this.product.reference_code = suggestion.code;
+                $('#reference_id').removeClass('has-error');
             });
-        },
-        searchMaterials: function(){
 
-            _this.materialsIndex.search(_this.materialsQuery, {
-                filters: 'brand_id='+_this.product.brand_id
-            },function(error, results){
-                _this.materials = results.hits;
+            autocomplete('#material-input', { hint: false }, [
+                {
+                    source: autocomplete.sources.hits(_this.materialsIndex, {
+                        hitsPerPage: 5,
+                        filters: 'brand_id='+Versato.brand_id
+                    }),
+                    displayKey: 'description',
+                    templates: {
+                        suggestion: function(suggestion) {
+                            return '<div><strong>' + suggestion._highlightResult.description.value + '</strong> <small>'
+                                    + suggestion.code + '</small></div>';
+                        }
+                    }
+                }
+            ]).on('autocomplete:selected', function(event, suggestion, dataset) {
+                _this.product.material_id = suggestion.id;
+                _this.product.material_code = suggestion.code;
+                $('#material_id').removeClass('has-error');
             });
-        },
-        searchColors: function(){
 
-            _this.colorsIndex.search(_this.colorsQuery, {
-                filters: 'brand_id='+_this.product.brand_id
-            },function(error, results){
-                _this.colors = results.hits;
+            autocomplete('#color-input', { hint: false }, [
+                {
+                    source: autocomplete.sources.hits(_this.colorsIndex, {
+                        hitsPerPage: 5,
+                        filters: 'brand_id='+Versato.brand_id
+                    }),
+                    displayKey: 'description',
+                    templates: {
+                        suggestion: function(suggestion){
+                            return '<div style="display: flex; align-items: center;"><div style="display:inline-block;height:20px; width:20px; margin:5px; background-color:'+suggestion.color+';"></div><strong>'+suggestion.code+'</strong> – '+suggestion.description+'</div>';
+                        }
+                    }
+                }
+            ]).on('autocomplete:selected', function(event, suggestion, dataset) {
+                _this.product.color_id = suggestion.id;
+                _this.product.color_code = suggestion.code;
+                $('#color_id').removeClass('has-error');
             });
-        }
+
+        },
+        validateInputs: function(){
+            console.log('validating...');
+            console.log('done.');
+
+        },
 
     },
     filters: {
@@ -432,6 +455,13 @@ export default{
 
                 var number = + val.replace(/[^\d.]/g, '');
                 return isNaN(number) ? 0 : parseFloat(number).toFixed(2);
+            }
+        }
+    },
+    watch: {
+        'product.grids': function (val, oldVal) {
+            if(val.length > 0){
+                $('#grids').removeClass('has-error');
             }
         }
     }

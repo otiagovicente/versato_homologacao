@@ -62,6 +62,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->index();
+            $table->string('code_beirario')->index()->unique()->nullable();
             $table->integer('brand_id')->unsigned()->index();
             $table->integer('line_id')->unsigned()->index();
             $table->integer('reference_id')->unsigned()->index();

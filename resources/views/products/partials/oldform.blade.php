@@ -584,7 +584,7 @@
                         }).bind(this);
 
 
-                    }
+                    });
 
                 },
                 filters: {

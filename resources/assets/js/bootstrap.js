@@ -14,10 +14,10 @@ require('bootstrap-switch');
 window.cookie = require('js-cookie');
 require('jquery-slimscroll');
 
-// window.typeahead = require('typeahead');
 window.toastr = require('toastr');
 
 window.algoliasearch = require('algoliasearch');
+window.autocomplete = require('autocomplete.js');
 
 window.bootbox = require('bootbox');
 
