@@ -13,9 +13,9 @@ class LineRequest extends Request
      */
 
     private $messages = [
-        'code.required'    => 'Você precisa inserir um código.',
-        'code.unique'    => 'Já existe uma linha de mesmo código.',
-        'code.integer' =>'Uma linha deve possuir um número como código',
+        'code.required'        => 'Você precisa inserir um código.',
+        'code.unique'          => 'Já existe uma linha de mesmo código.',
+        'code.integer'         => 'Uma linha deve possuir um número como código',
         'description.required' => 'Você precisa inserir uma descrição',
     ];
 

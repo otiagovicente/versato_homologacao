@@ -53,7 +53,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('/lines', 'LinesController', [
 			'parameters' => 'singular'
 		]);
-
+	
+	Route::post('/lines/store','LinesController@store');
+	
 
 	Route::post('/materials/search', 'MaterialsController@search');
 	Route::resource('/materials', 'MaterialsController', [
