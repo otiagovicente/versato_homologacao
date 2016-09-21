@@ -12,7 +12,7 @@
     <link href="/dashboard/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
     {{--<link href="/dashboard/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />--}}
     {{--<link href="/dashboard/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />--}}
-    {{--<link href="/dashboard/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />--}}
+    <link href="/dashboard/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/css/app.css" type="text/css"/>
 
     <!-- END GLOBAL MANDATORY STYLES -->
