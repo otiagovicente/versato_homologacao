@@ -238,17 +238,9 @@ export default{
             },
 
             client: '',
-            lines: [],
-            linesQuery: '',
             linesIndex: '',
-            references: [],
-            referencesQuery:'',
             referencesIndex: '',
-            materials: [],
-            materialsQuery: '',
             materialsIndex: '',
-            colors: [],
-            colorsQuery: '',
             colorsIndex: '',
             tags_select: new Array(),
             grids_select: new Array()
@@ -281,7 +273,6 @@ export default{
                     toastr.error(value);
                     $('#'+key).addClass('has-error');
                 });
-                toastr.error('cabecalho','mensagem');
             });
             console.log('submitData');
         },
@@ -439,6 +430,20 @@ export default{
             console.log('validating...');
             console.log('done.');
 
+            if(_this.product.price <= 0){
+                $('#price').addClass('has-error');
+                return false;
+            }
+
+            if(_this.product.cost <= 0){
+                $('#price').addClass('has-error');
+                return false;
+            }
+
+            $('#price').removeClass('has-error');
+            $('#cost').removeClass('has-error');
+
+            return true;
         },
 
     },
@@ -464,6 +469,8 @@ export default{
                 $('#grids').removeClass('has-error');
             }
         }
+
+
     }
 }
 

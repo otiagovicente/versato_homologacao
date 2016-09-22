@@ -36,8 +36,8 @@ class ProductRequest extends Request
                     'material_id' => 'required',
                     'color_id' => 'required',
                     'photo' => 'required',
-                    'cost' => 'required|numeric',
-                    'price' => 'required|numeric',
+                    'cost' => 'required|numeric|price',
+                    'price' => 'required|numeric|price',
                     'grids' => 'required'
                 ];
             break;
@@ -51,8 +51,8 @@ class ProductRequest extends Request
                     'material_id' => 'required',
                     'color_id' => 'required',
                     'photo' => 'required',
-                    'cost' => 'required|numeric',
-                    'price' => 'required|numeric',
+                    'cost' => 'required|numeric|price',
+                    'price' => 'required|numeric|price',
                     'grids' => 'required'
                 ];
             break;
