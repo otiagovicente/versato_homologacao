@@ -12,7 +12,10 @@ require('./bootstrap');
  * the body of the page. From here, you may begin adding components to
  * the application, or feel free to tweak this setup for your needs.
  */
-
+Vue.component(
+    'page-header-form',
+    require('./components/general/page-header.vue')
+);
 Vue.component(
     'product-form',
     require('./components/products/ProductForm.vue')
@@ -20,6 +23,14 @@ Vue.component(
 Vue.component(
     'line-form',
     require('./components/lines/LineForm.vue')
+);
+Vue.component(
+    'user-form',
+    require('./components/users/UserForm.vue')
+);
+Vue.component(
+    'profile-edit-form',
+    require('./components/users/ProfileEditForm.vue')
 );
 
 Vue.component(
@@ -40,4 +51,3 @@ Vue.component(
 const app = new Vue({
     el: 'body'
 });
-
