@@ -126,4 +126,8 @@ class UsersController extends Controller
         return view('users.passport');
     }
 
+
+    public function api_show(User $user){
+        return $user;
+    }
 }

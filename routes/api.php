@@ -28,3 +28,4 @@ Route::get('/materials/list', 'MaterialsController@api_list');
 Route::get('/colors/list', 'ColorsController@api_list');
 Route::get('/grids/list', 'GridsController@api_list');
 Route::get('/tags/list', 'TagsController@api_list');
+Route::get('/users/{user}', 'UsersController@api_show');
