@@ -11,12 +11,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10">
-            
-            @include('lines.partials.form', [
-            	'action' => 'edit', 
-            	'sendButtonText' => 'Editar Linha'
-            ])    
-
+            <line-form :line_id="{{$line->id}}"> </line-form>
         </div>
     </div>
 </div>

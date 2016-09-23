@@ -19,12 +19,13 @@ class UsersController extends Controller
 
     public function __construct()
     {
+        $this->middleware(function ($request, $next) {
         $this->imagesPath = 'images/users';
+            return $next($request);
+        });
     }
 
     public function index(){
-
-
         $roles = [
             1 => 'SuperAdmin',
             2 => 'Admin',
@@ -34,37 +35,26 @@ class UsersController extends Controller
 
         $usersgroup = User::all()->groupBy('role');
         return view('users.index', ['usersgroup' => $usersgroup, 'roles' => $roles]);
-
-
     }
 
     public function profile(){
-
         $user = User::find(Auth::user()['id']);
-
         return view('users.show',compact('user'));
-
     }
 
     public function show(User $user){
-
         return view('users.show', compact('user'));
-
     }
     public function create(){
-
         return view('users.create');
-
     }
 
     public function store(UserRequest $request){
-
         $user = new User($request->all());
         $user->password = \Hash::make($user->password);
         $user->photo = '/dashboard/pages/img/avatars/default.png';
         $user->save();
         return redirect('/');
-
     }
 
     public function edit(User $user){

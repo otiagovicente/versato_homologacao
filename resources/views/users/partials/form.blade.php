@@ -189,13 +189,8 @@
 @endsection
 
 @section('scripts')
-
-
     <script>
-
-
         var data = {
-
             actionUrl : '/users/{{$user->id}}',
             user: {
                 id: {{$user->id}},
@@ -219,15 +214,8 @@
                 password: '',
                 password_confirmation: ''
             }
-
         };
-
-
     </script>
-
-
-
-
 
     <script src="/dashboard/global/plugins/dropzone/dropzone.min.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
@@ -237,8 +225,6 @@
 
 
     <script>
-
-
         //ProductDropzone - Begin
         var AvatarDropzone = function() {
             var dropzoneOptions = {
@@ -255,7 +241,6 @@
                 },
 
                 success: function (file, response) {
-
                     data.user.photo = response;
                     this.removeAllFiles(true);
                 },
@@ -270,16 +255,11 @@
                         this.removeAllFiles(true);
                     });
                 }
-
             };
 
             var photoDropzone = new Dropzone("div#photo", dropzoneOptions);
-
             photoDropzone.accept = function(file, done) {
-
                 bootbox.confirm("Quieres cambiar tu foto?", function(result) {
-
-
                     if(result){
                         done();
                         photoDropzone.processQueue();
@@ -287,84 +267,54 @@
                         photoDropzone.removeAllFiles(true);
                         done(result);
                     }
-
                 });
-
             };
         };
-
-
 
         var vm = new Vue({
             el: '#app',
             data: data,
             ready: function(){
-
-
-
                 Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');
                 AvatarDropzone();
                 $('[data-toggle="popover"]').popover();
-
-
             },
             methods: {
                 submitData: function(){
+                    this.$http.put(data.actionUrl, data.user).then( function (response){
+                        toastr.success('Sucesso!','Produto atualizado com sucesso');
 
-
-                        this.$http.put(data.actionUrl, data.user).then( function (response){
-
-
-                            toastr.success('Sucesso!','Produto atualizado com sucesso');
-
-                            var userResponse = response.json();
-                            window.location.href ='/users/'+userResponse.id;
-                            console.log(userResponse.id);
-
-                        }).catch( function(response){
-
-                            var errors = response.json();
-
-                            $.each(errors, function (key, value) {
-
-                                var input = '#' + key + '-input';
-                                $(input).addClass('has-error');
-                                toastr.error('Atenção!', value);
-
-                            });
+                        var userResponse = response.json();
+                        window.location.href ='/users/'+userResponse.id;
+                        console.log(userResponse.id);
+                    
+                    }).catch( function(response){
+                        var errors = response.json();
+                        $.each(errors, function (key, value) {
+                            var input = '#' + key + '-input';
+                            $(input).addClass('has-error');
+                            toastr.error('Atenção!', value);
                         });
-
-
-                    },
-
-
+                    });
+                },
                 cancelUpload: function(){},
 
                 changePassword: function(){
                     this.$http.post('/users/changepassword', data.password).then(function (response){
-
                         toastr.success('Sucesso!','Contraseña cambiada con sucesso!');
-
-
                     }).catch( function (response){
                         var errors = response.json();
                         $.each(errors, function (key, value) {
-
                             toastr.error('Atención', value);
-
                         });
-
                     });
                 },
 
                 comparePasswords: function(){
-
                     if(data.password.password != data.password.password_confirmation){
-
                         $('#password-new').addClass('has-error');
                         $('#password-retype').addClass('has-error');
                         $('#password-retype').popover('show');
-
                     }else{
                         $('#password-new').removeClass('has-error');
                         $('#password-retype').removeClass('has-error');
@@ -372,10 +322,6 @@
                     }
                 }
             }
-
-            });
-
-
-
+        });
     </script>
 @endsection

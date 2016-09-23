@@ -143,8 +143,6 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-
-
         //instancia um novo Produto com os dados do request
         $product->fill($request->all());
         $product->brand_id = (int) session()->get('brand')->id;
@@ -154,10 +152,6 @@ class ProductsController extends Controller
         $product->grids()->sync($request->grids);
 
         return response($product);
-
-
-
-
 
     }
 
@@ -204,8 +198,6 @@ class ProductsController extends Controller
                     ->get();
 
         return $products;
-
-
     }
 
 }
