@@ -4,12 +4,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light ">
+                    
                     <div class="portlet-title tabbable-line">
                         <div class="caption caption-md">
-
                             <span class="caption-subject font-blue bold uppercase"> <i class="fa fa-user"></i> Conta de usuário</span>
                         </div>
                     </div>
+                    
                     <div class="portlet-body">
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('/users') }}">
                             {{ csrf_field() }}

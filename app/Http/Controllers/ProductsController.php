@@ -156,10 +156,6 @@ class ProductsController extends Controller
 
         return response($product);
 
-
-
-
-
     }
 
     /**
@@ -210,8 +206,6 @@ class ProductsController extends Controller
                     ->get();
 
         return $products;
-
-
     }
 
 }

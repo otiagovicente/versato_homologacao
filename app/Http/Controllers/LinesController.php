@@ -103,6 +103,11 @@ class LinesController extends Controller
         //
     }
 
+    public function getLineByCode($code){
+        $Line = Line::find($code);
+        return response()->json($Line);
+    }
+
     public function search(Request $request){
         $query = $request->get('search');
         $results = Line::where('code', 'like', "%$query%")->orWhere('description', 'like', "%$query%")->get();

@@ -83,13 +83,18 @@ import VueStrap from 'vue-strap'
 import toastr from 'toastr'
 
 export default{
+    
+    
     components: {
             vSelect: VueStrap.select,
             vOption: VueStrap.option,
     },
+    props: ['line_id'],
+    
     data(){
         return{
             line: {
+                id: '',
                 code: '',
                 description: '',
                 code_error: '',
@@ -98,13 +103,21 @@ export default{
         }
     },
     ready(){
+        console.log(this.line);
         this.line.code_error = false;
         this.line.description_error = false;
         toastr.options.closeButton = true;
+
+        if(this.line_id) this.loadLine();
     },
     methods:{
         submitData: function(){ 
-            if(this.fieldsValidate()) this.saveLine(this.line);
+            if(this.fieldsValidate()){
+                if(!this.line.id)
+                    this.saveLine(this.line);
+                else
+                    this.updateLine(this.line);
+            } 
         },
         
         saveLine: function(line){
@@ -130,6 +143,35 @@ export default{
                     toastr.warning("Atenção!", msg);
                     console.log(response);
                     // error callback
+                }
+            );
+        },
+
+        updateLine: function(line){
+            this.$http.post('/lines/update', {
+                id:          line.id,
+                code:        line.code, 
+                description: line.description, 
+                brand_id:    line.brand_id
+            }).then((response) => {
+                toastr.success('Sucesso!','Linha atualizada com sucesso');
+                }, (response) => {
+                    console.log(response);
+                }
+            );
+        },
+
+        loadLine: function(){
+            this.$http.post('/lines/line/3', {
+                code:this.line_code, 
+            }).then((response) => {
+                var line = JSON.parse(response.body);
+                this.line.id          = line.id;
+                this.line.code        = line.code;
+                this.line.description = line.description;
+                
+                }, (response) => {
+                    console.log(response);
                 }
             );
         },

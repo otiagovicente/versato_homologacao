@@ -1,4 +1,4 @@
-<div id="app">
+<template>
     <!-- BEGIN PROFILE SIDEBAR -->
     <div class="profile-sidebar">
         <!-- PORTLET MAIN -->
@@ -40,6 +40,7 @@
         <!-- END PORTLET MAIN -->
     </div>
     <!-- END BEGIN PROFILE SIDEBAR -->
+    
     <!-- BEGIN PROFILE CONTENT -->
     <div class="profile-content">
         <div class="row">
@@ -165,163 +166,70 @@
             </div>
         </div>
     </div>
-    <pre>
-        @{{ $data | json }}
-    </pre>
-</div>
+</template>
 
+<script>
 
-<!-- END PROFILE CONTENT -->
+import VueStrap from 'vue-strap'
+import algoliasearch from 'algoliasearch'
+import Dropzone from 'dropzone'
+import toastr from 'toastr'
+import bootbox from 'bootbox'
 
-
-@section('metatags')
-    <meta id="token" name="csrf-token" content="{{ csrf_token() }}">
-@stop
-
-@section('styles')
-    <link href="/dashboard/global/plugins/dropzone/dropzone.min.css" rel="stylesheet" type="text/css" />
-    <link href="/dashboard/global/plugins/dropzone/basic.min.css" rel="stylesheet" type="text/css" />
-    <link href="/dashboard/assets/pages/css/profile.min.css" rel="stylesheet" type="text/css">
-
-    <style>
-
-    </style>
-@endsection
-
-@section('scripts')
-    <script>
-        var data = {
-            actionUrl : '/users/{{$user->id}}',
+export default{
+   props: ['logged_user'],
+    components: {
+            vSelect: VueStrap.select,
+            vOption: VueStrap.option,
+    },
+    data(){
+        return{
+            actionUrl : '/users/' + this.logged_user.id,
             user: {
-                id: {{$user->id}},
+                id: this.logged_user.id,
                 _method: 'PATCH',
-                name: '{{$user->name}}',
-                lastname: '{{$user->lastname}}',
-                mobile: '{{$user->mobile}}',
-                occupation: '{!!$user->occupation!!}',
-                about: '{{ $user->about }}',
-                facebook: '{{$user->facebook}}',
-                twitter: '{{$user->twitter}}',
-                instagram: '{{$user->instagram}}',
-                email: '{{$user->email}}',
-                role: '{{$user->role}}',
-                photo: '{{$user->photo}}'
-
+                name: this.logged_user.name,
+                lastname: this.logged_user.lastname,
+                mobile: this.logged_user.mobile,
+                occupation: this.logged_user.occupation,
+                about: this.logged_user.about,
+                facebook: this.logged_user.facebook,
+                twitter: this.logged_user.twitter,
+                instagram: this.logged_user.instagram,
+                email: this.logged_user.email,
+                role: this.logged_user.role,
+                photo: this.logged_user.photo,
             },
             password: {
-                email: '{{$user->email}}',
+                email:this.logged_user.email,
                 current:'',
                 password: '',
                 password_confirmation: ''
             }
-        };
-    </script>
-
-    <script src="/dashboard/global/plugins/dropzone/dropzone.min.js" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/typeahead.js/0.11.1/typeahead.jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/dashboard/global/scripts/moment.min.js"></script>
-    <script type="text/javascript">Dropzone.autoDiscover = false;</script>
-
-
-    <script>
-        //ProductDropzone - Begin
-        var AvatarDropzone = function() {
-            var dropzoneOptions = {
-                autoDiscover: false,
-                maxFiles: 1,
-                maxFileSize: 5,
-                paramName: 'photo',
-                acceptedFiles: '.jpeg, .jpg, .png',
-                autoProcessQueue: false,
-                dictDefaultMessage: 'Elija la Foto',
-                url: "/users/photo",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-
-                success: function (file, response) {
-                    data.user.photo = response;
-                    this.removeAllFiles(true);
-                },
-
-                init: function () {
-                    this.on("maxfilesexceeded", function (file) {
-                        toastr.warning('Número de arquivos excedido!', 'Você só pode inserir um arquivo');
-                    });
-                    this.on("error", function (file, errorMessage) {
-                        console.log(errorMessage);
-                        toastr.error('Erro!', "Confira se o arquivo possui as características necessárias!");
-                        this.removeAllFiles(true);
-                    });
-                }
-            };
-
-            var photoDropzone = new Dropzone("div#photo", dropzoneOptions);
-            photoDropzone.accept = function(file, done) {
-                bootbox.confirm("Quieres cambiar tu foto?", function(result) {
-                    if(result){
-                        done();
-                        photoDropzone.processQueue();
-                    }else{
-                        photoDropzone.removeAllFiles(true);
-                        done(result);
-                    }
+        }
+    },
+    ready(){
+        console.log(this.logged_user);
+        toastr.options.closeButton = true;
+    },
+    methods:{
+        submitData: function(){ 
+            //console.log(this.user);
+            
+            this.$http.post('/users', this.user)
+            .then(function (response) {
+                toastr.success('Sucesso!', 'Perfil atualizado con sucesso.');
+            }).catch(function (response) {
+                console.log(response);
+                $.each(response.data, function (key, value) {
+                    toastr.warning('Atención', value);
+                    $('#'+key).addClass('has-error');
                 });
-            };
-        };
+            });
+        }//end submit data
+    }, //end methods
+    filters: {
 
-        var vm = new Vue({
-            el: '#app',
-            data: data,
-            ready: function(){
-                Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('content');
-                AvatarDropzone();
-                $('[data-toggle="popover"]').popover();
-            },
-            methods: {
-                submitData: function(){
-                    this.$http.put(data.actionUrl, data.user).then( function (response){
-                        toastr.success('Sucesso!','Produto atualizado com sucesso');
-
-                        var userResponse = response.json();
-                        window.location.href ='/users/'+userResponse.id;
-                        console.log(userResponse.id);
-                    
-                    }).catch( function(response){
-                        var errors = response.json();
-                        $.each(errors, function (key, value) {
-                            var input = '#' + key + '-input';
-                            $(input).addClass('has-error');
-                            toastr.error('Atenção!', value);
-                        });
-                    });
-                },
-                cancelUpload: function(){},
-
-                changePassword: function(){
-                    this.$http.post('/users/changepassword', data.password).then(function (response){
-                        toastr.success('Sucesso!','Contraseña cambiada con sucesso!');
-                    }).catch( function (response){
-                        var errors = response.json();
-                        $.each(errors, function (key, value) {
-                            toastr.error('Atención', value);
-                        });
-                    });
-                },
-
-                comparePasswords: function(){
-                    if(data.password.password != data.password.password_confirmation){
-                        $('#password-new').addClass('has-error');
-                        $('#password-retype').addClass('has-error');
-                        $('#password-retype').popover('show');
-                    }else{
-                        $('#password-new').removeClass('has-error');
-                        $('#password-retype').removeClass('has-error');
-                        $('#password-retype').popover('hide');
-                    }
-                }
-            }
-        });
-    </script>
-@endsection
+    }
+}
+</script>
