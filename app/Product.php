@@ -16,7 +16,7 @@ class Product extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $fillable = ['code','brand_id', 'line_id', 'reference_id',
+    protected $fillable = ['code', 'code_beirario', 'brand_id', 'line_id', 'reference_id',
         'material_id', 'color_id', 'photo', 'cost', 'price', 'published', 'launch'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'launch'];
     protected $casts = [
@@ -51,7 +51,8 @@ class Product extends Model
 
 
 //    public function setLaunchAttribute($value){
-//        $this->attributes['launch'] = Carbon::createFromFormat('d/m/Y', $value);
+//        $date = Carbon::createFromFormat('d/m/Y', $value);
+//        $this->attributes['launch'] = $date->format('Y-m-d');
 //    }
 //
 //    public function getLaunchAttribute($value){

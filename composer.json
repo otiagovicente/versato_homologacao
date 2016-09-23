@@ -8,7 +8,8 @@
         "php": ">=5.6.4",
         "laravel/framework": "5.3.*",
         "laravel/scout": "^1.1",
-        "laravel/passport": "^1.0"
+        "laravel/passport": "^1.0",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -20,7 +21,8 @@
         "intervention/image": "2.*",
         "tsawler/laravel-filemanager": "^0.6.2",
         "doctrine/dbal": "^2.5",
-        "algolia/algoliasearch-laravel": "^1.2"
+        "algolia/algoliasearch-laravel": "^1.2",
+        "aws/aws-sdk-php-laravel": "^3.1"
     },
     "autoload": {
         "classmap": [

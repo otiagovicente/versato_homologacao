@@ -5768,7 +5768,8 @@ button.close {
     display: none !important; } }
 
 .sidebar-logo {
-  width: 220px;
+  margin-top: 7px;
+  width: 150px;
   height: auto; }
 
 /*# sourceMappingURL=app.css.map */

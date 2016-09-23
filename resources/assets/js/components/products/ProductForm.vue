@@ -75,13 +75,13 @@
                         <div class="col-md-4">
                             <small>Código</small>
                             <div class="form-group form-line-input" id="code">
-                                <input id="code-input" class="form-control input-sm" type="text" />
+                                <input id="code-input" class="form-control input-sm" type="text" v-model="product.code" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <small>Código Beira Rio</small>
                             <div class="form-group form-line-input" id="code_beirario">
-                                <input id="code_beirario-input" class="form-control input-sm" type="text" />
+                                <input id="code_beirario-input" class="form-control input-sm" type="text" v-model="product.code_beirario"/>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
 
                             <small>Lanzamiento</small>
                             <div class="form-group form-line-input" id="launch">
-                                <datepicker :value.sync="product.launch" format="dd/MM/yyyy" width="100%">
+                                <datepicker :value.sync="product.launchdisplay" format="dd/MM/yyyy" width="100%">
                                 </datepicker>
                             </div>
                             <small>Publicado?</small>
@@ -220,19 +220,20 @@ export default{
             product: {
                 code: '',
                 code_beirario: '',
-                line_id: '',
+                line_id: null,
                 line_code: '',
-                reference_id: '',
+                reference_id: null,
                 reference_code: '',
-                material_id: '',
+                material_id: null,
                 material_code: '',
-                color_id: '',
+                color_id: null,
                 color_code: '',
                 cost: 0.00,
                 price: 0.00,
                 grids: [],
                 photo: '/images/default-placeholder.jpg',
                 brand_id: Versato.brand_id,
+                launchdisplay: '',
                 launch: '',
                 published: false
             },
@@ -253,18 +254,22 @@ export default{
     ready(){
         window._this = this;
         _this.product.brand_id = Versato.brand_id;
-        _this.product.launch = moment().format('DD/MM/YYYY');
+        _this.product.launchdisplay = moment().format('DD/MM/YYYY');
         _this.getGrids();
         _this.getTags();
         _this.configureDropbox(_this.product);
         _this.configureAlgolia();
         _this.configureAutocomplete();
-        _this.validateInputs();
 
 
     },
     methods:{
         submitData: function(){
+
+            if(!_this.validateInputs()){
+                return false;
+            }
+
             this.$http.post('/products', _this.product)
             .then(function (response) {
                 console.log(response);
@@ -292,7 +297,7 @@ export default{
             Dropzone.autoDiscover = false;
             var dropzoneOptions = {
                 maxFiles: 1,
-                maxFileSize: 2,
+                maxFileSize: 8,
                 paramName: 'photo',
                 acceptedFiles: '.jpeg, .jpg, .png',
                 autoProcessQueue: false,
@@ -322,7 +327,7 @@ export default{
 
             photoDropzone.accept = function(file, done) {
 
-                bootbox.confirm("Tem certeza que quer fazer o upload da imagem do produto?", function(result) {
+                bootbox.confirm("Seguro que quieres hacer el upload de una imágene del producto?", function(result) {
                     if(result){
                         done();
                         photoDropzone.processQueue();
@@ -429,21 +434,33 @@ export default{
         validateInputs: function(){
             console.log('validating...');
             console.log('done.');
+            _this.product.launch = moment(_this.product.launchdisplay, "DD/MM/YYYY").format("YYYY-MM-DD");
 
+            var valid = true;
             if(_this.product.price <= 0){
                 $('#price').addClass('has-error');
-                return false;
+                toastr.error('El precio necesita ser mas grande que zero');
+                valid = false;
             }
 
             if(_this.product.cost <= 0){
-                $('#price').addClass('has-error');
-                return false;
+                $('#cost').addClass('has-error');
+                toastr.error('El costo necesita ser mas grande que zero');
+                valid = false;
             }
 
-            $('#price').removeClass('has-error');
-            $('#cost').removeClass('has-error');
+            if(_this.product.cost >= _this.product.price){
+                $('#price').addClass('has-error');
+                $('#cost').addClass('has-error');
+                toastr.error('El precio hay que ser mas grande que el costo');
+                valid = false;
+            }
 
-            return true;
+            if(valid == true) {
+                $('#price').removeClass('has-error');
+                $('#cost').removeClass('has-error');
+            }
+            return valid;
         },
 
     },

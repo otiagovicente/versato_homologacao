@@ -45,6 +45,7 @@ class ProductRequest extends Request
             case 'PATCH':
                 $rules = [
                     'code' => 'required',
+                    'code_beirario' => 'required',
                     'brand_id' => 'required',
                     'line_id' => 'required',
                     'reference_id' => 'required',
@@ -79,7 +80,8 @@ class ProductRequest extends Request
          $messages = [
             'code.required'    => 'Você precisa inserir um código.',
             'code.unique'    => 'Já existe um produto de mesmo código.',
-            'code.integer' =>'Um produto deve possuir um número como código',
+            'code_beirario.required'    => 'Necesita de un codigo Beira Rio.',
+            'code_beirario.unique'    => 'Já existe um produto de mesmo código.',
             'brand_id.required' => 'Você precisa especificar a marca do produto',
             'line_id.required' => 'Você precisa especificar a linha do produto',
             'reference_id.required' => 'Você precisa especificar a referencia do produto',
@@ -88,6 +90,8 @@ class ProductRequest extends Request
             'photo.required' => 'Você precisa especificar a foto do produto',
             'cost.required' => 'Você precisa especificar o custo do produto',
             'cost.numeric' => 'Você precisa especificar um número como custo do produto',
+            'cost.price' => 'O custo deve ser maior que zero',
+            'price.price' => 'El precio necesita ser más grande que zero',
             'price.required' => 'Você precisa especificar o preço do produto',
             'price.numeric' => 'Você precisa especificar um número como preço do produto',
             'grids.required' => 'Você precisa especificar a grade do produto'

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Requests\ProductRequest;
+use Illuminate\Support\Facades\Storage;
 
 use App\Product;
 use App\Brand;
@@ -173,20 +173,25 @@ class ProductsController extends Controller
     }
 
     public function addPhoto(Request $request){
+
+
+        //Valida Mimes para garantir que é uma imagem
         $this->validate($request,[
             'photo' => 'required|mimes:jpg,png,jpeg'
         ]);
 
-        $file = $request->file('photo');
+        //Faz upload da imagem para o Driver AWS S3
+        $image = $request->file('photo')->store('products','s3');
+        //Torna acessível publicamente a imagem
+        Storage::disk('s3')->setVisibility($image, 'public');
+//        Espera 5 segundos para garantir que a visibilidade do
+//        arquivo no driver S3 seja público para que a imagem
+//        seja exibida
+        sleep(5);
 
-        $name= time().'.jpg';
+        //Retorna a url completa da imagem que será salva no campo photo do produto
+        return Storage::disk('s3')->url($image);
 
-        $file->move($this->imagesPath, $name);
-
-        //atualiza o path da imagem
-        $image = "/".$this->imagesPath."/".$name;
-
-        return $image;
     }
 
 
