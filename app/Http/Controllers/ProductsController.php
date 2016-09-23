@@ -85,8 +85,10 @@ class ProductsController extends Controller
     {
 
         //instancia um novo Produto com os dados do request
-        $product = new Product($request->all());
-        $product->brand_id = $this->brand_id;
+        $product = new Product();
+        $product->fill($request->all());
+        $product->brand_id = (int) $this->brand_id;
+//        dump($product);
         $product->save();
 
         //algo muda o código do produto
@@ -143,7 +145,6 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-
 
         //instancia um novo Produto com os dados do request
         $product->fill($request->all());

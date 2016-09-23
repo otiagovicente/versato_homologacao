@@ -21,6 +21,11 @@ class Product extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'launch'];
     protected $casts = [
         'published' => 'boolean',
+        'line_id' => 'integer',
+        'reference_id' => 'integer',
+        'material_id' => 'integer',
+        'color_id' => 'integer',
+
     ];
     protected $hidden = ['cost'];
 
@@ -49,16 +54,18 @@ class Product extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-
-//    public function setLaunchAttribute($value){
-//        $date = Carbon::createFromFormat('d/m/Y', $value);
-//        $this->attributes['launch'] = $date->format('Y-m-d');
-//    }
-//
-//    public function getLaunchAttribute($value){
-//        $date = new Carbon($value);
-//        return $date->format('d/m/Y');
-//    }
+    public function setLineIdAttribute($value){
+        $this->attributes['line_id'] = (int) $value;
+    }
+    public function setReferenceIdAttribute($value){
+        $this->attributes['reference_id'] = (int) $value;
+    }
+    public function setMaterialIdAttribute($value){
+        $this->attributes['material_id'] = (int) $value;
+    }
+    public function setColorIdAttribute($value){
+        $this->attributes['color_id'] = (int) $value;
+    }
 
     public function getGridListAttribute(){
         return $this->grids()->pluck('id');
