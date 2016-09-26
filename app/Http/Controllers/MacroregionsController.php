@@ -5,9 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Macroregion;
 
 class MacroregionsController extends Controller
 {
+    private $brand_id;
+
+    public function __construct(){
+        $this->middleware(function ($request, $next) {
+             $this->brand_id = session()->get('brand')->id;
+            return $next($request);
+        });
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,9 +44,13 @@ class MacroregionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MacroregionRequest $request)
     {
-        //
+        $macroregion = new Macroregion();
+        $macroregion->fill($request->all());
+        $macroregion->brand_id = (int) $this->brand_id;
+        $macroregion->save();
+        return response($macroregion);
     }
 
     /**

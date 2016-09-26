@@ -16,7 +16,7 @@ class CreateRegionsTable extends Migration
             $table->increments('id');
             $table->string('code');
             $table->string('description');
-            $table->string('geo');
+            $table->longText('geo');
             $table->integer('brand_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();

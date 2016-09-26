@@ -26,7 +26,7 @@
                             <i class="icon-home"></i> Perfil </a>
                     </li>
                     <li class="active">
-                        <a href="/users/{{$user->id}}/edit">
+                        <a href="/users/{{ user.name }}/edit">
                             <i class="icon-settings"></i> Cambiar Informaciones </a>
                     </li>
                     <li>
@@ -209,24 +209,93 @@ export default{
         }
     },
     ready(){
-        console.log(this.logged_user);
+        console.log(this.user);
         toastr.options.closeButton = true;
+        this.configureDropbox(this.user);
     },
     methods:{
         submitData: function(){ 
-            //console.log(this.user);
-            
-            this.$http.post('/users', this.user)
+            this.$http.post(this.actionUrl, this.user)
             .then(function (response) {
-                toastr.success('Sucesso!', 'Perfil atualizado con sucesso.');
+                toastr.success('Sucesso!', 'Perfil actualizado con sucesso.');
             }).catch(function (response) {
+                
                 console.log(response);
                 $.each(response.data, function (key, value) {
                     toastr.warning('Atención', value);
                     $('#'+key).addClass('has-error');
                 });
             });
-        }//end submit data
+
+        }, //end submit data
+
+        changePassword: function(){
+            this.$http.post('/users/changepassword', this.data.password).then(function (response){
+                toastr.success('Sucesso!','Contraseña cambiada con sucesso!');
+            }).catch( function (response){
+                var errors = response.json();
+                $.each(errors, function (key, value) {
+                    toastr.error('Atención', value);
+                });
+            });
+        },
+        comparePasswords: function(){
+            if(this.data.password.password != this.data.password.password_confirmation){
+                $('#password-new').addClass('has-error');
+                $('#password-retype').addClass('has-error');
+                $('#password-retype').popover('show');
+            }else{
+                $('#password-new').removeClass('has-error');
+                $('#password-retype').removeClass('has-error');
+                $('#password-retype').popover('hide');
+            }
+        },
+
+        configureDropbox: function(callback){
+            Dropzone.autoDiscover = false;
+            var dropzoneOptions = {
+                maxFiles: 1,
+                maxFileSize: 8,
+                paramName: 'photo',
+                acceptedFiles: '.jpeg, .jpg, .png',
+                autoProcessQueue: false,
+                dictDefaultMessage: 'Elija el arquivo',
+                url: "/users/photo",
+                headers: {
+                    'X-CSRF-TOKEN': Laravel.csrfToken
+                },
+
+                success: function(file, response){
+                    Vue.set(callback, 'photo', response);
+                    this.removeAllFiles(true);
+                },
+
+                init: function() {
+                    this.on("maxfilesexceeded", function(file){
+                        toastr.warning('Número de arquivos excedido!', 'Você só pode inserir um arquivo');
+                    });
+                    this.on("error", function(file, errorMessage){
+                        toastr.error('Erro!', "Confira se o arquivo possui as características necessárias!");
+                        this.removeAllFiles(true);
+                    });
+                }
+
+            };
+            var photoDropzone = new Dropzone("div#photo", dropzoneOptions);
+
+            photoDropzone.accept = function(file, done) {
+
+                bootbox.confirm("Seguro que quieres hacer el upload de una imágene del producto?", function(result) {
+                    if(result){
+                        done();
+                        photoDropzone.processQueue();
+                    }else{
+                        photoDropzone.removeAllFiles(true);
+                        done(result);
+                    }
+                });
+            };
+        },
     }, //end methods
     filters: {
 

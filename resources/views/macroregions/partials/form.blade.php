@@ -1,120 +1,78 @@
-<div class="portlet light">
-
-    <div class="portlet-title">
-        <div class="caption font-blue">
-        	@if($action==='edit')
-            <i class="fa fa-pencil font-blue"></i>Editar Referência 
-            @elseif($action==='create')
-            <i class="fa fa-plus font-blue"></i>Criar Referência
-            @endif
-        </div>
-    </div>
-
-    <div class="portlet-body form">
-        <!-- BEGIN FORM-->
-        <form id="form-reference" class="form-horizontal">
-
-	    	{{ csrf_field() }}
-	    	@if($action==='edit')
-	        {{ method_field('PATCH') }}
-	        @endif
-
-            <input type="hidden" name="brand_id" value="{{Session::get('brand')->id}}">
-            <div class="form-body">
-                <div id="code-input" class="form-group">
-                    <label class="col-md-3 control-label">Referência</label>
-                    <div class="col-md-7">
-                      
-                        <input type="text" name="code" class="form-control input-circle " placeholder="Código da Referência" @if($action==='edit') value="{{ $reference->code }}" readonly="readonly" @endif>
-
-                    </div>
-                </div>
-				
-				<div id="description-input" class="form-group last">
-                    <label class="col-md-3 control-label">Descrição</label>
-                    <div class="col-md-7">
-
-                      	<input type="text" name="description" class="form-control input-circle" rows="3" placeholder="Descrição" @if($action==='edit') value="{{ $reference->description }}"" @endif >
-
-                    </div>
-                </div>	
-
-            </div>
-            <div class="form-actions">
-                <div class="row">
-                    <div class="pull-right col-md-3">
-                        <a href="{{ url('references/') }}">
-                            <button type="button" class="btn grey-salsa btn-outline">Cancelar</button>
-                        </a>
-                        <button id="send-btn" type="button" class="btn blue">Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <!-- END FORM-->
-    </div>
-
-</div>
-
-
 @section('styles')
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <!-- END PAGE LEVEL PLUGINS -->
 @stop
 
+<div id="code-input" class="form-group">
+    <label class="col-md-3 control-label">Nome</label>
+      <div class="col-md-7">                
+        <input type="text" 
+          name="code"
+          class="form-control" 
+          placeholder="Nome"
+          v-model="macroregion.name"
+        >
+      </div>
+  </div>
+  <div id="code-input" class="form-group">
+    <label class="col-md-3 control-label">Descrição</label>
+      <div class="col-md-7">                
+        <input type="text" 
+          name="code"
+          class="form-control" 
+          placeholder="Descrição"
+          v-model="macroregion.description"
+        >
+      </div>
+  </div>
+  
+  <div id="code-input" class="form-group">
+    <label class="col-md-3 control-label">Região</label>
+      <div class="col-md-12" style="padding:15px">
+        
+        <div id="vue-map">
+            <div id="map_canvas2"></div>
+        </div>
+
+      </div>
+  </div>
+  
+  <div class="row">
+    <hr>
+    <div class="container-fluid">
+      <div class="col-md-3 pull-right">
+        <div class="form-group">
+          <button 
+            type="button" 
+            @click="submitData()" 
+            class="btn blue btn-block"
+          >
+            Salvar
+          </button>
+        </div>
+      </div>  
+      <div class="col-md-3 pull-right">
+        <div class="form-group">
+          <a href="/macroregions/"><button type="button" class="btn grey btn-block">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
 @section('scripts')
-   
-	<!-- DATA CASTING & FORM SEND-->
     <script>
-          $('#send-btn').on('click', function(event) {
-                 
-                var data = $('#form-reference').serialize();
-                
-                
-                
-                $.ajax({
-
-                	@if($action==='edit')
-			        type: "PATCH",
-			        url: '{{ url('/references/'.$reference->id) }}',
-			        @elseif($action==='create')
-			        type: "POST",
-			        url: '{{ url('/references') }}',
-			        @endif
-
-                     data: data,
-                     success: function(response) {
-                        toastr.success('Sucesso!','Referência atualizada com sucesso');
-                        $('#code-input').removeClass('has-error');
-                        $('#description-input').removeClass('has-error');
-                     },
-                     error: function(responseError) {
-
-                        var errors = JSON.parse(responseError.responseText);
-                        toastr.error('Erro!', 'Alguns dados não foram preenchidos corretamente');
-                        $.each(errors, function(key, value){
-
-                            if(key == 'code'){
-                                toastr.error('Erro!', value);
-                                $('#code-input').addClass('has-error');
-
-                            }
-                            if(key == 'description'){
-                                toastr.error('Erro!', value);
-                                $('#description-input').addClass('has-error');
-
-                            }
-                            
-                        });
-
-
-
-
-                    }
-                });
-                 return false;
-                 
-
-           });            
+        var App = new Vue({
+            el: 'body',
+            data: {
+            
+            },
+            ready: function() {
+                var myOptions = {
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    center: new google.maps.LatLng(25.761680, -80.19179)
+                };
+                var map = new google.maps.Map(document.getElementById("map_canvas2"), myOptions);
+            },
+        });
     </script>
 @stop
