@@ -1,3 +1,3 @@
 {{--<create-products/>--}}
 
-<product-form/>
+{{--<product-form/>--}}

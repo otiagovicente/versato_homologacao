@@ -26,7 +26,8 @@
     "vue": "^1.0.26",
     "vue-google-maps": "^0.1.21",
     "vue-resource": "^0.9.3",
-    "vue-select2": "^0.2.6"
+    "vue-select2": "^0.2.6",
+    "vue-validator": "^2.1.7"
   },
   "dependencies": {
     "algoliasearch": "^3.18.1",

@@ -22,8 +22,12 @@ Vue.component(
     require('./components/general/page-header.vue')
 );
 Vue.component(
-    'product-form',
-    require('./components/products/ProductForm.vue')
+    'create-product',
+    require('./components/products/CreateProducts.vue')
+);
+Vue.component(
+    'edit-product',
+    require('./components/products/EditProducts.vue')
 );
 Vue.component(
     'line-form',

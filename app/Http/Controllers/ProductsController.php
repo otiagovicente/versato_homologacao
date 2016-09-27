@@ -24,14 +24,6 @@ class ProductsController extends Controller
 
     public function __construct(){
 
-        $this->middleware(function ($request, $next) {
-             $this->imagesPath = "images/products";
-             $this->brand_id = session()->get('brand')->id;
-
-            return $next($request);
-        });
-
-
     }
 
     /**
@@ -49,7 +41,7 @@ class ProductsController extends Controller
             ->with('color')
             ->with('grids')
             ->with('tags')
-            ->where('brand_id', $this->brand_id)
+            ->where('brand_id', session()->get('brand')->id)
             ->paginate(10);
             //->get();
 
@@ -67,8 +59,8 @@ class ProductsController extends Controller
      */
     public function create(Request $request)
     {
-        $grids  = Grid::where('brand_id', $this->brand_id)->get();
-        $tags = Tag::where('brand_id', $this->brand_id)->get();
+        $grids  = Grid::where('brand_id', session()->get('brand')->id)->get();
+        $tags = Tag::where('brand_id', session()->get('brand')->id)->get();
         return view('products.create',[
             'grids' =>$grids,
             'tags' => $tags
@@ -87,7 +79,7 @@ class ProductsController extends Controller
         //instancia um novo Produto com os dados do request
         $product = new Product();
         $product->fill($request->all());
-        $product->brand_id = (int) $this->brand_id;
+        $product->brand_id = (int) session()->get('brand')->id;
 //        dump($product);
         $product->save();
 
@@ -127,8 +119,8 @@ class ProductsController extends Controller
      */
     public function edit(Product $product)
     {
-        $grids  = Grid::where('brand_id', $this->brand_id)->get();
-        $tags = Tag::where('brand_id', $this->brand_id)->get();
+        $grids  = Grid::where('brand_id', session()->get('brand')->id)->get();
+        $tags = Tag::where('brand_id', session()->get('brand')->id)->get();
         return view('products.edit',[
             'grids' =>$grids,
             'tags' => $tags,
@@ -202,10 +194,26 @@ class ProductsController extends Controller
                     ->with('color')
                     ->with('gridsAndSizes')
                     ->with('tags')
-                    ->groupBy('brand_id')
                     ->get();
 
         return $products;
+    }
+
+    public function api_edit($id){
+
+        $product = Product::
+            where('id', $id)
+            ->with('brand', 'line','reference','material','color', 'grids', 'tags')
+            ->first();
+
+        //carrega os atributos extras
+        $product->line_code = $product->line->code;
+        $product->reference_code = $product->reference->code;
+        $product->material_code = $product->material->code;
+        $product->color_code = $product->color->code;
+        $product->grids_list = $product->grids->pluck('id');
+        $product->tags_list = $product->tags->pluck('id');
+        return $product;
     }
 
 }

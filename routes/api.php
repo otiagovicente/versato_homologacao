@@ -21,6 +21,7 @@ Route::get('/grids/selectlist/{brand}', 'GridsController@api_selectList');
 Route::get('/tags/selectlist/{brand}', 'TagsController@api_selectList');
 
 Route::get('/products/list', 'ProductsController@api_list');
+Route::get('/products/{product}/edit', 'ProductsController@api_edit');
 Route::get('/brands/list', 'BrandsController@api_list');
 Route::get('/lines/list', 'LinesController@api_list');
 Route::get('/references/list', 'ReferencesController@api_list');

@@ -61,7 +61,7 @@
 
             <div class="portlet-title">
                 <div class="caption font-blue">
-                    <i class="fa fa-plus font-blue"></i>Criar Produto
+                    <i class="fa fa-plus font-blue"></i>Editar Produto
                 </div>
             </div>
             <div class="portlet-body form">
@@ -251,12 +251,14 @@ export default{
 
         }
     },
+    props:['productid'],
     ready(){
         window._this = this;
         _this.product.brand_id = Versato.brand_id;
         _this.product.launchdisplay = moment().format('DD/MM/YYYY');
         _this.getGrids();
         _this.getTags();
+        _this.getProduct();
         _this.configureDropbox(_this.product);
         _this.configureAlgolia();
         _this.configureAutocomplete();
@@ -270,7 +272,7 @@ export default{
                 return false;
             }
 
-            this.$http.post('/products', _this.product)
+            this.$http.put('/products/'+_this.productid, _this.product)
             .then(function (response) {
                 console.log(response);
             }).catch(function (response) {
@@ -292,6 +294,21 @@ export default{
             .then(response => {
                 _this.tags_select = response.json();
             });
+        },
+        getProduct: function(){
+            this.$http.get('/api/products/'+_this.productid+'/edit')
+                    .then(response => {
+                        var product = response.json();
+                        product.launch = moment(product.launch, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY');
+                        product.launchdisplay = product.launch;
+                        product.grids = product.grids_list;
+                        product.tags = product.tags_list;
+                        $('#line-input').val(product.line.description);
+                        $('#reference-input').val(product.reference.description);
+                        $('#material-input').val(product.material.description);
+                        $('#color-input').val(product.color.description);
+                        _this.product = product;
+                    });
         },
         configureDropbox: function(callback){
             Dropzone.autoDiscover = false;

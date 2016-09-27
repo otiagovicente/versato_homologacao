@@ -13,11 +13,9 @@
 ])
 
 <div class="x_content">
-    @include('products.partials.form', [
-        'action' => 'create',
-        'sendButtonText' => 'Criar Produto',
 
-    ])
+    <create-product></create-product>
+
 </div>
 
 @stop

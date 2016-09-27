@@ -27,7 +27,7 @@ class Product extends Model
         'color_id' => 'integer',
 
     ];
-    protected $hidden = ['cost'];
+//    protected $hidden = ['cost'];
 
     public function brand(){
     	return $this->belongsTo('App\Brand');
@@ -53,6 +53,8 @@ class Product extends Model
     public function tags(){
         return $this->belongsToMany(Tag::class);
     }
+
+
 
     public function setLineIdAttribute($value){
         $this->attributes['line_id'] = (int) $value;

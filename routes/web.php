@@ -11,10 +11,10 @@
 |
 */
 
-// Authentication routes...
-Route::get('/login', 'Auth\AuthController@showLoginForm');
-Route::post('/login', 'Auth\AuthController@login');
-Route::get('/logout', 'Auth\AuthController@logout');
+//// Authentication routes...
+//Route::get('/login', 'Auth\AuthController@showLoginForm');
+//Route::post('/login', 'Auth\AuthController@login');
+//Route::get('/logout', 'Auth\AuthController@logout');
 
 Auth::routes();
 
@@ -38,11 +38,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/users/changepassword', 'UsersController@changePassword');
     Route::resource('users','UsersController',['parameters' => 'singular']);
 
-	Route::get('/home', 'HomeController@index');
+	//Route::get('/home', 'HomeController@index');
+
     Route::get('/brands/select', 'BrandsController@select');
     Route::get('/brands/{brand}/setselected', 'BrandsController@setSelected');
+    Route::post('/brands/{brand}/photo', 'BrandsController@addPhoto');
 	Route::resource('brands', 'BrandsController',['parameters' => 'singular']);
-	Route::post('/brands/{brand}/photo', 'BrandsController@addPhoto');
+
 
 	Route::post('/lines/search','LinesController@search');
 	Route::post('/lines/line/{code}','LinesController@getLineByCode');
