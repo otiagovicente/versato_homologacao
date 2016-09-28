@@ -25,7 +25,7 @@ class RegionsController extends Controller
      */
     public function create()
     {
-        //
+        return view('regions.create');
     }
 
     /**

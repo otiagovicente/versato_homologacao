@@ -14,6 +14,10 @@ require('./bootstrap');
  */
 
 Vue.component(
+    'regions-form',
+    require('./components/regions/RegionsForm.vue')
+);
+Vue.component(
     'macroregions-form',
     require('./components/macroregions/MacroRegionsForm.vue')
 );
