@@ -10,10 +10,11 @@
                         'brand_id' => session()->get('brand')->id
                 ]); ?>;
 
-                window.Algolia = <?php echo json_encode([
+                window.Scout = <?php echo json_encode([
                         'app_id' => env('ALGOLIA_APP_ID'),
                         'secret' => env('ALGOLIA_SECRET'),
-                        'search_key' => env('ALGOLIA_SEARCH_KEY')
+                        'search_key' => env('ALGOLIA_SEARCH_KEY'),
+                        'prefix' => env('SCOUT_PREFIX')
                 ]); ?>
         </script>
         <!-- BEGIN CORE PLUGINS -->
