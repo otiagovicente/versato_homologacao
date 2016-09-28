@@ -5,7 +5,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="/">
-            <img src="/images/versato-logo-white.png" alt="logo" class="sidebar-logo"/>
+            <img src="/images/versato-logo-white.png" alt="logo" class="logo-default sidebar-logo"/>
             </a>
             <div class="menu-toggler sidebar-toggler">
                 <span></span>
