@@ -9,6 +9,12 @@
                 window.Versato = <?php echo json_encode([
                         'brand_id' => session()->get('brand')->id
                 ]); ?>;
+
+                window.Algolia = <?php echo json_encode([
+                        'app_id' => env('ALGOLIA_APP_ID'),
+                        'secret' => env('ALGOLIA_SECRET'),
+                        'search_key' => env('ALGOLIA_SEARCH_KEY')
+                ]); ?>
         </script>
         <!-- BEGIN CORE PLUGINS -->
         <script src="/js/app.js" type="text/javascript"></script>

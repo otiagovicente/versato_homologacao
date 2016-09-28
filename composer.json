@@ -22,7 +22,8 @@
         "tsawler/laravel-filemanager": "^0.6.2",
         "doctrine/dbal": "^2.5",
         "algolia/algoliasearch-laravel": "^1.2",
-        "aws/aws-sdk-php-laravel": "^3.1"
+        "aws/aws-sdk-php-laravel": "^3.1",
+        "algolia/algoliasearch-client-php": "^1.10"
     },
     "autoload": {
         "classmap": [

@@ -343,11 +343,11 @@
             },
             configureAlgolia: function(){
                 //initializes algolia
-                _this.client = window.algoliasearch('Y9WBZIWMX0', '463bcdaf034272d4a26167c5f82ba45e');
-                _this.linesIndex = _this.client.initIndex('lines');
-                _this.referencesIndex = _this.client.initIndex('references');
-                _this.materialsIndex = _this.client.initIndex('materials');
-                _this.colorsIndex = _this.client.initIndex('colors');
+                _this.client = window.algoliasearch(Algolia.app_id, Algolia.search_key);
+                _this.linesIndex = _this.client.initIndex('line');
+                _this.referencesIndex = _this.client.initIndex('reference');
+                _this.materialsIndex = _this.client.initIndex('material');
+                _this.colorsIndex = _this.client.initIndex('color');
             },
             configureAutocomplete: function(){
 
