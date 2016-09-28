@@ -22,7 +22,9 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('macroregions','MacroregionsController',['parameters' => 'singular']);
-    Route::resource('regions','RegionsController',['parameters' => 'singular']);
+	Route::post('/macroregions/update','MacroregionsController@update');
+	
+	Route::resource('regions','RegionsController',['parameters' => 'singular']);
     Route::resource('customers','CustomersController',['parameters' => 'singular']);
     Route::resource('representatives','RepresentativesController',['parameters' => 'singular']);
 

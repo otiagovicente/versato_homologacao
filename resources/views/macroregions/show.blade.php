@@ -6,7 +6,13 @@
         'actions' => []
     ])
 
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <macroregions-form :pmacroregion="{{$macroregion}}" :isedit='false'></<macroregions-form>
+            </div>
+        </div>
+    </div>
 
 
 @endsection

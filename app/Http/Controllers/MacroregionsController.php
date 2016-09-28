@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\MacroregionRequest;
 
 use App\Http\Requests;
 use App\Macroregion;
@@ -25,7 +26,8 @@ class MacroregionsController extends Controller
      */
     public function index()
     {
-        return view('macroregions.index');
+        $macroregions = Macroregion::where('brand_id', $this->brand_id)->paginate(10);
+        return view('macroregions.index', compact('macroregions'));
     }
 
     /**
@@ -59,9 +61,10 @@ class MacroregionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Macroregion $macroregion)
     {
-        //
+        //$macroregion = Macroregion::where('id',$id);
+        return view('macroregions.show', compact('macroregion'));
     }
 
     /**
@@ -70,9 +73,9 @@ class MacroregionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Macroregion $macroregion)
     {
-        return view('macroregions.edit');
+        return view('macroregions.edit', compact('macroregion'));
     }
 
     /**
@@ -82,9 +85,12 @@ class MacroregionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MacroregionRequest $request, Macroregion $macroregion)
     {
-        //
+        $macroregion = Macroregion::find($request->id);
+        $macroregion->fill($request->all());
+        $macroregion->save();
+        return response($macroregion);
     }
 
     /**

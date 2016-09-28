@@ -11,6 +11,10 @@ class Macroregion extends Model
     use Searchable;
     use SoftDeletes;
 
-    protected $fillable = ['code', 'description', 'brand_id', 'geo'];
+    protected $fillable = ['id', 'code', 'description', 'brand_id', 'geo'];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at'];
+
+    public function regions(){
+    	return $this->hasMany('App\Region');
+    }
 }
