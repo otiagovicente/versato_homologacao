@@ -13,49 +13,84 @@ require('./bootstrap');
  * the application, or feel free to tweak this setup for your needs.
  */
 
-Vue.component(
-    'macroregions-form',
-    require('./components/macroregions/MacroRegionsForm.vue')
-);
-Vue.component(
-    'page-header-form',
-    require('./components/general/page-header.vue')
-);
-Vue.component(
-    'create-product',
-    require('./components/products/CreateProducts.vue')
-);
-Vue.component(
-    'edit-product',
-    require('./components/products/EditProducts.vue')
-);
-Vue.component(
-    'line-form',
-    require('./components/lines/LineForm.vue')
-);
-Vue.component(
-    'user-form',
-    require('./components/users/UserForm.vue')
-);
-Vue.component(
-    'profile-edit-form',
-    require('./components/users/ProfileEditForm.vue')
-);
 
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue')
-);
+/*
+ * Componente Header de páginas
+ */
 
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue')
-);
+    Vue.component(
+        'page-header-form',
+        require('./components/general/page-header.vue')
+    );
 
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue')
-);
+/*
+ *  Componentes de Produto
+ */
+    Vue.component(
+        'create-product',
+        require('./components/products/CreateProducts.vue')
+    );
+    Vue.component(
+        'edit-product',
+        require('./components/products/EditProducts.vue')
+    );
+
+/*
+ *   Componentes de Linha
+ */
+    Vue.component(
+        'line-form',
+        require('./components/lines/LineForm.vue')
+    );
+/*
+ *  Componentes de Cores
+ */
+
+    Vue.component(
+        'colors-list',
+        require('./components/colors/ColorsList.vue')
+    );
+
+/*
+ *   Componentes de Usuário
+ */
+
+    Vue.component(
+        'user-form',
+        require('./components/users/UserForm.vue')
+    );
+    Vue.component(
+        'profile-edit-form',
+        require('./components/users/ProfileEditForm.vue')
+    );
+
+
+/*
+ * Componentes Passport - Autenticação JWT
+ */
+    Vue.component(
+        'passport-clients',
+        require('./components/passport/Clients.vue')
+    );
+
+    Vue.component(
+        'passport-authorized-clients',
+        require('./components/passport/AuthorizedClients.vue')
+    );
+
+    Vue.component(
+        'passport-personal-access-tokens',
+        require('./components/passport/PersonalAccessTokens.vue')
+    );
+
+/*
+ * Componentes de Macro Regiões
+ */
+
+// Vue.component(
+//     'macroregions-form',
+//     require('./components/macroregions/MacroRegionsForm.vue')
+// );
 
 const app = new Vue({
     el: 'body'

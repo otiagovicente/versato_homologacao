@@ -273,6 +273,7 @@
                 this.$http.post('/products', _this.product)
                         .then(function (response) {
                             console.log(response);
+                            toastr.success('Producto guardado');
                         }).catch(function (response) {
                     $.each(response.data, function (key, value) {
                         toastr.error(value);
@@ -282,13 +283,13 @@
                 console.log('submitData');
             },
             getGrids: function(){
-                this.$http.get('/api/grids/selectlist/1')
+                this.$http.get('/api/grids/selectlist/'+Versato.brand_id)
                         .then(response => {
                             _this.grids_select = response.json();
                         });
             },
             getTags: function(){
-                this.$http.get('/api/tags/selectlist/1')
+                this.$http.get('/api/tags/selectlist/'+Versato.brand_id)
                         .then(response => {
                             _this.tags_select = response.json();
                         });

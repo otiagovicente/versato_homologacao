@@ -12,7 +12,7 @@
     <div class="portlet-body form">
         <!-- BEGIN FORM-->
         <form id="form-color" class="form-horizontal">
-
+            <input type="hidden" name="brand_id" value="{{session()->get('brand')->id}}">
 	    	{{ csrf_field() }}
 	    	@if($action==='edit')
 	        {{ method_field('PATCH') }}

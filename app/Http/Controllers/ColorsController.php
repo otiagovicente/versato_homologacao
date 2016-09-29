@@ -9,6 +9,7 @@ use App\Http\Requests\ColorRequest;
 
 //load model
 use App\Color;
+use App\Brand;
 
 class ColorsController extends Controller
 {
@@ -112,13 +113,15 @@ class ColorsController extends Controller
         return response()->json($results);
     //    return response()->json(Color::all());
     }
+
+   public function api_index(Request $request, $brand_id){
+       $colors = Color::where('brand_id', $brand_id)->get();
+       return $colors;
+   }
    public function api_list(){
 
-        $products = Color::
-                    groupBy('brand_id')
-                    ->get();
-
-        return $products;
+        $colors = Color::all();
+        return $colors;
 
 
     }

@@ -78,13 +78,13 @@
                                 </ul>
                             </li>
                             <li class="heading">
-                                <h3 class="uppercase">Produtos</h3>
+                                <h3 class="uppercase">Productos</h3>
                             </li>
                           
                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-sitemap"></i>
-                                    <span class="title">Linhas</span>
+                                    <span class="title">Líneas</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
@@ -99,7 +99,7 @@
                                     <li class="nav-item">
                                         <a href="{{ url('/lines/create') }}" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
-                                            <span class="title">Criar Linha</span>
+                                            <span class="title">Crear Línea</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
@@ -115,7 +115,7 @@
                             <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-barcode"></i>
-                                    <span class="title">Referências</span>
+                                    <span class="title">Referencias</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
@@ -130,7 +130,7 @@
                                     <li class="nav-item">
                                         <a href="/references/create" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
-                                            <span class="title">Criar Referência</span>
+                                            <span class="title">Criar Referencia</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
@@ -143,7 +143,7 @@
                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-diamond"></i>
-                                    <span class="title">Materiais</span>
+                                    <span class="title">Materiales</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
@@ -158,7 +158,7 @@
                                     <li class="nav-item">
                                         <a href="/materials/create" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
-                                            <span class="title">Criar Material</span>
+                                            <span class="title">Crear Material</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
@@ -173,7 +173,7 @@
                             <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-eyedropper"></i>
-                                    <span class="title">Cores</span>
+                                    <span class="title">Colores</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
@@ -189,7 +189,7 @@
                                     <li class="nav-item">
                                         <a href="{{ url('/colors/create') }}" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
-                                            <span class="title">Criar Cor</span>
+                                            <span class="title">Crear Cor</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
@@ -209,7 +209,7 @@
                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-tags"></i>
-                                    <span class="title">Produtos</span>
+                                    <span class="title">Productos</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
@@ -224,7 +224,7 @@
                                     <li class="nav-item">
                                         <a href="/products/create" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
-                                            <span class="title">Criar Produto</span>
+                                            <span class="title">Crear Producto</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
