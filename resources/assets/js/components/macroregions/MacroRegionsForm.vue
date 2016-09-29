@@ -81,7 +81,7 @@
     import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon, PlaceInput} from 'vue-google-maps'
     import toastr from 'toastr'
     
-    load('AIzaSyBvsUfqhKn021ZZOZtRGyuRIIKE96vfQ8U', '3.21')
+    load(Maps.maps_key, Maps.maps_version)
 
 export default{
     props:[

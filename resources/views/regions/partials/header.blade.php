@@ -7,7 +7,7 @@
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a href="{{ url('/macroregiones') }}">Macro Regiones</a>
+                    <a href="{{ url('/regions') }}">Regiones</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
@@ -21,10 +21,10 @@
                     </button>
                     <ul class="dropdown-menu pull-right" role="menu">
                         <li>
-                            <a href="{{ url('/macroregiones') }}">Ver Todos</a>
+                            <a href="{{ url('/regions') }}">Ver Todos</a>
                         </li>
                         <li>
-                            <a href="{{ url('/macroregiones/create') }}">Criar Macro Región </a>
+                            <a href="{{ url('/regions/create') }}">Criar Macro Región </a>
                         </li>
                         <li class="divider">
                         </li>
@@ -36,6 +36,6 @@
             </div>
         </div>
     <h3 class="page-title">
-        Macro Regiones <small>{{ $pageTitle }}</small>
+        Regiones <small>{{ $pageTitle }}</small>
     </h3>
         <!-- END PAGE HEADER-->

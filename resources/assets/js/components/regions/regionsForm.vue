@@ -9,33 +9,20 @@
 <template>
   
   <div id="code-input" class="form-group" >
-    <label class="col-md-3 control-label">Nome</label>
+    <label class="col-md-3 control-label">Macro Regiones</label>
       <div class="col-md-7" id="code">                
         
         <v-select 
-          v-bind:options.sync="lstMacroRegiones"
-          :value.sync="region.macroregiones"  
-          placeholder="Elije las macro regiones" 
-          multiple class="form-control" 
-          id="macroregiones-input" 
-          name="grids[]" 
+          v-bind:options.sync="macroregions_select"
+          :value.sync="regions.macroregion"  
+          placeholder="Elije la macro región"  
+          id="macroregions-input" 
+          name="macroregions[]" 
           search justified required close-on-select
         ></v-select>
       </div>
   </div>
-  <!--
-  <div id="code-input" class="form-group" >
-    <label class="col-md-3 control-label">Descrição</label>
-      <div class="col-md-7" id="description">                
-        <input type="text" 
-          name="code"
-          class="form-control" 
-          placeholder="Descrição"
-          v-model="macroregion.description"
-        >
-      </div>
-  </div>
-  -->
+
   <div id="code-input" class="form-group">
     <label class="col-md-3 control-label">Regiones</label>
       <div class="col-md-12" style="padding:15px">                
@@ -49,7 +36,7 @@
           <polygon 
             :paths.sync="loadpolygon" 
             :editable="false" 
-            :options="{geodesic:true, strokeColor:'#FF0000', fillColor:'#000000', draggable: false}"
+            :options="{geodesic:true, strokeColor:'#FF0000', fillColor:'#000000', draggable: true}"
           ></polygon>
         </map>
       </div>
@@ -85,24 +72,28 @@
 <script>
     import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon, PlaceInput} from 'vue-google-maps'
     import toastr from 'toastr'
+    import VueStrap from 'vue-strap'
     
-    load('AIzaSyBvsUfqhKn021ZZOZtRGyuRIIKE96vfQ8U', '3.21')
+    load(Maps.maps_key, Maps.maps_version)
 
 export default{
     props:[
       'pregions',
-      'isedit'
+      'isedit',
+      'pmacroregions'
     ],
     components: {
-            Map,
-            Marker,
-            Cluster,
-            InfoWindow,
-            Polygon,
-            Polyline,
-            Rectangle,
-            Circle,
-            PlaceInput
+      vSelect: VueStrap.select,
+      vOption: VueStrap.option,
+      Map,
+      Marker,
+      Cluster,
+      InfoWindow,
+      Polygon,
+      Polyline,
+      Rectangle,
+      Circle,
+      PlaceInput
     },
     data(){
         return{
@@ -114,8 +105,7 @@ export default{
             mapBounds: {},
             pgvisible: true,
             canedit:true,
-            lstMacroRegiones: new Array(),
-            macroregiones:[],
+            macroregions_select: new Array(),
             polygons:[],
             loadpolygon:[[
                   {lat: -34.81375546971009, lng: -63.63490624999997},
@@ -124,22 +114,27 @@ export default{
                   {lat: -36.42123554842336, lng: -63.61293359374997},
                 ]],
             
-            regions: {
+            regions: [{
                 id:'',
                 code: '',
                 description: '',
                 geo: '',
-                masterregion_id:''
-            },
+                masterregion_id:'',
+                macroregion:[],
+            }],
         }
     },
     ready(){
         toastr.options.closeButton = true;
-        this.teste();
-        //if(this.pmacroregion) this.loadRegions(); 
+        this.getMacroRegions();
     },
     methods:{
-        
+        getMacroRegions: function(){
+            this.$http.get('/api/macroregions/selectlist/'+ window.Versato.brand_id)
+            .then(response => {
+                this.macroregions_select = response.json();
+            });
+        },
         teste:function(){
             this.polygons.push({
                 path:[[
@@ -190,6 +185,14 @@ export default{
     },
 
     filters: {
+    },
+    watch: {
+        'regions.macroregion': function (val, oldVal) {    
+          console.log(this.regions.macroregion);
+        },
+        'macroregions_select': function (val, oldVal) {    
+          console.log(this.macroregions_select);
+        }
     }
 }
 </script>
