@@ -14,6 +14,7 @@ require('./bootstrap');
  */
 
 
+
 /*
  * Componente Header de páginas
  */
@@ -87,10 +88,15 @@ require('./bootstrap');
  * Componentes de Macro Regiões
  */
 
-// Vue.component(
-//     'macroregions-form',
-//     require('./components/macroregions/MacroRegionsForm.vue')
-// );
+Vue.component(
+    'regions-form',
+    require('./components/regions/RegionsForm.vue')
+);
+Vue.component(
+    'macroregions-form',
+    require('./components/macroregions/MacroRegionsForm.vue')
+);
+
 
 const app = new Vue({
     el: 'body'
