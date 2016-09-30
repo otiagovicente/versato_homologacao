@@ -2,7 +2,7 @@
 
 @section('content')
 @include('lines.partials.header',[
-    'pageTitle' => 'Criar Linha',
+    'pageTitle' => 'Crear Linea ',
     'url' => '/lines/create',
     'actions' => []
 ])
