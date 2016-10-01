@@ -62,7 +62,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->index();
-            $table->string('code_beirario')->index()->unique()->nullable();
+            $table->string('code_beirario')->index()->nullable();
             $table->integer('brand_id')->unsigned()->index();
             $table->integer('line_id')->unsigned()->index();
             $table->integer('reference_id')->unsigned()->index();
@@ -78,6 +78,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
 
             $table->unique(array('code', 'brand_id'));
+            $table->unique(array('code_beirario', 'brand_id'));
 
             $table->foreign('brand_id')->references('id')->on('brands');
             $table->foreign('line_id')->references('id')->on('lines');
