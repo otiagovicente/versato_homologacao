@@ -168,7 +168,7 @@ return [
          * Package Service Providers...
          */
 
-        AlgoliaSearch\Laravel\AlgoliaServiceProvider::class,
+//        AlgoliaSearch\Laravel\AlgoliaServiceProvider::class,
         App\Providers\SearchServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
