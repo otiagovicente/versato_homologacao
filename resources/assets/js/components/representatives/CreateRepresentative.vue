@@ -39,6 +39,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <small>Marcas</small>
+                            <div class="form-group form-line-input" id="brands">
+                                <v-select v-bind:options.sync="brands_select" :value.sync="representative.brands"
+                                          placeholder="Elije las marcas" class="form-control"
+                                          id="brands-input" name="brands[]"
+                                          search justified required close-on-select multiple></v-select>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
                     <div class="row">
                         <div class="col-md-12">
@@ -68,7 +79,8 @@
                     user_id : null
                 },
                 users_select : [],
-                regions_select : []
+                regions_select : [],
+                brands_select :[]
             }
         },
         components:{
@@ -79,6 +91,7 @@
             window._this = this;
             _this.getUsers();
             _this.getRegions();
+            _this.getBrands();
         },
         methods : {
 
@@ -92,6 +105,12 @@
                 this.$http.get('/api/regions/selectlist/'+Versato.brand_id)
                         .then(response => {
                             _this.regions_select = response.json();
+                        });
+            },
+            getBrands: function(){
+                this.$http.get('/api/brands/selectlist')
+                        .then(response => {
+                            _this.brands_select = response.json();
                         });
             },
             submitData: function(){

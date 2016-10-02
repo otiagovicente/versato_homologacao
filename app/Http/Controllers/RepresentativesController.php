@@ -39,9 +39,12 @@ class RepresentativesController extends Controller
      */
     public function store(RepresentativeRequest $request)
     {
+
         $representative = new Representative($request->all());
         $representative->save();
+        $representative->brands()->sync($request->brands);
         return $representative;
+
     }
 
     /**
@@ -77,6 +80,7 @@ class RepresentativesController extends Controller
     {
         $representative->fill($request->all());
         $representative->save();
+        $representative->brands()->sync($request->brands);
         return $representative;
     }
 
@@ -102,12 +106,13 @@ class RepresentativesController extends Controller
 
         $representative = Representative::
         where('id', $id)
-            ->with('user', 'region')
+            ->with('user', 'region', 'brands')
             ->first();
 
         //carrega os atributos extras
         $representative->user_id = $representative->user->id;
         $representative->region_id = $representative->region->id;
+        $representative->brands_list = $representative->brands->pluck('id');
         return $representative;
     }
 

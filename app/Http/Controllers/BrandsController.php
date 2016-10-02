@@ -138,5 +138,20 @@ class BrandsController extends Controller
 
 
     }
+    public function api_selectList(){
+
+        $brands = Brand::all();
+
+        foreach($brands as $brand){
+
+            $selectItem['value'] = $brand->id;
+            $selectItem['label'] = $brand->name;
+            $selectList[] = $selectItem;
+        }
+
+        return response()->json($selectList);
+
+    }
+
 
 }

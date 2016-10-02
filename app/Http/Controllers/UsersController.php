@@ -121,6 +121,7 @@ class UsersController extends Controller
     }
 
     public function api_show(User $user){
+        $user = User::where('id', $user->id)->with('representative')->first();
         return $user;
     }
 

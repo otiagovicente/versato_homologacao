@@ -19,4 +19,10 @@ class Representative extends Model
         return $this->belongsTo('App\Region');
     }
 
+    public function brands(){
+        return $this->belongsToMany('App\Brand');
+    }
+
+
+
 }

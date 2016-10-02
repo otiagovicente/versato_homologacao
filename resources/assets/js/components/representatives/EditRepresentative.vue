@@ -39,6 +39,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <small>Marcas</small>
+                        <div class="form-group form-line-input" id="brands">
+                            <v-select v-bind:options.sync="brands_select" :value.sync="representative.brands"
+                                      placeholder="Elije las marcas" class="form-control"
+                                      id="brands-input" name="brands[]"
+                                      search justified required close-on-select multiple></v-select>
+                        </div>
+                    </div>
+                </div>
+
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
@@ -68,7 +80,8 @@
                     user_id : null
                 },
                 users_select : [],
-                regions_select : []
+                regions_select : [],
+                brands_select : []
             }
         },
         props: ['representative_id'],
@@ -80,6 +93,7 @@
             window._this = this;
             _this.getUsers();
             _this.getRegions();
+            _this.getBrands();
             _this.getRepresentative();
         },
         methods : {
@@ -96,12 +110,17 @@
                             _this.regions_select = response.json();
                         });
             },
+            getBrands: function(){
+                this.$http.get('/api/brands/selectlist')
+                        .then(response => {
+                            _this.brands_select = response.json();
+                        });
+            },
             getRepresentative: function () {
                 this.$http.get('/api/representatives/'+_this.representative_id)
                         .then(response => {
                             _this.representative = response.json();
-                            _this.users_select.push(_this.representative.user_id);
-                            _this.regions_select.push(_this.representative.region_id);
+                            _this.representative.brands = _this.representative.brands_list;
                         });
             },
             submitData: function(){
