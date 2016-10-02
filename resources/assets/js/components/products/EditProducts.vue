@@ -258,8 +258,6 @@ export default{
         _this.configureDropbox(_this.product);
         _this.configureAlgolia();
         _this.configureAutocomplete();
-
-
     },
     methods:{
         submitData: function(){
@@ -300,10 +298,12 @@ export default{
                         product.launchdisplay = product.launch;
                         product.grids = product.grids_list;
                         product.tags = product.tags_list;
+                        
                         $('#line-input').val(product.line.description);
                         $('#reference-input').val(product.reference.description);
                         $('#material-input').val(product.material.description);
                         $('#color-input').val(product.color.description);
+                        
                         _this.product = product;
                     });
         },

@@ -14,7 +14,7 @@
         
         <v-select 
           v-bind:options.sync="macroregions_select"
-          :value.sync="regions.macroregion"  
+          :value.sync="macroregion"  
           placeholder="Elije la macro región"  
           id="macroregions-input" 
           name="macroregions[]" 
@@ -24,8 +24,50 @@
   </div>
 
   <div id="code-input" class="form-group">
+      <div class="col-md-12" style="padding:15px">
+        <button v-show="macroregion" type="button" class="btn grey btn-block" @click="addRegion">Nueva Región</button>
+        <br/>
+        
+        <table>
+          <tr>
+            <th class="col-md-3">Región</th>
+            <th class="col-md-3">Descripción</th>
+            <th class="col-md-3">Borrar</th>
+          </tr>
+          <tr v-for="r in regions">
+            <td>
+              <input type="text" 
+                name="code"
+                class="form-control" 
+                placeholder="Región"
+                v-model="r.code"
+              >
+            </td>
+            <td>
+              <input type="text" 
+                name="description"
+                class="form-control" 
+                placeholder="Descripción"
+                v-model="r.description"
+              >
+            </td>
+            <td>
+              <button 
+                v-show="canedit"
+                type="button" 
+                class="btn blue btn-block"
+                @click="regions.splice($index, 1)"
+              >Borrar</button> 
+            </td>
+          </tr>
+        </table>
+      </div>
+  </div>
+  
+  <div id="code-input" class="form-group">
     <label class="col-md-3 control-label">Regiones</label>
-      <div class="col-md-12" style="padding:15px">                
+      <div class="col-md-12" style="padding:15px">
+        <br/>
         <map
           :center.sync="center"
           :zoom.sync="zoom"
@@ -36,7 +78,14 @@
           <polygon 
             :paths.sync="loadpolygon" 
             :editable="false" 
-            :options="{geodesic:true, strokeColor:'#FF0000', fillColor:'#000000', draggable: true}"
+            :options="{geodesic:true, strokeColor:'#8080ff', fillColor:'#668cff', draggable: false}"
+          ></polygon>
+          
+          <polygon
+            v-for="r in regions"
+            :paths.sync="r.geo" 
+            :editable="true" 
+            :options="{geodesic:true, strokeColor:'#33ff33', fillColor:'#00e600', draggable: true}"
           ></polygon>
         </map>
       </div>
@@ -67,6 +116,9 @@
       </div>
     </div>
   </div>
+  <pre>
+    {{regions | json}}
+  </pre>
 </template>
 
 <script>
@@ -103,25 +155,12 @@ export default{
             mapStyle: 'normal',
             scrollwheel: true,
             mapBounds: {},
-            pgvisible: true,
             canedit:true,
             macroregions_select: new Array(),
-            polygons:[],
-            loadpolygon:[[
-                  {lat: -34.81375546971009, lng: -63.63490624999997},
-                  {lat: -34.83179331290262, lng: -61.23988671874997},
-                  {lat: -36.4565891377291, lng: -61.26185937499997},
-                  {lat: -36.42123554842336, lng: -63.61293359374997},
-                ]],
-            
-            regions: [{
-                id:'',
-                code: '',
-                description: '',
-                geo: '',
-                masterregion_id:'',
-                macroregion:[],
-            }],
+            regions:[],
+            macroregion:[],
+            loadpolygon:[],
+            regionsEven: false,
         }
     },
     ready(){
@@ -135,23 +174,35 @@ export default{
                 this.macroregions_select = response.json();
             });
         },
-        teste:function(){
-            this.polygons.push({
-                path:[[
-                  {lat: -38.81375546971009, lng: -53.63490624999997},
-                  {lat: -38.83179331290262, lng: -51.23988671874997},
-                  {lat: -38.4565891377291, lng: -51.26185937499997},
-                  {lat: -38.42123554842336, lng: -53.61293359374997},
-                ]]
-            });
-            return this.polygons[this.polygons.length - 1];
-        },
-        loadRegions: function(){
+        getRegions: function(){
 
         },
         
+        addRegion: function(){
+          var objCenter = {lat:'', lng:''};
+          objCenter.lat = this.loadpolygon[0][0].lat + ((this.loadpolygon[0][3].lat - this.loadpolygon[0][0].lat) / 2);
+          objCenter.lng = this.loadpolygon[0][0].lng + ((this.loadpolygon[0][3].lng - this.loadpolygon[0][0].lng) / 2);
+          
+          
+          this.regions.push({
+              id:'',
+              code:'',
+              description: '',
+              masterregion_id:this.macroregion, 
+              geo:[[
+                {lat: -34.81375546971009, lng: -63.63490624999997},
+                {lat: -34.83179331290262, lng: -61.23988671874997},
+                {lat: -36.4565891377291, lng: -61.26185937499997},
+                {lat: -36.42123554842336, lng: -63.61293359374997},
+              ]],
+            });
+            return this.regions[this.regions.length - 1];
+        },
+
         submitData: function(){
-            
+            for (var objRegion in this.regions) {
+              console.log(objRegion.code);
+            }
         },
         
         insertData: function(){
@@ -185,14 +236,38 @@ export default{
     },
 
     filters: {
-    },
-    watch: {
-        'regions.macroregion': function (val, oldVal) {    
-          console.log(this.regions.macroregion);
-        },
-        'macroregions_select': function (val, oldVal) {    
-          console.log(this.macroregions_select);
+      regionsRemover (regions) {
+        if (this.regionsEven) {
+          const result = [];
+          for (var i = 0 ; i < regions.length; i+=2) {
+            result.push(regions[i]);
+          }
+          return result;
+        } else {
+          return regions
         }
+      }
+    },
+    
+    watch: {
+        'macroregion': function (val, oldVal) {     
+          if(this.macroregion){
+            this.$http.get('/api/macroregions/geo/'+this.macroregion)
+            .then((response) => {
+              this.loadpolygon = JSON.parse(response.data);
+              
+              var objCenter = {lat:'', lng:''};
+              objCenter.lat = this.loadpolygon[0][0].lat + ((this.loadpolygon[0][3].lat - this.loadpolygon[0][0].lat) / 2);
+              objCenter.lng = this.loadpolygon[0][0].lng + ((this.loadpolygon[0][3].lng - this.loadpolygon[0][0].lng) / 2);
+              
+              this.center = objCenter;
+              this.zoom = 6;
+            
+            }, (response) => {
+              toastr.error('erro!', console.log(response.data));
+            });
+          } 
+        },
     }
 }
 </script>

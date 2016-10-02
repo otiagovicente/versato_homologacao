@@ -156,9 +156,9 @@ export default{
         
         updateData: function(){
           this.macroregion.geo = JSON.stringify(this.loadpolygon);
-          this.$http.post('/macroregions/update', this.macroregion)
+          this.$http.put('/macroregions/'+this.macroregion.id, this.macroregion)
           .then((response) => {
-            toastr.success('Sucesso!','Macro Região incluída com sucesso');
+            toastr.success('Sucesso!','Macro Região atualizada com sucesso');
           }, (response) => { 
             this.showErrors(response.data); 
           }); 

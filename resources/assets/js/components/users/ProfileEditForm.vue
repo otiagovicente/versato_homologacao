@@ -215,12 +215,10 @@ export default{
     },
     methods:{
         submitData: function(){ 
-            this.$http.post(this.actionUrl, this.user)
+            this.$http.put(this.actionUrl, this.user)
             .then(function (response) {
                 toastr.success('Sucesso!', 'Perfil actualizado con sucesso.');
             }).catch(function (response) {
-                
-                console.log(response);
                 $.each(response.data, function (key, value) {
                     toastr.warning('Atención', value);
                     $('#'+key).addClass('has-error');
