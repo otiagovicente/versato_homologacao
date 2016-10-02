@@ -20,6 +20,11 @@ Route::get('/user', function (Request $request) {
 Route::get('/grids/selectlist/{brand}', 'GridsController@api_selectList');
 Route::get('/tags/selectlist/{brand}', 'TagsController@api_selectList');
 
+Route::get('/macroregions/selectlist/{brand}', 'MacroregionsController@selectList');
+Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
+
+
+
 Route::get('/products/list', 'ProductsController@api_list');
 Route::get('/products/{product}/edit', 'ProductsController@api_edit');
 Route::get('/brands/list', 'BrandsController@api_list');
