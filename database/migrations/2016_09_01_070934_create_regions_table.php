@@ -67,9 +67,12 @@ class CreateRegionsTable extends Migration
         Schema::create('representatives', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->unique();
+            $table->integer('user_id')->unsigned()->unique();
             $table->integer('region_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
 
 
@@ -85,6 +88,9 @@ class CreateRegionsTable extends Migration
     public function down()
     {
 
+        Schema::table('representatives', function($table){
+            $table->dropForeign('representatives_user_id_foreign');
+        });
         Schema::table('customers', function($table){
             $table->dropForeign('customers_region_id_foreign');
         });

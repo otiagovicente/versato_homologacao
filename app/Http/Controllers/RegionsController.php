@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Region;
 
 class RegionsController extends Controller
 {
@@ -82,5 +83,20 @@ class RegionsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function api_selectList($brand_id){
+
+        $regions = Region::where('brand_id', $brand_id)->get();
+
+        foreach($regions as $region){
+
+            $selectItem['value'] = $region->id;
+            $selectItem['label'] = $region->description;
+            $selectList[] = $selectItem;
+        }
+
+        return response()->json($selectList);
+
     }
 }

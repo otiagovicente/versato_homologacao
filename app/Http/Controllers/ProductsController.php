@@ -184,7 +184,8 @@ class ProductsController extends Controller
     }
 
 
-    public function api_list(){
+    public function api_list(Brand $brand){
+
 
         $products = Product::
                     with('brand')
@@ -194,9 +195,25 @@ class ProductsController extends Controller
                     ->with('color')
                     ->with('gridsAndSizes')
                     ->with('tags')
+                    ->where('brand_id', $brand->id)
                     ->get();
 
         return $products;
+    }
+
+    public function api_show(Product $product){
+
+        $product = Product::with('brand')
+                    ->with('line')
+                    ->with('reference')
+                    ->with('material')
+                    ->with('color')
+                    ->with('gridsAndSizes')
+                    ->with('tags')
+                    ->find($product->id);
+
+        return response()->json($product);
+
     }
 
     public function api_edit($id){
@@ -215,5 +232,8 @@ class ProductsController extends Controller
         $product->tags_list = $product->tags->pluck('id');
         return $product;
     }
+
+
+
 
 }

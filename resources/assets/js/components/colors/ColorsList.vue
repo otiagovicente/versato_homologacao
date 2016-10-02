@@ -40,8 +40,8 @@
     .colors-list-item-div {
         position: relative;
         border-radius: 8px;
-        background-color: rgb(254, 238, 0);
-        box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.43),inset 0px 3px 7px 0px rgba(0, 0, 0, 0.35);
+        /*background-color: rgb(254, 238, 0);*/
+        /*box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.43),inset 0px 3px 7px 0px rgba(0, 0, 0, 0.35);*/
         width: 95%;
         margin-left:20px;
         height: 100px;

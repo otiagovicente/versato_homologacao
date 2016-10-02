@@ -233,8 +233,68 @@
                             </li>
 
 
+                            <li class="heading">
+                                <h3 class="uppercase">Clientes</h3>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-sitemap"></i>
+                                    <span class="title">Clientes</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="{{ url('/lines') }}" class="nav-link nav-toggle">
+                                            <i class="fa fa-bars"></i>
+                                            <span class="title">Mostrar Todos</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('/lines/create') }}" class="nav-link nav-toggle">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="title">Crear Cliente</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
 
 
+
+
+                                </ul>
+                            </li>
+
+
+                            <li class="heading">
+                                <h3 class="uppercase">Representantes</h3>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-users"></i>
+                                    <span class="title">Representantes</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/representatives" class="nav-link nav-toggle">
+                                            <i class="fa fa-users"></i>
+                                            <span class="title">Ver Todos</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/representatives/create" class="nav-link nav-toggle">
+                                            <i class="icon-user-follow"></i>
+                                            <span class="title">Crear</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
 
 
@@ -380,6 +440,8 @@
 
                                 </ul>
                             </li>
+
+
 
 
 

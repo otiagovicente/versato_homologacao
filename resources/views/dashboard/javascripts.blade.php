@@ -12,7 +12,7 @@
 
                 window.Scout = <?php echo json_encode([
                         'app_id' => env('ALGOLIA_APP_ID'),
-                        'secret' => env('ALGOLIA_SECRET'),
+//                        'secret' => env('ALGOLIA_SECRET'),
                         'search_key' => env('ALGOLIA_SEARCH_KEY'),
                         'prefix' => env('SCOUT_PREFIX')
                 ]); ?>
@@ -31,7 +31,7 @@
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="/dashboard/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
-        <script src="/dashboard/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
+        {{--<script src="/dashboard/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>--}}
         <script src="/dashboard/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <script src="/dashboard/custom/notifications.js" type="text/javascript" charset="utf-8"></script>
         <!-- END THEME LAYOUT SCRIPTS -->

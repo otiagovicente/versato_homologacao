@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests\RepresentativeRequest;
 use App\Http\Requests;
+use App\Representative;
+use App\User;
 
 class RepresentativesController extends Controller
 {
@@ -15,7 +18,7 @@ class RepresentativesController extends Controller
      */
     public function index()
     {
-        //
+        return view('representatives.index');
     }
 
     /**
@@ -25,7 +28,7 @@ class RepresentativesController extends Controller
      */
     public function create()
     {
-        //
+        return view('representatives.create');
     }
 
     /**
@@ -34,9 +37,11 @@ class RepresentativesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RepresentativeRequest $request)
     {
-        //
+        $representative = new Representative($request->all());
+        $representative->save();
+        return $representative;
     }
 
     /**
@@ -56,9 +61,9 @@ class RepresentativesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Representative $representative)
     {
-        //
+        return view('representatives.edit', compact('representative'));
     }
 
     /**
@@ -68,9 +73,11 @@ class RepresentativesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Representative $representative)
     {
-        //
+        $representative->fill($request->all());
+        $representative->save();
+        return $representative;
     }
 
     /**
@@ -83,4 +90,26 @@ class RepresentativesController extends Controller
     {
         //
     }
+
+
+    public function api_index(){
+
+        $representatives = Representative::with('user', 'region')->get();
+        return $representatives;
+    }
+
+    public function api_show($id){
+
+        $representative = Representative::
+        where('id', $id)
+            ->with('user', 'region')
+            ->first();
+
+        //carrega os atributos extras
+        $representative->user_id = $representative->user->id;
+        $representative->region_id = $representative->region->id;
+        return $representative;
+    }
+
+
 }

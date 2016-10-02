@@ -9,7 +9,8 @@
         "laravel/framework": "5.3.*",
         "laravel/scout": "^1.1",
         "laravel/passport": "^1.0",
-        "league/flysystem-aws-s3-v3": "^1.0"
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "intervention/image": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -18,7 +19,6 @@
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
         "guzzlehttp/guzzle": "~5.3|~6.0",
-        "intervention/image": "2.*",
         "tsawler/laravel-filemanager": "^0.6.2",
         "doctrine/dbal": "^2.5",
         "algolia/algoliasearch-laravel": "^1.2",

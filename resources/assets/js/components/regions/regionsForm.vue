@@ -74,7 +74,7 @@
     import toastr from 'toastr'
     import VueStrap from 'vue-strap'
     
-    load(Maps.maps_key, Maps.maps_version)
+    //load(Maps.maps_key, Maps.maps_version)
 
 export default{
     props:[

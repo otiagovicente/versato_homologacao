@@ -15,15 +15,6 @@ use Hash;
 class UsersController extends Controller
 {
 
-    private $imagesPath;
-
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-        $this->imagesPath = 'images/users';
-            return $next($request);
-        });
-    }
 
     public function index(){
         $roles = [
@@ -80,16 +71,22 @@ class UsersController extends Controller
             'photo' => 'required|mimes:jpg,png,jpeg'
         ]);
 
-        $file = $request->file('photo');
+        //Faz upload da imagem para o Driver AWS S3
+        $image = $request->file('photo')->store('users','s3');
 
-        $name= time().'.jpg';
+        //Torna acessível publicamente a imagem
+        Storage::disk('s3')->setVisibility($image, 'public');
 
-        $file->move($this->imagesPath, $name);
+        /*
+         * Espera 5 segundos para garantir que a visibilidade do
+         * arquivo no driver S3 seja público para que a imagem
+         * seja exibida
+         */
+        sleep(5);
 
-        //atualiza o path da imagem
-        $image = "/".$this->imagesPath."/".$name;
+        //Retorna a url completa da imagem que será salva no campo photo do produto
+        return Storage::disk('s3')->url($image);
 
-        return $image;
     }
 
     public function changePassword(PasswordRequest $request){
@@ -117,7 +114,28 @@ class UsersController extends Controller
     }
 
 
+
+    public function api_index(){
+        $users = User::all();
+        return $users;
+    }
+
     public function api_show(User $user){
         return $user;
     }
+
+    public function api_selectList(){
+
+        $users = User::all();
+        foreach($users as $user){
+
+            $selectItem['value'] = $user->id;
+            $selectItem['label'] = $user->name.' '.$user->lastname ;
+            $selectList[] = $selectItem;
+        }
+
+        return response()->json($selectList);
+
+    }
+
 }

@@ -76,4 +76,9 @@ Route::group(['middleware' => 'auth'], function () {
 			'parameters' => 'singular'
 		]);
 
+    Route::resource('/representatives', 'RepresentativesController',[
+        'parameters' => 'singular'
+    ]);
+
+
 });

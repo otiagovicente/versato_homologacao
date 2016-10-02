@@ -24,6 +24,26 @@ require('./bootstrap');
         require('./components/general/page-header.vue')
     );
 
+
+
+
+/*
+ *  Componentes de Produto
+ */
+
+    Vue.component(
+        'list-representatives',
+        require('./components/representatives/ListRepresentatives.vue')
+    );
+    Vue.component(
+        'create-representative',
+        require('./components/representatives/CreateRepresentative.vue')
+    );
+    Vue.component(
+        'edit-representative',
+        require('./components/representatives/EditRepresentative.vue')
+    );
+
 /*
  *  Componentes de Produto
  */
