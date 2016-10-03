@@ -20,12 +20,14 @@ Auth::routes();
 
 
 Route::group(['middleware' => 'auth'], function () {
-
-    Route::resource('macroregions','MacroregionsController',['parameters' => 'singular']);
-	Route::post('/macroregions/update','MacroregionsController@update');
 	
+	Route::resource('shops','ShopsController',['parameters' => 'singular']);
+	Route::resource('shops','ShopsController',['parameters' => 'singular']);
+    
+	Route::resource('macroregions','MacroregionsController',['parameters' => 'singular']);
 	Route::resource('regions','RegionsController',['parameters' => 'singular']);
-    Route::resource('customers','CustomersController',['parameters' => 'singular']);
+    
+	Route::resource('customers','CustomersController',['parameters' => 'singular']);
     Route::resource('representatives','RepresentativesController',['parameters' => 'singular']);
 
     Route::get('/','PagesController@productsDashboard');
@@ -70,7 +72,6 @@ Route::group(['middleware' => 'auth'], function () {
 			'parameters' => 'singular'
 		]);
 	Route::post('/products/photo', 'ProductsController@addPhoto');
-
 	Route::post('/colors/search', 'ColorsController@search');
 	Route::resource('/colors', 'ColorsController', [
 			'parameters' => 'singular'

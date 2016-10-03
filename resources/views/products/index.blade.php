@@ -38,10 +38,8 @@
                     </div>
                     
                 @endforeach
-
         </div>
     </div>
-
 @stop
 
 @section('styles')

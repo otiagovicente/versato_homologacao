@@ -1,8 +1,7 @@
-<template>
+<template>  
     <div class="row">
             <div class="col-md-12">
-                <div class="portlet light ">
-                    
+                <div class="portlet light ">    
                     <div class="portlet-title tabbable-line">
                         <div class="caption caption-md">
                             <span class="caption-subject font-blue bold uppercase"> <i class="fa fa-user"></i> Conta de usuário</span>
@@ -10,106 +9,80 @@
                     </div>
                     
                     <div class="portlet-body">
-                        
                         <form class="form-horizontal">    
-                            
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <div class="form-group form-line-input" id="name">
-                                        <small>Name</small>
-                                        <input 
-                                            name="name"
-                                            type="text"
-                                            v-model="user.name"
-                                            class="form-control input-sm"
-                                            id="cost-input"
-                                        >
-                                    </div>
+                            <div id="code-input" class="form-group" >
+                                <label class="col-md-3 control-label">Nome</label>
+                                <div class="col-md-7" id="code">                
+                                    <input type="text" 
+                                    name="code"
+                                    class="form-control" 
+                                    placeholder="Nombre"
+                                    v-model="user.name"
+                                    >
+                                </div>
+                            </div>   
+                            <div id="code-input" class="form-group" >
+                                <label class="col-md-3 control-label">Apellido</label>
+                                <div class="col-md-7" id="lastname">                
+                                    <input type="text" 
+                                    name="lastname"
+                                    class="form-control" 
+                                    placeholder="Apellido"
+                                    v-model="user.lastname"
+                                    >
+                                </div>
+                            </div>   
+                            <div id="code-input" class="form-group" >
+                                <label class="col-md-3 control-label">E-mail</label>
+                                <div class="col-md-7" id="email">                
+                                    <input type="text" 
+                                    name="email"
+                                    class="form-control" 
+                                    placeholder="E-mail"
+                                    v-model="user.email"
+                                    >
+                                </div>
+                            </div> 
+                            <div id="code-input" class="form-group" >
+                                <label class="col-md-3 control-label">Contraseña</label>
+                                <div class="col-md-7" id="password">                
+                                    <input type="text" 
+                                    name="contrasena"
+                                    class="form-control" 
+                                    placeholder="Contraseña"
+                                    v-model="user.password"
+                                    >
+                                </div>
+                            </div>  
+                            <div id="code-input" class="form-group" >
+                                <label class="col-md-3 control-label">Confirmar la Contraseña</label>
+                                <div class="col-md-7" id="password_confirmation">                
+                                    <input type="text" 
+                                    name="confirmarcontrasena"
+                                    class="form-control" 
+                                    placeholder="Confirmar la Contraseña"
+                                    v-model="user.password_confirmation"
+                                    >
+                                </div>
+                            </div> 
+                            <div id="code-input" class="form-group" >
+                                <label class="col-md-3 control-label">Tipo de Usuario</label>
+                                <div class="col-md-7" id="role">                
+                                    <select id="role-input" name="role" class="form-control" v-model="user.role">
+                                        <option value="1">Super Admin</option>
+                                        <option value="2">Admin</option>
+                                        <option value="3">Gestor</option>
+                                        <option value="4" selected>Editor</option>
+                                        <option value="5">Representante</option>
+                                    </select>
                                 </div>
                             </div>
-                           
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <div class="form-group form-line-input" id="lastname">
-                                        <small>Sobrenome</small>
-                                        <input 
-                                            name="lastname"
-                                            type="text"
-                                            v-model="user.lastname"
-                                            class="form-control input-sm"
-                                            id="lastname-input"
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <div class="form-group form-line-input" id="email">
-                                        <small>E-Mail</small>
-                                        <input 
-                                            name="email"
-                                            type="text"
-                                            v-model="user.email"
-                                            class="form-control input-sm"
-                                            id="email-input"
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <div class="form-group form-line-input" id="password">
-                                        <small>Senha</small>
-                                        <input 
-                                            name="password"
-                                            type="password"
-                                            v-model="user.password"
-                                            class="form-control input-sm"
-                                            id="password-input"
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <div class="form-group form-line-input" id="password_confirmation">
-                                        <small>Confirmar Senha</small>
-                                        <input 
-                                            name="password_confirmation"
-                                            type="password"
-                                            v-model="user.password_confirmation"
-                                            class="form-control input-sm"
-                                            id="password_confirmation-input"
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <div class="form-group form-line-input" id="role">
-                                        <small>Tipo de usuário</small>
-                                        <select id="role-input" name="role" class="form-control" v-model="user.role">
-                                            <option value="1">Super Admin</option>
-                                            <option value="2">Admin</option>
-                                            <option value="3">Gestor</option>
-                                            <option value="4" selected>Editor</option>
-                                            <option value="5">Representante</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
                             <hr>
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
-                                    <button
-                                        type="button"
-                                        class="btn btn-primary pull-right"
-                                        @click="submitData()"
-                                    >
-                                        <i class="fa fa-btn fa-user"></i> 
-                                        Criar
+                                    <button type="button" class="btn btn-primary pull-right" @click="submitData()">
+                                        <i class="fa fa-btn fa-user"></i>
+                                        Crear
                                     </button>
                                 </div>
                             </div>
@@ -151,9 +124,7 @@ export default{
         toastr.options.closeButton = true;
     },
     methods:{
-        submitData: function(){ 
-            console.log(this.user);
-            
+        submitData: function(){             
             this.$http.post('/users', this.user)
             .then(function (response) {
                 toastr.success('Sucesso!', 'Usuário criado con sucesso.');
