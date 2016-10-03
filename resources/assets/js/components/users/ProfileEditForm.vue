@@ -208,12 +208,15 @@ export default{
             }
         }
     },
+    
     ready(){
         console.log(this.user);
         toastr.options.closeButton = true;
         this.configureDropbox(this.user);
     },
+
     methods:{
+        
         submitData: function(){ 
             this.$http.put(this.actionUrl, this.user)
             .then(function (response) {

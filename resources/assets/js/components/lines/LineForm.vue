@@ -1,27 +1,27 @@
 
 <template>
     <div id="code-input" class="form-group" >
-    <label class="col-md-3 control-label">Nome</label>
-      <div class="col-md-7" id="code">                
-        <input type="text" 
-          name="code"
-          class="form-control" 
-          placeholder="Nome"
-          v-model="line.code"
-        >
-      </div>
-  </div>
-  <div id="code-input" class="form-group" >
-    <label class="col-md-3 control-label">Descrição</label>
-      <div class="col-md-7" id="description">                
-        <input type="text" 
-          name="code"
-          class="form-control" 
-          placeholder="Descrição"
-          v-model="line.description"
-        >
-      </div>
-  </div>
+        <label class="col-md-3 control-label">Nome</label>
+        <div class="col-md-7" id="code">                
+            <input type="text" 
+            name="code"
+            class="form-control" 
+            placeholder="Nome"
+            v-model="line.code"
+            >
+        </div>
+    </div>
+    <div id="code-input" class="form-group" >
+        <label class="col-md-3 control-label">Descrição</label>
+        <div class="col-md-7" id="description">                
+            <input type="text" 
+            name="code"
+            class="form-control" 
+            placeholder="Descrição"
+            v-model="line.description"
+            >
+        </div>
+    </div>
   
   <div class="row">
     <br/>

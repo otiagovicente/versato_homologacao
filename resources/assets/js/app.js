@@ -97,6 +97,14 @@ Vue.component(
     require('./components/macroregions/MacroRegionsForm.vue')
 );
 
+/*
+* Componentes de Shops
+*/
+
+Vue.component(
+    'shop-form',
+    require('./components/shops/shopForm.vue')
+);
 
 const app = new Vue({
     el: 'body'
