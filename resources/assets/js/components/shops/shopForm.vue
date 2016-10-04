@@ -18,83 +18,81 @@
 </style>
 
 <template>  
-    <div class="row">
+    <!-- BEGIN PROFILE CONTENT -->
+    <div class="profile-content">
+        <div class="row">
             <div class="col-md-12">
-                <div class="portlet light ">    
+                <div class="portlet light ">
                     <div class="portlet-title tabbable-line">
                         <div class="caption caption-md">
-                            <span class="caption-subject font-blue bold uppercase"> <i class="fa fa-user"></i> 
-                            Tienda</span>
+                            <i class="icon-globe theme-font hide"></i>
+                            <span class="caption-subject font-blue-madison bold uppercase">Conta de usuário</span>
                         </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab_1_1" data-toggle="tab">Informaciones</a>
+                            </li>
+                            <li>
+                                <a href="#tab_1_2" data-toggle="tab">Añadir el logotipo</a>
+                            </li>
+                        </ul>
                     </div>
-                    
                     <div class="portlet-body">
-                        <form class="form-horizontal">    
-                            <div id="code-input" class="form-group" >
-                                <label class="col-md-3 control-label">Nome</label>
-                                <div class="col-md-7" id="name">                
-                                    <input type="text" 
-                                    name="name"
-                                    class="form-control" 
-                                    placeholder="Nombre"
-                                    v-model="shop.name"
-                                    >
-                                </div>
+                        <div class="tab-content">
+                            <!-- PERSONAL INFO TAB -->
+                            <div class="tab-pane active" id="tab_1_1">
+                                <form role="form" action="#">
+                                    
+                                    <div class="form-group" id="name-input" >
+                                        <label  class="control-label">Nombre</label>
+                                        <input type="text" placeholder="la tienda" class="form-control" v-model="shop.name" /> </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label"  id="about-input" >Description</label>
+                                        <textarea class="form-control" rows="3" placeholder="Una breve descripcion de la tienda" v-model="shop.description"></textarea>
+                                    </div>
+
+                                    <div class="form-group" id="address-input" >
+                                        <label class="control-label">Endereço</label>
+                                        <input type="text" placeholder="avenida aa" v-model="shop.address" class="form-control" /> </div>
+                                    
+                                    <hr>
+                                    <div class="margin-top-10">
+                                        <a href="javascript:;" v-on:click="submitData" class="btn green"> Guardar </a>
+                                        <a href="/shops" class="btn default"> Cancel </a>
+                                    </div>
+                                </form>
                             </div>
-                            <div id="code-input" class="form-group" >
-                                <label class="col-md-3 control-label">Descricion</label>
-                                <div class="col-md-7" id="description">                
-                                    <input type="text" 
-                                    name="description"
-                                    class="form-control" 
-                                    placeholder="Descricion"
-                                    v-model="shop.description"
-                                    >
-                                </div>
-                            </div> 
-                            <div id="code-input" class="form-group" >
-                                <label class="col-md-3 control-label">Endereço</label>
-                                <div class="col-md-7" id="address">                
-                                    <input type="text" 
-                                    name="address"
-                                    class="form-control" 
-                                    placeholder="Endereço"
-                                    v-model="shop.address"
-                                    >
-                                </div>
-                            </div> 
-                            <div id="code-input" class="form-group" >
-                                <label class="col-md-3 control-label">Endereço</label>
-                                <div id="photo-input" class="form-group">
-                                    <div class="">
-                                        <img id="photo-image"  v-bind:src="shops.logo" class="figure-img img-fluid img-rounded product-photo" alt="sem imagem do produto.">
+                            <!-- END PERSONAL INFO TAB -->
+                            
+                            <div class="tab-pane" id="tab_1_2">
+                                <p> Cambia el logo! ;) </p>
+                                <form id="image-form" action="#" role="form">
+                                    <div class="form-group">
+                                        <div class="thumbnail" style="width: 100%;">
+                                            <img :src="shop.photo" alt="" style="width:auto;"/>
+                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <div id="photo" class="dropzone"></div>
+                                        <div id="photo" class="dropzone" style="min-height:150px; border: 2px dashed #eaeaea; background: white; padding: 20px 20px; text-align:center;">
+
+                                        </div>
                                     </div>
-                                </div>
-                                
+                                </form>
                             </div>
-                            
-                            <hr>
-                            <div class="form-group">
-                                <div class="col-md-6 col-md-offset-4">
-                                    <button type="button" class="btn btn-primary pull-right" @click="submitData()">
-                                        <i class="fa fa-btn fa-user"></i>
-                                        Crear
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    {{shop | json}}
 </template>
 
 <script>
 import VueStrap from 'vue-strap'
 import toastr from 'toastr'
+import Dropzone from 'dropzone'
 
 export default{
     components: {
@@ -110,7 +108,8 @@ export default{
                 logo: '',
                 address: '',
                 geo:'',
-                customer_id: ''
+                customer_id: '',
+                photo:''
             },
         }
     },
@@ -120,7 +119,7 @@ export default{
     },
     methods:{
         submitData: function(){ 
-            if(this.shop.id)
+            if(!this.shop.id)
                 this.insertShop();
             else
                 this.updateShop();
@@ -182,7 +181,7 @@ export default{
 
             photoDropzone.accept = function(file, done) {
 
-                bootbox.confirm("Seguro que quieres hacer el upload de una imágene del producto?", function(result) {
+                bootbox.confirm("Seguro que quieres hacer el upload de una imágene de la tienda?", function(result) {
                     if(result){
                         done();
                         photoDropzone.processQueue();
