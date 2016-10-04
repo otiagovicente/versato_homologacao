@@ -40,9 +40,6 @@ class UserRequest extends Request
                 $rules = [
                     'name' => 'required|max:255',
                     'email' => 'required|email|max:255|unique:users',
-                    'password' => 'required|min:6|confirmed',
-                    'password_confirmation' => 'min:6|same:password',
-                    'role' => 'required'
                 ];
                 break;
 
@@ -50,17 +47,11 @@ class UserRequest extends Request
                 $rules = [
                     'name' => 'required|max:255',
                     'email' => 'required|email|max:255|unique:users,email,'.$this->id,
-                    'role' => 'required',
-                    'password' => 'required|min:6|confirmed',
-                    'password_confirmation' => 'min:6|same:password',
                 ];
                 break;
         }
-
-
         return $rules;
     }
-
 
     public function messages(){
         return [

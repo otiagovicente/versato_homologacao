@@ -11,6 +11,6 @@ class Region extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $fillable = ['id','code', 'description', 'geo', 'brand_id', 'macroregion_id'];
+    protected $fillable = ['code', 'description', 'geo', 'brand_id', 'macroregion_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 }

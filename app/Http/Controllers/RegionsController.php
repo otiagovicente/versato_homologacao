@@ -3,12 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//use App\Http\Requests\RegionRequest;
 
 use App\Http\Requests;
+use App\Macroregion;
 use App\Region;
 
 class RegionsController extends Controller
 {
+    private $brand_id;
+
+    public function __construct(){
+        $this->middleware(function ($request, $next) {
+             $this->brand_id = session()->get('brand')->id;
+            return $next($request);
+        });
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +37,8 @@ class RegionsController extends Controller
      */
     public function create()
     {
-        return view('regions.create');
+        $macroregions = Macroregion::where('brand_id', $this->brand_id)->get();
+        return view('regions.create', compact('macroregions'));
     }
 
     /**
@@ -37,7 +49,11 @@ class RegionsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $region = new Region();
+        $region->fill($request->all());
+        $region->brand_id = (int) session()->get('brand')->id;
+        $region->save();
+        return response($region);
     }
 
     /**
@@ -69,9 +85,12 @@ class RegionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Region $region)
     {
-        //
+        $region->fill($request->all());
+        $region->brand_id = (int) session()->get('brand')->id;
+        $region->save();
+        return response($region);
     }
 
     /**
@@ -82,21 +101,12 @@ class RegionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $region = Region::find($id);
+        $region->delete();
     }
-
-    public function api_selectList($brand_id){
-
-        $regions = Region::where('brand_id', $brand_id)->get();
-
-        foreach($regions as $region){
-
-            $selectItem['value'] = $region->id;
-            $selectItem['label'] = $region->description;
-            $selectList[] = $selectItem;
-        }
-
-        return response()->json($selectList);
-
-    }
+    
+    public function destroyByMacroregion($id){
+        //$region = Region::where('macroregion_id',$id);
+        //$region->delete();
+    } 
 }
