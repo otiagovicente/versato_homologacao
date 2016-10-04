@@ -26,8 +26,8 @@ class CreateRegionsTable extends Migration
         Schema::create('regions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code');
-            $table->string('description')->nullable();
-            $table->string('geo')->nullable();
+            $table->string('description');
+            $table->longText('geo');
             $table->integer('brand_id')->unsigned();
             $table->integer('macroregion_id')->unsigned();
             $table->timestamps();
@@ -60,7 +60,6 @@ class CreateRegionsTable extends Migration
             $table->string('address');
             $table->string('geo');
             $table->integer('customer_id')->unsigned();
-
             $table->foreign('customer_id')->references('id')->on('customers');
         });
 
@@ -74,10 +73,6 @@ class CreateRegionsTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
         });
-
-
-
-
     }
 
     /**
