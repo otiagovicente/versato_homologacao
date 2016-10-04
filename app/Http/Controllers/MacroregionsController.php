@@ -10,13 +10,8 @@ use App\Macroregion;
 
 class MacroregionsController extends Controller
 {
-    private $brand_id;
-
     public function __construct(){
-        $this->middleware(function ($request, $next) {
-             $this->brand_id = session()->get('brand')->id;
-            return $next($request);
-        });
+       
     }
 
     /**
@@ -26,7 +21,7 @@ class MacroregionsController extends Controller
      */
     public function index()
     {
-        $macroregions = Macroregion::where('brand_id', $this->brand_id)->paginate(10);
+        $macroregions = Macroregion::where('brand_id', session()->get('brand')->id)->paginate(10);
         return view('macroregions.index', compact('macroregions'));
     }
 
@@ -50,7 +45,7 @@ class MacroregionsController extends Controller
     {
         $macroregion = new Macroregion();
         $macroregion->fill($request->all());
-        $macroregion->brand_id = (int) $this->brand_id;
+        $macroregion->brand_id = (int) session()->get('brand')->id;
         $macroregion->save();
         return response($macroregion);
     }
@@ -87,7 +82,6 @@ class MacroregionsController extends Controller
      */
     public function update(MacroregionRequest $request, Macroregion $macroregion)
     {
-        $macroregion = Macroregion::find($request->id);
         $macroregion->fill($request->all());
         $macroregion->save();
         return response($macroregion);
@@ -102,5 +96,21 @@ class MacroregionsController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    public function selectList($brand){
+        $macroregions = Macroregion::where('brand_id', $brand)->get();
+        
+        foreach($macroregions as $macroregion){
+            $selectItem['value'] = $macroregion->id;
+            $selectItem['label'] = $macroregion->description;
+            $selectList[] = $selectItem;
+        }
+        return response()->json($selectList);
+    }
+    
+    public function getMacroregionGeo($id){
+        $macroregion = Macroregion::with('regions')->find($id);
+        return response()->json($macroregion);
     }
 }

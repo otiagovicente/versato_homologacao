@@ -1,19 +1,21 @@
-@section('styles')
-    <link href="/dashboard/pages/css/profile.min.css" rel="stylesheet" type="text/css" />
-@endsection
-
+@extends('layouts.dashboard')
 @section('content')
-    @include('shops.partials.header',[
-        'pageTitle' => 'Crear Tienda',
-        'url' => '/shops/create',
-        'actions' => []
-    ])
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10">
-                <shop-form/>
-            </div>
-        </div>
-    </div>
-@endsection
+@include('general.pageheader',[
+    'section' => 'Tiendas',
+    'sectionUrl' => '/shops',
+    'pageTitle' => 'Crear Tienda',
+    'url' => '/shops/create',
+    'actions' => [
+        'Mostrar Todos' => '/shops',
+        'Crear Tiendas' => '/shops/create'
+    ]
+])
+
+<div class="x_content">
+
+    <shop-form></shop-form>
+
+</div>
+
+@stop
