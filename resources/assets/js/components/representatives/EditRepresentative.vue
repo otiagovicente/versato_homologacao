@@ -105,7 +105,7 @@
                         });
             },
             getRegions: function(){
-                this.$http.get('/api/regions/selectlist/'+Versato.brand_id)
+                this.$http.get('/api/regions/selectlist')
                         .then(response => {
                             _this.regions_select = response.json();
                         });

@@ -26,9 +26,32 @@ require('./bootstrap');
 
 
 
+/*
+ *  Componentes de Clientes
+ */
+
+    Vue.component(
+        'create-customer',
+        require('./components/customers/CreateCustomer.vue')
+    );
+    Vue.component(
+        'edit-customer',
+        require('./components/customers/EditCustomer.vue')
+    );
+    Vue.component(
+        'show-customer',
+        require('./components/customers/ShowCustomer.vue')
+    );
+    Vue.component(
+        'list-customers',
+        require('./components/customers/ListCustomers.vue')
+    );
+
+
+
 
 /*
- *  Componentes de Produto
+ *  Componentes de Representantes
  */
 
     Vue.component(
@@ -76,6 +99,11 @@ require('./bootstrap');
  *   Componentes de Usuário
  */
 
+
+    Vue.component(
+        'user-profile',
+        require('./components/users/UserProfile.vue')
+    );
     Vue.component(
         'user-form',
         require('./components/users/UserForm.vue')

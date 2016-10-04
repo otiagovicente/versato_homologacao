@@ -85,9 +85,9 @@ class RegionsController extends Controller
         //
     }
 
-    public function api_selectList($brand_id){
+    public function api_selectList(){
 
-        $regions = Region::where('brand_id', $brand_id)->get();
+        $regions = Region::all();
 
         foreach($regions as $region){
 

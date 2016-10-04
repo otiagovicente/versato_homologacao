@@ -231,21 +231,21 @@
 
                             <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-sitemap"></i>
+                                    <i class="fa fa-black-tie"></i>
                                     <span class="title">Clientes</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="{{ url('/lines') }}" class="nav-link nav-toggle">
+                                        <a href="{{ url('/customers') }}" class="nav-link nav-toggle">
                                             <i class="fa fa-bars"></i>
                                             <span class="title">Mostrar Todos</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('/lines/create') }}" class="nav-link nav-toggle">
+                                        <a href="{{ url('/customers/create') }}" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
                                             <span class="title">Crear Cliente</span>
                                             <span class="selected"></span>

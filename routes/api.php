@@ -21,7 +21,7 @@ Route::get('/brands/selectlist', 'BrandsController@api_selectList');
 Route::get('/grids/selectlist/{brand}', 'GridsController@api_selectList');
 Route::get('/tags/selectlist/{brand}', 'TagsController@api_selectList');
 Route::get('/users/selectlist', 'UsersController@api_selectList');
-Route::get('/regions/selectlist/{brand}', 'RegionsController@api_selectList');
+Route::get('/regions/selectlist', 'RegionsController@api_selectList');
 
 
 
@@ -30,14 +30,12 @@ Route::get('/representatives','RepresentativesController@api_index');
 
 
 Route::get('/products/list/{brand}', 'ProductsController@api_list');
-=======
 Route::get('/macroregions/selectlist/{brand}', 'MacroregionsController@selectList');
 Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
 
 
 
 Route::get('/products/list', 'ProductsController@api_list');
->>>>>>> origin/master
 Route::get('/products/{product}/edit', 'ProductsController@api_edit');
 Route::get('/products/{product}', 'ProductsController@api_show');
 Route::get('/products');
