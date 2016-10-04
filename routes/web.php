@@ -22,7 +22,6 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
 	
 	Route::resource('shops','ShopsController',['parameters' => 'singular']);
-	Route::resource('shops','ShopsController',['parameters' => 'singular']);
     
 	Route::resource('macroregions','MacroregionsController',['parameters' => 'singular']);
 	Route::resource('regions','RegionsController',['parameters' => 'singular']);
