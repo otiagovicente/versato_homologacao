@@ -13,9 +13,7 @@
 ])
 
 <div class="x_content">
-
     <shop-form></shop-form>
-
 </div>
 
 @stop

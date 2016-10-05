@@ -78,7 +78,7 @@
 </template>
 
 <script>
-    import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon, PlaceInput} from 'vue-google-maps'
+    import {load, Map, Polygon} from 'vue-google-maps'
     import toastr from 'toastr'
     
     load(Maps.maps_key, Maps.maps_version)
@@ -90,14 +90,7 @@ export default{
     ],
     components: {
             Map,
-            Marker,
-            Cluster,
-            InfoWindow,
-            Polygon,
-            Polyline,
-            Rectangle,
-            Circle,
-            PlaceInput
+            Polygon
     },
     data(){
         return{

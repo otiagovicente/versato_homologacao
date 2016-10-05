@@ -26,7 +26,7 @@
                     <div class="portlet-title tabbable-line">
                         <div class="caption caption-md">
                             <i class="icon-globe theme-font hide"></i>
-                            <span class="caption-subject font-blue-madison bold uppercase">Conta de usuário</span>
+                            <span class="caption-subject font-blue-madison bold uppercase">Tienda</span>
                         </div>
                         <ul class="nav nav-tabs">
                             <li class="active">
@@ -54,12 +54,27 @@
 
                                     <div class="form-group" id="address-input" >
                                         <label class="control-label">Endereço</label>
-                                        <input type="text" placeholder="avenida aa" v-model="shop.address" class="form-control" /> </div>
+                                        <input  type="text" placeholder="avenida aa" v-model="shop.address" class="form-control" /> </div>
                                     
                                     <hr>
-                                    <div class="margin-top-10">
-                                        <a href="javascript:;" v-on:click="submitData" class="btn green"> Guardar </a>
-                                        <a href="/shops" class="btn default"> Cancel </a>
+                                    <div class="row">
+                                        <div class="container-fluid">
+                                            <div class="col-md-3 pull-right">
+                                                <div v-show="canedit" class="form-group">
+                                                    <a href="/shops/"><button type="button" class="btn grey btn-block" id="cancel-btn">Cancel</button></a>
+                                                </div>
+                                                <div v-show="!canedit" class="form-group">
+                                                    <a href="/shops/"><button type="button" class="btn grey btn-block" id="cancel-btn">Voltar</button></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 pull-right">
+                                                <div class="form-group">
+                                                    <button v-show="canedit" type="button" @click="submitData" class="btn blue btn-block" id="send-btn">
+                                                        Guardar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -70,13 +85,11 @@
                                 <form id="image-form" action="#" role="form">
                                     <div class="form-group">
                                         <div class="thumbnail" style="width: 100%;">
-                                            <img :src="shop.photo" alt="" style="width:auto;"/>
+                                            <img :src="shop.logo" alt="" style="width:auto;"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div id="photo" class="dropzone" style="min-height:150px; border: 2px dashed #eaeaea; background: white; padding: 20px 20px; text-align:center;">
-
-                                        </div>
+                                        <div id="photo" class="dropzone" style="min-height:150px; border: 2px dashed #eaeaea; background: white; padding: 20px 20px; text-align:center;"></div>
                                     </div>
                                 </form>
                             </div>
@@ -86,7 +99,6 @@
             </div>
         </div>
     </div>
-    {{shop | json}}
 </template>
 
 <script>
@@ -95,12 +107,17 @@ import toastr from 'toastr'
 import Dropzone from 'dropzone'
 
 export default{
+    
     components: {
             vSelect: VueStrap.select,
             vOption: VueStrap.option,
     },
+    
+    props:['pshop','isedit'],
+    
     data(){
         return{
+            canedit:true,
             shop: {
                 id:'',
                 name: '',
@@ -108,15 +125,18 @@ export default{
                 logo: '',
                 address: '',
                 geo:'',
-                customer_id: '',
-                photo:''
+                customer_id: 1,
             },
         }
     },
+    
     ready(){
         toastr.options.closeButton = true;
         this.configureDropbox(this.shop);
+        this.canedit = this.isedit;
+        if(this.pshop) this.loadShop();
     },
+
     methods:{
         submitData: function(){ 
             if(!this.shop.id)
@@ -136,7 +156,7 @@ export default{
             });
         },
         updateShop: function(){
-            this.$http.put('/shops', this.shop)
+            this.$http.put('/shops/'+this.shop.id, this.shop)
             .then(function (response) {
                 toastr.success('Sucesso!', 'Tienda actualizada con sucesso.');
             }).catch(function (response) {
@@ -145,6 +165,16 @@ export default{
                     $('#'+key).addClass('has-error');
                 });
             });
+        },
+        
+        loadShop:function(){
+            this.shop.id = this.pshop.id;
+            this.shop.name = this.pshop.name;
+            this.shop.description = this.pshop.description;
+            this.shop.logo = this.pshop.logo;
+            this.shop.address = this.pshop.address;
+            this.shop.geo = this.pshop.geo;
+            this.shop.customer_id = this.pshop.customer_id;
         },
 
         configureDropbox: function(callback){
@@ -162,7 +192,7 @@ export default{
                 },
 
                 success: function(file, response){
-                    Vue.set(callback, 'photo', response);
+                    Vue.set(callback, 'logo', response);
                     this.removeAllFiles(true);
                 },
 

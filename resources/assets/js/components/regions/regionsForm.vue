@@ -128,7 +128,7 @@
     import toastr from 'toastr'
     import VueStrap from 'vue-strap'
     
-    load(Maps.maps_key, Maps.maps_version)
+    //load(Maps.maps_key, Maps.maps_version)
 
 export default{
     props:[
@@ -140,14 +140,7 @@ export default{
       vSelect: VueStrap.select,
       vOption: VueStrap.option,
       Map,
-      //Marker,
-      //Cluster,
-      InfoWindow,
-      Polygon,
-      //Polyline,
-      //Rectangle,
-      //Circle,
-      //PlaceInput
+      Polygon
     },
     
     data(){
@@ -189,7 +182,7 @@ export default{
         },
 
         getMacroRegions: function(){
-            this.$http.get('/api/macroregions/selectlist/'+ window.Versato.brand_id)
+            this.$http.get('/api/macroregions/selectlist')
             .then(response => {
                 this.macroregions_select = response.json();
             });
@@ -302,12 +295,4 @@ export default{
         },
     }
 }
-
-
-
-
-
-
-
-
 </script>

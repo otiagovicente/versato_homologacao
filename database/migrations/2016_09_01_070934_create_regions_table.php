@@ -16,8 +16,8 @@ class CreateRegionsTable extends Migration
             $table->increments('id');
             $table->string('code');
             $table->string('description')->nullable();
-            $table->longText('geo')->nullable();
-            $table->integer('brand_id')->unsigned();
+            $table->longText('geo');
+            $table->integer('brand_id');
             $table->timestamps();
             $table->softDeletes();
 
@@ -28,7 +28,7 @@ class CreateRegionsTable extends Migration
             $table->string('code');
             $table->string('description');
             $table->longText('geo');
-            $table->integer('brand_id')->unsigned();
+            $table->integer('brand_id');
             $table->integer('macroregion_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();

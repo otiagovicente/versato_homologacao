@@ -30,7 +30,7 @@ Route::get('/representatives','RepresentativesController@api_index');
 
 
 Route::get('/products/list/{brand}', 'ProductsController@api_list');
-Route::get('/macroregions/selectlist/{brand}', 'MacroregionsController@selectList');
+Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
 Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
 
 
