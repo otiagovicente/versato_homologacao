@@ -16,9 +16,9 @@ class Shop extends Model
     protected $fillable = ['name', 'description', 'logo', 'address','geo','customer_id'];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at'];
 
-    public function region(){
-    	return $this->belongsTo('App\Region');
-    }
+    //public function region(){
+    // 	return $this->belongsTo('App\Region');
+    //}
     public function customer(){
     	return $this->belongsTo('App\Customer');
     }

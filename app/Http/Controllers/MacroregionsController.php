@@ -21,7 +21,7 @@ class MacroregionsController extends Controller
      */
     public function index()
     {
-        $macroregions = Macroregion::where('brand_id', session()->get('brand')->id)->paginate(10);
+        $macroregions = Macroregion::paginate(10);
         return view('macroregions.index', compact('macroregions'));
     }
 
@@ -45,7 +45,6 @@ class MacroregionsController extends Controller
     {
         $macroregion = new Macroregion();
         $macroregion->fill($request->all());
-        $macroregion->brand_id = (int) session()->get('brand')->id;
         $macroregion->save();
         return response($macroregion);
     }
@@ -58,7 +57,6 @@ class MacroregionsController extends Controller
      */
     public function show(Macroregion $macroregion)
     {
-        //$macroregion = Macroregion::where('id',$id);
         return view('macroregions.show', compact('macroregion'));
     }
 
@@ -98,8 +96,8 @@ class MacroregionsController extends Controller
         //
     }
     
-    public function selectList($brand){
-        $macroregions = Macroregion::where('brand_id', $brand)->get();
+    public function selectList(){
+        $macroregions = Macroregion::all();
         
         foreach($macroregions as $macroregion){
             $selectItem['value'] = $macroregion->id;

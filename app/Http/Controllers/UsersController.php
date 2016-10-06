@@ -24,7 +24,7 @@ class UsersController extends Controller
             4 => 'Representante'
         ];
 
-        $usersgroup = User::all()->groupBy('role');
+        $usersgroup = User::all()->groupBy('role_id');
         return view('users.index', ['usersgroup' => $usersgroup, 'roles' => $roles]);
     }
 

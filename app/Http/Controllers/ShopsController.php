@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Storage;
+
+use App\Shop;
 
 class ShopsController extends Controller
 {
@@ -14,7 +17,8 @@ class ShopsController extends Controller
      */
     public function index()
     {
-        return view('shops.create');
+        $shops = Shop::paginate(10);
+        return view('shops.index', compact('shops'));
     }
 
     /**
@@ -28,25 +32,14 @@ class ShopsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        return view('shops.create');
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Shop $shop)
     {
-        return view('shops.create');
+        return view('shops.show', compact('shop'));
     }
 
     /**
@@ -55,9 +48,24 @@ class ShopsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Shop $shop)
     {
-        return view('shops.create');
+        return view('shops.edit', compact('shop'));
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $shop = new Shop();
+        $shop->fill($request->all());
+        $shop->save();
+        return response($shop);
     }
 
     /**
@@ -67,9 +75,11 @@ class ShopsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Shop $shop)
     {
-        return view('shops.create');
+        $shop->fill($request->all());
+        $shop->save();
+        return response($shop);
     }
 
     /**
@@ -80,6 +90,27 @@ class ShopsController extends Controller
      */
     public function destroy($id)
     {
-        return view('shops.create');
+        $shop = Shop::find($id);
+        $shop->delete();
     }
+
+    public function addPhoto(Request $request){
+        //Valida Mimes para garantir que é uma imagem
+        $this->validate($request,[
+            'photo' => 'required|mimes:jpg,png,jpeg'
+        ]);
+
+        //Faz upload da imagem para o Driver AWS S3
+        $image = $request->file('photo')->store('shops','s3');
+        //Torna acessível publicamente a imagem
+        Storage::disk('s3')->setVisibility($image, 'public');
+//        Espera 5 segundos para garantir que a visibilidade do
+//        arquivo no driver S3 seja público para que a imagem
+//        seja exibida
+        sleep(5);
+
+        //Retorna a url completa da imagem que será salva no campo photo do produto
+        return Storage::disk('s3')->url($image);
+    }
+    
 }

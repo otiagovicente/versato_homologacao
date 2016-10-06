@@ -51,7 +51,6 @@ class RegionsController extends Controller
     {
         $region = new Region();
         $region->fill($request->all());
-        $region->brand_id = (int) session()->get('brand')->id;
         $region->save();
         return response($region);
     }
@@ -88,7 +87,6 @@ class RegionsController extends Controller
     public function update(Request $request, Region $region)
     {
         $region->fill($request->all());
-        $region->brand_id = (int) session()->get('brand')->id;
         $region->save();
         return response($region);
     }
@@ -101,27 +99,17 @@ class RegionsController extends Controller
      */
     public function destroy($id)
     {
-
-        //
+        $region = Region::find($id);
+        $region->delete();
     }
 
     public function api_selectList(){
-
         $regions = Region::all();
-
         foreach($regions as $region){
-
             $selectItem['value'] = $region->id;
             $selectItem['label'] = $region->description;
             $selectList[] = $selectItem;
         }
-
         return response()->json($selectList);
-
     }
-    
-    public function destroyByMacroregion($id){
-        //$region = Region::where('macroregion_id',$id);
-        //$region->delete();
-    } 
 }

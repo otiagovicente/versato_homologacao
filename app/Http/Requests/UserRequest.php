@@ -32,7 +32,7 @@ class UserRequest extends Request
                     'email' => 'required|email|max:255|unique:users',
                     'password' => 'required|min:6|confirmed',
                     'password_confirmation' => 'min:6|same:password',
-                    'role' => 'required'
+                    'role_id' => 'required'
                 ];
                 break;
             case 'PUT':
@@ -64,7 +64,7 @@ class UserRequest extends Request
             'password.required' => 'Insira uma senha para o usuário',
             'password.min' => 'Senha deve ter no mínimo 6 caracteres',
             'password.confirmed' => 'Senhas não são idênticas',
-            'role.required' => 'Escolha o tipo de usuário'
+            'role_id.required' => 'Escolha o tipo de usuário'
         ];
     }
 }
