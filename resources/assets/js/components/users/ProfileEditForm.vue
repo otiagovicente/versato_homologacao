@@ -9,8 +9,8 @@
             <!-- END SIDEBAR USERPIC -->
             <!-- SIDEBAR USER TITLE -->
             <div class="profile-usertitle">
-                <div class="profile-usertitle-name">@{{ user.name }} @{{ user.lastname }}</div>
-                <div class="profile-usertitle-job">@{{ user.occupation }} </div>
+                <div class="profile-usertitle-name">{{ user.name }} {{ user.lastname }}</div>
+                <div class="profile-usertitle-job">{{ user.occupation }} </div>
             </div>
             <!-- END SIDEBAR USER TITLE -->
             <!-- SIDEBAR BUTTONS -->
@@ -286,7 +286,7 @@ export default{
 
             photoDropzone.accept = function(file, done) {
 
-                bootbox.confirm("Seguro que quieres hacer el upload de una imágene del producto?", function(result) {
+                bootbox.confirm("Seguro que quieres hacer el upload de una imágene del usuario?", function(result) {
                     if(result){
                         done();
                         photoDropzone.processQueue();

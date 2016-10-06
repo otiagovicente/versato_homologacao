@@ -87,10 +87,6 @@
             :editable="true" 
             :options="{geodesic:true, strokeColor:'#33ff33', fillColor:'#00e600', draggable: true}"
           >
-            <info-window
-              :opened.sync="true"
-              :content="bla bla bla"
-            ></info-window>
           </polygon>
         </map>
       </div>
