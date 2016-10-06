@@ -67,8 +67,8 @@
                             </div> 
                             <div id="code-input" class="form-group" >
                                 <label class="col-md-3 control-label">Tipo de Usuario</label>
-                                <div class="col-md-7" id="role">                
-                                    <select id="role-input" name="role" class="form-control" v-model="user.role">
+                                <div class="col-md-7" id="role_id">                
+                                    <select id="role-id-input" name="role_id" class="form-control" v-model="user.role_id">
                                         <option value="1">Super Admin</option>
                                         <option value="2">Admin</option>
                                         <option value="3">Gestor</option>
@@ -105,11 +105,10 @@ export default{
     data(){
         return{
             user: {
-                _method: 'POST',
                 name: '',
                 lastname: '',
                 email: '',
-                role: '',
+                role_id: '',
                 password:'',
                 password_confirmation: ''
             },

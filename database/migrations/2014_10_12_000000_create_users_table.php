@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('instagram')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->integer('role');//1 - Admin, 2 - Editor, 3 - Representative
+            $table->integer('role_id');//1 - Admin, 2 - Editor, 3 - Representative
             $table->string('photo')->nullable();
             $table->boolean('blocked')->nullable();
 
