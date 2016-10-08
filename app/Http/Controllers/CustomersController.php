@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\CustomerRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
+
+use App\Customer;
 
 class CustomersController extends Controller
 {
@@ -15,7 +19,9 @@ class CustomersController extends Controller
      */
     public function index()
     {
-        return view('customers.index');
+        $customers = Customer::paginate(10);
+        
+        return view('customers.index', compact('customers'));
     }
 
     /**
@@ -34,8 +40,12 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
+        $customer = new Customer();
+        $customer->fill($request->all());
+        $customer->save();
+        return response($customer);
     }
 
     /**
@@ -44,9 +54,9 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Customer $customer)
     {
-        return view('customers.show');
+        return view('customers.show', compact('customer'));
     }
 
     /**
@@ -55,9 +65,9 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Customer $customer)
     {
-        return view('customers.edit');
+        return view('customers.edit', compact('customer'));
     }
 
     /**
@@ -67,9 +77,11 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CustomerRequest $request, Customer $customer)
     {
-        //
+        $customer->fill($request->all());
+        $customer->save();
+        return response($customer);
     }
 
     /**
@@ -85,15 +97,13 @@ class CustomersController extends Controller
 
 
     public function addPhoto(Request $request){
-
-
         //Valida Mimes para garantir que é uma imagem
         $this->validate($request,[
             'photo' => 'required|mimes:jpg,png,jpeg'
         ]);
 
         //Faz upload da imagem para o Driver AWS S3
-        $image = $request->file('photo')->store('products','s3');
+        $image = $request->file('photo')->store('customers','s3');
         //Torna acessível publicamente a imagem
         Storage::disk('s3')->setVisibility($image, 'public');
 //        Espera 5 segundos para garantir que a visibilidade do
@@ -103,7 +113,6 @@ class CustomersController extends Controller
 
         //Retorna a url completa da imagem que será salva no campo photo do produto
         return Storage::disk('s3')->url($image);
-
     }
 
 

@@ -1,5 +1,4 @@
 <template>
-
     <div class="content">
         <div class="portlet light">
 
@@ -7,23 +6,28 @@
                 <div class="caption font-blue">
                     <i class="fa fa-plus font-blue"></i>Crear Cliente
                 </div>
+
             </div>
             <div class="portlet-body form">
                 <div class="row">
-                    <div class="col-md-4"></div>
                     <div class="col-md-4">
-                        <small>Codigo</small>
+                     <span class="blue">Codigo</span>
                         <div class="form-group form-line-input" id="code">
-                            <input id="code-input" class="form-control input-sm" type="text" />
+                            <input id="code-input" class="form-control input-sm" type="text" v-model="customer.code" />
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <small>Cuit</small>
+                        <span class="blue">Cuit</span>
                         <div class="form-group form-line-input" id="cuit">
-                            <input id="cuit-input" class="form-control input-sm" type="text" />
+                            <input id="cuit-input" class="form-control input-sm" type="text" v-model="customer.cuit" />
                         </div>
                     </div>
-
+                    <div class="col-md-4">
+                        <span class="blue">Company</span>
+                        <div class="form-group form-line-input" id="company">
+                            <input id="company-input" class="form-control input-sm" type="text" v-model="customer.company" />
+                        </div>
+                    </div>
                 </div>
                 <hr>
                 <div class="row">
@@ -32,7 +36,7 @@
                         <small>Logo</small>
                         <div id="photo-input" class="form-group">
                             <div class="">
-                                <img id="photo-image"  v-bind:src="customer.logo" class="figure-img img-fluid img-rounded product-photo" alt="sem imagem do produto.">
+                                <img id="photo-image"  v-bind:src="customer.logo" class="figure-img img-fluid img-rounded customer-logo" alt="sem logo do cliente.">
                             </div>
                         </div>
                         <div class="form-group">
@@ -43,7 +47,7 @@
                     <div class="col-md-4">
                         <small>Nombre</small>
                         <div class="form-group form-line-input" id="name">
-                            <input id="name-input" class="form-control input-sm" type="text" />
+                            <input id="name-input" class="form-control input-sm" type="text" v-model="customer.name" />
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -61,11 +65,40 @@
                     </div>
 
                     <div class="col-md-8">
-                        <small>Address</small>
-                        <div class="form-group form-line-input" id="address">
-                            <input id="address-input" class="form-control input-sm" type="text" />
-                        </div>
+                        <small>Ubicación de la sede</small>
+                        <div class="input-group" id="address">
 
+                            <input id="address-input" class="form-control" type="text"
+                                   v-model="customer.address"
+                                   @keyup.enter="fetchAddress()"
+                            />
+                            <span class="input-group-btn">
+                                <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+
+                        <hr>
+                        <div class="map">
+                            <map style="width: 100%; height: 150px;"
+                                        v-bind:center.sync="map.center"
+                                        v-bind:zoom.sync="map.zoom"
+                            >
+
+                                <marker
+                                        v-for="m in map.markers"
+                                        :position.sync="m.position"
+                                        :clickable.sync="m.clickable"
+                                        :draggable.sync="m.draggable"
+                                        @g-click="center=m.position"
+                                >
+                                    <!--<info-window v-show="m.ifw" content="{{m.ifw2text}}"></info-window>-->
+                                </marker>
+
+                            </map>
+
+                        </div>
                     </div>
 
 
@@ -76,12 +109,12 @@
                     <div class="container-fluid">
                         <div class="col-md-3 pull-right">
                             <div class="form-group">
-                                <button type="button" @click="submitData()" class="btn blue btn-block" id="send-btn">Salvar</button>
+                                <button type="button" @click="submitData" class="btn blue btn-block" id="send-btn">Salvar</button>
                             </div>
                         </div>
                         <div class="col-md-3 pull-right">
                             <div class="form-group">
-                                <a href="/products/"><button type="button" class="btn grey btn-block" id="cancel-btn">Cancel</button></a>
+                                <a href="/customers/"><button type="button" class="btn grey btn-block" id="cancel-btn">Cancel</button></a>
                             </div>
                         </div>
                     </div>
@@ -91,6 +124,10 @@
             </div>
         </div>
     </div>
+    <pre>
+        {{customer | json}}
+    </pre>
+    
 </template>
 <style>
     .dropzone {
@@ -106,82 +143,69 @@
         font-weight: 300;
         font-size: 18px;
     }
-    .datepicker-input {
-        width: 100%;
-    }
-    .product-photo {
+    .customer-logo {
         width:200px;
     }
 
-    .algolia-autocomplete {
+    .map {
         width: 100%;
+        height: 200px;
     }
-    .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
-        width: 100%;
-        min-height: 30px;
-        text-indent: 10px;
-    }
-    .algolia-autocomplete .aa-hint {
-        color: #999;
-    }
-    .algolia-autocomplete .aa-dropdown-menu {
-        width: 100%;
-        background-color: #fff;
-        border: 1px solid #999;
-        border-top: none;
-    }
-    .algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
-        cursor: pointer;
-        padding: 5px 4px;
-    }
-    .algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
-        background: #f8f8f8;
-    }
-    .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
-        font-weight: bold;
-        font-style: normal;
-    }
-    .algolia-autocomplete .category {
-        text-align: left;
-        background: #efefef;
-        padding: 10px 5px;
-        font-weight: bold;
-    }
-
 </style>
 <script>
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
+    import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
+//    import google from 'google-maps'
+
 
     export default{
         components: {
             vSelect: VueStrap.select,
             vOption: VueStrap.option,
-            datepicker: VueStrap.datepicker
+            datepicker: VueStrap.datepicker,
+            Map,
+            load,
+            Marker,
+            InfoWindow
         },
         data(){
             return{
                 customer: {
-                    logo: "/images/default-placeholder.jpg"
+                    logo: "/images/default-placeholder.jpg",
+                    address: "",
+                    code:'',
+                    company:'',
+                    cuit:'',
+                    name:'',
+                    region_id:[],
+                    geo:''
                 },
-                regions_select: []
+                regions_select: [],
+                map :{
+                    markers: [],
+                    center : {lat: -34.6248187, lng: -58.3761432},
+                    zoom: 12
+                },
             }
         },
         ready(){
             window._this = this;
             _this.configureDropbox();
             _this.getRegions();
+            _this.configureMapsApi();
         },
         methods:{
-
             getRegions: function(){
-                this.$http.get('/api/regions/selectlist')
-                    .then(response => {
-                        _this.regions_select = response.json();
-                    })
-                    .catch(responseError => {
-                        toastr.error('No se puede conectar al servidor');
-                    });
+                this.$http.get('/api/macroregions/selectlist')
+                .then((response) => {
+                    _this.regions_select = response.json();
+                }, (response) => { 
+                    toastr.error('No se puede conectar al servidor'); 
+                });
+            },
+            configureMapsApi: function(){
+                //load(Maps.maps_key,Maps.maps_version);
             },
             configureDropbox: function(callback){
                 Dropzone.autoDiscover = false;
@@ -198,7 +222,7 @@
                     },
 
                     success: function(file, response){
-                        Vue.set(callback, 'photo', response);
+                        _this.customer.logo = response;
                         this.removeAllFiles(true);
                     },
 
@@ -214,7 +238,6 @@
 
                 };
                 var photoDropzone = new Dropzone("div#photo", dropzoneOptions);
-
                 photoDropzone.accept = function(file, done) {
 
                     bootbox.confirm("Seguro que quieres hacer el upload de una imágene del producto?", function(result) {
@@ -227,12 +250,58 @@
                         }
                     });
                 };
+            },
+            fetchAddress: function(){
+                if(_this.customer.address !=  '') {
+                    $('#address').removeClass('has-error');
 
-
+                    _this.getGeocode(_this.customer.address);
+                }else{
+                    toastr.error('informa la ubicación');
+                    $('#address').addClass('has-error');
+                }
+            },
+            getGeocode: function(address){
+                new google.maps.Geocoder().geocode({ address: address }, function(results, status) {
+                    var position = {lat:'', lng:''};
+                    position.lat = results[0].geometry.location.lat();
+                    position.lng = results[0].geometry.location.lng();
+                    
+                    _this.emptyMarkers();
+                    _this.centerMap(position.lat, position.lng);
+                    _this.addMarker(position.lat, position.lng);
+                   
+                    _this.customer.geo = JSON.stringify(position);
+                });
 
             },
+            centerMap: function (lat, lng) {
+                _this.map.center = {lat, lng};
+            },
+            addMarker: function(lat, lng) {
+                _this.map.markers.push({
+                    position: { lat: lat, lng: lng },
+                    opacity: 1,
+                    draggable: false,
+                    enabled: true,
+                    clicked: 0,
+                    rightClicked: 0,
+                    dragended: 0,
+                    ifw: true,
+                    ifw2text: _this.customer.name
+                });
+                return _this.map.markers[_this.map.markers.length - 1];
+            },
+            emptyMarkers: function(){
+                _this.map.markers = [];
+            },
             submitData: function(){
-                //
+                this.$http.post('/customers', this.customer)
+                .then((response) => {
+                    toastr.success('Sucesso!','Região incluída com sucesso');
+                }, (response) => { 
+                    this.showErrors(response.data); 
+                });
             }
         }
     }

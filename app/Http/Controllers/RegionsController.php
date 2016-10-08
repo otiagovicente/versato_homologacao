@@ -11,13 +11,9 @@ use App\Region;
 
 class RegionsController extends Controller
 {
-    private $brand_id;
 
     public function __construct(){
-        $this->middleware(function ($request, $next) {
-             $this->brand_id = session()->get('brand')->id;
-            return $next($request);
-        });
+        
     }
     
     /**
@@ -37,7 +33,7 @@ class RegionsController extends Controller
      */
     public function create()
     {
-        $macroregions = Macroregion::where('brand_id', $this->brand_id)->get();
+        $macroregions = Macroregion::all();
         return view('regions.create', compact('macroregions'));
     }
 

@@ -46,6 +46,7 @@ class CreateRegionsTable extends Migration
             $table->string('address')->nullable();
             $table->string('geo')->nullable();
             $table->integer('region_id')->unsigned();
+            $table->string('company')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

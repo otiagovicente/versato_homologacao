@@ -28,7 +28,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('regions','RegionsController',['parameters' => 'singular']);
     
 	Route::resource('customers','CustomersController',['parameters' => 'singular']);
-    Route::resource('representatives','RepresentativesController',['parameters' => 'singular']);
+	Route::post('/customers/photo', 'CustomersController@addPhoto');
+    
+	Route::resource('representatives','RepresentativesController',['parameters' => 'singular']);
 
     Route::get('/','PagesController@productsDashboard');
     Route::get('/help', 'PagesController@help');
