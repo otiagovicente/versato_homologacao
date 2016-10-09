@@ -19,7 +19,8 @@ class MacroregionsAndRegionsTableSeeder extends Seeder
         $MacroregionData = [
             'code' => '12345',
             'description' => 'Gran Buenos Aires',
-            'brand_id' => 1
+            'brand_id' => 1,
+            'geo' => '{lat: -34.6248187, lng: -58.3761432}'
         ];
 
         $Macroregion = new Macroregion($MacroregionData);
@@ -29,7 +30,8 @@ class MacroregionsAndRegionsTableSeeder extends Seeder
             'code' => '12345',
             'description' => 'Capital Federal',
             'brand_id' => 1,
-            'macroregion_id' => 1
+            'macroregion_id' => 1,
+            'geo' => '{lat: -34.6248187, lng: -58.3761432}'
         ];
         $Region = new Region($RegionData);
         $Region->save();

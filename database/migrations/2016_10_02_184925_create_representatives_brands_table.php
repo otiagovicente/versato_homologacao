@@ -33,7 +33,7 @@ class CreateRepresentativesBrandsTable extends Migration
      */
     public function down()
     {
-        Schema::table('product_tag', function($table){
+        Schema::table('brand_representative', function($table){
             $table->dropForeign('brand_representative_brand_id_foreign');
             $table->dropForeign('brand_representative_representative_id_foreign');
         });
