@@ -21,5 +21,4 @@ class Brand extends Model
     public function retrieveProducts(){
     	return $this->products()->with('brand')->with('line')->with('reference')->with('material')->with('color')->with('grids');
     }
-  
 }

@@ -11,7 +11,9 @@
                         <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
                         <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
                         <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                        <ul class="page-sidebar-menu page-sidebar-menu-light page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 0px">
+                        <ul class="page-sidebar-menu page-sidebar-menu-light page-header-fixed " 
+                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" 
+                            style="padding-top: 0px">
                             <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
                             <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
                             <li class="sidebar-toggler-wrapper hide">
@@ -102,8 +104,6 @@
                                 </ul>
                             </li>
 
-
-
                             <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-barcode"></i>
@@ -129,8 +129,6 @@
 
                                 </ul>
                             </li>
-
-
 
                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
@@ -158,10 +156,6 @@
                                 </ul>
                             </li>
 
-
-
-
-
                             <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-eyedropper"></i>
@@ -185,18 +179,8 @@
                                             <span class="selected"></span>
                                         </a>
                                     </li>
-
-
                                 </ul>
                             </li>
-
-
-
-
-
-
-
-
 
                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
@@ -376,9 +360,34 @@
 
 
 
+                            <li class="heading">
+                                <h3 class="uppercase">Ventas</h3>
+                            </li>
 
-
-
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-map"></i>
+                                    <span class="title">Pedidos</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/orders" class="nav-link nav-toggle">
+                                            <i class="fa fa-map"></i>
+                                            <span class="title">Ver Todos</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/orders/create" class="nav-link nav-toggle">
+                                            <i class="fa fa-map"></i>
+                                            <span class="title">Crear</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
 
                             <li class="heading">
@@ -455,9 +464,6 @@
                                             <span class="selected"></span>
                                         </a>
                                     </li>
-
-
-
                                 </ul>
                             </li>
 

@@ -151,7 +151,16 @@ Vue.component(
 
 Vue.component(
     'shop-form',
-    require('./components/shops/shopForm.vue')
+    require('./components/shops/ShopForm.vue')
+);
+
+/*
+* Componentes de Shops
+*/
+
+Vue.component(
+    'order-form',
+    require('./components/orders/OrderForm.vue')
 );
 
 const app = new Vue({
