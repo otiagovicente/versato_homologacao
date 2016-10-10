@@ -212,13 +212,16 @@ export default{
         }
     },
     ready(){
+
         toastr.options.closeButton = true;
         this.getCustomers();
         this.getRepresentatives();
         this.getBrands();
-        //if(this.pmacroregion) this.loadMacroregion(); 
+        //if(this.pmacroregion) this.loadMacroregion
+
     },
     methods:{
+        
         addToProductList: function(product){
             this.order.orderProducts.push({
               id:product.id,
@@ -228,30 +231,35 @@ export default{
             });
             return this.order.orderProducts[this.order.orderProducts.length - 1];
         },
+        
         getBrands:function(brandid){
             this.$http.get('/api/brands/selectlist')
             .then(response => {
                 this.brands_select = response.json();
             });
         },
+
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
                 this.products = response.data;
             });
         },
+
         getCustomers: function(){
             this.$http.get('/api/customers/selectlist')
             .then(response => {
                 this.customers_select = response.json();
             });
         },
+
         getRepresentatives: function(){
             this.$http.get('/api/representatives/selectlist')
             .then(response => {
                 this.representatives_select = response.json();
             });
         },
+
         submitData: function(){
             //if(!this.macroregion.id)
             //  this.insertData();
@@ -286,6 +294,7 @@ export default{
           }); 
         },
     },
+
     watch: {
         'brand_id': function (val, oldVal) {
             if(this.brand_id)
