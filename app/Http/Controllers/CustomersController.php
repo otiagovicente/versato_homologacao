@@ -115,5 +115,14 @@ class CustomersController extends Controller
         return Storage::disk('s3')->url($image);
     }
 
-
+    public function api_selectList(){
+        $lstAll = Customer::all();
+        
+        foreach($lstAll as $item){
+            $selectItem['value'] = $item->id;
+            $selectItem['label'] = $item->name;
+            $selectList[] = $selectItem;
+        }
+        return response()->json($selectList);
+    }
 }

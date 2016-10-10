@@ -27,39 +27,43 @@
         <button v-show="macroregion" type="button" class="btn grey btn-block" @click="addNewRegion">Nueva Región</button>
         <br/>
         
-        <table>
-          <tr>
-            <th class="col-md-3">Región</th>
-            <th class="col-md-3">Descripción</th>
-            <th class="col-md-3">Borrar</th>
-          </tr>
-          <tr v-for="r in regions">
-            <td>
-              <input type="text" 
-                name="code"
-                class="form-control" 
-                placeholder="Región"
-                v-model="r.code"
-              >
-            </td>
-            <td>
-              <input type="text" 
-                name="description"
-                class="form-control" 
-                placeholder="Descripción"
-                v-model="r.description"
-              >
-            </td>
-            <td>
-              <button 
-                v-show="canedit"
-                type="button" 
-                class="btn blue btn-block"
-                
-                @click="deleteRegion($index)"
-              >Borrar</button> 
-            </td>
-          </tr>
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th class="col-md-3">Región</th>
+              <th class="col-md-3">Descripción</th>
+              <th class="col-md-3">Borrar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="r in regions">
+              <td>
+                <input type="text" 
+                  name="code"
+                  class="form-control" 
+                  placeholder="Región"
+                  v-model="r.code"
+                >
+              </td>
+              <td>
+                <input type="text" 
+                  name="description"
+                  class="form-control" 
+                  placeholder="Descripción"
+                  v-model="r.description"
+                >
+              </td>
+              <td>
+                <button 
+                  v-show="canedit"
+                  type="button" 
+                  class="btn blue btn-block"
+                  
+                  @click="deleteRegion($index)"
+                >Borrar</button> 
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
   </div>

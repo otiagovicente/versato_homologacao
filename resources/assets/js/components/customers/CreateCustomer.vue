@@ -70,13 +70,14 @@
 
                             <input id="address-input" class="form-control" type="text"
                                    v-model="customer.address"
-                                   @keyup.enter="fetchAddress()"
+                                   @keyup.enter="fetchAddress"
                             />
                             <span class="input-group-btn">
                                 <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
                             </span>
                         </div>
                     </div>
+                    
                     <div class="col-md-8">
 
                         <hr>
@@ -298,7 +299,7 @@
             submitData: function(){
                 this.$http.post('/customers', this.customer)
                 .then((response) => {
-                    toastr.success('Sucesso!','Região incluída com sucesso');
+                    toastr.success('Sucesso!','Cliente creado con sucesso');
                 }, (response) => { 
                     this.showErrors(response.data); 
                 });

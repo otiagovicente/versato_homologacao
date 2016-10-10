@@ -8,6 +8,7 @@
             </div>
         </div>
         <hr>
+        
         <div class="row">
             <ul class="representatives-list">
                 <li v-for="representative in representatives | filterBy search" class="representatives-list-item" @click="goToRepresentative(representative.id)">

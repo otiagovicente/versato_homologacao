@@ -13,7 +13,7 @@
 ])
 
 <div class="x_content">
-    <shop-form></shop-form>
+    <shop-form :isedit="true"></shop-form>
 </div>
 
 @stop

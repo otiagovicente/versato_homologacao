@@ -15,6 +15,10 @@
     .product-photo {
         width:200px;
     }
+    .map {
+        width: 100%;
+        height: 200px;
+    }
 </style>
 
 <template>  
@@ -52,9 +56,38 @@
                                         <textarea class="form-control" rows="3" placeholder="Una breve descripcion de la tienda" v-model="shop.description"></textarea>
                                     </div>
 
-                                    <div class="form-group" id="address-input" >
-                                        <label class="control-label">Endereço</label>
-                                        <input  type="text" placeholder="avenida aa" v-model="shop.address" class="form-control" /> </div>
+                                    <div class="col-md-12">
+                                        <small>Ubicación de la sede</small>
+                                        <div class="input-group" id="address">
+
+                                            <input id="address-input" class="form-control" type="text"
+                                                v-model="shop.address"
+                                                @keyup.enter="fetchAddress"
+                                            />
+                                            <span class="input-group-btn">
+                                                <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <hr>
+                                        <div class="map">
+                                            <map style="width: 100%; height: 150px;"
+                                                v-bind:center.sync="map.center"
+                                                v-bind:zoom.sync="map.zoom"
+                                            >
+                                                <marker
+                                                    v-for="m in map.markers"
+                                                    :position.sync="m.position"
+                                                    :clickable.sync="m.clickable"
+                                                    :draggable.sync="m.draggable"
+                                                    @g-click="center=m.position"
+                                                >
+                                                <!--<info-window v-show="m.ifw" content="{{m.ifw2text}}"></info-window>-->
+                                                </marker>
+                                            </map>
+                                        </div>
+                                    </div>
                                     
                                     <hr>
                                     <div class="row">
@@ -105,12 +138,17 @@
 import VueStrap from 'vue-strap'
 import toastr from 'toastr'
 import Dropzone from 'dropzone'
+import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
 
 export default{
     
     components: {
             vSelect: VueStrap.select,
             vOption: VueStrap.option,
+            Map,
+            load,
+            Marker,
+            InfoWindow
     },
     
     props:['pshop','isedit'],
@@ -127,25 +165,81 @@ export default{
                 geo:'',
                 customer_id: 1,
             },
+            map :{
+                markers: [],
+                center : {lat: -34.6248187, lng: -58.3761432},
+                zoom: 12
+            },
         }
     },
     
     ready(){
+        window._this = this;
         toastr.options.closeButton = true;
-        this.configureDropbox(this.shop);
-        this.canedit = this.isedit;
-        if(this.pshop) this.loadShop();
+        _this.configureDropbox(this.shop);
+        _this.configureMapsApi()
+        
+        _this.canedit = _this.isedit;
+        if(_this.pshop) _this.loadShop();
     },
 
     methods:{
+        configureMapsApi: function(){
+            //load(Maps.maps_key,Maps.maps_version);
+        },
+        fetchAddress: function(){
+            if(_this.shop.address !=  '') {
+                $('#address').removeClass('has-error');
+
+                this.getGeocode(_this.shop.address);
+            }else{
+                toastr.error('informa la ubicación');
+                $('#address').addClass('has-error');
+            }
+        },
+        getGeocode: function(address){
+                new google.maps.Geocoder().geocode({ address: address }, function(results, status) {
+                    var position = {lat:'', lng:''};
+                    position.lat = results[0].geometry.location.lat();
+                    position.lng = results[0].geometry.location.lng();
+                    
+                    _this.emptyMarkers();
+                    _this.centerMap(position.lat, position.lng);
+                    _this.addMarker(position.lat, position.lng);
+                   
+                    _this.shop.geo = JSON.stringify(position);
+                });
+
+            },
+            centerMap: function (lat, lng) {
+                _this.map.center = {lat, lng};
+            },
+            addMarker: function(lat, lng) {
+                _this.map.markers.push({
+                    position: { lat: lat, lng: lng },
+                    opacity: 1,
+                    draggable: false,
+                    enabled: true,
+                    clicked: 0,
+                    rightClicked: 0,
+                    dragended: 0,
+                    ifw: true,
+                    ifw2text: this.shop.name
+                });
+                return _this.map.markers[_this.map.markers.length - 1];
+            },
+            emptyMarkers: function(){
+                _this.map.markers = [];
+                _this.shop.geo = "";
+            },
         submitData: function(){ 
-            if(!this.shop.id)
-                this.insertShop();
+            if(!_this.shop.id)
+                _this.insertShop();
             else
-                this.updateShop();
+                _this.updateShop();
         },//end submit data
         insertShop:function(){
-            this.$http.post('/shops', this.shop)
+            this.$http.post('/shops', _this.shop)
             .then(function (response) {
                 toastr.success('Sucesso!', 'Tienda criada con sucesso.');
             }).catch(function (response) {
@@ -156,7 +250,7 @@ export default{
             });
         },
         updateShop: function(){
-            this.$http.put('/shops/'+this.shop.id, this.shop)
+            this.$http.put('/shops/'+_this.shop.id, _this.shop)
             .then(function (response) {
                 toastr.success('Sucesso!', 'Tienda actualizada con sucesso.');
             }).catch(function (response) {
@@ -168,13 +262,7 @@ export default{
         },
         
         loadShop:function(){
-            this.shop.id = this.pshop.id;
-            this.shop.name = this.pshop.name;
-            this.shop.description = this.pshop.description;
-            this.shop.logo = this.pshop.logo;
-            this.shop.address = this.pshop.address;
-            this.shop.geo = this.pshop.geo;
-            this.shop.customer_id = this.pshop.customer_id;
+            this.shop = this.pshop;
         },
 
         configureDropbox: function(callback){

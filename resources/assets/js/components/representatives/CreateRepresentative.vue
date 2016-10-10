@@ -1,5 +1,4 @@
 <template>
-
     <div class="content">
         <div class="portlet light">
 
@@ -50,6 +49,25 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <small>Comision</small>
+                            <div class="form-group form-line-input" id="representative_comision">
+                                <div class="form-group" id="name-input" >
+                                    <input 
+                                        type="number" 
+                                        step="0.10"
+                                        placeholder="Comision" 
+                                        class="form-control" 
+                                        v-model="representative.representative_comision" /> 
+                                </div>
+                                    
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
                     <hr>
                     <div class="row">
                         <div class="col-md-12">
@@ -76,7 +94,8 @@
             return{
                 representative:{
                     code : '',
-                    user_id : null
+                    user_id : null,
+                    representative_comision:'0.00'
                 },
                 users_select : [],
                 regions_select : [],
