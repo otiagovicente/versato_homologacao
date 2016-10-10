@@ -23,6 +23,10 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	Route::resource('orders','OrdersController',['parameters' => 'singular']);
 
+
+    Route::resource('deliverycenters','DeliverycentersController',['parameters' => 'singular']);
+
+
 	Route::resource('shops','ShopsController',['parameters' => 'singular']);
 	Route::post('/shops/photo', 'ShopsController@addPhoto');
     

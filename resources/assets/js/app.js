@@ -27,6 +27,29 @@ require('./bootstrap');
 
 
 /*
+ *  Componentes de DeliveryCenters
+ */
+
+    Vue.component(
+        'create-deliverycenter',
+        require('./components/deliverycenters/CreateDeliverycenter.vue')
+    );
+    Vue.component(
+        'edit-deliverycenter',
+        require('./components/deliverycenters/EditDeliverycenter.vue')
+    );
+    Vue.component(
+        'show-deliverycenter',
+        require('./components/deliverycenters/ShowDeliverycenter.vue')
+    );
+    Vue.component(
+        'list-deliverycenter',
+        require('./components/deliverycenters/ListDeliverycenter.vue')
+    );
+
+
+
+/*
  *  Componentes de Clientes
  */
 
