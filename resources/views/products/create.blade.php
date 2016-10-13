@@ -13,9 +13,7 @@
 ])
 
 <div class="x_content">
-
     <create-product></create-product>
-
 </div>
 
 @stop

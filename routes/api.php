@@ -18,6 +18,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::get('/brands/selectlist', 'BrandsController@api_selectList');
+Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
+
 Route::get('/grids/selectlist/{brand}', 'GridsController@api_selectList');
 Route::get('/tags/selectlist/{brand}', 'TagsController@api_selectList');
 Route::get('/users/selectlist', 'UsersController@api_selectList');
@@ -25,10 +27,8 @@ Route::get('/regions/selectlist', 'RegionsController@api_selectList');
 Route::get('/representatives/selectlist', 'RepresentativesController@api_selectList');
 Route::get('/customers/selectlist', 'CustomersController@api_selectList');
 
-
 Route::get('/representatives/{representative}','RepresentativesController@api_show');
 Route::get('/representatives','RepresentativesController@api_index');
-
 
 Route::get('/products/list/{brand}', 'ProductsController@api_list');
 Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
@@ -38,7 +38,6 @@ Route::get('/products/list', 'ProductsController@api_list');
 Route::get('/products/{product}/edit', 'ProductsController@api_edit');
 Route::get('/products/{product}', 'ProductsController@api_show');
 Route::get('/products');
-
 
 Route::get('/brands/list', 'BrandsController@api_list');
 Route::get('/lines/list', 'LinesController@api_list');
