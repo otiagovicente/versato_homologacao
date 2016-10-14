@@ -31,6 +31,9 @@ Route::get('/representatives/{representative}','RepresentativesController@api_sh
 Route::get('/representatives','RepresentativesController@api_index');
 
 Route::get('/products/list/{brand}', 'ProductsController@api_list');
+Route::get('/products/listPaginate/{brand}', 'ProductsController@api_listPaginate');
+
+
 Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
 Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
 

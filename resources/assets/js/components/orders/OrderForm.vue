@@ -48,7 +48,7 @@
                                     </div>
                                     
                                     <div class="tab-pane active" id="tab1">
-                                        <h3 class="block">Provide your account details</h3>
+                                        <h3 class="block"></h3>
                                         
                                         <div class="form-group">
                                             <label class="control-label col-md-3">Cliente
@@ -169,26 +169,52 @@
 
                                     <div class="tab-pane" id="tab3">
                                         <h3 class="block">Confirme el pedido</h3>
-                                        <h4 class="form-section">Dados Basicos</h4>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">Username:</label>
-                                            <div class="col-md-4">
-                                                <p class="form-control-static" data-display="username"> </p>
-                                            </div>
-                                        </div>
-                                        <h4 class="form-section">Productos</h4>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">Fullname:</label>
-                                            <div class="col-md-4">
-                                                <p class="form-control-static" data-display="fullname"> </p>
-                                            </div>
-                                        </div>
-                                        <h4 class="form-section">Totales</h4>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">Card Holder Name:</label>
-                                            <div class="col-md-4">
-                                            <p class="form-control-static" data-display="card_name"> </p>
-                                            </div>
+                                            <table class="table table-striped table-bordered table-hover table-checkable order-column">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6" style="text-align:center"><b>Geral</b></th>
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <th >Descuento Client</th>
+                                                        <th>{{order.client_discount}}%</th>
+                                                        <th>Descuento Representante</th>
+                                                        <th>{{order.client_representative}}%</th>
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <th colspan="6" style="text-align:center"><b>Productos</b></th>
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Costo</th>
+                                                        <th>Precio</th>
+                                                        <th>Descuento Cliente</th>
+                                                        <th>Descuento Representante</th>
+                                                        <th><i class="fa fa-shopping-cart"></i> Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th style="text-align:left">Totales</th>
+                                                        <th style="text-align:center">${{order.cost}}</th>
+                                                        <th style="text-align:center">${{order.price}}</th>
+                                                        <th colspan="3" style="text-align:right">Total:&nbsp;&nbsp; ${{order.total}}</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    <tr v-for="op in order.orderProducts">
+                                                        <td>{{op.code}}</td>
+                                                        <td style="text-align:right">${{op.cost}}</td>
+                                                        <td style="text-align:right">${{op.price}}</td>
+                                                        <td style="text-align:center">{{op.client_discount}}%</td>
+                                                        <td style="text-align:center">{{op.representative_discount}}%</td>
+                                                        <td>${{op.total}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -217,11 +243,7 @@
             </div>
         </div>
     </div>
-
-    
-
-
-
+    <!-- Begin - Modal de Produtos -->
     <div class="modal fade bs-modal-lg" id="large" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -281,15 +303,17 @@
                         </tbody>
                             </table>
                 </div>
-                
                 <div class="modal-footer">
                     <button type="button" class="btn dark btn-outline" data-dismiss="modal">Fechar</button>
                 </div>
             </div>
         </div>
     </div>
-
-
+    <!--End - Modal de Produtos -->
+    
+    <pre>
+        {{order | json}} 
+    </pre>
 </template>
 
 <script>
@@ -333,11 +357,10 @@ export default{
     },
     ready(){
         toastr.options.closeButton = true;
-        
         this.getCustomers();
         this.getRepresentatives();
-        this.getBrands();
         this.getProducts(Versato.brand_id);
+        
         //if(this.porder) this.loadOrder();
     },
     methods:{
@@ -346,47 +369,79 @@ export default{
             this.order.orderProducts.splice(index, 1);
         },
 
-        addToProductList: function(product){
-            product.client_discount = product.client_discount ? product.client_discount : 0;
-            product.representative_discount = product.representative_discount ? product.representative_discount : 0;
-            
-            var totalDiscount = parseFloat(product.client_discount) + parseFloat(product.representative_discount);
-            var finalPrice = (parseFloat(product.price) - ((parseFloat(totalDiscount)/100) * parseFloat(product.price)));
+        updateOrderValues: function(){
+            this.order.cost = 0;
+            this.order.price = 0;
+            this.order.total = 0;
+            this.order.overalldiscount = 0;
 
+            for (var i = 0; i < this.order.orderProducts.length; i++) {
+                var finalPrice = this.calcFinalPrice(this.order.orderProducts[i]);
+                this.order.orderProducts[i].total = finalPrice.finalPrice;
+                this.order.orderProducts[i].totaldiscount = finalPrice.totalDiscount;
+
+                this.order.cost            += parseFloat(this.order.orderProducts[i].cost);
+                this.order.price           += parseFloat(this.order.orderProducts[i].price);
+                this.order.total           += parseFloat(this.order.orderProducts[i].total);
+                this.order.overalldiscount += parseFloat(this.order.orderProducts[i].totaldiscount);
+            }
+        },
+        addToProductList: function(product){
+            var finalPrice = this.calcFinalPrice(product);
+            
             this.order.orderProducts.push({
               id:product.id,
               code:product.code,
               cost:product.cost,
               price:product.price,
+              chk_client_discount:false,
+              chk_representative_discount:false,
               client_discount: product.client_discount,
               representative_discount: product.representative_discount,
-              total: finalPrice
+              total: finalPrice.finalPrice,
+              totaldiscount:finalPrice.totalDiscount,
             });
             return this.order.orderProducts[this.order.orderProducts.length - 1];
         },
         
-        getBrands:function(representative_id){
-            //selectListByRepresentativeId
-            this.$http.get('/api/brands/selectlist')
-            .then(response => {
-                this.brands_select = response.json();
-            });
-        },
+        calcFinalPrice: function(product){
+            var finalPrice              = {finalPrice:0, totalDiscount:0};
+            var finalDiscount           = 0;
+            var totalGeneralDiscount    = 0;
+            var totalIndividualDiscount = 0;
 
+            totalGeneralDiscount    = this.calcGeneralDiscount();
+            totalIndividualDiscount = this.calcIndidualDiscount(product);
+            
+            finalDiscount = totalIndividualDiscount? totalIndividualDiscount : totalGeneralDiscount;
+            
+            finalPrice.totalDiscount = ((parseFloat(finalDiscount)/100) * parseFloat(product.price));
+            finalPrice.finalPrice = (parseFloat(product.price) - parseFloat(finalPrice.totalDiscount));
+            
+            return finalPrice;
+        },
+        calcGeneralDiscount: function(){
+            var client_discount         = this.order.client_discount         ? this.order.client_discount         : 0;
+            var representative_discount = this.order.representative_discount ? this.order.representative_discount : 0;
+            return parseFloat(client_discount) + parseFloat(representative_discount);
+        },
+        calcIndidualDiscount: function(product){
+            var client_discount         = product.client_discount         ? product.client_discount         : 0;
+            var representative_discount = product.representative_discount ? product.representative_discount : 0;
+            return parseFloat(client_discount) + parseFloat(representative_discount);
+        },
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
                 this.products = response.data;
             });
         },
-
         getCustomers: function(){
             this.$http.get('/api/customers/selectlist')
             .then(response => {
                 this.customers_select = response.json();
             });
         },
-
         getRepresentatives: function(){
             this.$http.get('/api/representatives/selectlist')
             .then(response => {
@@ -425,34 +480,15 @@ export default{
     },
 
     watch: {
-        'brand_id': function (val, oldVal) {
-            if(this.brand_id) this.getProducts(this.brand_id);
-        },
         'order.orderProducts': function (val, oldVal) {
-            var CostTotal = 0;
-            var PriceTotal = 0;
-            var Total = 0;
-
-            for (var i = 0; i < this.order.orderProducts.length; i++) {
-                CostTotal += parseFloat(this.order.orderProducts[i].cost);
-                PriceTotal += parseFloat(this.order.orderProducts[i].price);
-                Total += parseFloat(this.order.orderProducts[i].total);
-            }
-
-            this.order.cost  = CostTotal;
-            this.order.price = PriceTotal;
-            this.order.total = Total;
+            this.updateOrderValues();
         },
-        'order.representative_id': function (val, oldVal) {
-            
-            //if(val && oldVal != null)
-                //this.order.orderProducts = [];
-            //else
-              //  this.order.representative_id = [oldVal];
-
-                //bootbox.confirm('Cambiar representante?', function(response){
-                //});      
-        }
+        'order.client_discount': function(val, oldVal){
+            this.updateOrderValues();
+        },
+        'order.representative_discount': function(val, oldVal){
+            this.updateOrderValues();
+        },
     },
 }
 </script>
