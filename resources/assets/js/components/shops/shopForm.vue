@@ -46,10 +46,18 @@
                             <!-- PERSONAL INFO TAB -->
                             <div class="tab-pane active" id="tab_1_1">
                                 <form role="form" action="#">
-                                    
+                                    <div class="form-group" id="name-input" >
+                                        <label  class="control-label">Cliente</label>
+                                        <v-select 
+                                            v-bind:options.sync="customers_select" :value.sync="shop.customer_id"
+                                            placeholder="Elije el cliente" class="form-control"
+                                            id="customer-input" name="customer[]"
+                                            search justified required close-on-select></v-select>
+                                    </div>
                                     <div class="form-group" id="name-input" >
                                         <label  class="control-label">Nombre</label>
-                                        <input type="text" placeholder="la tienda" class="form-control" v-model="shop.name" /> </div>
+                                        <input type="text" placeholder="la tienda" class="form-control" v-model="shop.name" />
+                                    </div>
                                     
                                     <div class="form-group">
                                         <label class="control-label"  id="about-input" >Description</label>
@@ -83,7 +91,6 @@
                                                     :draggable.sync="m.draggable"
                                                     @g-click="center=m.position"
                                                 >
-                                                <!--<info-window v-show="m.ifw" content="{{m.ifw2text}}"></info-window>-->
                                                 </marker>
                                             </map>
                                         </div>
@@ -156,6 +163,7 @@ export default{
     data(){
         return{
             canedit:true,
+            customers_select:[],
             shop: {
                 id:'',
                 name: '',
@@ -163,7 +171,7 @@ export default{
                 logo: '',
                 address: '',
                 geo:'',
-                customer_id: 1,
+                customer_id: [],
             },
             map :{
                 markers: [],
@@ -177,15 +185,22 @@ export default{
         window._shopForm = this;
 
         toastr.options.closeButton = true;
+
         _shopForm.configureDropbox(this.shop);
         _shopForm.configureMapsApi()
-        
+
         _shopForm.canedit = _shopForm.isedit;
         if(_shopForm.pshop) _shopForm.loadShop();
         if(_shopForm.pcustomer_id) _shopForm.loadCustomer();
     },
 
     methods:{
+        getCustomers: function(){
+            this.$http.get('/api/customers/selectlist')
+            .then(response => {
+                this.customers_select = response.json();
+            });
+        },
         configureMapsApi: function(){
             //load(Maps.maps_key,Maps.maps_version);
         },
