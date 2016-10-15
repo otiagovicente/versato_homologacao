@@ -10,7 +10,8 @@
         <div class="col-md-12">
             <div class="portlet light bordered" id="form_wizard_1">        
                 <div class="portlet-body form">
-                    <form class="form-horizontal" action="#" id="submit_form" method="POST">
+                    
+                    <form class="form-horizontal" id="submit_form">
                         <div class="form-wizard">
                             <div class="form-body">
                                 <ul class="nav nav-pills nav-justified steps">
@@ -177,10 +178,8 @@
                                                     </tr>
                                                     
                                                     <tr>
-                                                        <th >Descuento Client</th>
-                                                        <th>{{order.client_discount}}%</th>
-                                                        <th>Descuento Representante</th>
-                                                        <th>{{order.client_representative}}%</th>
+                                                        <th colspan="3">Descuento Cliente: {{order.client_discount}}%</th>
+                                                        <th colspan="3">Descuento Representante: {{order.representative_discount}}%</th>
                                                     </tr>
                                                     
                                                     <tr>
@@ -219,30 +218,35 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="form-actions">
                                 <div class="row">
                                     <div class="col-md-offset-3 col-md-9">
+                                        
                                         <a href="javascript:;" class="btn default button-previous">
                                             <i class="fa fa-angle-left"></i>
                                             Retorno 
                                         </a>
+
                                         <a href="javascript:;" class="btn btn-outline green button-next"> 
                                             Continue
                                             <i class="fa fa-angle-right"></i>
                                         </a>
-                                        <a href="javascript:;" class="btn green button-submit">
+                                        <a @click="submitData" class="btn btn-outline green button-submit"> 
                                             Guardar
-                                            <i class="fa fa-check"></i>
+                                            <i class="fa fa-angle-right"></i>
                                         </a>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Begin - Modal de Produtos -->
     <div class="modal fade bs-modal-lg" id="large" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -310,7 +314,6 @@
         </div>
     </div>
     <!--End - Modal de Produtos -->
-    
     <pre>
         {{order | json}} 
     </pre>
@@ -356,40 +359,41 @@ export default{
         }
     },
     ready(){
+        window._this = this;
         toastr.options.closeButton = true;
-        this.getCustomers();
-        this.getRepresentatives();
-        this.getProducts(Versato.brand_id);
+        _this.getCustomers();
+        _this.getRepresentatives();
+        _this.getProducts(Versato.brand_id);
         
         //if(this.porder) this.loadOrder();
     },
     methods:{
         deleteProduct: function(index){
-            this.orderProductsDelete.push(this.order.orderProducts[index]);
-            this.order.orderProducts.splice(index, 1);
+            _this.orderProductsDelete.push(this.order.orderProducts[index]);
+            _this.order.orderProducts.splice(index, 1);
         },
 
         updateOrderValues: function(){
-            this.order.cost = 0;
-            this.order.price = 0;
-            this.order.total = 0;
-            this.order.overalldiscount = 0;
+            _this.order.cost = 0;
+            _this.order.price = 0;
+            _this.order.total = 0;
+            _this.order.overalldiscount = 0;
 
             for (var i = 0; i < this.order.orderProducts.length; i++) {
-                var finalPrice = this.calcFinalPrice(this.order.orderProducts[i]);
-                this.order.orderProducts[i].total = finalPrice.finalPrice;
-                this.order.orderProducts[i].totaldiscount = finalPrice.totalDiscount;
+                var finalPrice = this.calcFinalPrice(_this.order.orderProducts[i]);
+                _this.order.orderProducts[i].total = finalPrice.finalPrice;
+                _this.order.orderProducts[i].totaldiscount = finalPrice.totalDiscount;
 
-                this.order.cost            += parseFloat(this.order.orderProducts[i].cost);
-                this.order.price           += parseFloat(this.order.orderProducts[i].price);
-                this.order.total           += parseFloat(this.order.orderProducts[i].total);
-                this.order.overalldiscount += parseFloat(this.order.orderProducts[i].totaldiscount);
+                _this.order.cost            += parseFloat(_this.order.orderProducts[i].cost);
+                _this.order.price           += parseFloat(_this.order.orderProducts[i].price);
+                _this.order.total           += parseFloat(_this.order.orderProducts[i].total);
+                _this.order.overalldiscount += parseFloat(_this.order.orderProducts[i].totaldiscount);
             }
         },
         addToProductList: function(product){
-            var finalPrice = this.calcFinalPrice(product);
+            var finalPrice = _this.calcFinalPrice(product);
             
-            this.order.orderProducts.push({
+            _this.order.orderProducts.push({
               id:product.id,
               code:product.code,
               cost:product.cost,
@@ -401,7 +405,7 @@ export default{
               total: finalPrice.finalPrice,
               totaldiscount:finalPrice.totalDiscount,
             });
-            return this.order.orderProducts[this.order.orderProducts.length - 1];
+            return _this.order.orderProducts[_this.order.orderProducts.length - 1];
         },
         
         calcFinalPrice: function(product){
@@ -410,8 +414,8 @@ export default{
             var totalGeneralDiscount    = 0;
             var totalIndividualDiscount = 0;
 
-            totalGeneralDiscount    = this.calcGeneralDiscount();
-            totalIndividualDiscount = this.calcIndidualDiscount(product);
+            totalGeneralDiscount    = _this.calcGeneralDiscount();
+            totalIndividualDiscount = _this.calcIndidualDiscount(product);
             
             finalDiscount = totalIndividualDiscount? totalIndividualDiscount : totalGeneralDiscount;
             
@@ -421,8 +425,8 @@ export default{
             return finalPrice;
         },
         calcGeneralDiscount: function(){
-            var client_discount         = this.order.client_discount         ? this.order.client_discount         : 0;
-            var representative_discount = this.order.representative_discount ? this.order.representative_discount : 0;
+            var client_discount         = _this.order.client_discount         ? _this.order.client_discount         : 0;
+            var representative_discount = _this.order.representative_discount ? _this.order.representative_discount : 0;
             return parseFloat(client_discount) + parseFloat(representative_discount);
         },
         calcIndidualDiscount: function(product){
@@ -433,41 +437,48 @@ export default{
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
-                this.products = response.data;
+                _this.products = response.data;
             });
         },
         getCustomers: function(){
             this.$http.get('/api/customers/selectlist')
             .then(response => {
-                this.customers_select = response.json();
+                _this.customers_select = response.json();
             });
         },
         getRepresentatives: function(){
             this.$http.get('/api/representatives/selectlist')
             .then(response => {
-                this.representatives_select = response.json();
+                _this.representatives_select = response.json();
             });
         },
 
         submitData: function(){
-
+            if(!_this.order.id)
+                _this.insertData();
+            else
+                _this.updateData();
         },
         
         insertData: function(){
-            this.$http.post('/orders', this.order)
+            Vue.http.interceptors.push((request, next) => {
+                request.headers['X-CSRF-TOKEN'] = Laravel.csrfToken;
+                next();
+            });
+            this.$http.post('/orders', _this.order)
             .then((response) => {
               toastr.success('Sucesso!','Pedido creado con sucesso!');
             }, (response) => { 
-              this.showErrors(response.data); 
-            }); 
+              _this.showErrors(response.data); 
+            });
         },
         
         updateData: function(){
-          this.$http.put('/orders/'+this.order.id, this.order)
+          this.$http.put('/orders/'+_this.order.id, _this.order)
           .then((response) => {
             toastr.success('Sucesso!','Pedido atualizado con sucesso!');
           }, (response) => { 
-            this.showErrors(response.data); 
+            _this.showErrors(response.data); 
           }); 
         },
         
@@ -481,13 +492,13 @@ export default{
 
     watch: {
         'order.orderProducts': function (val, oldVal) {
-            this.updateOrderValues();
+            _this.updateOrderValues();
         },
         'order.client_discount': function(val, oldVal){
-            this.updateOrderValues();
+            _this.updateOrderValues();
         },
         'order.representative_discount': function(val, oldVal){
-            this.updateOrderValues();
+            _this.updateOrderValues();
         },
     },
 }

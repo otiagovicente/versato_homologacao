@@ -185,8 +185,6 @@ class ProductsController extends Controller
 
 
     public function api_list(Brand $brand){
-
-
         $products = Product::
                     with('brand')
                     ->with('line')
@@ -198,6 +196,19 @@ class ProductsController extends Controller
                     ->where('brand_id', $brand->id)
                     ->get();
 
+        return $products;
+    }
+    public function api_listPaginate(Brand $brand){
+        $products = Product::
+            with('brand')
+            ->with('line')
+            ->with('reference')
+            ->with('material')
+            ->with('color')
+            ->with('grids')
+            ->with('tags')
+            ->where('brand_id', $brand->id)
+            ->paginate(10);
         return $products;
     }
 

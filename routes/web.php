@@ -22,17 +22,13 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
 	
 	Route::resource('orders','OrdersController',['parameters' => 'singular']);
-
-
     Route::resource('deliverycenters','DeliverycentersController',['parameters' => 'singular']);
-
-
 	Route::resource('shops','ShopsController',['parameters' => 'singular']);
+	
 	Route::post('/shops/photo', 'ShopsController@addPhoto');
     
 	Route::resource('macroregions','MacroregionsController',['parameters' => 'singular']);
 	Route::resource('regions','RegionsController',['parameters' => 'singular']);
-    
 	Route::resource('customers','CustomersController',['parameters' => 'singular']);
 	Route::post('/customers/photo', 'CustomersController@addPhoto');
     

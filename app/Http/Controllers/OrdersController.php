@@ -32,11 +32,18 @@ class OrdersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(OrderRequest $request)
+    public function store(Request $request)
     {
+        var_dump($request);
+        
         $order = new Order;
         $order->create($request->all());
-        return response()->json($order);
+        $order->save();
+
+        //foreach ($request->orderProducts as $orderProduct) {
+            //$order->orderProducts()->attach($orderProduct);
+       //}
+        //return response()->json($order);
     }
 
     /**
@@ -66,7 +73,7 @@ class OrdersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @ret/urn \Illuminate\Http\Response
      */
     public function update(OrderRequest $request, Order $order)
     {

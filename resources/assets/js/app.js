@@ -47,8 +47,6 @@ require('./bootstrap');
         require('./components/deliverycenters/ListDeliverycenter.vue')
     );
 
-
-
 /*
  *  Componentes de Clientes
  */
@@ -187,5 +185,5 @@ Vue.component(
 );
 
 const app = new Vue({
-    el: 'body'
+    el: 'body' 
 });
