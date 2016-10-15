@@ -63,7 +63,33 @@
 
                         </div>
                     </div>
-
+                    <div class="col-md-8">
+                        <small>Email:</small>
+                        <div class="form-group form-line-input" id="email">
+                            <input id="email-input" class="form-control input-sm" type="email" v-model="customer.email" />
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <hr>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group form-line-input">
+                            <small>Ciudad</small>
+                            <input id="city-input" class="form-control input-sm" type="text" v-model="customer.city" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <small>Província</small>
+                        <div class="form-group form-line-input">
+                            <input id="state-input" class="form-control input-sm" type="text" v-model="customer.state" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <small>CPA</small>
+                        <div class="form-group form-line-input">
+                            <input id="zip-input" class="form-control input-sm" type="text" v-model="customer.zip" />
+                        </div>
+                    </div>
                     <div class="col-md-8">
                         <small>Ubicación de la sede</small>
                         <div class="input-group" id="address">
@@ -77,10 +103,11 @@
                             </span>
                         </div>
                     </div>
-                    
                     <div class="col-md-8">
-
                         <hr>
+                    </div>
+                    <div class="col-md-offset-4 col-md-8">
+
                         <div class="map">
                             <map style="width: 100%; height: 150px;"
                                         v-bind:center.sync="map.center"
@@ -101,7 +128,26 @@
 
                         </div>
                     </div>
-
+                    <div class="col-md-offset-4 col-md-8 well">
+                        <div class="col-md-4">
+                            <small>Fone 1</small>
+                            <div id="phone1" class="form-group form-line-input">
+                                <input id="phone1-input" class="form-control input-sm" type="text" v-model="customer.phone1" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <small>Fone 2</small>
+                            <div id="phone2" class="form-group form-line-input">
+                                <input id="phone2-input" class="form-control input-sm" type="text" v-model="customer.phone2" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <small>Fone 3</small>
+                            <div id="phone3" class="form-group form-line-input">
+                                <input id="phone3-input" class="form-control input-sm" type="text" v-model="customer.phone3" />
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -125,10 +171,7 @@
             </div>
         </div>
     </div>
-    <pre>
-        {{customer | json}}
-    </pre>
-    
+
 </template>
 <style>
     .dropzone {
@@ -157,7 +200,6 @@
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
     import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
-//    import google from 'google-maps'
 
 
     export default{
@@ -175,12 +217,20 @@
                 customer: {
                     logo: "/images/default-placeholder.jpg",
                     address: "",
-                    code:'',
-                    company:'',
-                    cuit:'',
-                    name:'',
+                    zip: "",
+                    city: "",
+                    state: "",
+                    zip: "",
+                    city: "",
+                    phone1: "",
+                    phone2: "",
+                    phone3: "",
+                    code:"",
+                    company:"",
+                    cuit:"",
+                    name:"",
                     region_id:[],
-                    geo:''
+                    geo:""
                 },
                 regions_select: [],
                 map :{
@@ -191,16 +241,16 @@
             }
         },
         ready(){
-            window._this = this;
-            _this.configureDropbox();
-            _this.getRegions();
-            _this.configureMapsApi();
+            window._createCustomer = this;
+            _createCustomer.configureDropbox();
+            _createCustomer.getRegions();
+            _createCustomer.configureMapsApi();
         },
         methods:{
             getRegions: function(){
                 this.$http.get('/api/macroregions/selectlist')
                 .then((response) => {
-                    _this.regions_select = response.json();
+                    _createCustomer.regions_select = response.json();
                 }, (response) => { 
                     toastr.error('No se puede conectar al servidor'); 
                 });
@@ -223,7 +273,7 @@
                     },
 
                     success: function(file, response){
-                        _this.customer.logo = response;
+                        _createCustomer.customer.logo = response;
                         this.removeAllFiles(true);
                     },
 
@@ -253,10 +303,10 @@
                 };
             },
             fetchAddress: function(){
-                if(_this.customer.address !=  '') {
+                if(_createCustomer.customer.address !=  '') {
                     $('#address').removeClass('has-error');
 
-                    _this.getGeocode(_this.customer.address);
+                    _createCustomer.getGeocode(_createCustomer.customer.address+', '+_createCustomer.customer.city+', '+_createCustomer.customer.state);
                 }else{
                     toastr.error('informa la ubicación');
                     $('#address').addClass('has-error');
@@ -268,19 +318,19 @@
                     position.lat = results[0].geometry.location.lat();
                     position.lng = results[0].geometry.location.lng();
                     
-                    _this.emptyMarkers();
-                    _this.centerMap(position.lat, position.lng);
-                    _this.addMarker(position.lat, position.lng);
+                    _createCustomer.emptyMarkers();
+                    _createCustomer.centerMap(position.lat, position.lng);
+                    _createCustomer.addMarker(position.lat, position.lng);
                    
-                    _this.customer.geo = JSON.stringify(position);
+                    _createCustomer.customer.geo = JSON.stringify(position);
                 });
 
             },
             centerMap: function (lat, lng) {
-                _this.map.center = {lat, lng};
+                _createCustomer.map.center = {lat, lng};
             },
             addMarker: function(lat, lng) {
-                _this.map.markers.push({
+                _createCustomer.map.markers.push({
                     position: { lat: lat, lng: lng },
                     opacity: 1,
                     draggable: false,
@@ -289,12 +339,12 @@
                     rightClicked: 0,
                     dragended: 0,
                     ifw: true,
-                    ifw2text: _this.customer.name
+                    ifw2text: _createCustomer.customer.name
                 });
-                return _this.map.markers[_this.map.markers.length - 1];
+                return _createCustomer.map.markers[_createCustomer.map.markers.length - 1];
             },
             emptyMarkers: function(){
-                _this.map.markers = [];
+                _createCustomer.map.markers = [];
             },
             submitData: function(){
                 this.$http.post('/customers', this.customer)

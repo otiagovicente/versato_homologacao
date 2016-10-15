@@ -4,7 +4,7 @@
     @include('general.pageheader',[
         'section' => 'Clientes',
         'sectionUrl' => '/customers',
-        'pageTitle' => 'Cliente',
+        'pageTitle' => $customer->name,
         'url' => '/customers/editar/{{customer->id}}/edit',
         'actions' => [
             'Mostrar Todos' => '/customers',
@@ -14,7 +14,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <show-customer :pcustomer="{{$customer}}"></create-customer>
+            <show-customer :pcustomer_id="{{$customer->id}}"></show-customer>
         </div>
     </div>
 

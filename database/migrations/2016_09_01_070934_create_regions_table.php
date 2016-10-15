@@ -41,12 +41,20 @@ class CreateRegionsTable extends Migration
             $table->increments('id');
             $table->string('code');
             $table->string('cuit')->nullable();
+            $table->string('company')->nullable();
             $table->string('name');
             $table->string('logo')->nullable();
             $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('zip')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone1')->nullable();
+            $table->string('phone2')->nullable();
+            $table->string('phone3')->nullable();
             $table->string('geo')->nullable();
             $table->integer('region_id')->unsigned();
-            $table->string('company')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 
@@ -62,6 +70,8 @@ class CreateRegionsTable extends Migration
             $table->string('geo');
             $table->integer('customer_id')->unsigned();
             $table->foreign('customer_id')->references('id')->on('customers');
+            $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('representatives', function (Blueprint $table) {

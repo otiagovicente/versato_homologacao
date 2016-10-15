@@ -1,11 +1,6 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: otiagovicente
- * Date: 09/10/16
- * Time: 01:11
- */
+@extends('layouts.dashboard')
 
+@section('content')
 @include('general.pageheader',[
     'section' => 'Centros de Entrega',
     'sectionUrl' => '/deliverycenters',

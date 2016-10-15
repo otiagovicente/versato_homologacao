@@ -57,7 +57,7 @@
                                     </div>
 
                                     <div class="col-md-12">
-                                        <small>Ubicación de la sede</small>
+                                        <small>Ubicación de la tienda</small>
                                         <div class="input-group" id="address">
 
                                             <input id="address-input" class="form-control" type="text"
@@ -97,7 +97,7 @@
                                                     <a href="/shops/"><button type="button" class="btn grey btn-block" id="cancel-btn">Cancel</button></a>
                                                 </div>
                                                 <div v-show="!canedit" class="form-group">
-                                                    <a href="/shops/"><button type="button" class="btn grey btn-block" id="cancel-btn">Voltar</button></a>
+                                                    <a href="/shops/"><button type="button" class="btn grey btn-block" id="back-btn">Voltar</button></a>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 pull-right">
@@ -151,7 +151,7 @@ export default{
             InfoWindow
     },
     
-    props:['pshop','isedit'],
+    props:['pshop','isedit','pcustomer_id'],
     
     data(){
         return{
@@ -174,13 +174,15 @@ export default{
     },
     
     ready(){
-        window._this = this;
+        window._shopForm = this;
+
         toastr.options.closeButton = true;
-        _this.configureDropbox(this.shop);
-        _this.configureMapsApi()
+        _shopForm.configureDropbox(this.shop);
+        _shopForm.configureMapsApi()
         
-        _this.canedit = _this.isedit;
-        if(_this.pshop) _this.loadShop();
+        _shopForm.canedit = _shopForm.isedit;
+        if(_shopForm.pshop) _shopForm.loadShop();
+        if(_shopForm.pcustomer_id) _shopForm.loadCustomer();
     },
 
     methods:{
@@ -188,10 +190,10 @@ export default{
             //load(Maps.maps_key,Maps.maps_version);
         },
         fetchAddress: function(){
-            if(_this.shop.address !=  '') {
+            if(_shopForm.shop.address !=  '') {
                 $('#address').removeClass('has-error');
 
-                this.getGeocode(_this.shop.address);
+                this.getGeocode(_shopForm.shop.address);
             }else{
                 toastr.error('informa la ubicación');
                 $('#address').addClass('has-error');
@@ -203,19 +205,19 @@ export default{
                     position.lat = results[0].geometry.location.lat();
                     position.lng = results[0].geometry.location.lng();
                     
-                    _this.emptyMarkers();
-                    _this.centerMap(position.lat, position.lng);
-                    _this.addMarker(position.lat, position.lng);
+                    _shopForm.emptyMarkers();
+                    _shopForm.centerMap(position.lat, position.lng);
+                    _shopForm.addMarker(position.lat, position.lng);
                    
-                    _this.shop.geo = JSON.stringify(position);
+                    _shopForm.shop.geo = JSON.stringify(position);
                 });
 
             },
             centerMap: function (lat, lng) {
-                _this.map.center = {lat, lng};
+                _shopForm.map.center = {lat, lng};
             },
             addMarker: function(lat, lng) {
-                _this.map.markers.push({
+                _shopForm.map.markers.push({
                     position: { lat: lat, lng: lng },
                     opacity: 1,
                     draggable: false,
@@ -226,22 +228,24 @@ export default{
                     ifw: true,
                     ifw2text: this.shop.name
                 });
-                return _this.map.markers[_this.map.markers.length - 1];
+                return _shopForm.map.markers[_shopForm.map.markers.length - 1];
             },
             emptyMarkers: function(){
-                _this.map.markers = [];
-                _this.shop.geo = "";
+                _shopForm.map.markers = [];
+                _shopForm.shop.geo = "";
             },
         submitData: function(){ 
-            if(!_this.shop.id)
-                _this.insertShop();
+            if(!_shopForm.shop.id)
+                _shopForm.insertShop();
             else
-                _this.updateShop();
+                _shopForm.updateShop();
         },//end submit data
         insertShop:function(){
-            this.$http.post('/shops', _this.shop)
+            this.$http.post('/shops', _shopForm.shop)
             .then(function (response) {
                 toastr.success('Sucesso!', 'Tienda criada con sucesso.');
+                this.$emit('shop-created');
+                this.reload();
             }).catch(function (response) {
                 $.each(response.data, function (key, value) {
                     toastr.warning('Atención', value);
@@ -250,9 +254,11 @@ export default{
             });
         },
         updateShop: function(){
-            this.$http.put('/shops/'+_this.shop.id, _this.shop)
+            this.$http.put('/shops/'+_shopForm.shop.id, _shopForm.shop)
             .then(function (response) {
                 toastr.success('Sucesso!', 'Tienda actualizada con sucesso.');
+                this.$emit('shop-updated');
+                this.reload();
             }).catch(function (response) {
                 $.each(response.data, function (key, value) {
                     toastr.warning('Atención', value);
@@ -264,7 +270,18 @@ export default{
         loadShop:function(){
             this.shop = this.pshop;
         },
+        loadCustomer: function(){
+            console.log(_shopForm.pcustomer_id);
+            _shopForm.shop.customer_id = _shopForm.pcustomer_id;
+        },
+        reload: function(){
 
+            _shopForm.data = {
+                shop: {id:'', name: '', description: '', logo: '', address: '', geo:'', customer_id: 1},
+                map :{ markers: [], center : {lat: -34.6248187, lng: -58.3761432}, zoom: 12}};
+
+
+        },
         configureDropbox: function(callback){
             Dropzone.autoDiscover = false;
             var dropzoneOptions = {

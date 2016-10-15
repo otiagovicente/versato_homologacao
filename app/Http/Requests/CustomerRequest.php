@@ -23,12 +23,40 @@ class CustomerRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'code' => 'required|unique:customers,code',
-            'cuit' => 'required|unique:customers,cuit',
-            'company' => 'required',
-            'name' => 'required',
-            'address' => 'required'
-        ];
+        switch ($this->method) {
+            case 'GET':
+            case 'POST':
+                $rules = [
+                    'code' => 'required|unique:customers,code',
+                    'cuit' => 'required|unique:customers,cuit',
+                    'company' => 'required',
+                    'name' => 'required',
+                    'address' => 'required'
+                ];
+                break;
+            case 'PUT':
+            case 'PATCH':
+                $rules = [
+                    'code' => 'required',
+                    'cuit' => 'required',
+                    'company' => 'required',
+                    'name' => 'required',
+                    'address' => 'required'
+                ];
+                break;
+
+            default:
+                $rules = [
+                    'code' => 'required',
+                    'cuit' => 'required',
+                    'company' => 'required',
+                    'name' => 'required',
+                    'address' => 'required'
+                ];
+                break;
+        }
+
+
+        return $rules;
     }
 }

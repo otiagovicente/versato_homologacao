@@ -1,146 +1,156 @@
 <template>
-    <div class="content">
-        <div class="portlet light">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="content">
+                <div class="portlet light">
+                    <div class="portlet-body form">
+                         <div class="row">
+                             <div class="col-md-6">
+                                 <img id="photo-image"  v-bind:src="customer.logo" class="figure-img img-fluid img-rounded customer-logo" alt="sem logo do cliente.">
 
-            <div class="portlet-title">
-                <div class="caption font-blue">
-                    <i class="fa fa-plus font-blue"></i>Crear Cliente
-                </div>
+                                 <h3>{{customer.name}}</h3>
+                                 <h4>{{customer.company}}</h4>
+                                 <h4>código: {{customer.code}}</h4>
+                                 <h4>cuit: {{customer.cuit}}</h4>
+                             </div>
+                             <div class="col-md-6">
+                                 <div class="well">
+                                     <h3>{{customer.company}}</h3>
+                                     <address>
+                                         <strong>{{customer.address}}</strong>
+                                         <br>{{customer.city}}, {{customer.state}}
+                                         <br>{{customer.zip}}
+                                         <br><abbr v-show="customer.phone1" title="Phone">P:</abbr> {{customer.phone1}}
+                                         <br><abbr v-show="customer.phone2" title="Phone">P:</abbr> {{customer.phone2}}
+                                         <br><abbr v-show="customer.phone3" title="Phone">P:</abbr> {{customer.phone3}}
+                                     </address>
+                                 </div>
+                             </div>
 
-            </div>
-            <div class="portlet-body form">
-                <div class="row">
-                    <div class="col-md-4">
-                     <span class="blue">Codigo</span>
-                        <div class="form-group form-line-input" id="code">
-                            <input id="code-input" class="form-control input-sm" type="text" v-model="customer.code" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="blue">Cuit</span>
-                        <div class="form-group form-line-input" id="cuit">
-                            <input id="cuit-input" class="form-control input-sm" type="text" v-model="customer.cuit" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="blue">Company</span>
-                        <div class="form-group form-line-input" id="company">
-                            <input id="company-input" class="form-control input-sm" type="text" v-model="customer.company" />
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
+                         </div>
+                         <hr>
+                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="map">
+                                    <map style="width: 100%; height: 150px;"
+                                                v-bind:center.sync="map.center"
+                                                v-bind:zoom.sync="map.zoom"
+                                    >
 
-                    <div class="col-md-4">
-                        <small>Logo</small>
-                        <div id="photo-input" class="form-group">
-                            <div class="">
-                                <img id="photo-image"  v-bind:src="customer.logo" class="figure-img img-fluid img-rounded customer-logo" alt="sem logo do cliente.">
+                                        <marker
+                                                v-for="m in map.markers"
+                                                :position.sync="m.position"
+                                                :clickable.sync="m.clickable"
+                                                :draggable.sync="m.draggable"
+                                                @g-click="center=m.position"
+                                        >
+                                            <!--<info-window v-show="m.ifw" content="{{m.ifw2text}}"></info-window>-->
+                                        </marker>
+
+                                    </map>
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div id="photo" class="dropzone">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <small>Nombre</small>
-                        <div class="form-group form-line-input" id="name">
-                            <input id="name-input" class="form-control input-sm" type="text" v-model="customer.name" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <small>Región</small>
-                        <div class="form-group form-line-input" id="region_id">
-                            <v-select v-bind:options.sync="regions_select"
-                                      :value.sync="customer.region_id"
-                                      placeholder="Elije la región"
-                                      class="form-control" id="region-input"
-                                      name="region[]" search justified required close-on-select>
-
-                            </v-select>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-8">
-                        <small>Ubicación de la sede</small>
-                        <div class="input-group" id="address">
-
-                            <input id="address-input" class="form-control" type="text"
-                                   v-model="customer.address"
-                                   @keyup.enter="fetchAddress()"
-                            />
-                            <span class="input-group-btn">
-                                <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-
+                         </div>
                         <hr>
-                        <div class="map">
-                            <map style="width: 100%; height: 150px;"
-                                        v-bind:center.sync="map.center"
-                                        v-bind:zoom.sync="map.zoom"
-                            >
+                         <div class="row">
+                             <div class="col-md-12">
+                                 <a class="btn blue btn-outline sbold pull-right" data-toggle="modal" href="#crear-tienda"> Crear Tienda </a>
+                                 <a class="btn green btn-outline sbold pull-right" style="margin-right:10px;" data-toggle="modal" href="#create-deliverycenter"> Crear Centro de Entrega </a>
+                             </div>
+                         </div>
 
-                                <marker
-                                        v-for="m in map.markers"
-                                        :position.sync="m.position"
-                                        :clickable.sync="m.clickable"
-                                        :draggable.sync="m.draggable"
-                                        @g-click="center=m.position"
-                                >
-                                    <!--<info-window v-show="m.ifw" content="{{m.ifw2text}}"></info-window>-->
-                                </marker>
 
-                            </map>
-
-                        </div>
                     </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="container-fluid">
-                        <div class="col-md-3 pull-right">
-                            <div class="form-group">
-                                <a href="/customers/"><button type="button" class="btn grey btn-block" id="cancel-btn">Retornar</button></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
+                </div>
 
             </div>
         </div>
     </div>
+
+    <div class="col-md-6">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption font-blue">
+                            <i class="fa fa-map-pin font-blue"></i>Tiendas
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                         <div v-for="shop in shops" class="row">
+
+                             <div class="col-md-12">
+                                 <div class="col-md-4">
+                                     <img v-if="shop.logo" class="shop-logo" v-bind:src="shop.logo" />
+                                     <img v-else class="shop-logo" v-bind:src="customer.logo" />
+                                 </div>
+                                 <div class="col-md-8" style="padding-top:5px;">
+                                     <span class="caption font-blue"> {{shop.name}} </span>
+                                     <br>
+                                     <span class="caption font-blue"> {{shop.address}} </span>
+                                 </div>
+                             </div>
+                             <div class="col-md-12">
+                                 <hr>
+                             </div>
+
+                         </div>
+                    </div>
+                </div>
+    </div>
+
+    <div class="modal fade" id="create-shop" tabindex="-1" role="create-shop" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <shop-form
+                            v-on:shop-created="reloadShops"
+                            :isedit="true" :pcustomer_id="pcustomer_id">
+
+                    </shop-form>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="create-deliverycenter" tabindex="-1" role="create-deliverycenter" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <create-deliverycenter
+                            v-on:shop-created="reloadShops"
+                            :isedit="true" :pcustomer_id="pcustomer_id">
+
+                    </create-deliverycenter>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 </template>
 <style>
-    .dropzone {
-        min-height: 150px;
-        border: 2px dashed #eaeaea;
-        background: white;
-        padding: 20px 20px;
-        width: 200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: "Open Sans",sans-serif;
-        font-weight: 300;
-        font-size: 18px;
-    }
     .customer-logo {
         width:200px;
     }
+    .shop-logo{
 
+        width:100%;
+    }
     .map {
         width: 100%;
         height: 200px;
     }
 </style>
 <script>
+//    import shopForm from '../shops/shopForm.vue'
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
     import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
@@ -149,15 +159,13 @@
 
     export default{
         components: {
-            vSelect: VueStrap.select,
-            vOption: VueStrap.option,
-            datepicker: VueStrap.datepicker,
             Map,
             load,
             Marker,
-            InfoWindow
+            InfoWindow,
+//            'shop-form': shopForm,
         },
-        props:['pcustomer'],
+        props:['pcustomer_id'],
         data(){
             return{
                 customer: {
@@ -171,114 +179,66 @@
                     region_id:[],
                     geo:''
                 },
-                regions_select: [],
                 map :{
                     markers: [],
                     center : {lat: -34.6248187, lng: -58.3761432},
                     zoom: 12
                 },
+                shops: []
             }
         },
         ready(){
-            window._this = this;
-            _this.configureDropbox();
-            _this.getRegions();
-            _this.configureMapsApi();
-            _this.loadCustomer();
+            window._showCustomer = this;
+            _showCustomer.configureMapsApi();
+            _showCustomer.getCustomer();
+            _showCustomer.getShops();
         },
         methods:{
-            loadCustomer:function(){
-                _this.customer = _this.pcustomer;
-                
-                var geo = JSON.parse(_this.customer.geo);
-                console.log(geo);
-                
-                _this.emptyMarkers();
-                _this.centerMap(geo.lat, geo.lng);
-                _this.addMarker(geo.lat, geo.lng);
+            getCustomer:function(){
+
+                this.$http.get('/api/customers/'+_showCustomer.pcustomer_id)
+                        .then((response)=>{
+                            _showCustomer.customer = response.json();
+                            console.log(response.json());
+
+                            var geo = JSON.parse(_showCustomer.customer.geo);
+                            console.log(geo);
+
+                            _showCustomer.emptyMarkers();
+                            _showCustomer.centerMap(geo.lat, geo.lng);
+                            _showCustomer.addMarker(geo.lat, geo.lng);
+
+                        }).catch((response)=>{
+                            console.log(response);
+                            toastr.error('No se puede conectar al servidor. getCustomer Fails');
+                        });
+
             },
-            getRegions: function(){
-                this.$http.get('/api/macroregions/selectlist')
-                .then((response) => {
-                    _this.regions_select = response.json();
-                }, (response) => { 
-                    toastr.error('No se puede conectar al servidor'); 
+            reloadShops:function(){
+                _showCustomer.getShops();
+            },
+            getShops: function(){
+//                _showCustomer.shops = [];
+                this.$http.get('/api/customers/'+_showCustomer.pcustomer_id+'/shops')
+                        .then((response)=>{
+                            _showCustomer.shops = [];
+                            $.each(response.json(), function(index){
+                                this.geo = JSON.parse(this.geo);
+                                _showCustomer.shops.push(this);
+                            });
+                            console.log(response.json());
+                        }).catch((response)=>{
+                            toastr.error('No se puede conectar al servidor. getShops Fails');
                 });
             },
             configureMapsApi: function(){
                 //load(Maps.maps_key,Maps.maps_version);
             },
-            configureDropbox: function(callback){
-                Dropzone.autoDiscover = false;
-                var dropzoneOptions = {
-                    maxFiles: 1,
-                    maxFileSize: 8,
-                    paramName: 'photo',
-                    acceptedFiles: '.jpeg, .jpg, .png',
-                    autoProcessQueue: false,
-                    dictDefaultMessage: 'Elije el archivo',
-                    url: "/customers/photo",
-                    headers: {
-                        'X-CSRF-TOKEN': Laravel.csrfToken
-                    },
-
-                    success: function(file, response){
-                        _this.customer.logo = response;
-                        this.removeAllFiles(true);
-                    },
-
-                    init: function() {
-                        this.on("maxfilesexceeded", function(file){
-                            toastr.warning('Número de arquivos excedido!', 'Você só pode inserir um arquivo');
-                        });
-                        this.on("error", function(file, errorMessage){
-                            toastr.error('Erro!', "Confira se o arquivo possui as características necessárias!");
-                            this.removeAllFiles(true);
-                        });
-                    }
-
-                };
-                var photoDropzone = new Dropzone("div#photo", dropzoneOptions);
-                photoDropzone.accept = function(file, done) {
-
-                    bootbox.confirm("Seguro que quieres hacer el upload de una imágene del producto?", function(result) {
-                        if(result){
-                            done();
-                            photoDropzone.processQueue();
-                        }else{
-                            photoDropzone.removeAllFiles(true);
-                            done(result);
-                        }
-                    });
-                };
-            },
-            fetchAddress: function(){
-                if(_this.customer.address !=  '') {
-                    $('#address').removeClass('has-error');
-
-                    _this.getGeocode(_this.customer.address);
-                }else{
-                    toastr.error('informa la ubicación');
-                    $('#address').addClass('has-error');
-                }
-            },
-            getGeocode: function(address){
-                new google.maps.Geocoder().geocode({ address: address }, function(results, status) {
-                    var position = {lat:'', lng:''};
-                    position.lat = results[0].geometry.location.lat();
-                    position.lng = results[0].geometry.location.lng();
-                    
-                    _this.emptyMarkers();
-                    _this.centerMap(position.lat, position.lng);
-                    _this.addMarker(position.lat, position.lng);
-                });
-
-            },
             centerMap: function (lat, lng) {
-                _this.map.center = {lat, lng};
+                _showCustomer.map.center = {lat, lng};
             },
             addMarker: function(lat, lng) {
-                _this.map.markers.push({
+                _showCustomer.map.markers.push({
                     position: { lat: lat, lng: lng },
                     opacity: 1,
                     draggable: false,
@@ -287,27 +247,19 @@
                     rightClicked: 0,
                     dragended: 0,
                     ifw: true,
-                    ifw2text: _this.customer.name
+                    ifw2text: _showCustomer.customer.name
                 });
                 
                 var pos = {lat:'', lng:''};
                 pos.lat = lat;
                 pos.lng = lng;
-                _this.geo= JSON.stringify(pos);
+                _showCustomer.geo= JSON.stringify(pos);
                 
-                return _this.map.markers[_this.map.markers.length - 1];
+                return _showCustomer.map.markers[_showCustomer.map.markers.length - 1];
             },
             emptyMarkers: function(){
-                _this.map.markers = [];
-                _this.geo = '';
-            },
-            submitData: function(){
-                _this.$http.put('/customers/'+_this.customer.id, _this.customer)
-                .then((response) => {
-                    toastr.success('Sucesso!','Região incluída com sucesso');
-                }, (response) => { 
-                    _this.showErrors(response.data); 
-                });
+                _showCustomer.map.markers = [];
+                _showCustomer.geo = '';
             }
         }
     }

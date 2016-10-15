@@ -115,6 +115,14 @@ class CustomersController extends Controller
         return Storage::disk('s3')->url($image);
     }
 
+
+
+
+
+    public function api_show(Customer $customer){
+        return response()->json($customer);
+    }
+
     public function api_selectList(){
         $lstAll = Customer::all();
         
@@ -125,4 +133,12 @@ class CustomersController extends Controller
         }
         return response()->json($selectList);
     }
+
+
+
+
+    public function api_listShops(Customer $customer){
+        return $customer->shops()->get();
+    }
+
 }

@@ -18,9 +18,14 @@ class CreateDeliverycentersTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('address');
+            $table->string('city');
+            $table->string('state');
+            $table->string('zip');
             $table->string('geo');
             $table->integer('customer_id')->unsigned();
             $table->foreign('customer_id')->references('id')->on('customers');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

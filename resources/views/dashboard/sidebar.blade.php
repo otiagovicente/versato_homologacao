@@ -237,10 +237,59 @@
                                     </li>
 
 
-
+                                    <li class="nav-item ">
+                                        <a href="javascript:;" class="nav-link nav-toggle">
+                                            <i class="fa fa-map-marker"></i>
+                                            <span class="title">Tiendas</span>
+                                            <span class="selected"></span>
+                                            <span class="arrow"></span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li class="nav-item">
+                                                <a href="/shops" class="nav-link nav-toggle">
+                                                    <i class="fa fa-map-marker"></i>
+                                                    <span class="title">Ver Todos</span>
+                                                    <span class="selected"></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/shops/create" class="nav-link nav-toggle">
+                                                    <i class="fa fa-map-marker"></i>
+                                                    <span class="title">Crear</span>
+                                                    <span class="selected"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a href="javascript:;" class="nav-link nav-toggle">
+                                            <i class="fa fa-truck"></i>
+                                            <span class="title">Centro de Entrega</span>
+                                            <span class="selected"></span>
+                                            <span class="arrow"></span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li class="nav-item">
+                                                <a href="/deliverycenters" class="nav-link nav-toggle">
+                                                    <i class="fa fa-bars"></i>
+                                                    <span class="title">Ver Todos</span>
+                                                    <span class="selected"></span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/deliverycenters/create" class="nav-link nav-toggle">
+                                                    <i class="fa fa-plus"></i>
+                                                    <span class="title">Crear</span>
+                                                    <span class="selected"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
 
                                 </ul>
                             </li>
+
+
 
 
                             <li class="heading">
@@ -327,38 +376,6 @@
                                     </li>
                                 </ul>
                             </li>
-
-
-
-
-                            <li class="nav-item ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-map-marker"></i>
-                                    <span class="title">Tiendas</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item">
-                                        <a href="/shops" class="nav-link nav-toggle">
-                                            <i class="fa fa-map-marker"></i>
-                                            <span class="title">Ver Todos</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/shops/create" class="nav-link nav-toggle">
-                                            <i class="fa fa-map-marker"></i>
-                                            <span class="title">Crear</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-
-
-
 
                             <li class="heading">
                                 <h3 class="uppercase">Ventas</h3>
