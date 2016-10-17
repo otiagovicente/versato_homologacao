@@ -236,6 +236,7 @@
             }
         },
         ready(){
+            load(Maps.maps_key, Maps.maps_version)
             window._editCustomer = this;
             _editCustomer.configureDropbox();
             _editCustomer.getRegions();
@@ -369,4 +370,3 @@
         }
     }
 </script>
-;

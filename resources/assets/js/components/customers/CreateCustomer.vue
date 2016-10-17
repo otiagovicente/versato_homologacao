@@ -241,6 +241,7 @@
             }
         },
         ready(){
+            load(Maps.maps_key, Maps.maps_version)
             window._createCustomer = this;
             _createCustomer.configureDropbox();
             _createCustomer.getRegions();

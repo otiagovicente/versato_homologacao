@@ -169,6 +169,7 @@
             }
         },
         ready(){
+            load(Maps.maps_key, Maps.maps_version)
             window._createDeliveryCenter = this;
             _createDeliveryCenter.configureMapsApi();
         },

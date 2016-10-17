@@ -128,7 +128,6 @@
     import toastr from 'toastr'
     import VueStrap from 'vue-strap'
     
-    //load(Maps.maps_key, Maps.maps_version)
 
 export default{
     props:[
@@ -162,8 +161,10 @@ export default{
     },
     
     ready(){
+        load(Maps.maps_key, Maps.maps_version)
         toastr.options.closeButton = true;
         this.getMacroRegions();
+
     },
     
     methods:{

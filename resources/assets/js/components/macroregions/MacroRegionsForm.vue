@@ -81,7 +81,7 @@
     import {load, Map, Polygon} from 'vue-google-maps'
     import toastr from 'toastr'
     
-    load(Maps.maps_key, Maps.maps_version)
+
 
 export default{
     props:[
@@ -118,7 +118,8 @@ export default{
     },
     ready(){
         toastr.options.closeButton = true;
-        if(this.pmacroregion) this.loadMacroregion(); 
+        if(this.pmacroregion) this.loadMacroregion();
+        load(Maps.maps_key, Maps.maps_version)
     },
     methods:{
         

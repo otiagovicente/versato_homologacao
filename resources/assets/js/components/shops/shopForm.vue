@@ -182,6 +182,7 @@ export default{
     },
     
     ready(){
+        load(Maps.maps_key, Maps.maps_version)
         window._shopForm = this;
 
         toastr.options.closeButton = true;
