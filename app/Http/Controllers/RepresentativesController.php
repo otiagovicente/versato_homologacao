@@ -117,9 +117,10 @@ class RepresentativesController extends Controller
     }
 
     public function api_selectList(){
-        $lstAll = Representative::all();
+        $listAll = Representative::all();
+        $selectList = [];
         
-        foreach($lstAll as $item){
+        foreach($listAll as $item){
             $selectItem['value'] = $item->id;
             $selectItem['label'] = $item->code;
             $selectList[] = $selectItem;
