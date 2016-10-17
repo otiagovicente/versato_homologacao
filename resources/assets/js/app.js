@@ -88,6 +88,11 @@ require('./bootstrap');
         require('./components/representatives/EditRepresentative.vue')
     );
 
+
+
+
+
+
 /*
  *  Componentes de Produto
  */
@@ -100,6 +105,8 @@ require('./bootstrap');
         require('./components/products/EditProducts.vue')
     );
 
+
+
 /*
  *   Componentes de Linha
  */
@@ -107,6 +114,10 @@ require('./bootstrap');
         'line-form',
         require('./components/lines/LineForm.vue')
     );
+
+
+
+
 /*
  *  Componentes de Cores
  */
@@ -115,6 +126,10 @@ require('./bootstrap');
         'colors-list',
         require('./components/colors/ColorsList.vue')
     );
+
+
+
+
 
 /*
  *   Componentes de Usuário
@@ -135,6 +150,8 @@ require('./bootstrap');
     );
 
 
+
+
 /*
  * Componentes Passport - Autenticação JWT
  */
@@ -152,6 +169,9 @@ require('./bootstrap');
         'passport-personal-access-tokens',
         require('./components/passport/PersonalAccessTokens.vue')
     );
+
+
+
 
 /*
  * Componentes de Macro Regiões
@@ -176,7 +196,7 @@ Vue.component(
 );
 
 /*
-* Componentes de Shops
+* Componentes de Pedidos
 */
 
 Vue.component(
