@@ -36,13 +36,4 @@
         <script src="/dashboard/custom/notifications.js" type="text/javascript" charset="utf-8"></script>
     
         <!-- END THEME LAYOUT SCRIPTS -->
-        <script src="/dashboard/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>
-        <script src="/dashboard/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
-        <script src="/dashboard/pages/scripts/form-wizard.js" type="text/javascript"></script>
-        
         @yield('scripts')
