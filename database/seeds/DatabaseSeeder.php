@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
          $this->call(TagsTableSeeder::class);
          $this->call(ProductsTableSeeder::class);
          $this->call(MacroregionsAndRegionsTableSeeder::class);
+         $this->call(CustomersTableSeeder::class);
     }
 }

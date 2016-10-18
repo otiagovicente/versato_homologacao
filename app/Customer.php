@@ -20,5 +20,9 @@ class Customer extends Model
         return $this->hasMany('App\Shop');
     }
 
+    public function deliverycenters(){
+        return $this->hasMany('App\DeliveryCenter');
+    }
+
 }
 

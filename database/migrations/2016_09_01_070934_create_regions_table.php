@@ -64,11 +64,12 @@ class CreateRegionsTable extends Migration
         Schema::create('shops', function (Blueprint $table){
             $table->increments('id');
             $table->string('name');
-            $table->string('description');
-            $table->string('logo');
+            $table->string('description')->nullable();
+            $table->string('logo')->nullable();
             $table->string('address');
             $table->string('geo');
             $table->integer('customer_id')->unsigned();
+
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
             $table->softDeletes();

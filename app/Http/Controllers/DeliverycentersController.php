@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
+use App\Deliverycenter;
 use Illuminate\Http\Request;
+use App\Http\Requests\DeliverycenterRequest;
 
 use App\Http\Requests;
 
@@ -34,9 +37,14 @@ class DeliverycentersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DeliverycenterRequest $request)
     {
-        //
+
+        $deliveryCenter = $customer->deliverycenters($request);
+        $deliveryCenter->save();
+
+        return response()->json($deliveryCenter);
+
     }
 
     /**

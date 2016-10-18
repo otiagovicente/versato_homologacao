@@ -143,7 +143,7 @@
             Marker,
             InfoWindow
         },
-        props:['pcustomer'],
+        props:['pcustomer_id'],
         data(){
             return{
                 deliverycenter: {
@@ -153,7 +153,6 @@
                     city: "",
                     state: "",
                     zip: "",
-                    code:'',
                     company:'',
                     cuit:'',
                     name:'',
@@ -169,23 +168,16 @@
             }
         },
         ready(){
-            load(Maps.maps_key, Maps.maps_version)
             window._createDeliveryCenter = this;
             _createDeliveryCenter.configureMapsApi();
+            _createDeliveryCenter.loadCustomer();
         },
         methods:{
             loadCustomer:function(){
-                _createDeliveryCenter.customer = _createDeliveryCenter.pcustomer;
-
-                var geo = JSON.parse(_createDeliveryCenter.customer.geo);
-                console.log(geo);
-
-                _createDeliveryCenter.emptyMarkers();
-                _createDeliveryCenter.centerMap(geo.lat, geo.lng);
-                _createDeliveryCenter.addMarker(geo.lat, geo.lng);
+                _createDeliveryCenter.deliverycenter.customer_id = _createDeliveryCenter.pcustomer_id;
             },
             configureMapsApi: function(){
-                //load(Maps.maps_key,Maps.maps_version);
+                load(Maps.maps_key,Maps.maps_version);
             },
             fetchAddress: function(){
                 if(_createDeliveryCenter.deliverycenter.address !=  '') {
@@ -236,9 +228,9 @@
                 _createDeliveryCenter.geo = '';
             },
             submitData: function(){
-                _createDeliveryCenter.$http.put('/deliverycenters')
+                _createDeliveryCenter.$http.post('/deliverycenters/', data().deliverycenter)
                         .then((response) => {
-                            toastr.success('Sucesso!','Região incluída com sucesso');
+                            toastr.success('Sucesso!','Centro de Entrega incluyida com exito!');
                         }, (response) => {
                             _createDeliveryCenter.showErrors(response.data);
                         });
