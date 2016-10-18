@@ -141,7 +141,7 @@
                 </div>
                 
                 <div class="modal-body">
-                    <table class="table table-striped table-hover">
+                      <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>Producto</>
@@ -189,7 +189,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                            </table>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn dark btn-outline" data-dismiss="modal">Fechar</button>
