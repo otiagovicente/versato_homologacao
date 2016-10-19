@@ -236,7 +236,6 @@
             }
         },
         ready(){
-            load(Maps.maps_key, Maps.maps_version)
             window._editCustomer = this;
             _editCustomer.configureDropbox();
             _editCustomer.getRegions();
@@ -263,7 +262,9 @@
                 });
             },
             configureMapsApi: function(){
-                //load(Maps.maps_key,Maps.maps_version);
+                if (!(typeof google === 'object' && typeof google.maps === 'object')) {
+                    load(Maps.maps_key, Maps.maps_version);
+                }
             },
             configureDropbox: function(callback){
                 Dropzone.autoDiscover = false;

@@ -118,11 +118,15 @@ export default{
     },
     ready(){
         toastr.options.closeButton = true;
+        this.configureMapsApi();
         if(this.pmacroregion) this.loadMacroregion();
-        load(Maps.maps_key, Maps.maps_version)
     },
     methods:{
-        
+      configureMapsApi: function(){
+        if (!(typeof google === 'object' && typeof google.maps === 'object')) {
+          load(Maps.maps_key, Maps.maps_version);
+        }
+      },
         loadMacroregion: function(){
           this.macroregion.id = this.pmacroregion.id,
           this.macroregion.code = this.pmacroregion.code,

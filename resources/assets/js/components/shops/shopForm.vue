@@ -182,7 +182,6 @@ export default{
     },
     
     ready(){
-        load(Maps.maps_key, Maps.maps_version)
         window._shopForm = this;
 
         toastr.options.closeButton = true;
@@ -203,7 +202,9 @@ export default{
             });
         },
         configureMapsApi: function(){
-            //load(Maps.maps_key,Maps.maps_version);
+            if (!(typeof google === 'object' && typeof google.maps === 'object')) {
+                load(Maps.maps_key, Maps.maps_version);
+            }
         },
         fetchAddress: function(){
             if(_shopForm.shop.address !=  '') {

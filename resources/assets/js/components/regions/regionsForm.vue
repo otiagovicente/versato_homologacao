@@ -161,13 +161,18 @@ export default{
     },
     
     ready(){
-        load(Maps.maps_key, Maps.maps_version)
         toastr.options.closeButton = true;
+        this.configureMapsApi();
         this.getMacroRegions();
 
     },
     
     methods:{
+      configureMapsApi: function(){
+        if (!(typeof google === 'object' && typeof google.maps === 'object')) {
+          load(Maps.maps_key, Maps.maps_version);
+        }
+      },
         submitData: function(){
             if(this.regions){
               if(this.deleteRegions)

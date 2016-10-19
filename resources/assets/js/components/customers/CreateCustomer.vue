@@ -241,11 +241,11 @@
             }
         },
         ready(){
-            load(Maps.maps_key, Maps.maps_version)
             window._createCustomer = this;
+            _createCustomer.configureMapsApi();
             _createCustomer.configureDropbox();
             _createCustomer.getRegions();
-            _createCustomer.configureMapsApi();
+
         },
         methods:{
             getRegions: function(){
@@ -257,7 +257,9 @@
                 });
             },
             configureMapsApi: function(){
-                //load(Maps.maps_key,Maps.maps_version);
+                if (!(typeof google === 'object' && typeof google.maps === 'object')) {
+                    load(Maps.maps_key, Maps.maps_version);
+                }
             },
             configureDropbox: function(callback){
                 Dropzone.autoDiscover = false;

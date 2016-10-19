@@ -177,7 +177,9 @@
                 _createDeliveryCenter.deliverycenter.customer_id = _createDeliveryCenter.pcustomer_id;
             },
             configureMapsApi: function(){
-                load(Maps.maps_key,Maps.maps_version);
+                if (!(typeof google === 'object' && typeof google.maps === 'object')) {
+                    load(Maps.maps_key, Maps.maps_version);
+                }
             },
             fetchAddress: function(){
                 if(_createDeliveryCenter.deliverycenter.address !=  '') {

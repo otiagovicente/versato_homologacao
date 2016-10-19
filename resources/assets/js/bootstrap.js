@@ -19,6 +19,15 @@ window.toastr = require('toastr');
 window.algoliasearch = require('algoliasearch');
 window.autocomplete = require('autocomplete.js');
 
+
+window.jQueryBridget = require('jquery-bridget');
+window.Masonry = require('masonry-layout');
+window.imagesLoaded = require('imagesloaded');
+
+// make Masonry a jQuery plugin
+jQueryBridget( 'masonry', Masonry, $ );
+imagesLoaded.makeJQueryPlugin( $ );
+
 window.bootbox = require('bootbox');
 
 /**

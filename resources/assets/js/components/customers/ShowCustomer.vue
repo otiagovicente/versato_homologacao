@@ -154,7 +154,6 @@
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
     import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
-//    import google from 'google-maps'
 
 
     export default{
@@ -232,7 +231,9 @@
                 });
             },
             configureMapsApi: function(){
-                //load(Maps.maps_key,Maps.maps_version);
+                if (!(typeof google === 'object' && typeof google.maps === 'object')) {
+                    load(Maps.maps_key, Maps.maps_version);
+                }
             },
             centerMap: function (lat, lng) {
                 _showCustomer.map.center = {lat, lng};
