@@ -35,8 +35,14 @@ class CustomersTableSeeder extends Seeder
             'region_id' => 1,
         ];
 
-        $customer = new Customer($customerData);
-        $customer->save();
+
+
+        $i = 0;
+        while($i < 10){
+            $customer = new Customer($customerData);
+            $customer->save();
+            $i++;
+        }
 
 
         $shopData = [

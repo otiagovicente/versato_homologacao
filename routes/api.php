@@ -26,7 +26,7 @@ Route::get('/users/selectlist', 'UsersController@api_selectList');
 Route::get('/regions/selectlist', 'RegionsController@api_selectList');
 Route::get('/representatives/selectlist', 'RepresentativesController@api_selectList');
 
-
+Route::get('/customers', 'CustomersController@api_index');
 Route::get('/customers/selectlist', 'CustomersController@api_selectList');
 Route::get('/customers/{customer}', 'CustomersController@api_show');
 Route::get('/customers/{customer}/shops', 'CustomersController@api_listShops');

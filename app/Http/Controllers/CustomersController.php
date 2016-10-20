@@ -119,6 +119,12 @@ class CustomersController extends Controller
 
 
 
+
+    public function api_index(){
+        $customers = Customer::all();
+        return response()->json($customers);
+    }
+
     public function api_show(Customer $customer){
         return response()->json($customer);
     }
