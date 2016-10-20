@@ -6,130 +6,244 @@
 </style>
 
 <template>
-    <div class="content">
-        <div class="portlet light">
-            <div class="portlet-title">
-                <div class="caption font-blue">
-                    <i class="fa fa-plus font-blue"></i>Crear Pedido
-                </div>
-            </div>
-            <div class="portlet-body form">
-                
-                <div class="row">
-                    <div class="col-md-4">
-                        <small>Cliente</small>
-                        <div class="form-group form-line-input" id="client">
-                            <v-select 
-                                v-bind:options.sync="customers_select" :value.sync="order.customer_id"
-                                placeholder="Elije el cliente" class="form-control"
-                                id="customer-input" name="customer[]"
-                                search justified required close-on-select>
-                            </v-select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <small>Representante</small>
-                        <div class="form-group form-line-input" id="representative">
-                            <v-select 
-                                v-bind:options.sync="representatives_select" :value.sync="order.representative_id"
-                                placeholder="Elije el representante" class="form-control"
-                                id="representative-input" name="representative[]"
-                                search justified required close-on-select>
-                            </v-select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <small>Cliente Descuento</small>
-                        <div class="form-group form-line-input" id="client_discount">
-                            <input 
-                                id="client-discount-input" 
-                                class="form-control input-sm" 
-                                type="number"
-                                v-model="order.client_discount" 
-                            />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <small>Representante Descuento</small>
-                        <div class="form-group form-line-input" id="representative_discount">
-                            <input              
-                                id="representative-discount-input" 
-                                class="form-control input-sm" 
-                                type="number"
-                                v-model="order.representative_discount" 
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <fieldset class="form-group">
-                        <legend>Productos</legend>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="pull-right">
-                                    <a class="btn blue btn-outline sbold" 
-                                        data-toggle="modal" 
-                                        href="#large"
-                                    > 
-                                        Adicionar Producto 
-                                    </a>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered" id="form_wizard_1">        
+                <div class="portlet-body form">
+                    
+                    <form class="form-horizontal" id="submit_form">
+                        <div class="form-wizard">
+                            <div class="form-body">
+                                <ul class="nav nav-pills nav-justified steps">
+                                    <li>
+                                        <a href="#tab1" data-toggle="tab" class="step">
+                                            <span class="number"> 1 </span>
+                                            <span class="desc">
+                                            <i class="fa fa-check"></i> Dados Basicos </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab2" data-toggle="tab" class="step">
+                                            <span class="number"> 2 </span>
+                                            <span class="desc">
+                                            <i class="fa fa-check"></i> Productos </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab3" data-toggle="tab" class="step">
+                                            <span class="number"> 3 </span>
+                                            <span class="desc">
+                                            <i class="fa fa-check"></i> Confirmar </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div id="bar" class="progress progress-striped" role="progressbar">
+                                    <div class="progress-bar progress-bar-success"> </div>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="alert alert-danger display-none">
+                                        <button class="close" data-dismiss="alert"></button> You have some form errors. Please check below.
+                                    </div>
+                                    <div class="alert alert-success display-none">
+                                        <button class="close" data-dismiss="alert"></button> Your form validation is successful! 
+                                    </div>
+                                    
+                                    <div class="tab-pane active" id="tab1">
+                                        <h3 class="block"></h3>
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Cliente
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <div class="col-md-4">
+                                                <v-select 
+                                                    v-bind:options.sync="customers_select" :value.sync="order.customer_id"
+                                                    placeholder="Elije el cliente" class="form-control"
+                                                    id="customer-input" name="customer[]"
+                                                    search justified required close-on-select>
+                                                </v-select>
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Representante
+                                                <span class="required"> * </span>
+                                            </label>
+                                            <div class="col-md-4">
+                                                <v-select 
+                                                    v-bind:options.sync="representatives_select" :value.sync="order.representative_id"
+                                                    placeholder="Elije el representante" class="form-control"
+                                                    id="representative-input" name="representative[]"
+                                                    search justified required close-on-select>
+                                                </v-select>
+                                                <span class="help-block"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    
+                                    <div class="tab-pane" id="tab2">
+                                        <h3 class="block"></h3>
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Descuento Cliente
+                                            </label>
+                                            <div class="col-md-4">
+                                                <input 
+                                                    contenteditable="false"
+                                                    id="code-input" 
+                                                    class="form-control input-sm" 
+                                                    type="number"
+                                                    v-model="order.client_discount" 
+                                                />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Descuento Representante
+                                            </label>
+                                            <div class="col-md-4">
+                                                <input 
+                                                    contenteditable="false"
+                                                    id="code-input" 
+                                                    class="form-control input-sm" 
+                                                    type="number"
+                                                    v-model="order.representative_discount" 
+                                                />
+                                            </div>
+                                        </div>
+                                        
+                                        <hr/>
+                                        
+                                        <div class="row">
+                                            <fieldset class="form-group">
+                                                <legend>Productos</legend>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="pull-right">
+                                                            <a class="btn blue btn-outline sbold" 
+                                                                data-toggle="modal" 
+                                                                href="#large"
+                                                            > 
+                                                                Adicionar Producto 
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <table class="table table-striped table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Code</th>
+                                                            <th>Costo</th>
+                                                            <th>Precio</th>
+                                                            <th>Descuento Cliente</th>
+                                                            <th>Descuento Representante</th>
+                                                            <th>Total</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="op in order.orderProducts">
+                                                            <td>{{op.code}}</td>
+                                                            <td>{{op.cost}}</td>
+                                                            <td>{{op.price}}</td>
+                                                            <td>{{op.client_discount}}</td>
+                                                            <td>{{op.representative_discount}}</td>
+                                                            <td>{{op.total}}</td>
+                                                            <td>
+                                                                <button 
+                                                                    class="btn grey"
+                                                                    @click="deleteProduct($index)"
+                                                                >
+                                                                    Excluir
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                            
+
+                                    <div class="tab-pane" id="tab3">
+                                        <h3 class="block">Confirme el pedido</h3>
+                                        <div class="form-group">
+                                            <table class="table table-striped table-bordered table-hover table-checkable order-column">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6" style="text-align:center"><b>Geral</b></th>
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <th colspan="3">Descuento Cliente: {{order.client_discount}}%</th>
+                                                        <th colspan="3">Descuento Representante: {{order.representative_discount}}%</th>
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <th colspan="6" style="text-align:center"><b>Productos</b></th>
+                                                    </tr>
+                                                    
+                                                    <tr>
+                                                        <th>Code</th>
+                                                        <th>Costo</th>
+                                                        <th>Precio</th>
+                                                        <th>Descuento Cliente</th>
+                                                        <th>Descuento Representante</th>
+                                                        <th><i class="fa fa-shopping-cart"></i> Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th style="text-align:left">Totales</th>
+                                                        <th style="text-align:center">${{order.cost}}</th>
+                                                        <th style="text-align:center">${{order.price}}</th>
+                                                        <th colspan="3" style="text-align:right">Total:&nbsp;&nbsp; ${{order.total}}</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    <tr v-for="op in order.orderProducts">
+                                                        <td>{{op.code}}</td>
+                                                        <td style="text-align:right">${{op.cost}}</td>
+                                                        <td style="text-align:right">${{op.price}}</td>
+                                                        <td style="text-align:center">{{op.client_discount}}%</td>
+                                                        <td style="text-align:center">{{op.representative_discount}}%</td>
+                                                        <td>${{op.total}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <a href="javascript:;" class="btn default button-previous">
+                                            <i class="fa fa-angle-left"></i>
+                                            Retorno 
+                                        </a>
 
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Costo</th>
-                                    <th>Precio</th>
-                                    <th>Descuento Cliente</th>
-                                    <th>Descuento Representante</th>
-                                    <th>Total</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="op in order.orderProducts">
-                                    <td>{{op.code}}</td>
-                                    <td>{{op.cost}}</td>
-                                    <td>{{op.price}}</td>
-                                    <td>{{op.client_discount}}</td>
-                                    <td>{{op.representative_discount}}</td>
-                                    <td>{{op.total}}</td>
-                                    <td>
-                                        <button 
-                                            class="btn grey"
-                                            @click="deleteProduct($index)"
-                                        >
-                                            Excluir
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </fieldset>
-                </div>
-                <div class="row">
-                    <div class="container-fluid">
-                        <div class="col-md-3 pull-right">
-                            <div class="form-group">
-                                <button type="button" @click="submitData" class="btn blue btn-block" id="send-btn">Guardar</button>
-                            </div>
+                                        <a href="javascript:;" class="btn btn-outline green button-next"> 
+                                            Continue
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                        <a @click="submitData" class="btn btn-outline green button-submit"> 
+                                            Guardar
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div> 
                         </div>
-                        <div class="col-md-3 pull-right">
-                            <div class="form-group">
-                                <a href="/orders/"><button type="button" class="btn grey btn-block" id="cancel-btn">Retornar</button></a>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Begin - Modal de Produtos -->
     <div class="modal fade bs-modal-lg" id="large" tabindex="-1" role="dialog" aria-hidden="true">
@@ -141,7 +255,7 @@
                 </div>
                 
                 <div class="modal-body">
-                      <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>Producto</>
@@ -189,7 +303,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                            </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn dark btn-outline" data-dismiss="modal">Fechar</button>
@@ -345,6 +459,10 @@ export default{
         },
         
         insertData: function(){
+            Vue.http.interceptors.push((request, next) => {
+                request.headers['X-CSRF-TOKEN'] = Laravel.csrfToken;
+                next();
+            });
             this.$http.post('/orders', _this.order)
             .then((response) => {
               toastr.success('Sucesso!','Pedido creado con sucesso!');
