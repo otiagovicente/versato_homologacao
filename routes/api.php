@@ -41,6 +41,7 @@ Route::get('/products/listPaginate/{brand}', 'ProductsController@api_listPaginat
 Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
 Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
 
+Route::get('/products/sync/{dtSincronizacao}', 'ProductsController@api_sync');
 Route::get('/products/list', 'ProductsController@api_list');
 Route::get('/products/{product}/edit', 'ProductsController@api_edit');
 Route::get('/products/{product}', 'ProductsController@api_show');
@@ -56,3 +57,6 @@ Route::get('/grids/list', 'GridsController@api_list');
 Route::get('/tags/list', 'TagsController@api_list');
 Route::get('/users/{user}', 'UsersController@api_show');
 Route::get('/users', 'UsersController@api_index');
+
+Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
+Route::resource('orders','OrdersController',['parameters' => 'singular']);

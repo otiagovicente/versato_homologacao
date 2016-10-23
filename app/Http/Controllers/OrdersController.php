@@ -103,5 +103,14 @@ class OrdersController extends Controller
             $selectList[] = $selectItem;
         }
         return response()->json($selectList);
-    }  
+    } 
+
+    public function api_listByRepresentive($idRepresentative){
+        $orders = Order::
+                    with('OrderProducts')
+                    ->where('representative_id',$idRepresentative)
+                    ->get();
+
+        return response()->json($orders);
+    } 
 }

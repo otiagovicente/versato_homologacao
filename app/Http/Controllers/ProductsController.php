@@ -244,7 +244,20 @@ class ProductsController extends Controller
         return $product;
     }
 
+    public function api_sync($dtSincronizacao){
+         
+         $products = Product::
+                    with('brand')
+                    ->with('line')
+                    ->with('reference')
+                    ->with('material')
+                    ->with('color')
+                    ->with('gridsAndSizes')
+                    ->with('tags')
+                    ->whereDate('updated_at', '>',$dtSincronizacao)
+                    ->get();
 
-
+        return response()->json($products);
+    }
 
 }
