@@ -6,6 +6,7 @@
 </style>
 
 <template>
+    TESTE
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered" id="form_wizard_1">        
@@ -336,7 +337,6 @@ export default{
             customers_select:[],
             representatives_select:[],
             brands_select:[],
-            brand_id:[],
             products:[],
             orderProductsDelete:[],
 
@@ -349,7 +349,7 @@ export default{
                 representative_comision:0,
                 representative_discount:0,
                 client_discount:0,
-                status_id:[],
+                status_id:1,
                 customer_id:[],
                 representative_id:[],
                 orderProducts:[]

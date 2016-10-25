@@ -17,7 +17,7 @@ class OrderProduct extends Model
         ,'representative_discount','grid_id','delivery_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    public function orderproducts(){
-        return $this->belongsTo('App\Order');
+    public function order(){
+        return $this->belongsToMany(Order::class);
     }
 }

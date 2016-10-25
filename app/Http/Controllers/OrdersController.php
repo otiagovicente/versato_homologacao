@@ -34,16 +34,15 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        var_dump($request);
-        
         $order = new Order;
-        $order->create($request->all());
+        $order->fill($request->all());
         $order->save();
 
-        //foreach ($request->orderProducts as $orderProduct) {
-            //$order->orderProducts()->attach($orderProduct);
-       //}
-        //return response()->json($order);
+        //var_dump($request->orderProducts);
+
+        $order->orderproducts()->sync($request->orderProducts);
+
+        return response()->json($order);
     }
 
     /**
