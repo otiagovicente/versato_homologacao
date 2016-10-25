@@ -1,52 +1,55 @@
 <template>
 
-    <div class="grid js-masonry">
+    <div class="container-fluid">
 
-        <div v-for="customer in customers" class="grid-item">
+        <div class="row search-box">
+            <div class="col-lg-12">
+                <div class="input-icon input-icon-lg right">
+                    <i class="fa fa-search font-green"></i>
+                    <input id="search-input" class="form-control input-lg" type="text" v-model="search" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div v-for="customer in customers | filterBy search" class="col-md-3">
 
-            <div class="customer-box">
+                <div class="customer-box">
 
-                <div class="customer-box-image">
-                    <img v-bind:src="customer.logo">
+                    <div class="customer-box-image" @click="showCustomer(customer.id)">
+                            <img v-bind:src="customer.logo" class="img-rounded">
+                    </div>
+
                 </div>
 
             </div>
-
         </div>
-
     </div>
 
 </template>
 <style>
 
+    .search-box{
+        margin-bottom: 40px;
+    }
     .customer-box {
         border-width: 1px;
         border-color: rgb(140, 199, 236);
         border-style: solid;
-        border-radius: 10px;
-        background-color: rgb(255, 255, 255);
+        border-radius: 8px;
         z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        cursor: pointer;
     }
 
     .customer-box-image{
-        padding: 10px;
         width: 100%;
     }
     .customer-box-image img{
         max-width:250px;
     }
-
-
-    .grid-sizer,
-    .grid-item {
-        max-width: 300px;
-        min-width: 200px;
-    }
-
-    .grid-item-image{
-        width: 100%;
-    }
-
 
 </style>
 <script>
@@ -54,31 +57,17 @@
     export default{
         data(){
             return{
-                customers:[]
+                customers:[],
+                search: ''
             }
         },
         components:{
         },
         ready(){
             window._listCustomers = this;
-            _listCustomers.configureMasonry();
             _listCustomers.getCustomers();
         },
         methods:{
-            configureMasonry: function(){
-
-                var $grid = $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    columnWidth: '.grid-sizer',
-                    percentPosition: true
-                });
-
-                // layout Masonry after each image loads
-                $grid.imagesLoaded().progress( function() {
-                    $grid.masonry('layout');
-                });
-            },
             getCustomers: function(){
                 this.$http.get('/api/customers')
                     .then((response) => {
@@ -88,6 +77,9 @@
                     }).catch((response) => {
                         toastr.error('No fué posible conectar al servidor');
                     });
+            },
+            showCustomer: function(customer_id){
+                window.location.href = '/customers/'+customer_id;
             }
         }
     }

@@ -130,9 +130,9 @@ class CustomersController extends Controller
     }
 
     public function api_selectList(){
-        $lstAll = Customer::all();
+        $listAll = Customer::all();
         
-        foreach($lstAll as $item){
+        foreach($listAll as $item){
             $selectItem['value'] = $item->id;
             $selectItem['label'] = $item->name;
             $selectList[] = $selectItem;

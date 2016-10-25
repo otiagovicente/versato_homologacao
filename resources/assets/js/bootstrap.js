@@ -25,30 +25,10 @@ window.Masonry = require('masonry-layout');
 window.imagesLoaded = require('imagesloaded');
 
 // make Masonry a jQuery plugin
-jQueryBridget( 'masonry', Masonry, $ );
-imagesLoaded.makeJQueryPlugin( $ );
+jQueryBridget( 'masonry', Masonry, $);
+imagesLoaded.makeJQueryPlugin($);
 
 window.bootbox = require('bootbox');
-
-/**
- * Vue is a modern JavaScript library for building interactive web interfaces
- * using reactive data binding and reusable components. Vue's API is clean
- * and simple, leaving you to focus on building your next great project.
- */
-
-window.Vue = require('vue');
-require('vue-resource');
-
-/**
- * We'll register a HTTP interceptor to attach the "CSRF" header to each of
- * the outgoing requests issued by this application. The CSRF middleware
- * included with Laravel will automatically verify the header's value.
- */
-
-Vue.http.interceptors.push((request, next) => {
-    request.headers['X-CSRF-TOKEN'] = Laravel.csrfToken;
-    next();
-});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -62,3 +42,30 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '6c3dd34a782803571d89'
 });
+
+
+
+
+
+
+/**
+ * Vue is a modern JavaScript library for building interactive web interfaces
+ * using reactive data binding and reusable components. Vue's API is clean
+ * and simple, leaving you to focus on building your next great project.
+ */
+
+window.Vue = require('vue');
+window.VueResource = require('vue-resource');
+Vue.use(VueResource);
+
+/**
+ * We'll register a HTTP interceptor to attach the "CSRF" header to each of
+ * the outgoing requests issued by this application. The CSRF middleware
+ * included with Laravel will automatically verify the header's value.
+ */
+
+Vue.http.interceptors.push((request, next) => {
+    request.headers['X-CSRF-TOKEN'] = Laravel.csrfToken;
+    next();
+});
+

@@ -3,13 +3,17 @@
         <div class="row">
             <div class="form-group form-line-input search">
                 <h4>Buscar</h4>
-                <input id="search-input" class="form-control input-sm" type="text" v-model="search" />
+
+                <div class="input-icon input-icon-lg right">
+                    <i class="fa fa-search font-green"></i>
+                    <input id="search-input" class="form-control input-lg" type="text" v-model="search" />
+                </div>
             </div>
         </div>
         <hr>
         <div class="row">
             <ul class="colors-list">
-                <li v-for="color in colors | filterBy search" class="colors-list-item" @click="goToColor(color.id)">
+                <li v-for="color in colors | filterBy search" class="colors-list-item" @click="showColor(color.id)">
                     <div class="colors-list-item-div" style="background-color:{{color.color}};">
                         <span class="colors-list-item-description">{{color.description}}</span>
                         <span class="colors-list-item-code">{{color.code}}</span>
@@ -26,6 +30,7 @@
         width: 95%;
         /*float: right;*/
         margin-left: 25px;
+        margin-bottom: 15px;
     }
     .colors-list{
         list-style-type: none;
@@ -87,7 +92,7 @@
                         });
 
             },
-            goToColor: function(color_id){
+            showColor: function(color_id){
                 window.location.href = '/colors/'+color_id;
             }
         }

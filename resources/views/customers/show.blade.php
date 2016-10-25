@@ -5,10 +5,11 @@
         'section' => 'Clientes',
         'sectionUrl' => '/customers',
         'pageTitle' => $customer->name,
-        'url' => '/customers/editar/{{customer->id}}/edit',
+        'url' => '/customers/'.$customer->id,
         'actions' => [
             'Mostrar Todos' => '/customers',
-            'Crear Cliente' => '/customers/create'
+            'Crear Cliente' => '/customers/create',
+            'Editar Cliente' => '/customers/'.$customer->id.'/edit'
         ]
     ])
 

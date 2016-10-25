@@ -356,7 +356,13 @@
                 }, (response) => { 
                     this.showErrors(response.data); 
                 });
-            }
+            },
+            showErrors: function(data){
+                $.each(data, function (key, value) {
+                    toastr.warning('Atención', value);
+                    $('#'+key).addClass('has-error');
+                });
+            },
         }
     }
 </script>

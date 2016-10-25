@@ -361,11 +361,14 @@
                 _editCustomer.geo = '';
             },
             submitData: function(){
-                _editCustomer.$http.put('/customers/'+_editCustomer.customer.id, _editCustomer.customer)
+                _editCustomer.$http.patch('/customers/'+_editCustomer.customer.id, _editCustomer.customer)
                 .then((response) => {
                     toastr.success('Sucesso!','Região incluída com sucesso');
                 }, (response) => { 
-                    _editCustomer.showErrors(response.data);
+                    $.each(response, function (key, value) {
+                        toastr.warning('Atención', value);
+                        $('#'+key).addClass('has-error');
+                    });
                 });
             }
         }
