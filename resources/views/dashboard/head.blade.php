@@ -29,7 +29,7 @@
     <!-- BEGIN PAGE STYLES -->
 @yield('styles')
 <!-- END PAGE STYLES -->
-    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/images/favicon.png" />
 
     @yield('scripts.header')
 </head>
