@@ -204,6 +204,7 @@
                 $("#create-shop").on("hidden.bs.modal", function (e) {
 
                     _shopForm.reload();
+                    google.maps.event.trigger(_shopForm.googleMap, "resize");
                     console.log('dispara.');
 
                 });
@@ -224,7 +225,7 @@
 
             toastr.options.closeButton = true;
 
-            _shopForm.configureDropzone(this.shop);
+            _shopForm.configureDropzone();
 
             _shopForm.canedit = _shopForm.isedit;
 
@@ -244,6 +245,11 @@
                 }
             },
 
+
+
+            /*
+             * Funções de Envio
+             */
             submitData: function () {
                 _shopForm.fetchAddress();
                 if (!_shopForm.shop.id) {
@@ -257,7 +263,7 @@
                 this.$http.post('/shops', _shopForm.shop)
                         .then(function (response) {
                             toastr.success('Sucesso!', 'Tienda criada con sucesso.');
-                            this.$broadcast('shopCreated');
+                            this.$dispatch('ShopCreated');
                             _shopForm.closeWindow();
                         }).catch(function (response) {
                     $.each(response.data, function (key, value) {
@@ -270,7 +276,7 @@
                 this.$http.put('/shops/' + _shopForm.shop.id, _shopForm.shop)
                         .then(function (response) {
                             toastr.success('Sucesso!', 'Tienda actualizada con sucesso.');
-                            this.$broadcast('shopUpdated');
+                            this.$dispatch('ShopUpdated');
                             _shopForm.closeWindow();
                         }).catch(function (response) {
                     $.each(response.data, function (key, value) {
@@ -280,6 +286,10 @@
                 });
             },
 
+
+            /*
+             * Funções de carregamento
+             */
             loadShop: function (shopId) {
 
                 this.$http.get('/api/shops/' + shopId)
@@ -297,6 +307,20 @@
             loadCustomer: function () {
                 _shopForm.shop.customer_id = _shopForm.pcustomer_id;
             },
+
+            /*
+             * Funcões de Janela
+             */
+
+            openWindow: function (shopId) {
+                if (shopId) {
+                    _shopForm.loadShop(shopId);
+                }
+                $('#create-shop').modal();
+            },
+            closeWindow: function () {
+                $('#create-shop').modal('hide');
+            },
             reload: function () {
                 _shopForm.emptyMarkers();
 
@@ -313,20 +337,6 @@
 
 
             },
-            /*
-             * Funcões de Janela
-             */
-
-            openWindow: function (shopId) {
-                if (shopId) {
-                    _shopForm.loadShop(shopId);
-                }
-                $('#create-shop').modal();
-            },
-            closeWindow: function () {
-                $('#create-shop').modal('hide');
-            },
-
 
             /*
              *  Funções de Mapa
@@ -394,7 +404,7 @@
             /*
              *  Configuração do Dropzone
              */
-            configureDropzone: function (callback) {
+            configureDropzone: function () {
                 Dropzone.autoDiscover = false;
                 var dropzoneOptions = {
                     maxFiles: 1,
@@ -409,7 +419,7 @@
                     },
 
                     success: function (file, response) {
-                        Vue.set(callback, 'logo', response);
+                        _shopForm.shop.logo = response;
                         this.removeAllFiles(true);
                     },
 

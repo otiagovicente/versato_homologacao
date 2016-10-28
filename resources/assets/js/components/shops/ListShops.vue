@@ -54,11 +54,11 @@
             MapsApiLoaded: function () {
                 return true;
             },
-            shopCreated: function(){
+            ShopCreated: function(){
                 console.log('shop created');
                 _ListShops.reloadShops();
             },
-            shopUpdated: function(){
+            ShopUpdated: function(){
                 console.log('shop updated');
                 _ListShops.reloadShops();
             }

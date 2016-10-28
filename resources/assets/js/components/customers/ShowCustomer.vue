@@ -135,6 +135,18 @@
                 _showCustomer.createMap();
                 _showCustomer.getCustomer();
                 return true;
+            },
+            ShopCreated: function(){
+                this.$broadcast('ShopCreated');
+            },
+            ShopUpdated: function(){
+                this.$broadcast('ShopCreated');
+            },
+            DeliveryCenterCreated: function(){
+                this.$broadcast('DeliveryCenterCreated');
+            },
+            DeliveryCenterUpdated: function(){
+                this.$broadcast('DeliveryCenterUpdated');
             }
         },
         ready(){

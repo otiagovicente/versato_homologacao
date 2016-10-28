@@ -349,7 +349,7 @@
                 this.$http.post('/deliverycenters', _CreateDeliveryCenter.deliverycenter)
                         .then(function (response) {
                             toastr.success('Exito!', 'Centro de Entrega criada con sucesso.');
-                            this.$broadcast('DeliveryCenterCreated');
+                            this.$dispatch('DeliveryCenterCreated');
                             _CreateDeliveryCenter.closeWindow();
                         }).catch(function (response) {
                     $.each(response.data, function (key, value) {
@@ -362,7 +362,7 @@
                 this.$http.patch('/deliverycenters/'+_CreateDeliveryCenter.deliverycenter.id, _CreateDeliveryCenter.deliverycenter)
                         .then(function (response) {
                             toastr.success('Exito!', 'Centro de Entrega criada con sucesso.');
-                            this.$broadcast('DeliveryCenterUpdated');
+                            this.$dispatch('DeliveryCenterUpdated');
                             _CreateDeliveryCenter.closeWindow();
                         }).catch(function (response) {
                     $.each(response.data, function (key, value) {
