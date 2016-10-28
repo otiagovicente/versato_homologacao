@@ -314,7 +314,7 @@
                                     <li class="nav-item">
                                         <a href="/representatives/create" class="nav-link nav-toggle">
                                             <i class="icon-user-follow"></i>
-                                            <span class="title">Crear</span>
+                                            <span class="title">Agregar a usuario</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
@@ -419,6 +419,13 @@
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/users" class="nav-link nav-toggle">
+                                            <i class="fa fa-bars"></i>
+                                            <span class="title">Ver Todos</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a href="/profile" class="nav-link nav-toggle">
                                             <i class="icon-user-follow"></i>

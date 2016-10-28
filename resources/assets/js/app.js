@@ -204,6 +204,12 @@ Vue.component(
     require('./components/orders/OrderForm.vue')
 );
 
-const app = new Vue({
-    el: 'body' 
+window.app = new Vue({
+    el: 'body',
+    methods: {
+        initMap: function(){
+            this.$broadcast('MapsApiLoaded');
+        }
+    }
+
 });

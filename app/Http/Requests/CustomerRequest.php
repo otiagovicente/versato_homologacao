@@ -59,4 +59,15 @@ class CustomerRequest extends FormRequest
 
         return $rules;
     }
+
+    public function messages()
+    {
+        return [
+            'code.required' => 'necesita poner el codigo del cliente',
+            'cuit.required' => 'necesita poner el cuit del cliente',
+            'company.required' => 'necesita poner la razón social del cliente',
+            'address.required' => 'necesita poner la ubicación del cliente',
+            'geo.required' => 'necesita el geocode del cliente',
+        ];
+    }
 }

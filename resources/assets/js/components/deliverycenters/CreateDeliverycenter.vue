@@ -126,7 +126,7 @@
         height: 200px;
     }
 </style>
-<script>
+<script type="text/babel">
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
     import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
@@ -167,20 +167,91 @@
                 },
             }
         },
+        events: {
+            MapsApiLoaded: function () {
+
+                _createDeliveryCenter.createMap();
+
+                if (_createDeliveryCenter.pshop) _createDeliveryCenter.loadShop();
+
+                return true;
+            },
+            showCreateDeliveryCenterModal: function () {
+
+                $("#create-deliverycenter").on("shown.bs.modal", function (e) {
+                    google.maps.event.trigger(_createDeliveryCenter.googleMap, "resize");
+                });
+
+                $("#create-deliverycenter").on("hidden.bs.modal", function (e) {
+
+                    if (!_createDeliveryCenter.pshop) {
+                        _createDeliveryCenter.reload();
+                        _createDeliveryCenter.emptyMarkers();
+                    }
+                    console.log('dispara.');
+
+                });
+
+                _createDeliveryCenter.openWindow();
+                return true;
+            }
+        },
+        watch: {
+            'deliverycenter.address': function () {
+                if (_createDeliveryCenter.shop.address != '') {
+                    _createDeliveryCenter.fetchAddress();
+                }
+            }
+        },
         ready(){
             window._createDeliveryCenter = this;
-            _createDeliveryCenter.configureMapsApi();
+//            _createDeliveryCenter.configureMapsApi();
             _createDeliveryCenter.loadCustomer();
         },
         methods:{
             loadCustomer:function(){
                 _createDeliveryCenter.deliverycenter.customer_id = _createDeliveryCenter.pcustomer_id;
             },
-            configureMapsApi: function(){
-                if (!(typeof google === 'object' && typeof google.maps === 'object')) {
-                    load(Maps.maps_key, Maps.maps_version);
-                }
+
+
+
+
+            /*
+             *  Funções de Mapa
+             *
+             */
+
+
+            createMap: function () {
+                _createDeliveryCenter.googleMap = new google.maps.Map(this.$els.shopmap, {
+                    center: _createDeliveryCenter.map.center,
+                    zoom: _createDeliveryCenter.map.zoom
+                });
             },
+            centerMap: function (lat, lng) {
+
+                _createDeliveryCenter.googleMap.setCenter({lat: lat, lng: lng});
+
+            },
+            addMarker: function (lat, lng) {
+
+                var marker = new google.maps.Marker({
+                    map: _createDeliveryCenter.googleMap,
+                    animation: google.maps.Animation.DROP,
+                    position: {lat: lat, lng: lng}
+                });
+                _createDeliveryCenter.map.markers.push(marker);
+
+            },
+            emptyMarkers: function () {
+
+                _.forEach(_createDeliveryCenter.map.markers, function (value) {
+                    value.setMap(null);
+                });
+                _createDeliveryCenter.map.markers = [];
+                _createDeliveryCenter.shop.geo = "";
+            },
+
             fetchAddress: function(){
                 if(_createDeliveryCenter.deliverycenter.address !=  '') {
                     $('#address').removeClass('has-error');
@@ -202,33 +273,22 @@
                 });
 
             },
-            centerMap: function (lat, lng) {
-                _createDeliveryCenter.map.center = {lat, lng};
-            },
-            addMarker: function(lat, lng) {
-                _createDeliveryCenter.map.markers.push({
-                    position: { lat: lat, lng: lng },
-                    opacity: 1,
-                    draggable: false,
-                    enabled: true,
-                    clicked: 0,
-                    rightClicked: 0,
-                    dragended: 0,
-                    ifw: true,
-                    ifw2text: _createDeliveryCenter.deliverycenter.name
-                });
 
-                var pos = {lat:'', lng:''};
-                pos.lat = lat;
-                pos.lng = lng;
-                _createDeliveryCenter.geo= JSON.stringify(pos);
+            /*
+             * Funcões de Janela
+             */
 
-                return _createDeliveryCenter.map.markers[_createDeliveryCenter.map.markers.length - 1];
+            openWindow: function(){
+                $('#create-deliverycenter').modal();
             },
-            emptyMarkers: function(){
-                _createDeliveryCenter.map.markers = [];
-                _createDeliveryCenter.geo = '';
+            closeWindow: function () {
+                $('#create-deliverycenter').modal('hide');
             },
+
+            /*
+             *   Funções de Envio
+             */
+
             submitData: function(){
                 _createDeliveryCenter.$http.post('/deliverycenters/', data().deliverycenter)
                         .then((response) => {

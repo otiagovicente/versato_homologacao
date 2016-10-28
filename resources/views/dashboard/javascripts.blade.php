@@ -12,7 +12,7 @@
 
                 window.Scout = <?php echo json_encode([
                         'app_id' => env('ALGOLIA_APP_ID'),
-//                        'secret' => env('ALGOLIA_SECRET'),
+                        'secret' => env('ALGOLIA_SECRET'),
                         'search_key' => env('ALGOLIA_SEARCH_KEY'),
                         'prefix' => env('SCOUT_PREFIX')
                 ]); ?>
@@ -22,9 +22,9 @@
                         'maps_version' => env('MAP_VERSION'),
                 ]); ?>
         </script>
-        
         <!-- BEGIN CORE PLUGINS -->
         <script src="/js/app.js" type="text/javascript"></script>
+
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="/dashboard/global/scripts/app.min.js" type="text/javascript"></script>
@@ -45,4 +45,5 @@
         <script src="/dashboard/global/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>
         <script src="/dashboard/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
         <script src="/dashboard/pages/scripts/form-wizard.js" type="text/javascript"></script>
+
         @yield('scripts')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Http\Requests\ShopRequest;
 use Illuminate\Support\Facades\Storage;
 
 use App\Shop;
@@ -60,7 +61,7 @@ class ShopsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ShopRequest $request)
     {
         $shop = new Shop();
         $shop->fill($request->all());
@@ -75,7 +76,7 @@ class ShopsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shop $shop)
+    public function update(ShopRequest $request, Shop $shop)
     {
         $shop->fill($request->all());
         $shop->save();

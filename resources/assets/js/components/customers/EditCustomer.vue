@@ -19,7 +19,8 @@
                     <div class="col-md-4">
                         <span class="blue">Cuit</span>
                         <div class="form-group form-line-input" id="cuit">
-                            <input id="cuit-input" class="form-control input-sm" type="text" v-model="customer.cuit" />
+                            <input id="cuit-input" class="form-control input-sm" type="text" v-model="customer.cuit"
+                                   data-toggle="tooltip" title="Solo numeros!"/>
                         </div>
                     </div>
                     <div class="col-md-4">

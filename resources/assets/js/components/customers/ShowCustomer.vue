@@ -31,23 +31,8 @@
                          <hr>
                          <div class="row">
                             <div class="col-md-12">
-                                <div class="map">
-                                    <map style="width: 100%; height: 150px;"
-                                                v-bind:center.sync="map.center"
-                                                v-bind:zoom.sync="map.zoom"
-                                    >
+                                <div class="map" v-el:customermap>
 
-                                        <marker
-                                                v-for="m in map.markers"
-                                                :position.sync="m.position"
-                                                :clickable.sync="m.clickable"
-                                                :draggable.sync="m.draggable"
-                                                @g-click="center=m.position"
-                                        >
-                                            <!--<info-window v-show="m.ifw" content="{{m.ifw2text}}"></info-window>-->
-                                        </marker>
-
-                                    </map>
 
                                 </div>
                             </div>
@@ -55,8 +40,8 @@
                         <hr>
                          <div class="row">
                              <div class="col-md-12">
-                                 <a class="btn blue btn-outline sbold pull-right" data-toggle="modal" href="#crear-tienda"> Crear Tienda </a>
-                                 <a class="btn green btn-outline sbold pull-right" style="margin-right:10px;" data-toggle="modal" href="#create-deliverycenter"> Crear Centro de Entrega </a>
+                                 <a class="btn blue btn-outline sbold pull-right" @click="showShopsForm()"> Crear Tienda </a>
+                                 <a class="btn green btn-outline sbold pull-right" style="margin-right:10px;" @click="showCreateDeliveryCenter()"> Crear Centro de Entrega </a>
                              </div>
                          </div>
 
@@ -70,33 +55,41 @@
     </div>
 
     <div class="col-md-6">
-                <div class="portlet light">
-                    <div class="portlet-title">
-                        <div class="caption font-blue">
-                            <i class="fa fa-map-pin font-blue"></i>Tiendas
+        <div class="portlet light" >
+            <div class="portlet-title">
+                <div class="caption font-blue">
+                    <i class="fa fa-map-pin font-blue"></i>Tiendas
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <div class="row search-box">
+                    <div class="col-lg-12">
+                        <div class="input-icon input-icon-sm right">
+                            <i class="fa fa-search font-green"></i>
+                            <input id="search-input" class="form-control input-sm" type="text" v-model="shopsearch" />
                         </div>
                     </div>
-                    <div class="portlet-body form">
-                         <div v-for="shop in shops" class="row">
-
-                             <div class="col-md-12">
-                                 <div class="col-md-4">
-                                     <img v-if="shop.logo" class="shop-logo" v-bind:src="shop.logo" />
-                                     <img v-else class="shop-logo" v-bind:src="customer.logo" />
-                                 </div>
-                                 <div class="col-md-8" style="padding-top:5px;">
-                                     <span class="caption font-blue"> {{shop.name}} </span>
-                                     <br>
-                                     <span class="caption font-blue"> {{shop.address}} </span>
-                                 </div>
-                             </div>
-                             <div class="col-md-12">
-                                 <hr>
-                             </div>
-
-                         </div>
+                </div>
+                <div style="height:500px; overflow-y: scroll;">
+                    <div v-for="shop in shops | filterBy shopsearch" class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+                                <img v-if="shop.logo" class="shop-logo" v-bind:src="shop.logo" />
+                                <img v-else class="shop-logo" v-bind:src="customer.logo" />
+                            </div>
+                            <div class="col-md-8" style="padding-top:5px;">
+                                <span class="caption font-blue"> {{shop.name}} </span>
+                                <br>
+                                <span class="caption font-blue"> {{shop.address}} </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="create-shop" tabindex="-1" role="create-shop" aria-hidden="true" style="display: none;">
@@ -116,6 +109,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+
 
     <div class="modal fade" id="create-deliverycenter" tabindex="-1" role="create-deliverycenter" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
@@ -149,8 +143,8 @@
         height: 200px;
     }
 </style>
-<script>
-//    import shopForm from '../shops/shopForm.vue'
+<script type="text/babel">
+    //    import shopForm from '../shops/shopForm.vue'
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
     import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
@@ -164,105 +158,127 @@
             InfoWindow,
 //            'shop-form': shopForm,
         },
-        props:['pcustomer_id'],
+        props: ['pcustomer_id'],
         data(){
-            return{
+            return {
                 customer: {
-                    id:'',
+                    id: '',
                     logo: "/images/default-placeholder.jpg",
                     address: "",
-                    code:'',
-                    company:'',
-                    cuit:'',
-                    name:'',
-                    region_id:[],
-                    geo:''
+                    code: '',
+                    company: '',
+                    cuit: '',
+                    name: '',
+                    region_id: [],
+                    geo: ''
                 },
-                map :{
+
+                googleMap: {},
+
+                map: {
                     markers: [],
-                    center : {lat: -34.6248187, lng: -58.3761432},
-                    zoom: 12
+                    center: {lat: -34.6248187, lng: -58.3761432},
+                    zoom: 14
                 },
-                shops: []
+
+                shops: [],
+                shopsearch: ''
+            }
+        },
+        watch: {
+            'map.center': function(){
+                console.log(_showCustomer.map.center)
+            }
+        },
+        events: {
+            MapsApiLoaded: function () {
+                _showCustomer.createMap();
+                _showCustomer.getCustomer();
+                return true;
             }
         },
         ready(){
             window._showCustomer = this;
-            _showCustomer.configureMapsApi();
-            _showCustomer.getCustomer();
             _showCustomer.getShops();
         },
-        methods:{
-            getCustomer:function(){
+        methods: {
+            getCustomer: function () {
 
-                this.$http.get('/api/customers/'+_showCustomer.pcustomer_id)
-                        .then((response)=>{
+                this.$http.get('/api/customers/' + _showCustomer.pcustomer_id)
+                        .then((response)=> {
                             _showCustomer.customer = response.json();
-                            console.log(response.json());
+                            if (!(_showCustomer.customer.geo == '')) {
+                                var geo = JSON.parse(_showCustomer.customer.geo);
+                                _showCustomer.centerMap(geo.lat, geo.lng);
+                                _showCustomer.addMarker(geo.lat, geo.lng);
+                            }
 
-                            var geo = JSON.parse(_showCustomer.customer.geo);
-                            console.log(geo);
-
-                            _showCustomer.emptyMarkers();
-                            _showCustomer.centerMap(geo.lat, geo.lng);
-                            _showCustomer.addMarker(geo.lat, geo.lng);
-
-                        }).catch((response)=>{
-                            console.log(response);
-                            toastr.error('No se puede conectar al servidor. getCustomer Fails');
-                        });
+                        }).catch((response)=> {
+                    toastr.error('No se puede conectar al servidor. getCustomer Fails');
+                });
 
             },
-            reloadShops:function(){
+            reloadShops: function () {
                 _showCustomer.getShops();
             },
-            getShops: function(){
-//                _showCustomer.shops = [];
-                this.$http.get('/api/customers/'+_showCustomer.pcustomer_id+'/shops')
-                        .then((response)=>{
-                            _showCustomer.shops = [];
-                            $.each(response.json(), function(index){
-                                this.geo = JSON.parse(this.geo);
-                                _showCustomer.shops.push(this);
-                            });
-                            console.log(response.json());
-                        }).catch((response)=>{
-                            toastr.error('No se puede conectar al servidor. getShops Fails');
+            getShops: function () {
+                this.$http.get('/api/customers/' + _showCustomer.pcustomer_id + '/shops')
+                        .then((response)=> {
+                            _showCustomer.shops = response.json();
+
+                            // console.log(response.json());
+                            // _showCustomer.shops = [];
+                            //
+                            // $.each(response.json(), function (index) {
+                            //     this.geo = JSON.parse(this.geo);
+                            //     _showCustomer.shops.push(this);
+                            // });
+
+                        }).catch((response)=> {
+                    toastr.error('No se puede conectar al servidor. getShops Fails');
                 });
             },
-            configureMapsApi: function(){
-                if (!(typeof google === 'object' && typeof google.maps === 'object')) {
-                    load(Maps.maps_key, Maps.maps_version);
-                }
+
+            createMap: function () {
+                _showCustomer.googleMap = new google.maps.Map(this.$els.customermap, {
+                    center: _showCustomer.map.center,
+                    zoom: _showCustomer.map.zoom
+                });
             },
             centerMap: function (lat, lng) {
-                _showCustomer.map.center = {lat, lng};
+
+                _showCustomer.googleMap.setCenter({lat: lat, lng: lng});
+
             },
-            addMarker: function(lat, lng) {
-                _showCustomer.map.markers.push({
-                    position: { lat: lat, lng: lng },
-                    opacity: 1,
-                    draggable: false,
-                    enabled: true,
-                    clicked: 0,
-                    rightClicked: 0,
-                    dragended: 0,
-                    ifw: true,
-                    ifw2text: _showCustomer.customer.name
+            addMarker: function (lat, lng) {
+
+                var marker = new google.maps.Marker({
+                    map: _showCustomer.googleMap,
+                    animation: google.maps.Animation.DROP,
+                    position: {lat: lat, lng: lng}
                 });
-                
-                var pos = {lat:'', lng:''};
-                pos.lat = lat;
-                pos.lng = lng;
-                _showCustomer.geo= JSON.stringify(pos);
-                
-                return _showCustomer.map.markers[_showCustomer.map.markers.length - 1];
+                _showCustomer.map.markers.push(marker);
+
             },
             emptyMarkers: function(){
+
+                _.forEach(_showCustomer.map.markers, function(value) {
+                    value.setMap(null);
+                });
                 _showCustomer.map.markers = [];
-                _showCustomer.geo = '';
+                _showCustomer.customer.geo = "";
+            },
+            showCreateDeliveryCenter: function () {
+
+                $('#create-deliverycenter').modal();
+                this.$broadcast('showCreateDeliveryCenterModal');
+
+            },
+            showShopsForm: function () {
+                this.$broadcast('showShopsFormModal');
+
+
             }
         }
     }
 </script>
-;
