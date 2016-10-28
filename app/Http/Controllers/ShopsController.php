@@ -113,5 +113,10 @@ class ShopsController extends Controller
         //Retorna a url completa da imagem que será salva no campo photo do produto
         return Storage::disk('s3')->url($image);
     }
+
+
+    public function api_show(Shop $shop){
+        return response()->json($shop);
+    }
     
 }

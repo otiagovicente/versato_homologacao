@@ -55,89 +55,29 @@
     </div>
 
     <div class="col-md-6">
-        <div class="portlet light" >
-            <div class="portlet-title">
-                <div class="caption font-blue">
-                    <i class="fa fa-map-pin font-blue"></i>Tiendas
-                </div>
-            </div>
-            <div class="portlet-body form">
-                <div class="row search-box">
-                    <div class="col-lg-12">
-                        <div class="input-icon input-icon-sm right">
-                            <i class="fa fa-search font-green"></i>
-                            <input id="search-input" class="form-control input-sm" type="text" v-model="shopsearch" />
-                        </div>
-                    </div>
-                </div>
-                <div style="height:500px; overflow-y: scroll;">
-                    <div v-for="shop in shops | filterBy shopsearch" class="row">
-                        <div class="col-md-12">
-                            <div class="col-md-4">
-                                <img v-if="shop.logo" class="shop-logo" v-bind:src="shop.logo" />
-                                <img v-else class="shop-logo" v-bind:src="customer.logo" />
-                            </div>
-                            <div class="col-md-8" style="padding-top:5px;">
-                                <span class="caption font-blue"> {{shop.name}} </span>
-                                <br>
-                                <span class="caption font-blue"> {{shop.address}} </span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <list-shops :pcustomer_id="pcustomer_id"></list-shops>
     </div>
 
-    <div class="modal fade" id="create-shop" tabindex="-1" role="create-shop" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-body">
-                    <shop-form
-                            v-on:shop-created="reloadShops"
-                            :isedit="true" :pcustomer_id="pcustomer_id">
-
-                    </shop-form>
-                </div>
-
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
+    <div class="col-md-6">
+        <list-deliverycenter :pcustomer_id="pcustomer_id" ></list-deliverycenter>
     </div>
 
+    <shop-form
+            :isedit="true" :pcustomer_id="pcustomer_id">
+    </shop-form>
 
-    <div class="modal fade" id="create-deliverycenter" tabindex="-1" role="create-deliverycenter" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
 
-                <div class="modal-body">
-                    <create-deliverycenter
-                            v-on:shop-created="reloadShops"
-                            :isedit="true" :pcustomer_id="pcustomer_id">
 
-                    </create-deliverycenter>
-                </div>
-
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
+    <create-deliverycenter
+            :isedit="true" :pcustomer_id="pcustomer_id">
+    </create-deliverycenter>
 
 </template>
 <style>
     .customer-logo {
         width:200px;
     }
-    .shop-logo{
 
-        width:100%;
-    }
     .map {
         width: 100%;
         height: 200px;
@@ -199,7 +139,6 @@
         },
         ready(){
             window._showCustomer = this;
-            _showCustomer.getShops();
         },
         methods: {
             getCustomer: function () {
@@ -217,26 +156,6 @@
                     toastr.error('No se puede conectar al servidor. getCustomer Fails');
                 });
 
-            },
-            reloadShops: function () {
-                _showCustomer.getShops();
-            },
-            getShops: function () {
-                this.$http.get('/api/customers/' + _showCustomer.pcustomer_id + '/shops')
-                        .then((response)=> {
-                            _showCustomer.shops = response.json();
-
-                            // console.log(response.json());
-                            // _showCustomer.shops = [];
-                            //
-                            // $.each(response.json(), function (index) {
-                            //     this.geo = JSON.parse(this.geo);
-                            //     _showCustomer.shops.push(this);
-                            // });
-
-                        }).catch((response)=> {
-                    toastr.error('No se puede conectar al servidor. getShops Fails');
-                });
             },
 
             createMap: function () {
@@ -270,7 +189,6 @@
             },
             showCreateDeliveryCenter: function () {
 
-                $('#create-deliverycenter').modal();
                 this.$broadcast('showCreateDeliveryCenterModal');
 
             },

@@ -40,7 +40,7 @@ class DeliverycentersController extends Controller
     public function store(DeliverycenterRequest $request)
     {
 
-        $deliveryCenter = $customer->deliverycenters($request);
+        $deliveryCenter = new Deliverycenter($request->all());
         $deliveryCenter->save();
 
         return response()->json($deliveryCenter);
@@ -76,9 +76,12 @@ class DeliverycentersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DeliverycenterRequest $request, Deliverycenter $deliverycenter)
     {
-        //
+        $deliverycenter->fill($request->all());
+        $deliverycenter->save();
+
+        return response()->json($deliverycenter);
     }
 
     /**
@@ -91,4 +94,16 @@ class DeliverycentersController extends Controller
     {
         //
     }
+
+    public function api_index(Customer $customer){
+
+
+
+    }
+
+    public function api_show(Deliverycenter $deliverycenter){
+        return response()->json($deliverycenter);
+    }
+
+
 }

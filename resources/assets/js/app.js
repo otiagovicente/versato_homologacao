@@ -195,6 +195,11 @@ Vue.component(
     require('./components/shops/ShopForm.vue')
 );
 
+Vue.component(
+    'list-shops',
+    require('./components/shops/ListShops.vue')
+);
+
 /*
 * Componentes de Pedidos
 */

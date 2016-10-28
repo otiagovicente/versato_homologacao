@@ -32,7 +32,12 @@ Route::group(['middleware' => 'api'], function () {
     Route::get('/customers', 'CustomersController@api_index');
     Route::get('/customers/selectlist', 'CustomersController@api_selectList');
     Route::get('/customers/{customer}', 'CustomersController@api_show');
-    Route::get('/customers/{customer}/shops', 'CustomersController@api_listShops');
+    Route::get('/customers/{customer}/shops', 'CustomersController@api_getShops');
+    Route::get('/customers/{customer}/deliverycenters/', 'CustomersController@api_getDeliverycenters');
+
+    Route::get('/shops/{shop}', 'ShopsController@api_show');
+
+    Route::get('/deliverycenters/{deliverycenter}', 'DeliverycentersController@api_show');
 
     Route::get('/representatives/{representative}', 'RepresentativesController@api_show');
     Route::get('/representatives', 'RepresentativesController@api_index');

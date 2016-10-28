@@ -143,8 +143,12 @@ class CustomersController extends Controller
 
 
 
-    public function api_listShops(Customer $customer){
+    public function api_getShops(Customer $customer){
         return $customer->shops()->get();
+    }
+
+    public function api_getDeliverycenters(Customer $customer){
+        return $customer->deliverycenters()->get();
     }
 
 }

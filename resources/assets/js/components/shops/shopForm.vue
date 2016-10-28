@@ -23,111 +23,127 @@
 
 <template>
 
+    <div class="modal fade" id="create-shop" tabindex="-1" role="create-shop" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
 
 
-
-    <!-- BEGIN PROFILE CONTENT -->
-    <div class="profile-content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="portlet light ">
-                    <div class="portlet-title tabbable-line">
-                        <div class="caption caption-md">
-                            <i class="icon-globe theme-font hide"></i>
-                            <span class="caption-subject font-blue-madison bold uppercase">Tienda</span>
-                        </div>
-                        <ul class="nav nav-tabs">
-                            <li class="active">
-                                <a href="#tab_1_1" data-toggle="tab">Informaciones</a>
-                            </li>
-                            <li>
-                                <a href="#tab_1_2" data-toggle="tab">Añadir el logotipo</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="portlet-body">
-                        <div class="tab-content">
-                            <!-- PERSONAL INFO TAB -->
-                            <div class="tab-pane active" id="tab_1_1">
-                                    <div class="row">
-
-                                        <div class="form-group" id="name" >
-                                            <label  class="control-label">Nombre</label>
-                                            <input type="text" placeholder="la tienda" class="form-control" v-model="shop.name" />
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="control-label"  id="about-input" >Descripción</label>
-                                            <textarea class="form-control" rows="3" placeholder="Una breve descripcion de la tienda" v-model="shop.description"></textarea>
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <small>Ubicación de la tienda</small>
-                                            <div class="input-group" id="address">
-
-                                                <input id="address-input" class="form-control" type="text"
-                                                    v-model="shop.address"
-                                                    debounce="800"
-                                                />
-                                                <span class="input-group-btn">
-                                                    <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
-                                                </span>
+                        <!-- BEGIN PROFILE CONTENT -->
+                        <div class="profile-content">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="portlet light ">
+                                        <div class="portlet-title tabbable-line">
+                                            <div class="caption caption-md">
+                                                <i class="icon-globe theme-font hide"></i>
+                                                <span class="caption-subject font-blue-madison bold uppercase">Tienda</span>
                                             </div>
+                                            <ul class="nav nav-tabs">
+                                                <li class="active">
+                                                    <a href="#tab_1_1" data-toggle="tab">Informaciones</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab_1_2" data-toggle="tab">Añadir el logotipo</a>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <div class="col-md-12">
-                                            <hr>
-                                            <div class="map" v-el:shopmap>
+                                        <div class="portlet-body">
+                                            <div class="tab-content">
+                                                <!-- PERSONAL INFO TAB -->
+                                                <div class="tab-pane active" id="tab_1_1">
+                                                        <div class="row">
 
+                                                            <div class="form-group" id="name" >
+                                                                <label  class="control-label">Nombre</label>
+                                                                <input type="text" placeholder="la tienda" class="form-control" v-model="shop.name" />
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label"  id="about-input" >Descripción</label>
+                                                                <textarea class="form-control" rows="3" placeholder="Una breve descripcion de la tienda" v-model="shop.description"></textarea>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <small>Ubicación de la tienda</small>
+                                                                <div class="input-group" id="address">
+
+                                                                    <input id="address-input" class="form-control" type="text"
+                                                                        v-model="shop.address"
+                                                                        debounce="800"
+                                                                    />
+                                                                    <span class="input-group-btn">
+                                                                        <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <hr>
+                                                                <div class="map" v-el:shopmap>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <hr>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="container-fluid">
+                                                                <div class="col-md-3 pull-right">
+                                                                    <div v-show="canedit" class="form-group">
+                                                                        <button type="button" class="btn grey btn-block" data-dismiss="modal" id="cancel-btn">Cerrar</button>
+
+                                                                    </div>
+                                                                    <div v-show="!canedit" class="form-group">
+                                                                        <a href="/shops/"><button type="button" class="btn grey btn-block" id="back-btn">Voltar</button></a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 pull-right">
+                                                                    <div class="form-group">
+                                                                        <button v-show="canedit" type="button" @click="submitData" class="btn blue btn-block" id="send-btn">
+                                                                            Guardar
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <!-- END PERSONAL INFO TAB -->
+
+                                                <div class="tab-pane" id="tab_1_2">
+                                                    <p> Cambia el logo! ;) </p>
+                                                    <form id="image-form" action="#" role="form">
+                                                        <div class="form-group">
+                                                            <div class="thumbnail" style="width: 100%;">
+                                                                <img :src="shop.logo" alt="" style="width:auto;"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div id="photo" class="dropzone" style="min-height:150px; border: 2px dashed #eaeaea; background: white; padding: 20px 20px; text-align:center;"></div>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <hr>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="container-fluid">
-                                            <div class="col-md-3 pull-right">
-                                                <div v-show="canedit" class="form-group">
-                                                    <button type="button" class="btn grey btn-block" data-dismiss="modal" id="cancel-btn">Cerrar</button>
-
-                                                </div>
-                                                <div v-show="!canedit" class="form-group">
-                                                    <a href="/shops/"><button type="button" class="btn grey btn-block" id="back-btn">Voltar</button></a>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 pull-right">
-                                                <div class="form-group">
-                                                    <button v-show="canedit" type="button" @click="submitData" class="btn blue btn-block" id="send-btn">
-                                                        Guardar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
-                            <!-- END PERSONAL INFO TAB -->
-
-                            <div class="tab-pane" id="tab_1_2">
-                                <p> Cambia el logo! ;) </p>
-                                <form id="image-form" action="#" role="form">
-                                    <div class="form-group">
-                                        <div class="thumbnail" style="width: 100%;">
-                                            <img :src="shop.logo" alt="" style="width:auto;"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div id="photo" class="dropzone" style="min-height:150px; border: 2px dashed #eaeaea; background: white; padding: 20px 20px; text-align:center;"></div>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
-                    </div>
+
+
+
                 </div>
+
             </div>
+            <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
     </div>
+
+
 </template>
 
 <script type="text/babel">
@@ -187,10 +203,7 @@
 
                 $("#create-shop").on("hidden.bs.modal", function (e) {
 
-                    if (!_shopForm.pshop) {
-                        _shopForm.reload();
-                        _shopForm.emptyMarkers();
-                    }
+                    _shopForm.reload();
                     console.log('dispara.');
 
                 });
@@ -230,10 +243,105 @@
                     load(Maps.maps_key, Maps.maps_version);
                 }
             },
+
+            submitData: function () {
+                _shopForm.fetchAddress();
+                if (!_shopForm.shop.id) {
+                    _shopForm.store();
+                }
+                else {
+                    _shopForm.update();
+                }
+            },//end submit data
+            store: function () {
+                this.$http.post('/shops', _shopForm.shop)
+                        .then(function (response) {
+                            toastr.success('Sucesso!', 'Tienda criada con sucesso.');
+                            this.$broadcast('shopCreated');
+                            _shopForm.closeWindow();
+                        }).catch(function (response) {
+                    $.each(response.data, function (key, value) {
+                        toastr.warning('Atención', value);
+                        $('#' + key).addClass('has-error');
+                    });
+                });
+            },
+            update: function () {
+                this.$http.put('/shops/' + _shopForm.shop.id, _shopForm.shop)
+                        .then(function (response) {
+                            toastr.success('Sucesso!', 'Tienda actualizada con sucesso.');
+                            this.$broadcast('shopUpdated');
+                            _shopForm.closeWindow();
+                        }).catch(function (response) {
+                    $.each(response.data, function (key, value) {
+                        toastr.warning('Atención', value);
+                        $('#' + key).addClass('has-error');
+                    });
+                });
+            },
+
+            loadShop: function (shopId) {
+
+                this.$http.get('/api/shops/' + shopId)
+                        .then(response => {
+                            _shopForm.shop = response.json();
+                            if (!(_shopForm.shop.geo == '')) {
+                                var geo = JSON.parse(_shopForm.shop.geo);
+                                _shopForm.centerMap(geo.lat, geo.lng);
+                                _shopForm.addMarker(geo.lat, geo.lng);
+                            }
+                        }).catch(response => {
+                    toastr.error('No fue possible cargar a la tienda');
+                });
+            },
+            loadCustomer: function () {
+                _shopForm.shop.customer_id = _shopForm.pcustomer_id;
+            },
+            reload: function () {
+                _shopForm.emptyMarkers();
+
+                _shopForm.shop = {
+                    id: '',
+                    name: '',
+                    description: '',
+                    logo: '',
+                    address: '',
+                    geo: '',
+                    customer_id: _shopForm.pcustomer_id
+                };
+                _shopForm.map = {markers: [], center: {lat: -34.6248187, lng: -58.3761432}, zoom: 14};
+
+
+            },
+            /*
+             * Funcões de Janela
+             */
+
+            openWindow: function (shopId) {
+                if (shopId) {
+                    _shopForm.loadShop(shopId);
+                }
+                $('#create-shop').modal();
+            },
+            closeWindow: function () {
+                $('#create-shop').modal('hide');
+            },
+
+
+            /*
+             *  Funções de Mapa
+             *
+             */
+
+            createMap: function () {
+                _shopForm.googleMap = new google.maps.Map(this.$els.shopmap, {
+                    center: _shopForm.map.center,
+                    zoom: _shopForm.map.zoom
+                });
+            },
             fetchAddress: function () {
                 if (_shopForm.shop.address != '') {
                     $('#address').removeClass('has-error');
-
                     this.getGeocode(_shopForm.shop.address);
                 } else {
                     toastr.error('informa la ubicación');
@@ -257,87 +365,6 @@
                     }
                 });
 
-            },
-
-            submitData: function () {
-                _shopForm.fetchAddress();
-                if (!_shopForm.shop.id) {
-                    _shopForm.insertShop();
-                }
-                else {
-                    _shopForm.updateShop();
-                }
-            },//end submit data
-            insertShop: function () {
-                this.$http.post('/shops', _shopForm.shop)
-                        .then(function (response) {
-                            toastr.success('Sucesso!', 'Tienda criada con sucesso.');
-                            this.$emit('shop-created');
-                            _shopForm.closeWindow();
-                        }).catch(function (response) {
-                    $.each(response.data, function (key, value) {
-                        toastr.warning('Atención', value);
-                        $('#' + key).addClass('has-error');
-                    });
-                });
-            },
-            updateShop: function () {
-                this.$http.put('/shops/' + _shopForm.shop.id, _shopForm.shop)
-                        .then(function (response) {
-                            toastr.success('Sucesso!', 'Tienda actualizada con sucesso.');
-                            this.$emit('shop-updated');
-                            _shopForm.closeWindow();
-                        }).catch(function (response) {
-                    $.each(response.data, function (key, value) {
-                        toastr.warning('Atención', value);
-                        $('#' + key).addClass('has-error');
-                    });
-                });
-            },
-
-            loadShop: function () {
-                this.shop = this.pshop;
-            },
-            loadCustomer: function () {
-                _shopForm.shop.customer_id = _shopForm.pcustomer_id;
-            },
-            reload: function () {
-
-                _shopForm.shop = {
-                    id: '',
-                    name: '',
-                    description: '',
-                    logo: '',
-                    address: '',
-                    geo: '',
-                    customer_id: _shopForm.pcustomer_id
-                };
-                _shopForm.map = {markers: [], center: {lat: -34.6248187, lng: -58.3761432}, zoom: 14};
-
-
-            },
-            /*
-             * Funcões de Janela
-             */
-
-            openWindow: function(){
-                $('#create-shop').modal();
-            },
-            closeWindow: function () {
-                $('#create-shop').modal('hide');
-            },
-
-
-            /*
-             *  Funções de Mapa
-             *
-             */
-
-            createMap: function () {
-                _shopForm.googleMap = new google.maps.Map(this.$els.shopmap, {
-                    center: _shopForm.map.center,
-                    zoom: _shopForm.map.zoom
-                });
             },
             centerMap: function (lat, lng) {
 

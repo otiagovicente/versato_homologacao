@@ -1,107 +1,114 @@
 <template>
-    <div class="content">
-        <div class="portlet light">
 
-            <div class="portlet-title">
-                <div class="caption font-blue">
-                    <i class="fa fa-plus font-blue"></i>Crear Centro de Entrega
+    <div class="modal fade" id="create-deliverycenter" tabindex="-1" role="create-shop" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+
+
+
+
+                        <div class="content">
+                            <div class="portlet light">
+
+                                <div class="portlet-title">
+                                    <div class="caption font-blue">
+                                        <i class="fa fa-plus font-blue"></i>Crear Centro de Entrega
+                                    </div>
+
+                                </div>
+                                <div class="portlet-body form">
+                                    <div class="row">
+
+                                        <div class="col-md-12">
+                                            <small>Nombre</small>
+                                            <div class="form-group form-line-input" id="name">
+                                                <input id="name-input" class="form-control input-sm" type="text" v-model="deliverycenter.name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <small>Descripción</small>
+                                            <div class="form-group form-line-input" id="description">
+                                                <input id="description-input" class="form-control input-sm" type="text" v-model="deliverycenter.description" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <small>Ciudad</small>
+                                            <div class="form-group form-line-input" id="city">
+                                                <input id="city-input" class="form-control input-sm" type="text" v-model="deliverycenter.city" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <small>Província</small>
+                                            <div class="form-group form-line-input" id="state">
+                                                <input id="state-input" class="form-control input-sm" type="text" v-model="deliverycenter.state" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <small>CPA</small>
+                                            <div class="form-group form-line-input" id="zip">
+                                                <input id="zip-input" class="form-control input-sm" type="text" v-model="deliverycenter.zip" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <small>Ubicación</small>
+                                            <div class="input-group" id="address">
+
+                                                <input id="address-input" class="form-control" type="text"
+                                                       v-model="deliverycenter.address"
+                                                       @keyup.enter="fetchAddress()"
+                                                       debounce="800"
+                                                />
+                                                <span class="input-group-btn">
+                                                    <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+
+                                            <hr>
+                                            <div class="map" v-el:deliverycentermap >
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="container-fluid">
+                                            <div class="col-md-3 pull-right">
+                                                <div class="form-group">
+                                                    <button type="button" @click="submitData" class="btn blue btn-block" id="send-btn">Salvar</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 pull-right">
+                                                <div class="form-group">
+                                                    <a href="/customers/"><button type="button" class="btn grey btn-block" id="cancel-btn">Cancel</button></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
                 </div>
 
             </div>
-            <div class="portlet-body form">
-                <div class="row">
-
-                    <div class="col-md-12">
-                        <small>Nombre</small>
-                        <div class="form-group form-line-input" id="name">
-                            <input id="name-input" class="form-control input-sm" type="text" v-model="deliverycenter.name" />
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <small>Descripción</small>
-                        <div class="form-group form-line-input" id="description">
-                            <input id="description-input" class="form-control input-sm" type="text" v-model="deliverycenter.description" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-5">
-                        <small>Ciudad</small>
-                        <div class="form-group form-line-input" id="city">
-                            <input id="city-input" class="form-control input-sm" type="text" v-model="deliverycenter.city" />
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <small>Província</small>
-                        <div class="form-group form-line-input" id="state">
-                            <input id="state-input" class="form-control input-sm" type="text" v-model="deliverycenter.state" />
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <small>CPA</small>
-                        <div class="form-group form-line-input" id="zip">
-                            <input id="zip-input" class="form-control input-sm" type="text" v-model="deliverycenter.zip" />
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <small>Ubicación</small>
-                        <div class="input-group" id="address">
-
-                            <input id="address-input" class="form-control" type="text"
-                                   v-model="deliverycenter.address"
-                                   @keyup.enter="fetchAddress()"
-                            />
-                            <span class="input-group-btn">
-                                <button class="btn blue" type="button" @click="fetchAddress">Go!</button>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-
-                        <hr>
-                        <div class="map">
-                            <map style="width: 100%; height: 150px;"
-                                 v-bind:center.sync="map.center"
-                                 v-bind:zoom.sync="map.zoom"
-                            >
-
-                                <marker
-                                        v-for="m in map.markers"
-                                        :position.sync="m.position"
-                                        :clickable.sync="m.clickable"
-                                        :draggable.sync="m.draggable"
-                                        @g-click="center=m.position"
-                                >
-                                    <!--<info-window v-show="m.ifw" content="{{m.ifw2text}}"></info-window>-->
-                                </marker>
-
-                            </map>
-
-                        </div>
-                    </div>
-
-
-
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="container-fluid">
-                        <div class="col-md-3 pull-right">
-                            <div class="form-group">
-                                <button type="button" @click="submitData" class="btn blue btn-block" id="send-btn">Salvar</button>
-                            </div>
-                        </div>
-                        <div class="col-md-3 pull-right">
-                            <div class="form-group">
-                                <a href="/customers/"><button type="button" class="btn grey btn-block" id="cancel-btn">Cancel</button></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
+            <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
     </div>
+
 </template>
 <style>
     .dropzone {
@@ -129,7 +136,6 @@
 <script type="text/babel">
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
-    import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
     //    import google from 'google-maps'
 
 
@@ -138,31 +144,27 @@
             vSelect: VueStrap.select,
             vOption: VueStrap.option,
             datepicker: VueStrap.datepicker,
-            Map,
-            load,
-            Marker,
-            InfoWindow
         },
-        props:['pcustomer_id'],
+        props: ['pcustomer_id'],
         data(){
-            return{
+            return {
                 deliverycenter: {
-                    id:'',
+                    id: '',
                     logo: "/images/default-placeholder.jpg",
                     address: "",
                     city: "",
                     state: "",
                     zip: "",
-                    company:'',
-                    cuit:'',
-                    name:'',
-                    region_id:[],
-                    geo:''
+                    company: '',
+                    cuit: '',
+                    name: '',
+                    region_id: [],
+                    geo: ''
                 },
                 regions_select: [],
-                map :{
+                map: {
                     markers: [],
-                    center : {lat: -34.6248187, lng: -58.3761432},
+                    center: {lat: -34.6248187, lng: -58.3761432},
                     zoom: 12
                 },
             }
@@ -170,50 +172,60 @@
         events: {
             MapsApiLoaded: function () {
 
-                _createDeliveryCenter.createMap();
+                _CreateDeliveryCenter.createMap();
 
-                if (_createDeliveryCenter.pshop) _createDeliveryCenter.loadShop();
+                if (_CreateDeliveryCenter.pdeliverycenter) _CreateDeliveryCenter.loadDeliveryCenter();
 
                 return true;
             },
             showCreateDeliveryCenterModal: function () {
 
                 $("#create-deliverycenter").on("shown.bs.modal", function (e) {
-                    google.maps.event.trigger(_createDeliveryCenter.googleMap, "resize");
+                    google.maps.event.trigger(_CreateDeliveryCenter.googleMap, "resize");
                 });
 
                 $("#create-deliverycenter").on("hidden.bs.modal", function (e) {
 
-                    if (!_createDeliveryCenter.pshop) {
-                        _createDeliveryCenter.reload();
-                        _createDeliveryCenter.emptyMarkers();
-                    }
+                    _CreateDeliveryCenter.reload();
                     console.log('dispara.');
 
                 });
 
-                _createDeliveryCenter.openWindow();
+                _CreateDeliveryCenter.openWindow();
                 return true;
             }
         },
         watch: {
             'deliverycenter.address': function () {
-                if (_createDeliveryCenter.shop.address != '') {
-                    _createDeliveryCenter.fetchAddress();
+                if (_CreateDeliveryCenter.deliverycenter.address != '') {
+                    _CreateDeliveryCenter.fetchAddress();
                 }
             }
         },
         ready(){
-            window._createDeliveryCenter = this;
-//            _createDeliveryCenter.configureMapsApi();
-            _createDeliveryCenter.loadCustomer();
+            window._CreateDeliveryCenter = this;
+            _CreateDeliveryCenter.loadCustomer();
         },
-        methods:{
-            loadCustomer:function(){
-                _createDeliveryCenter.deliverycenter.customer_id = _createDeliveryCenter.pcustomer_id;
+        methods: {
+
+            loadCustomer: function () {
+                _CreateDeliveryCenter.deliverycenter.customer_id = _CreateDeliveryCenter.pcustomer_id;
             },
+            loadDeliveryCenter: function (deliveryCenterId) {
 
+                this.$http.get('/api/deliverycenters/' + deliveryCenterId)
+                        .then(response => {
+                            _CreateDeliveryCenter.deliverycenter = response.json();
+                            if (!(_CreateDeliveryCenter.deliverycenter.geo == '')) {
+                                var geo = JSON.parse(_CreateDeliveryCenter.deliverycenter.geo);
+                                _CreateDeliveryCenter.centerMap(geo.lat, geo.lng);
+                                _CreateDeliveryCenter.addMarker(geo.lat, geo.lng);
+                            }
+                        }).catch(response => {
+                    toastr.error('No fue possible cargar a la tienda');
+                });
 
+            },
 
 
             /*
@@ -223,79 +235,141 @@
 
 
             createMap: function () {
-                _createDeliveryCenter.googleMap = new google.maps.Map(this.$els.shopmap, {
-                    center: _createDeliveryCenter.map.center,
-                    zoom: _createDeliveryCenter.map.zoom
+                _CreateDeliveryCenter.googleMap = new google.maps.Map(this.$els.deliverycentermap, {
+                    center: _CreateDeliveryCenter.map.center,
+                    zoom: _CreateDeliveryCenter.map.zoom
                 });
             },
             centerMap: function (lat, lng) {
 
-                _createDeliveryCenter.googleMap.setCenter({lat: lat, lng: lng});
+                _CreateDeliveryCenter.googleMap.setCenter({lat: lat, lng: lng});
 
             },
             addMarker: function (lat, lng) {
 
                 var marker = new google.maps.Marker({
-                    map: _createDeliveryCenter.googleMap,
+                    map: _CreateDeliveryCenter.googleMap,
                     animation: google.maps.Animation.DROP,
                     position: {lat: lat, lng: lng}
                 });
-                _createDeliveryCenter.map.markers.push(marker);
+                _CreateDeliveryCenter.map.markers.push(marker);
 
             },
             emptyMarkers: function () {
 
-                _.forEach(_createDeliveryCenter.map.markers, function (value) {
+                _.forEach(_CreateDeliveryCenter.map.markers, function (value) {
                     value.setMap(null);
                 });
-                _createDeliveryCenter.map.markers = [];
-                _createDeliveryCenter.shop.geo = "";
+                _CreateDeliveryCenter.map.markers = [];
+                _CreateDeliveryCenter.deliverycenter.geo = "";
             },
-
-            fetchAddress: function(){
-                if(_createDeliveryCenter.deliverycenter.address !=  '') {
+            fetchAddress: function () {
+                if (_CreateDeliveryCenter.deliverycenter.address != '') {
                     $('#address').removeClass('has-error');
-                    _createDeliveryCenter.getGeocode(_createDeliveryCenter.deliverycenter.address+', '+_createDeliveryCenter.deliverycenter.city+', '+_createDeliveryCenter.deliverycenter.state);
-                }else{
+
+                    this.getGeocode(_CreateDeliveryCenter.deliverycenter.address);
+                } else {
                     toastr.error('informa la ubicación');
                     $('#address').addClass('has-error');
                 }
             },
-            getGeocode: function(address){
-                new google.maps.Geocoder().geocode({ address: address }, function(results, status) {
-                    var position = {lat:'', lng:''};
-                    position.lat = results[0].geometry.location.lat();
-                    position.lng = results[0].geometry.location.lng();
+            getGeocode: function (address) {
+                new google.maps.Geocoder().geocode({address: address}, function (results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        var position = {lat: '', lng: ''};
+                        position.lat = results[0].geometry.location.lat();
+                        position.lng = results[0].geometry.location.lng();
 
-                    _createDeliveryCenter.emptyMarkers();
-                    _createDeliveryCenter.centerMap(position.lat, position.lng);
-                    _createDeliveryCenter.addMarker(position.lat, position.lng);
+                        _CreateDeliveryCenter.emptyMarkers();
+                        _CreateDeliveryCenter.centerMap(position.lat, position.lng);
+                        _CreateDeliveryCenter.addMarker(position.lat, position.lng);
+
+                        _CreateDeliveryCenter.deliverycenter.geo = JSON.stringify(position);
+                    } else {
+                        toastr.error('No se puede encontrar la ubicación!');
+                    }
                 });
 
             },
+
 
             /*
              * Funcões de Janela
              */
 
-            openWindow: function(){
+            openWindow: function (deliveryCenterId) {
+                if (deliveryCenterId) {
+                    _CreateDeliveryCenter.loadDeliveryCenter(deliveryCenterId);
+                }
                 $('#create-deliverycenter').modal();
             },
             closeWindow: function () {
                 $('#create-deliverycenter').modal('hide');
+            },
+            reload: function () {
+
+                _CreateDeliveryCenter.emptyMarkers();
+                _CreateDeliveryCenter.deliverycenter = {
+                    id: '',
+                    logo: "/images/default-placeholder.jpg",
+                    address: "",
+                    city: "",
+                    state: "",
+                    zip: "",
+                    company: '',
+                    cuit: '',
+                    name: '',
+                    region_id: [],
+                    geo: ''
+                };
+                _CreateDeliveryCenter.regions_select= [];
+
+                _CreateDeliveryCenter.map = {
+                    markers: [],
+                    center: {lat: -34.6248187, lng: -58.3761432},
+                    zoom: 12
+                };
+
             },
 
             /*
              *   Funções de Envio
              */
 
-            submitData: function(){
-                _createDeliveryCenter.$http.post('/deliverycenters/', data().deliverycenter)
-                        .then((response) => {
-                            toastr.success('Sucesso!','Centro de Entrega incluyida com exito!');
-                        }, (response) => {
-                            _createDeliveryCenter.showErrors(response.data);
-                        });
+            submitData: function () {
+                _CreateDeliveryCenter.fetchAddress();
+                if (!_CreateDeliveryCenter.deliverycenter.id) {
+                    _CreateDeliveryCenter.store();
+                }
+                else {
+                    _CreateDeliveryCenter.update();
+                }
+            },
+            store: function(){
+                this.$http.post('/deliverycenters', _CreateDeliveryCenter.deliverycenter)
+                        .then(function (response) {
+                            toastr.success('Exito!', 'Centro de Entrega criada con sucesso.');
+                            this.$broadcast('DeliveryCenterCreated');
+                            _CreateDeliveryCenter.closeWindow();
+                        }).catch(function (response) {
+                    $.each(response.data, function (key, value) {
+                        toastr.warning('Atención', value);
+                        $('#' + key).addClass('has-error');
+                    });
+                });
+            },
+            update: function(){
+                this.$http.patch('/deliverycenters/'+_CreateDeliveryCenter.deliverycenter.id, _CreateDeliveryCenter.deliverycenter)
+                        .then(function (response) {
+                            toastr.success('Exito!', 'Centro de Entrega criada con sucesso.');
+                            this.$broadcast('DeliveryCenterUpdated');
+                            _CreateDeliveryCenter.closeWindow();
+                        }).catch(function (response) {
+                    $.each(response.data, function (key, value) {
+                        toastr.warning('Atención', value);
+                        $('#' + key).addClass('has-error');
+                    });
+                });
             }
         }
     }
