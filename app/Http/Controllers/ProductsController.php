@@ -89,7 +89,7 @@ class ProductsController extends Controller
         $tags = $request->tags;
         foreach ($tags as $tag){
             $product->tags()->attach($tag);
-        }
+    }
 
         foreach ($request->grids as $grid) {
             $product->grids()->attach($grid);
@@ -185,6 +185,7 @@ class ProductsController extends Controller
 
 
     public function api_list(Brand $brand){
+        $lstProducts = [];
         $products = Product::
                     with('brand')
                     ->with('line')
@@ -196,7 +197,19 @@ class ProductsController extends Controller
                     ->where('brand_id', $brand->id)
                     ->get();
 
-        return $products;
+        foreach ($products as $product){
+
+            /*foreach($product->grids_and_sizes as $grid){
+                $selectItem['value'] = $grid->id;
+                $selectItem['label'] = $grid->description;
+                $product->grids_select[] = $selectItem;
+                $selectList[] = $selectItem;
+            }
+            */
+            $lstProducts[] = $product;
+        }
+
+        return $lstProducts;
     }
     public function api_listPaginate(Brand $brand){
         $products = Product::
@@ -245,8 +258,7 @@ class ProductsController extends Controller
     }
 
     public function api_sync($dtSincronizacao){
-         
-         $products = Product::
+        $products = Product::
                     with('brand')
                     ->with('line')
                     ->with('reference')
@@ -257,7 +269,8 @@ class ProductsController extends Controller
                     ->whereDate('updated_at', '>',$dtSincronizacao)
                     ->get();
 
+
+
         return response()->json($products);
     }
-
 }

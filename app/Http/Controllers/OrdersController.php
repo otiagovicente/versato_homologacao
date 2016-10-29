@@ -37,10 +37,15 @@ class OrdersController extends Controller
         $order = new Order;
         $order->fill($request->all());
         $order->save();
+        //$order->products()->sync($request->orderProducts);
 
-        //var_dump($request->orderProducts);
-
-        $order->orderproducts()->sync($request->orderProducts);
+        foreach ($request->orderProducts as $product){
+            var_dump($product);
+            $orderProduct = new OrderProduct();
+            $orderProduct->order_id = $order->id;
+            $orderProduct->fill($product);
+            $orderProduct->save();
+        }
 
         return response()->json($order);
     }

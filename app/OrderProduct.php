@@ -14,10 +14,11 @@ class OrderProduct extends Model
     //use Notifiable;
 
     protected $fillable = ['cost','price','discount','representative_id','representative_comision'
-        ,'representative_discount','grid_id','delivery_id'];
+        ,'representative_discount','grid_id', 'order_id', 'product_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    public function order(){
-        return $this->belongsToMany(Order::class);
+    public function orders(){
+        return $this->belongsToMany('Order');
     }
 }
+
