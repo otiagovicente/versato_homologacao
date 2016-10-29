@@ -193,11 +193,12 @@ class ProductsController extends Controller
                     ->with('material')
                     ->with('color')
                     ->with('gridsAndSizes')
+                    ->with('grids_select')
                     ->with('tags')
                     ->where('brand_id', $brand->id)
                     ->get();
 
-        foreach ($products as $product){
+        //foreach ($products as $product){
 
             /*foreach($product->grids_and_sizes as $grid){
                 $selectItem['value'] = $grid->id;
@@ -206,10 +207,10 @@ class ProductsController extends Controller
                 $selectList[] = $selectItem;
             }
             */
-            $lstProducts[] = $product;
-        }
+            //$lstProducts[] = $product;
+        //}
 
-        return $lstProducts;
+        return $products;
     }
     public function api_listPaginate(Brand $brand){
         $products = Product::

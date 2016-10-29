@@ -54,8 +54,9 @@ class Product extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-
-
+    public function grids_select(){
+        return $this->belongsToMany(Grid::class)->select(['id as value', 'description as label']);;
+    }
     public function setLineIdAttribute($value){
         $this->attributes['line_id'] = (int) $value;
     }
