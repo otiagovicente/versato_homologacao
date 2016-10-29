@@ -15,6 +15,7 @@ class CreateOrderproductsTable extends Migration
     {
         Schema::create('orders_products', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('order_id');
             $table->double('cost', 8,2);
             $table->double('price', 8,2);
             $table->double('discount',8,2);
@@ -23,6 +24,7 @@ class CreateOrderproductsTable extends Migration
             $table->integer('representative_discount')->nullable();
             $table->integer('grid_id')->unsigned();
             $table->integer('delivery_id')->unsigned();
+            $table->integer('order_id')->unsigned();
 
             $table->timestamps();
         });
