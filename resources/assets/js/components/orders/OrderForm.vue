@@ -151,8 +151,9 @@
                                                             <th>Producto</th>
                                                             <th>Costo</th>
                                                             <th>Precio</th>
-                                                            <th>Descuento Cliente</th>
-                                                            <th>Descuento Representante</th>
+                                                            <th>Grid</th>
+                                                            <th>Desc. Cliente</th>
+                                                            <th>Desc. Representante</th>
                                                             <th>Total</th>
                                                             <th>Acciones</th>
                                                         </tr>
@@ -162,6 +163,7 @@
                                                             <td>{{op.strLine}} {{op.strMaterial}} {{op.strColor}}</td>
                                                             <td>{{op.cost | currency}}</td>
                                                             <td>{{op.price | currency}}</td>
+                                                            <td>{{op.strGrid}}</td>
                                                             <td>{{op.client_discount}}</td>
                                                             <td>{{op.representative_discount}}</td>
                                                             <td>{{op.total | currency}}</td>
@@ -203,6 +205,7 @@
                                                         <th style="width: 400px">Producto</th>
                                                         <th>Costo</th>
                                                         <th>Precio</th>
+                                                        <th>Grid</th>
                                                         <th>Descuento Cliente</th>
                                                         <th>Descuento Representante</th>
                                                         <th style="width: 100px"><i class="fa fa-shopping-cart"></i> Total</th>
@@ -221,6 +224,7 @@
                                                         <td>{{op.strLine}} {{op.strMaterial}} {{op.strColor}}</td>
                                                         <td style="text-align:right">{{op.cost | currency}}</td>
                                                         <td style="text-align:right">{{op.price | currency}}</td>
+                                                        <td style="text-align:center">{{op.strGrid}}</td>
                                                         <td style="text-align:center">{{op.client_discount}}%</td>
                                                         <td style="text-align:center">{{op.representative_discount}}%</td>
                                                         <td>${{op.total | currency}}</td>
@@ -319,7 +323,7 @@
                                 </td>
                                 <td>
                                     <v-select
-                                        v-bind:options.sync="p.grids_select" :value.sync="p.grid_id"
+                                        v-bind:options.sync="p.grids_select" :value.sync="p.grid_id" :selected.sync="p.strGrid"
                                         placeholder="grid" class="form-control"
                                         id="customer-input" name="customer[]"
                                         search justified required close-on-select>
@@ -426,6 +430,7 @@ export default{
 
         addToProductList: function(product){
             if(!_this.sarchByIdAndGrid(product)){
+
                 var finalPrice = _this.calcFinalPrice(product);
                 _this.order.orderProducts.push({
                     product_id:product.id,
@@ -442,18 +447,17 @@ export default{
                     total: finalPrice.finalPrice,
                     discount:finalPrice.totalDiscount,
                     grid_id:product.grid_id,
+                    strGrid: '',
                 });
                 return _this.order.orderProducts[_this.order.orderProducts.length - 1];
             }else{
                 toastr.warning('Atención', 'Producto ya se ha registrado para esta grid!');
             }
-
-
         },
+
         sarchByIdAndGrid: function(product){
             for (var i=0; i < _this.order.orderProducts.length; ++i) {
                 var txt = _this.order.orderProducts[i].product_id + ' - ' +  _this.order.orderProducts[i].grid_id;
-                console.log(txt);
                 if (_this.order.orderProducts[i].product_id == product.id &&
                         _this.order.orderProducts[i].grid_id == product.grid_id) {
                     return true;
