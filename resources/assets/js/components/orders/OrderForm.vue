@@ -415,26 +415,42 @@ export default{
         },
 
         addToProductList: function(product){
-            var finalPrice = _this.calcFinalPrice(product);
-            _this.order.orderProducts.push({
-                product_id:product.id,
-                code:product.code,
-                strLine:product.line.description,
-                strMaterial:product.material.description,
-                strColor:product.color.description,
-                cost:product.cost,
-                price:product.price,
-                chk_client_discount:false,
-                chk_representative_discount:false,
-                client_discount: product.client_discount,
-                representative_discount: product.representative_discount,
-                total: finalPrice.finalPrice,
-                discount:finalPrice.totalDiscount,
-                grid_id:product.grid_id,
-            });
-            return _this.order.orderProducts[_this.order.orderProducts.length - 1];
+            if(!_this.sarchByIdAndGrid(product)){
+                var finalPrice = _this.calcFinalPrice(product);
+                _this.order.orderProducts.push({
+                    product_id:product.id,
+                    code:product.code,
+                    strLine:product.line.description,
+                    strMaterial:product.material.description,
+                    strColor:product.color.description,
+                    cost:product.cost,
+                    price:product.price,
+                    chk_client_discount:false,
+                    chk_representative_discount:false,
+                    client_discount: product.client_discount,
+                    representative_discount: product.representative_discount,
+                    total: finalPrice.finalPrice,
+                    discount:finalPrice.totalDiscount,
+                    grid_id:product.grid_id,
+                });
+                return _this.order.orderProducts[_this.order.orderProducts.length - 1];
+            }else{
+                toastr.warning('Atención', 'Producto ya se ha registrado para esta grid!');
+            }
+
+
         },
-        
+        sarchByIdAndGrid: function(product){
+            for (var i=0; i < _this.order.orderProducts.length; ++i) {
+                var txt = _this.order.orderProducts[i].product_id + ' - ' +  _this.order.orderProducts[i].grid_id;
+                console.log(txt);
+                if (_this.order.orderProducts[i].product_id == product.id &&
+                        _this.order.orderProducts[i].grid_id == product.grid_id) {
+                    return true;
+                }
+            }
+            return false;
+        },
         calcFinalPrice: function(product){
             var finalPrice              = {finalPrice:0, totalDiscount:0};
             var finalDiscount           = 0;
