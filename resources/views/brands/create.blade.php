@@ -5,17 +5,9 @@
     'pageTitle' => 'Criar Marca',
     'url' => '/brands/create'
 ])
-<div class="container">
     <div class="row">
         <div class="col-md-10">
-            
-            @include('brands.partials.form', [
-            'action' => 'create',
-            'sendButtonText' => 'Criar Marca'
-
-            ])    
-
+            <create-brand></create-brand>
         </div>
     </div>
-</div>
 @endsection

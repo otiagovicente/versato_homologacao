@@ -20,6 +20,7 @@ Route::get('/user', function (Request $request) {
 Route::group(['middleware' => 'api'], function () {
 
 
+    Route::get('/brands/{brand}', 'BrandsController@api_show');
     Route::get('/brands/selectlist', 'BrandsController@api_selectList');
     Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
 
@@ -48,6 +49,7 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
     Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
+    Route::get('/macroregions/regions', 'MacroregionsController@api_getRegions');
 
     Route::get('/products/sync/{dtSincronizacao}', 'ProductsController@api_sync');
     Route::get('/products/list', 'ProductsController@api_list');

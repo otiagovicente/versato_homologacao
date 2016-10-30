@@ -11,7 +11,7 @@ class Brand extends Model
 	use SoftDeletes;
 	use Searchable;
 
-    protected $fillable = ['name', 'description', 'image'];
+    protected $fillable = ['name', 'description', 'image', 'logo'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     public function products(){
@@ -21,4 +21,9 @@ class Brand extends Model
     public function retrieveProducts(){
     	return $this->products()->with('brand')->with('line')->with('reference')->with('material')->with('color')->with('grids');
     }
+
+    public function representatives(){
+        return $this->belongsToMany('App\Representative')->with('comission');
+    }
+
 }

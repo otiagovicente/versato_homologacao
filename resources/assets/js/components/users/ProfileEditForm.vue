@@ -119,18 +119,32 @@
                             <!-- CHANGE PASSWORD TAB -->
                             <div class="tab-pane" id="tab_1_3">
                                 <form>
-                                    <div class="form-group">
-                                        <label class="control-label"><i class="fa fa-facebook font-blue"></i> Facebook</label>
-                                        <input type="text" class="form-control" v-model="user.facebook" />
+
+                                    <div class="input-group input-icon">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-facebook tooltips" data-original-title="Facebook User." data-container="body"></i> facebook.com/
+                                        </span>
+                                        <input id="facebook" class="form-control" type="text" v-model="user.facebook" >
+
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label"><i class="fa fa-twitter font-blue"></i> Twitter</label>
-                                        <input type="text" class="form-control" v-model="user.twitter" />
+                                    <br>
+                                    <div class="input-group input-icon">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-twitter tooltips" data-original-title="Twitter User." data-container="body"></i> twitter.com/
+                                        </span>
+
+                                        <input id="twitter" class="form-control" type="text" v-model="user.twitter" >
+
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label"><i class="fa fa-instagram font-blue"></i> Instagram</label>
-                                        <input type="text" class="form-control" v-model="user.instagram" />
+                                    <br>
+                                    <div class="input-group input-icon">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-instagram tooltips" data-original-title="Instagram User." data-container="body"></i> instagram.com/
+                                        </span>
+
+                                        <input id="instagram" class="form-control" type="text" v-model="user.instagram" >
                                     </div>
+
                                     <hr>
                                     <div class="margin-top-10">
                                         <a href="javascript:;" v-on:click="submitData" class="btn green"> Guardar </a>

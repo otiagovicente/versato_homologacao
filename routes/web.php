@@ -48,7 +48,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/brands/select', 'BrandsController@select');
     Route::get('/brands/{brand}/setselected', 'BrandsController@setSelected');
-    Route::post('/brands/{brand}/photo', 'BrandsController@addPhoto');
+    Route::post('/brands/photo', 'BrandsController@addPhoto');
+    Route::post('/brands/logo', 'BrandsController@addLogo');
 	Route::resource('brands', 'BrandsController',['parameters' => 'singular']);
 
 

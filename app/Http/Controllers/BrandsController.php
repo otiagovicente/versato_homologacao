@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests;
 use App\Http\Requests\BrandRequest;
+use Illuminate\Support\Facades\Storage;
 
 //load model
 use App\Brand;
@@ -100,23 +101,49 @@ class BrandsController extends Controller
         //
     }
 
-    public function addPhoto(Request $request, Brand $brand){
+    public function addPhoto(Request $request){
+
+        //Valida Mimes para garantir que é uma imagem
         $this->validate($request,[
             'photo' => 'required|mimes:jpg,png,jpeg'
         ]);
 
-        $file = $request->file('photo');
+        //Faz upload da imagem para o Driver AWS S3
+        $image = $request->file('photo')->store('brands','s3');
+        //Torna acessível publicamente a imagem
+        Storage::disk('s3')->setVisibility($image, 'public');
+//        Espera 5 segundos para garantir que a visibilidade do
+//        arquivo no driver S3 seja público para que a imagem
+//        seja exibida
+        sleep(5);
 
-        $name= $brand->name.time().'.jpg';
+        //Retorna a url completa da imagem que será salva no campo photo do produto
+        return Storage::disk('s3')->url($image);
 
-        $file->move($this->imagesPath, $name);
-
-        //atualiza o path da imagem
-        $brand->image = "/".$this->imagesPath."/".$name;
-        $brand->save();
-
-        return $brand->image;
     }
+
+    public function addLogo(Request $request){
+
+        //Valida Mimes para garantir que é uma imagem
+        $this->validate($request,[
+            'logo' => 'required|mimes:jpg,png,jpeg'
+        ]);
+
+        //Faz upload da imagem para o Driver AWS S3
+        $image = $request->file('logo')->store('brands','s3');
+        //Torna acessível publicamente a imagem
+        Storage::disk('s3')->setVisibility($image, 'public');
+//        Espera 5 segundos para garantir que a visibilidade do
+//        arquivo no driver S3 seja público para que a imagem
+//        seja exibida
+        sleep(5);
+
+        //Retorna a url completa da imagem que será salva no campo photo do produto
+        return Storage::disk('s3')->url($image);
+
+    }
+
+
 
     public function select(){
         $brands = Brand::all();
@@ -128,10 +155,19 @@ class BrandsController extends Controller
         return redirect('/');
 
     }
+
+
+
+
     public function api_list(){
         $products = Brand::all();
         return $products;
     }
+
+    public function api_show(Brand $brand){
+        return response()->json($brand);
+    }
+
     public function api_selectList(){
         $brands = Brand::all();
         foreach($brands as $brand){

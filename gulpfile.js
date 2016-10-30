@@ -16,7 +16,8 @@ require('laravel-elixir-vue');
 elixir(mix => {
     mix.sass('app.scss')
         .styles(['../../../node_modules/animate.css/animate.min.css',
-            '../../../node_modules/google-code-prettify/bin/prettify.min.css'
+            '../../../node_modules/google-code-prettify/bin/prettify.min.css',
+            'dropzone.css'
         ])
         .webpack('app.js');
 

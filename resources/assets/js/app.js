@@ -15,6 +15,19 @@ require('./bootstrap');
 
 
 
+
+/*
+ * Componentes de Brands
+ */
+
+    Vue.component(
+        'create-brand',
+        require('./components/brands/CreateBrand.vue')
+    );
+
+
+
+
 /*
  * Componente Header de páginas
  */
@@ -86,6 +99,10 @@ require('./bootstrap');
     Vue.component(
         'edit-representative',
         require('./components/representatives/EditRepresentative.vue')
+    );
+    Vue.component(
+        'select-user',
+        require('./components/representatives/SelectUser.vue')
     );
 
 

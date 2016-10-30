@@ -46,7 +46,7 @@
                             <div id="code-input" class="form-group" >
                                 <label class="col-md-3 control-label">Contraseña</label>
                                 <div class="col-md-7" id="password">                
-                                    <input type="text" 
+                                    <input type="password"
                                     name="contrasena"
                                     class="form-control" 
                                     placeholder="Contraseña"
@@ -57,7 +57,7 @@
                             <div id="code-input" class="form-group" >
                                 <label class="col-md-3 control-label">Confirmar la Contraseña</label>
                                 <div class="col-md-7" id="password_confirmation">                
-                                    <input type="text" 
+                                    <input type="password"
                                     name="confirmarcontrasena"
                                     class="form-control" 
                                     placeholder="Confirmar la Contraseña"

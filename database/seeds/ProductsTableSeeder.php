@@ -45,7 +45,8 @@ class ProductsTableSeeder extends Seeder
                         'color_id' => 1,
                         'cost' => 200.00,
                         'price' => 480.20,
-                        'photo' => '/images/products/1472429100.jpg',
+                        'photo' => '	
+/images/products/1472429100.jpg',
                         'grids' => [1,3],
                         'tags'  => [1,3],
                         'published' => true,

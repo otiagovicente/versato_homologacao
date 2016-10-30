@@ -20,6 +20,6 @@ class Representative extends Model
     }
 
     public function brands(){
-        return $this->belongsToMany('App\Brand')->with('comision');
+        return $this->belongsToMany('App\Brand')->with('comission');
     }
 }

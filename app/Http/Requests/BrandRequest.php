@@ -30,8 +30,23 @@ class BrandRequest extends Request
     {
         $rules = [
             'name' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'logo' => 'required',
+            'image' => 'required'
         ];
         return $rules;
     }
+
+    public function messages(){
+
+        $messages = [
+            'name.required' => 'che, olvidaste del nombre de la marca',
+            'description.required' => 'ops, olvidaste de describir la marca',
+            'logo.required' => 'ops, olvidaste del logo',
+            'image.required' => 'olvidaste de la inmagen de pantalla'
+        ];
+
+        return $messages;
+    }
+
 }
