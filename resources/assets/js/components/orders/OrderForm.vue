@@ -6,7 +6,6 @@
 </style>
 
 <template>
-    TESTE
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered" id="form_wizard_1">        
@@ -57,7 +56,7 @@
                                                 <span class="required"> * </span>
                                             </label>
                                             <div class="col-md-4">
-                                                <v-select 
+                                                <v-select
                                                     v-bind:options.sync="customers_select" :value.sync="order.customer_id"
                                                     placeholder="Elije el cliente" class="form-control"
                                                     id="customer-input" name="customer[]"
@@ -114,11 +113,24 @@
                                                 />
                                             </div>
                                         </div>
-                                        
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">Centro de Distribuicion
+                                                </label>
+                                                <div class="col-md-4">
+                                                    <v-select
+                                                            v-bind:options.sync="deliverycenters_select" :value.sync="order.delivery_id"
+                                                            placeholder="Elije el cebtro de distruicion" class="form-control"
+                                                            id="customer-input" name="customer[]"
+                                                            search justified required close-on-select>
+                                                    </v-select>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <hr/>
                                         
                                         <div class="row">
-                                            <fieldset class="form-group">
+                                            <fieldset>
                                                 <legend>Productos</legend>
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -136,7 +148,7 @@
                                                 <table class="table table-striped table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th>Code</th>
+                                                            <th>Producto</th>
                                                             <th>Costo</th>
                                                             <th>Precio</th>
                                                             <th>Descuento Cliente</th>
@@ -147,12 +159,12 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="op in order.orderProducts">
-                                                            <td>{{op.code}}</td>
-                                                            <td>{{op.cost}}</td>
-                                                            <td>{{op.price}}</td>
+                                                            <td>{{op.strLine}} {{op.strMaterial}} {{op.strColor}}</td>
+                                                            <td>{{op.cost | currency}}</td>
+                                                            <td>{{op.price | currency}}</td>
                                                             <td>{{op.client_discount}}</td>
                                                             <td>{{op.representative_discount}}</td>
-                                                            <td>{{op.total}}</td>
+                                                            <td>{{op.total | currency}}</td>
                                                             <td>
                                                                 <button 
                                                                     class="btn grey"
@@ -188,34 +200,46 @@
                                                     </tr>
                                                     
                                                     <tr>
-                                                        <th>Code</th>
+                                                        <th style="width: 400px">Producto</th>
                                                         <th>Costo</th>
                                                         <th>Precio</th>
                                                         <th>Descuento Cliente</th>
                                                         <th>Descuento Representante</th>
-                                                        <th><i class="fa fa-shopping-cart"></i> Total</th>
+                                                        <th style="width: 100px"><i class="fa fa-shopping-cart"></i> Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
                                                         <th style="text-align:left">Totales</th>
-                                                        <th style="text-align:center">${{order.cost}}</th>
-                                                        <th style="text-align:center">${{order.price}}</th>
-                                                        <th colspan="3" style="text-align:right">Total:&nbsp;&nbsp; ${{order.total}}</th>
+                                                        <th style="text-align:center">{{order.cost | currency}}</th>
+                                                        <th style="text-align:center">{{order.price | currency}}</th>
+                                                        <th colspan="3" style="text-align:center">Total:&nbsp;&nbsp; {{order.total | currency}}</th>
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
                                                     <tr v-for="op in order.orderProducts">
-                                                        <td>{{op.code}}</td>
-                                                        <td style="text-align:right">${{op.cost}}</td>
-                                                        <td style="text-align:right">${{op.price}}</td>
+                                                        <td>{{op.strLine}} {{op.strMaterial}} {{op.strColor}}</td>
+                                                        <td style="text-align:right">{{op.cost | currency}}</td>
+                                                        <td style="text-align:right">{{op.price | currency}}</td>
                                                         <td style="text-align:center">{{op.client_discount}}%</td>
                                                         <td style="text-align:center">{{op.representative_discount}}%</td>
-                                                        <td>${{op.total}}</td>
+                                                        <td>${{op.total | currency}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <div class="row">
+                                            Comentário
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <textarea class="form-control" rows="3" v-model="order.comment"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -228,11 +252,11 @@
                                             Retorno 
                                         </a>
 
-                                        <a href="javascript:;" class="btn btn-outline green button-next"> 
+                                        <a href="javascript:;" class="btn btn-outline blue button-next">
                                             Continue
                                             <i class="fa fa-angle-right"></i>
                                         </a>
-                                        <a @click="submitData" class="btn btn-outline green button-submit"> 
+                                        <a @click="submitData" class="btn btn-outline blue button-submit">
                                             Guardar
                                             <i class="fa fa-angle-right"></i>
                                         </a>
@@ -262,8 +286,9 @@
                                 <th>Producto</>
                                 <th>Costo</th>
                                 <th>Precio</th>
-                                <th>Descuento Cliente</th>
-                                <th>Descuento Representante</th>
+                                <th>Desc. Cliente</th>
+                                <th>Desc. Representante</th>
+                                <th>Grid</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -272,10 +297,10 @@
                                 <td>
                                     <img class="product-list-photo" :src="p.photo" :alt="p.code" />
                                     <br/>
-                                    <small>{{p.code}}</small>
+                                    <small>{{p.line.description}} / {{p.material.description}} / {{p.color.description}}</small>
                                 </td>
-                                <td>{{p.cost}}</td>
-                                <td>{{p.price}}</td>
+                                <td>{{p.cost  | currency}}</td>
+                                <td>{{p.price | currency}}</td>
                                 <td>
                                     <input 
                                         id="code-input" 
@@ -293,12 +318,21 @@
                                     />
                                 </td>
                                 <td>
+                                    <v-select
+                                        v-bind:options.sync="p.grids_select" :value.sync="p.grid_id"
+                                        placeholder="grid" class="form-control"
+                                        id="customer-input" name="customer[]"
+                                        search justified required close-on-select>
+                                    </v-select>
+
+                                </td>
+                                <td>
                                     <a
                                         class="btn blue btn-outline sbold" 
-                                        data-toggle="modal" 
-                                        href="#large"
+                                        data-toggle="modal"
+                                        v-show="p.grid_id"
                                         @click="addToProductList(p)"
-                                    > 
+                                    >
                                         Selecionar
                                     </a>
                                 </td>
@@ -313,9 +347,6 @@
         </div>
     </div>
     <!--End - Modal de Produtos -->
-    <pre>
-        {{order | json}} 
-    </pre>
 </template>
 
 <script>
@@ -337,6 +368,7 @@ export default{
             customers_select:[],
             representatives_select:[],
             brands_select:[],
+            deliverycenters_select:[],
             products:[],
             orderProductsDelete:[],
 
@@ -352,7 +384,9 @@ export default{
                 status_id:1,
                 customer_id:[],
                 representative_id:[],
-                orderProducts:[]
+                orderProducts:[],
+                delivery_id:[],
+                comment: '',
             },
         }
     },
@@ -366,6 +400,7 @@ export default{
         //if(this.porder) this.loadOrder();
     },
     methods:{
+
         deleteProduct: function(index){
             _this.orderProductsDelete.push(this.order.orderProducts[index]);
             _this.order.orderProducts.splice(index, 1);
@@ -380,32 +415,52 @@ export default{
             for (var i = 0; i < this.order.orderProducts.length; i++) {
                 var finalPrice = this.calcFinalPrice(_this.order.orderProducts[i]);
                 _this.order.orderProducts[i].total = finalPrice.finalPrice;
-                _this.order.orderProducts[i].totaldiscount = finalPrice.totalDiscount;
+                _this.order.orderProducts[i].discount = finalPrice.totalDiscount;
 
                 _this.order.cost            += parseFloat(_this.order.orderProducts[i].cost);
                 _this.order.price           += parseFloat(_this.order.orderProducts[i].price);
                 _this.order.total           += parseFloat(_this.order.orderProducts[i].total);
-                _this.order.overalldiscount += parseFloat(_this.order.orderProducts[i].totaldiscount);
+                _this.order.overalldiscount += parseFloat(_this.order.orderProducts[i].discount);
             }
         },
+
         addToProductList: function(product){
-            var finalPrice = _this.calcFinalPrice(product);
-            
-            _this.order.orderProducts.push({
-              id:product.id,
-              code:product.code,
-              cost:product.cost,
-              price:product.price,
-              chk_client_discount:false,
-              chk_representative_discount:false,
-              client_discount: product.client_discount,
-              representative_discount: product.representative_discount,
-              total: finalPrice.finalPrice,
-              totaldiscount:finalPrice.totalDiscount,
-            });
-            return _this.order.orderProducts[_this.order.orderProducts.length - 1];
+            if(!_this.sarchByIdAndGrid(product)){
+                var finalPrice = _this.calcFinalPrice(product);
+                _this.order.orderProducts.push({
+                    product_id:product.id,
+                    code:product.code,
+                    strLine:product.line.description,
+                    strMaterial:product.material.description,
+                    strColor:product.color.description,
+                    cost:product.cost,
+                    price:product.price,
+                    chk_client_discount:false,
+                    chk_representative_discount:false,
+                    client_discount: product.client_discount,
+                    representative_discount: product.representative_discount,
+                    total: finalPrice.finalPrice,
+                    discount:finalPrice.totalDiscount,
+                    grid_id:product.grid_id,
+                });
+                return _this.order.orderProducts[_this.order.orderProducts.length - 1];
+            }else{
+                toastr.warning('Atención', 'Producto ya se ha registrado para esta grid!');
+            }
+
+
         },
-        
+        sarchByIdAndGrid: function(product){
+            for (var i=0; i < _this.order.orderProducts.length; ++i) {
+                var txt = _this.order.orderProducts[i].product_id + ' - ' +  _this.order.orderProducts[i].grid_id;
+                console.log(txt);
+                if (_this.order.orderProducts[i].product_id == product.id &&
+                        _this.order.orderProducts[i].grid_id == product.grid_id) {
+                    return true;
+                }
+            }
+            return false;
+        },
         calcFinalPrice: function(product){
             var finalPrice              = {finalPrice:0, totalDiscount:0};
             var finalDiscount           = 0;
@@ -450,12 +505,23 @@ export default{
                 _this.representatives_select = response.json();
             });
         },
+        getDeliveryCenters: function(customer_id){
+            this.$http.get('/api/deliverycenters/selectlist/'+customer_id)
+                    .then(response => {
+                _this.deliverycenters_select = response.json();
+            });
+        },
 
         submitData: function(){
-            if(!_this.order.id)
-                _this.insertData();
-            else
-                _this.updateData();
+            if(_this.order.orderProducts.length > 0){
+                if(!_this.order.id)
+                    _this.insertData();
+                else
+                    _this.updateData();
+            }else {
+                toastr.warning('Atencion!', 'Elije Productos para el Pedido!')
+            }
+
         },
         
         insertData: function(){
@@ -497,6 +563,9 @@ export default{
         },
         'order.representative_discount': function(val, oldVal){
             _this.updateOrderValues();
+        },
+        'order.customer_id':function(val, oldVal){
+            if(val) _this.getDeliveryCenters(val);
         },
     },
 }

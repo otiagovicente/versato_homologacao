@@ -105,5 +105,16 @@ class DeliverycentersController extends Controller
         return response()->json($deliverycenter);
     }
 
+    public function api_selectList($id){
+        $selectList = [];
+        $deliverycenters = Deliverycenter::where('customer_id', $id)->get();
+
+        foreach($deliverycenters as $deliverycenter){
+            $selectItem['value'] = $deliverycenter->id;
+            $selectItem['label'] = $deliverycenter->description;
+            $selectList[] = $selectItem;
+        }
+        return response()->json($selectList);
+    }
 
 }
