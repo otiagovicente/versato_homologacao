@@ -15,9 +15,7 @@ class Macroregion extends Model
     protected $fillable = ['code', 'description', 'brand_id', 'geo'];
     protected $dates    = ['created_at', 'updated_at', 'deleted_at'];
 
-    //public function region(){
-    //	return $this->belongsTo('App\Region');
-    //}
+
     public function regions(){
         return $this->hasMany('App\Region');
     }
