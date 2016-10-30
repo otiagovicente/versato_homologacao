@@ -223,11 +223,23 @@
                                                         <td style="text-align:right">{{op.price | currency}}</td>
                                                         <td style="text-align:center">{{op.client_discount}}%</td>
                                                         <td style="text-align:center">{{op.representative_discount}}%</td>
-                                                        <td>${{op.total}}</td>
+                                                        <td>${{op.total | currency}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <div class="row">
+                                            Comentário
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <textarea class="form-control" rows="3" v-model="order.comment"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -240,11 +252,11 @@
                                             Retorno 
                                         </a>
 
-                                        <a href="javascript:;" class="btn btn-outline green button-next"> 
+                                        <a href="javascript:;" class="btn btn-outline blue button-next">
                                             Continue
                                             <i class="fa fa-angle-right"></i>
                                         </a>
-                                        <a @click="submitData" class="btn btn-outline green button-submit">
+                                        <a @click="submitData" class="btn btn-outline blue button-submit">
                                             Guardar
                                             <i class="fa fa-angle-right"></i>
                                         </a>
@@ -335,9 +347,6 @@
         </div>
     </div>
     <!--End - Modal de Produtos -->
-    <pre>
-        {{order | json}}
-    </pre>
 </template>
 
 <script>
@@ -377,6 +386,7 @@ export default{
                 representative_id:[],
                 orderProducts:[],
                 delivery_id:[],
+                comment: '',
             },
         }
     },
