@@ -20,36 +20,14 @@
                                 <div class="col-md-12">
                                     <small>Región</small>
 
-                                    <div class="form-group form-line-input" id="region_id">
-                                        <v-select v-bind:options.sync="regions_select" :value.sync="representative.region_id"
-                                                  placeholder="Elije la región" class="form-control"
-                                                  id="region-input" name="region[]"
-                                                  search justified required close-on-select></v-select>
-                                    </div>
+                                    <h4 @click="openSelectRegion()" class="font-blue" style="cursor:pointer;">{{user.name+' '+user.lastname}}</h4>
+
+
                                 </div>
                                 <div class="col-md-12">
                                     <small>Marcas</small>
-                                    <div class="form-group form-line-input" id="brands">
-                                        <v-select v-bind:options.sync="brands_select" :value.sync="representative.brands"
-                                                  placeholder="Elije las marcas" class="form-control"
-                                                  id="brands-input" name="brands[]"
-                                                  search justified required close-on-select multiple></v-select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <small>Comision</small>
-                                    <div class="form-group form-line-input" id="representative_comision">
-                                        <div class="form-group" id="name-input" >
-                                            <input
-                                                    type="number"
-                                                    step="0.10"
-                                                    placeholder="Comision"
-                                                    class="form-control"
-                                                    v-model="representative.representative_comision" />
-                                        </div>
+                                    <h4 @click="openSelectBrands()" class="font-blue" style="cursor:pointer;">{{user.name+' '+user.lastname}}</h4>
 
-
-                                    </div>
                                 </div>
 
 
@@ -79,13 +57,17 @@
     </div>
 
     <select-user></select-user>
+    <select-region></select-region>
+    <select-brands></select-brands>
+
+
 </template>
 
 <style>
     .user-photo{
-        width: 100%;
-        height: auto;
+        height: 200px;
         cursor:pointer;
+        right : 50px;
     }
 </style>
 <script type="text/babel">
@@ -103,9 +85,8 @@
                     name: 'eligir',
                     lastname: 'usuario'
                 },
-                users_select : [],
-                regions_select : [],
-                brands_select :[]
+                regions:{},
+                brands:{}
             }
         },
         components:{
@@ -114,24 +95,9 @@
         },
         ready(){
             window._CreateRepresentative = this;
-            _CreateRepresentative.getRegions();
-            _CreateRepresentative.getBrands();
         },
         methods : {
 
-
-            getRegions: function(){
-                this.$http.get('/api/regions/selectlist')
-                        .then(response => {
-                            _CreateRepresentative.regions_select = response.json();
-                        });
-            },
-            getBrands: function(){
-                this.$http.get('/api/brands/selectlist')
-                        .then(response => {
-                            _CreateRepresentative.brands_select = response.json();
-                        });
-            },
             submitData: function(){
                 this.$http.post('/representatives', _CreateRepresentative.representative)
                     .then(response => {
@@ -150,6 +116,12 @@
             },
             openSelectUser: function(){
                 _SelectUser.openWindow();
+            },
+            openSelectRegion: function () {
+                _SelectRegion.openWindow();
+            },
+            openSelectBrands: function () {
+                _SelectBrands.openWindow();
             }
 
         }

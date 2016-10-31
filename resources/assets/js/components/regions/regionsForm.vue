@@ -123,7 +123,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/babel">
     import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon, PlaceInput} from 'vue-google-maps'
     import toastr from 'toastr'
     import VueStrap from 'vue-strap'

@@ -104,6 +104,14 @@ require('./bootstrap');
         'select-user',
         require('./components/representatives/SelectUser.vue')
     );
+    Vue.component(
+        'select-region',
+        require('./components/representatives/SelectRegion.vue')
+    );
+    Vue.component(
+        'select-brands',
+        require('./components/representatives/SelectBrands.vue')
+    );
 
 
 

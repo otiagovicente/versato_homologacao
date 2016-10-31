@@ -33,11 +33,11 @@
                     </div>
                     <div class="col-md-8">
                         <br>
-                        <div class="form-group">
+                        <div class="form-group" id="name">
                             <input type="text" class="form-control input-lg" placeholder="Nombre" v-model="brand.name">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="description">
                             <textarea class="form-control" placeholder="Descripción" rows="3" v-model="brand.description"></textarea>
                         </div>
 
@@ -142,11 +142,11 @@
             /*
              * Funções de envio
              */
-
-            sumbitData: function () {
-                if(_CreateBrand.brand.id === ''){
+            submitData: function () {
+                if (!_CreateBrand.brand.id) {
                     _CreateBrand.store();
-                }else{
+                }
+                else {
                     _CreateBrand.update();
                 }
             },
@@ -157,7 +157,10 @@
                               toastr.success('Marca creada con exito!');
                           })
                           .catch(response => {
-                              toastr.error('No fué possible incluir la marca. :(');
+                              $.each(response.data, function (key, value) {
+                                  toastr.warning('Atención', value);
+                                  $('#' + key).addClass('has-error');
+                              });
                           });
             },
             update: function (){
@@ -166,7 +169,10 @@
                               toastr.success('Marca guardada con exito!');
                           })
                           .catch(response => {
-                              toastr.error('No fué possible guardar la marca. :(');
+                              $.each(response.data, function (key, value) {
+                                  toastr.warning('Atención', value);
+                                  $('#' + key).addClass('has-error');
+                              });
                           });
             },
 

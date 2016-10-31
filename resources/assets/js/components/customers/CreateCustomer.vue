@@ -196,7 +196,7 @@
         height: 200px;
     }
 </style>
-<script>
+<script type="text/babel">
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
     import {Map, load, Marker, InfoWindow} from 'vue-google-maps'

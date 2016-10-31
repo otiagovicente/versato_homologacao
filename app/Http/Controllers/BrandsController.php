@@ -19,17 +19,10 @@ class BrandsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $brands;
-    private $imagesPath;
-
-    public function __construct(){
-        $this->brands = Brand::all();
-        $this->imagesPath = "images/brands";
-    }
-
     public function index()
     {
-        return view('brands.index', ['brands' => $this->brands]);
+        $brands = Brand::all();
+        return view('brands.index', ['brands' => $brands]);
     }
 
     /**
@@ -159,9 +152,13 @@ class BrandsController extends Controller
 
 
 
+    public function api_index(){
+        $brands = Brand::all();
+        return response()->json($brands);
+    }
+
     public function api_list(){
-        $products = Brand::all();
-        return $products;
+        return $this->api_index();
     }
 
     public function api_show(Brand $brand){
