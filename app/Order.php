@@ -18,6 +18,6 @@ class Order extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     public function products(){
-        return $this->belongsToMany('OrderProduct');
+        return $this->belongsToMany(Product::class)->withPivot('cost', 'price','discount', 'representative_id', 'representative_comission', 'representative_discount', 'client_discount', 'grid_id')->withTimestamps();
     }
 }
