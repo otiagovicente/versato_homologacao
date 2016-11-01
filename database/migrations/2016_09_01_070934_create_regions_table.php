@@ -79,7 +79,6 @@ class CreateRegionsTable extends Migration
             $table->increments('id');
             $table->string('code')->unique();
             $table->integer('user_id')->unsigned()->unique();
-            $table->integer('region_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 

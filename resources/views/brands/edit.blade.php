@@ -8,12 +8,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10">
-            
-            @include('brands.partials.form', [
-            	'action' => 'edit', 
-            	'sendButtonText' => 'Editar Marca'
-            ])    
 
+            <create-brand :pbrandid="{{$brand->id}}"></create-brand>
         </div>
     </div>
 </div>

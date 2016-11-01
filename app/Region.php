@@ -13,4 +13,9 @@ class Region extends Model
 
     protected $fillable = ['code', 'description', 'geo', 'brand_id', 'macroregion_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    public function representatives(){
+        return $this->belongsToMany('App\Representative')->withTimestamps();
+    }
+
 }

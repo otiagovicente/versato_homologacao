@@ -42,6 +42,7 @@ class RepresentativesController extends Controller
 
         $representative = new Representative($request->all());
         $representative->save();
+        $representative->regions()->sync($request->regions);
         $representative->brands()->sync($request->brands);
         return $representative;
 

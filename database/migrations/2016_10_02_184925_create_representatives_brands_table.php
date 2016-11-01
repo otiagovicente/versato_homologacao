@@ -25,6 +25,18 @@ class CreateRepresentativesBrandsTable extends Migration
             $table->foreign('representative_id')->references('id')->on('representatives');
         });
 
+
+        Schema::create('region_representative', function( Blueprint $table){
+            $table->increments('id');
+            $table->integer('region_id')->unsigned();
+            $table->integer('representative_id')->unsigned();
+            $table->timestamps();
+
+            $table->foreign('representative_id')->references('id')->on('representatives');
+            $table->foreign('region_id')->references('id')->on('regions');
+
+        });
+
     }
 
     /**
@@ -39,6 +51,18 @@ class CreateRepresentativesBrandsTable extends Migration
             $table->dropForeign('brand_representative_representative_id_foreign');
         });
 
+        Schema::table('region_representative', function($table){
+            $table->dropForeign('region_representative_region_id_foreign');
+            $table->dropForeign('region_representative_representative_id_foreign');
+        });
+
+
+
         Schema::drop('brand_representative');
+        Schema::drop('region_representative');
     }
+
+
+
+
 }

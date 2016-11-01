@@ -30,7 +30,6 @@ class RepresentativeRequest extends FormRequest
                 $rules = [
                     'code' => 'required|unique:representatives,code',
                     'user_id' => 'required|integer|unique:representatives,user_id',
-//                    'region_id' => 'integer'
                 ];
                 break;
             case 'PUT':
@@ -38,7 +37,6 @@ class RepresentativeRequest extends FormRequest
                 $rules = [
                     'code' => 'required',
                     'user_id' => 'required|integer',
-//                    'region' => 'integer'
                 ];
                 break;
 
@@ -46,7 +44,6 @@ class RepresentativeRequest extends FormRequest
                 $rules = [
                     'code' => 'required|unique:representatives,code',
                     'user_id' => 'required|integer|unique:representatives,user_id',
-//                    'region_id' => 'integer'
                 ];
                 break;
         }
