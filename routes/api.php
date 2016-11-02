@@ -17,6 +17,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+Route::group(['middleware' => 'auth'], function () {
+
+});
+Route::resource('orders','OrdersController');
 Route::get('/brands/selectlist', 'BrandsController@api_selectList');
 Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
 
@@ -67,12 +71,13 @@ Route::get('/users/{user}', 'UsersController@api_show');
 Route::get('/users', 'UsersController@api_index');
 
 Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
-Route::resource('orders','OrdersController',['parameters' => 'singular']);
 
 
-    Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
-    Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
-    Route::get('/macroregions/regions', 'MacroregionsController@api_getRegions');
+Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
+Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
+Route::get('/macroregions/regions', 'MacroregionsController@api_getRegions');
 
+
+Route::get('/customers/{customer}/aggregates', 'CustomersController@api_aggregates');
 
 
