@@ -150,5 +150,8 @@ class CustomersController extends Controller
     public function api_getDeliverycenters(Customer $customer){
         return $customer->deliverycenters()->get();
     }
-
+    public function api_aggregates(Customer $customer){
+        $aggregates = Customer::where('id', $customer->id)->with('deliverycenters')->with('shops')->get();
+        return response()->json($aggregates);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests;
@@ -187,4 +188,5 @@ class BrandsController extends Controller
         }
         return response()->json($selectList);
     }
+
 }

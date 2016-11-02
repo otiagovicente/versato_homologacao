@@ -12,7 +12,7 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        //$orders = Order::all();
+        $orders = Order::all();
         return view('orders.index', compact('orders'));
     }
 
@@ -37,17 +37,8 @@ class OrdersController extends Controller
         $order = new Order;
         $order->fill($request->all());
         $order->save();
-
         $order->products()->sync($request->products);
-
-        /*foreach ($request->products as $product){
-            $orderProduct = new OrderProduct();
-            $orderProduct->order_id = $order->id;
-            $orderProduct->fill($product);
-            $orderProduct->save();
-        }*/
-
-        return response()->json(Order::with('products')->find($order->id));
+        return response()->json($order);
     }
 
     /**
