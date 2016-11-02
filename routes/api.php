@@ -79,5 +79,9 @@ Route::get('/macroregions/regions', 'MacroregionsController@api_getRegions');
 
 
 Route::get('/customers/{customer}/aggregates', 'CustomersController@api_aggregates');
+Route::get('/customers/{customer}/shops', 'CustomersController@api_getShops');
+Route::get('/customers/{customer}/deliverycenters', 'CustomersController@api_getDeliveryCenters');
+Route::get('/deliverycenters/{deliverycenter}', 'DeliverycentersController@api_show');
+Route::get('/shops/{shop}', 'ShopsController@api_show');
 
 
