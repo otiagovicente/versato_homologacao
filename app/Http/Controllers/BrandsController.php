@@ -184,4 +184,6 @@ class BrandsController extends Controller
         }
         return response()->json($selectList);
     }
+
+
 }

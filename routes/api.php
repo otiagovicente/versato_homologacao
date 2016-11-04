@@ -17,6 +17,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+
+
 Route::get('/brands/selectlist', 'BrandsController@api_selectList');
 Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
 
@@ -37,7 +39,12 @@ Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_se
 Route::get('/customers', 'CustomersController@api_index');
 Route::get('/customers/selectlist', 'CustomersController@api_selectList');
 Route::get('/customers/{customer}', 'CustomersController@api_show');
-Route::get('/customers/{customer}/shops', 'CustomersController@api_listShops');
+Route::get('/customers/{customer}/shops', 'CustomersController@api_getShops');
+Route::get('/customers/{customer}/deliverycenters', 'CustomersController@api_getDeliveryCenters');
+
+Route::get('/shops/{shop}', 'ShopsController@api_show');
+Route::get('/deliverycenters/{deliverycenter}', 'DeliverycentersController@api_show');
+
 
 
 Route::get('/representatives/{representative}','RepresentativesController@api_show');
