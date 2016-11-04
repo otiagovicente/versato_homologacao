@@ -198,18 +198,6 @@ class ProductsController extends Controller
                     ->where('brand_id', $brand->id)
                     ->get();
 
-        //foreach ($products as $product){
-
-            /*foreach($product->grids_and_sizes as $grid){
-                $selectItem['value'] = $grid->id;
-                $selectItem['label'] = $grid->description;
-                $product->grids_select[] = $selectItem;
-                $selectList[] = $selectItem;
-            }
-            */
-            //$lstProducts[] = $product;
-        //}
-
         return $products;
     }
     public function api_listPaginate(Brand $brand){
@@ -259,6 +247,7 @@ class ProductsController extends Controller
     }
 
     public function api_sync($dtSincronizacao){
+        $date = date_create($dtSincronizacao);
         $products = Product::
                     with('brand')
                     ->with('line')
@@ -267,7 +256,7 @@ class ProductsController extends Controller
                     ->with('color')
                     ->with('gridsAndSizes')
                     ->with('tags')
-                    ->whereDate('updated_at', '>',$dtSincronizacao)
+                    ->where('updated_at', '>=',date_format($date, 'Y-m-d H:i:s'))
                     ->get();
 
 
