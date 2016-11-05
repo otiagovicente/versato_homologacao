@@ -46,4 +46,5 @@
         <script src="/dashboard/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js" type="text/javascript"></script>
         <script src="/dashboard/pages/scripts/form-wizard.js" type="text/javascript"></script>
 
+
         @yield('scripts')

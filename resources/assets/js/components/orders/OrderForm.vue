@@ -168,7 +168,7 @@
                                                             <td>{{op.representative_discount}}</td>
                                                             <td>{{op.total | currency}}</td>
                                                             <td>
-                                                                <button 
+                                                                <button
                                                                     class="btn grey"
                                                                     @click="deleteProduct($index)"
                                                                 >
@@ -227,7 +227,7 @@
                                                         <td style="text-align:center">{{op.strGrid}}</td>
                                                         <td style="text-align:center">{{op.client_discount}}%</td>
                                                         <td style="text-align:center">{{op.representative_discount}}%</td>
-                                                        <td>${{op.total | currency}}</td>
+                                                        <td>{{op.total | currency}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -293,6 +293,7 @@
                                 <th>Desc. Cliente</th>
                                 <th>Desc. Representante</th>
                                 <th>Grid</th>
+                                <th>Qtd.</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -331,6 +332,14 @@
 
                                 </td>
                                 <td>
+                                    <input
+                                            id="code-input"
+                                            class="form-control input-sm"
+                                            type="number"
+                                            v-model="p.qtd"
+                                    />
+                                </td>
+                                <td>
                                     <a
                                         class="btn blue btn-outline sbold" 
                                         data-toggle="modal"
@@ -351,6 +360,9 @@
         </div>
     </div>
     <!--End - Modal de Produtos -->
+    <pre>
+        {{order | json}}
+    </pre>
 </template>
 
 <script>
@@ -431,6 +443,7 @@ export default{
         addToProductList: function(product){
             if(!_this.sarchByIdAndGrid(product)){
                 var finalPrice = _this.calcFinalPrice(product);
+
                 _this.order.products.push({
                     product_id:product.id,
                     code:product.code,
@@ -447,6 +460,7 @@ export default{
                     discount:finalPrice.totalDiscount,
                     grid_id:product.grid_id,
                     strGrid: '',
+                    qtd:product.qtd,
                 });
                 return _this.order.products[_this.order.products.length - 1];
             }else{
@@ -468,14 +482,15 @@ export default{
             var finalDiscount           = 0;
             var totalGeneralDiscount    = 0;
             var totalIndividualDiscount = 0;
+            var qtd = product.qtd ? product.qtd : 1;
 
             totalGeneralDiscount    = _this.calcGeneralDiscount();
             totalIndividualDiscount = _this.calcIndidualDiscount(product);
             
             finalDiscount = totalIndividualDiscount? totalIndividualDiscount : totalGeneralDiscount;
-            
+
             finalPrice.totalDiscount = ((parseFloat(finalDiscount)/100) * parseFloat(product.price));
-            finalPrice.finalPrice = (parseFloat(product.price) - parseFloat(finalPrice.totalDiscount));
+            finalPrice.finalPrice = (parseFloat(product.price) - parseFloat(finalPrice.totalDiscount)) * qtd;
             
             return finalPrice;
         },
