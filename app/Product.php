@@ -16,13 +16,12 @@ class Product extends Model
     use SoftDeletes;
     use Searchable;
 
-    protected $fillable = ['code', 'code_beirario', 'brand_id', 'line_id', 'reference_id',
+    protected $fillable = ['code', 'code_beirario', 'brand_id', 'line_id',
         'material_id', 'color_id', 'photo', 'cost', 'price', 'published', 'launch'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'launch'];
     protected $casts = [
         'published' => 'boolean',
         'line_id' => 'integer',
-        'reference_id' => 'integer',
         'material_id' => 'integer',
         'color_id' => 'integer',
 
@@ -34,9 +33,6 @@ class Product extends Model
     }
     public function line(){
     	return $this->belongsTo('App\Line');
-    }
-    public function reference(){
-    	return $this->belongsTo('App\Reference');
     }
     public function material(){
     	return $this->belongsTo('App\Material');
