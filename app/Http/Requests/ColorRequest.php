@@ -44,7 +44,7 @@ class ColorRequest extends Request
             
             default:
                 $rules = [
-                    'code' => 'required|unique:colors,code,NULL,brand_id,'.$this->brand_id.'|integer',
+                    'code' => 'required|unique:colors,code,NULL,NULL,brand_id,'.$this->brand_id.'|integer',
                     'description' => 'required', 
                     'color' => 'required', 
                 ];
