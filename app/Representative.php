@@ -22,4 +22,7 @@ class Representative extends Model
     public function brands(){
         return $this->belongsToMany('App\Brand')->with('comission');
     }
+    public function orders(){
+        return $this->belongsToMany(Order::class);
+    }
 }
