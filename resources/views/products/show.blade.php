@@ -43,7 +43,7 @@
 
 
                                         </div>
-                                        
+
                                         <div class="form-group form-line-input " id="material-input">
                                             <small class="font-blue">Material</small><br>
                                             <span>{{$product->material->description}}</span>

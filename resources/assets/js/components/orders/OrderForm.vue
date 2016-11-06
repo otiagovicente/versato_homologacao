@@ -415,8 +415,15 @@ export default{
     methods:{
         loadOrder: function(){
             _this.order.id = _this.porder.id;
-
-
+            _this.order.comment = _this.porder.comment;
+            _this.order.representative_comision= _this.porder.representative_comision;
+            _this.order.representative_discount=0;
+            client_discount=0;
+            status_id=1;
+            customer_id=[];
+            representative_id=[];
+            products=[];
+            delivery_id=[];
         },
         getOrderProducts: function(id){
             this.$http.get('/api/orders/getProductsFromOrder/'+_this.porder.id).then(response => {

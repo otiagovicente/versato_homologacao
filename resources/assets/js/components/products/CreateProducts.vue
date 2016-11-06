@@ -109,10 +109,6 @@
                                 <input id="line-input" class="form-control input-sm" type="text" />
                             </div>
 
-                            <small>Modelo</small>
-                            <div class="form-group form-line-input" id="reference_id">
-                                <input id="reference-input"class="form-control input-sm" type="text"/>
-                            </div>
 
                             <small>Material</small>
                             <div class="form-group form-line-input" id="material_id">
@@ -222,8 +218,6 @@
                     code_beirario: '',
                     line_id: null,
                     line_code: '',
-                    reference_id: null,
-                    reference_code: '',
                     material_id: null,
                     material_code: '',
                     color_id: null,
@@ -240,7 +234,6 @@
 
                 client: '',
                 linesIndex: '',
-                referencesIndex: '',
                 materialsIndex: '',
                 colorsIndex: '',
                 tags_select: new Array(),
@@ -346,7 +339,6 @@
                 //initializes algolia
                 _this.client = window.algoliasearch(Scout.app_id, Scout.search_key);
                 _this.linesIndex = _this.client.initIndex(Scout.prefix+'lines');
-                _this.referencesIndex = _this.client.initIndex(Scout.prefix+'references');
                 _this.materialsIndex = _this.client.initIndex(Scout.prefix+'materials');
                 _this.colorsIndex = _this.client.initIndex(Scout.prefix+'colors');
             },
@@ -372,25 +364,7 @@
                     $('#line_id').removeClass('has-error');
                 });
 
-                autocomplete('#reference-input', { hint: false }, [
-                    {
-                        source: autocomplete.sources.hits(_this.referencesIndex, {
-                            hitsPerPage: 5,
-                            filters: 'brand_id='+Versato.brand_id
-                        }),
-                        displayKey: 'description',
-                        templates: {
-                            suggestion: function(suggestion) {
-                                return '<div><strong>' + suggestion._highlightResult.description.value + '</strong> <small>'
-                                        + suggestion.code + '</small></div>';
-                            }
-                        }
-                    }
-                ]).on('autocomplete:selected', function(event, suggestion, dataset) {
-                    _this.product.reference_id = suggestion.id;
-                    _this.product.reference_code = suggestion.code;
-                    $('#reference_id').removeClass('has-error');
-                });
+
 
                 autocomplete('#material-input', { hint: false }, [
                     {
@@ -456,11 +430,7 @@
                     valid = false;
                 }
 
-                //if(_this.product.reference_id == null){
-                //    $('#reference_id').addClass('has-error');
-                //    toastr.error('Necesita el numero de modelo');
-                //    valid = false;
-                //}
+
 
                 if(_this.product.material_id == null){
                     $('#material_id').addClass('has-error');
