@@ -9,7 +9,7 @@
                         <div class="portlet light" >
                             <div class="portlet-title">
                                 <div class="caption font-blue">
-                                    <i class="fa fa-map-pin font-blue"></i>Users
+                                    <i class="fa fa-users font-blue"></i>Users
                                 </div>
                             </div>
                             <div class="portlet-body form">
@@ -23,19 +23,24 @@
                                 </div>
                                 <div style="height:400px; overflow-y: scroll;">
                                     <div v-for="user in users | filterBy search" class="row">
-                                        <div class="col-md-12 user-box" @click="chooseUser(user)">
-                                            <div class="col-md-4">
-                                                <img v-if="user.photo" class="user-photo" v-bind:src="user.photo" />
-                                                <img v-else class="user-photo" v-bind:src="/images/default-placeholder.jpg" />
+                                        <div class="col-md-12" v-if="!user.representative">
+
+                                            <div class="user-box"  @click="chooseUser(user)">
+
+
+                                                <div class="col-md-8" style="padding-top:5px;">
+                                                    <h3 class="caption font-blue"> {{user.name+' '+user.lastname}} </h3>
+                                                    <br>
+                                                    <span class="caption font-blue"> {{user.email}} </span>
+
+                                                </div>
+                                                <div class="col-md-4 pull-right">
+                                                    <img v-if="user.photo" class="user-photo" v-bind:src="user.photo" />
+                                                    <img v-else class="user-photo" v-bind:src="/images/default-placeholder.jpg" />
+                                                </div>
+
                                             </div>
-                                            <div class="col-md-8" style="padding-top:5px;">
-                                                <h3 class="caption font-blue"> {{user.name+' '+user.lastname}} </h3>
-                                                <br>
-                                                <span class="caption font-blue"> {{user.email}} </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <hr>
+
                                         </div>
                                     </div>
                                 </div>
@@ -53,9 +58,20 @@
 <style>
     .user-photo{
         height:100px;
+        right: 10px;
+        top: 15px;
     }
     .user-box{
+        height: 125px;
+        position: relative;
         cursor:pointer;
+        border-radius: 15px;
+        border: 1px solid #3598DC;
+        margin-bottom: 10px;
+       /* margin: 10px 10px 5px 10px;*/
+    }
+    .user-representative{
+
     }
 </style>
 <script type="text/babel">

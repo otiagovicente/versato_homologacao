@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="portlet light">
 
                 <div class="portlet-title">
@@ -11,31 +11,31 @@
                 </div>
                 <div class="portlet-body form">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-7">
 
                                 <div class="col-md-12" style="cursor:pointer;" @click="openSelectUser()">
                                     <small>Nombre</small>
 
                                     <h4 v-if="user.id"  class="font-blue" style="cursor:pointer;">{{user.name+' '+user.lastname}}</h4>
-                                    <h4 v-else class="font-red">Eligir Usuário</h4>
+                                    <h4 v-else class="font-red" style="cursor:pointer;">Eligir Usuário</h4>
                                 </div>
                                 <div class="col-md-12" @click="openSelectRegion()" style="cursor:pointer;">
                                     <small>Región</small>
 
                                     <h4 class="font-blue" >
-                                        <div v-if="regions">
+                                        <div v-if="regions" >
                                             <span v-for=" region in regions">
                                             {{region.description}},
                                         </span>
                                         </div>
                                         <div v-else>
-                                            <span class="font-red">Elige la región</span>
+                                            <span class="font-red" >Elige la región</span>
                                         </div>
                                     </h4>
 
 
                                 </div>
-                                <div class="col-md-12" @click="openSelectBrands()">
+                                <div class="col-md-12" @click="openSelectBrands()" style="cursor:pointer;">
                                     <small>Marcas</small>
                                     <div v-if="brands">
                                         <div class="row font-blue" v-for="brand in brands">
@@ -60,9 +60,9 @@
 
 
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-5">
 
-                                <img v-bind:src="user.photo" class="user-photo" @click="openSelectUser()"/>
+                                <img v-bind:src="user.photo" class="user-photo pull-right" @click="openSelectUser()"/>
 
                             </div>
 
@@ -73,7 +73,7 @@
                             <div class="col-md-12">
                                 <div class="pull-right">
                                     <button class="btn grey">Cancelar</button>
-                                    <button class="btn blue" @click="submitData()">Guardar</button>
+                                    <button class="btn blue" @click="submit()">Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -117,6 +117,7 @@
             }
 
         },
+        props:['prepresentativeid'],
         computed: {
             'representative.user_id': function () {
                 _CreateRepresentative.representative.user_id = _CreateRepresentative.user.id;
@@ -131,6 +132,7 @@
             'representative.brands': function () {
                 _CreateRepresentative.representative.brands = [];
                 _.forEach(_CreateRepresentative.brands, function (brand) {
+                    if(brand.pivot.comission){ brand.comission = brand.pivot.comission}
                     var brandArray = { brand_id : brand.id, comission : brand.comission };
                     _CreateRepresentative.representative.brands.push(brandArray);
                 });
@@ -138,10 +140,89 @@
         },
         ready(){
             window._CreateRepresentative = this;
+            if(_CreateRepresentative.prepresentativeid){
+                _CreateRepresentative.loadData();
+            }
+
+
         },
         methods: {
 
-            submitData: function () {
+
+            /*
+             * Funções de Carregamento
+             */
+
+            loadData: function () {
+                _CreateRepresentative.loadRepresentative();
+                _CreateRepresentative.loadUser();
+                _CreateRepresentative.getBrands();
+                _CreateRepresentative.getRegions();
+            },
+
+            loadRepresentative: function () {
+
+                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid)
+                        .then(response => {
+                            _CreateRepresentative.representative = response.json();
+                        })
+                        .catch(response => {
+                            console.log(response.json());
+                            toastr.error('No Fue possible cargar el representante');
+                        });
+
+            },
+
+            loadUser: function(){
+
+                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid+'/user')
+                        .then(response => {
+                            _CreateRepresentative.user = response.json();
+                        })
+                        .catch(response => {
+                            console.log(response.json());
+                            toastr.error('No fue possible cargar el user');
+                        });
+
+            },
+            getBrands: function () {
+                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid+'/brands')
+                        .then(response => {
+                            __
+                            _CreateRepresentative.brands = response.json();
+                        })
+                        .catch(response => {
+                            console.log(response.json());
+                            toastr.error('No fue possible cargar las marcas');
+                        });
+            },
+
+            getRegions: function () {
+
+                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid+'/regions')
+                        .then(response => {
+                            _CreateRepresentative.regions = response.json();
+                        })
+                        .catch(response => {
+                            console.log(response.json());
+                            toastr.error('No fue possible cargar las regiones');
+                        });
+            },
+
+            /*
+             * Funções de envio
+             */
+            submit: function () {
+
+                if(!_CreateRepresentative.representative.id){
+                    _CreateRepresentative.store();
+                }else{
+                    _CreateRepresentative.update();
+                }
+
+            },
+            store: function(){
+
                 this.$http.post('/representatives', _CreateRepresentative.representative)
                         .then(response => {
                             console.log();
@@ -154,8 +235,26 @@
                             });
                         });
 
+            },
+            update: function () {
+
+                this.$http.patch('/representatives/'+_CreateRepresentative.prepresentativeid , _CreateRepresentative.representative)
+                        .then(response => {
+                            console.log();
+                            toastr.success('Representante guardado con exito');
+                        })
+                        .catch(response => {
+                            $.each(response.data, function (key, value) {
+                                toastr.error(value);
+                                $('#' + key).addClass('has-error');
+                            });
+                        });
 
             },
+
+            /*
+             * Funções de manejo de Componentes
+             */
             openSelectUser: function () {
                 _SelectUser.openWindow();
             },

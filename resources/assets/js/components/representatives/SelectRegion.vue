@@ -42,9 +42,9 @@
                                 <div style="height:400px; overflow-y: scroll;">
                                     <div v-for="region in regions | filterBy search" class="row">
                                         <div class="col-md-12 ">
-                                            <div class="user-box col-md-12" style="padding-top:5px;" v-bind:class="{ 'selected': region.selected }" @click="chooseRegion(region)">
-                                                    <h3 > {{region.code}} </h3>
-                                                    <span> {{region.description}} </span>
+                                            <div class="region-box col-md-12" style="padding-top:5px;" v-bind:class="{ 'selected': region.selected }" @click="chooseRegion(region)">
+                                                    <h3 > <strong>{{region.description}} </strong></h3>
+                                                    <span> {{region.code}} </span>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -64,12 +64,16 @@
     </div>
 </template>
 <style>
-    .user-photo{
-        height:100px;
-    }
-    .user-box{
+
+    .region-box{
+
+        height: 125px;
+        position: relative;
         cursor:pointer;
-        padding: 5px;
+        border-radius: 15px;
+        border: 1px solid #3598DC;
+        margin-bottom: 10px;
+        padding: 15px;
 
     }
     .selected{

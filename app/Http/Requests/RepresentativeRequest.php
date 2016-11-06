@@ -57,6 +57,7 @@ class RepresentativeRequest extends FormRequest
             'code.required'    => 'Necesitas poner un código.',
             'code.unique'    => 'Codigo de representante ya existe.',
             'user_id.required' => 'Necesitas tener un usuario',
+            'user_id.integer' => 'Necesita ser un numero entero',
             'user_id.unique' => 'Ya hay representante agriegado al usuario'
         ];
         return $messages;

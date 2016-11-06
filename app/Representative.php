@@ -20,7 +20,7 @@ class Representative extends Model
     }
 
     public function brands(){
-        return $this->belongsToMany('App\Brand')->with('comission')->withTimestamps();
+        return $this->belongsToMany('App\Brand')->withPivot('comission')->withTimestamps();
     }
 
 }

@@ -267,7 +267,7 @@
                 if (_CreateDeliveryCenter.deliverycenter.address != '') {
                     $('#address').removeClass('has-error');
 
-                    this.getGeocode(_CreateDeliveryCenter.deliverycenter.address);
+                    this.getGeocode(_CreateDeliveryCenter.deliverycenter.address+', '+_CreateDeliveryCenter.deliverycenter.city);
                 } else {
                     toastr.error('informa la ubicación');
                     $('#address').addClass('has-error');

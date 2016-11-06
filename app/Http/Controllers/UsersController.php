@@ -116,7 +116,7 @@ class UsersController extends Controller
 
 
     public function api_index(){
-        $users = User::all();
+        $users = User::with('representative')->get();
         return $users;
     }
 
@@ -138,5 +138,6 @@ class UsersController extends Controller
         return response()->json($selectList);
 
     }
+
 
 }

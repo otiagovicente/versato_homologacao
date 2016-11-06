@@ -81,6 +81,7 @@ class RepresentativesController extends Controller
     {
         $representative->fill($request->all());
         $representative->save();
+        $representative->regions()->sync($request->regions);
         $representative->brands()->sync($request->brands);
         return $representative;
     }
@@ -99,23 +100,31 @@ class RepresentativesController extends Controller
 
     public function api_index(){
 
-        $representatives = Representative::with('user', 'region')->get();
+        $representatives = Representative::with('user', 'regions')->get();
         return $representatives;
     }
 
-    public function api_show($id){
+    public function api_show(Representative $representative){
 
-        $representative = Representative::
-        where('id', $id)
-            ->with('user', 'region', 'brands')
-            ->first();
+        return response()->json($representative);
 
-        //carrega os atributos extras
-        $representative->user_id = $representative->user->id;
-        $representative->region_id = $representative->region->id;
-        $representative->brands_list = $representative->brands->pluck('id');
-        return $representative;
     }
+
+    public function api_brands(Representative $representative){
+
+        return response()->json($representative->brands()->get());
+
+    }
+
+    public function api_regions(Representative $representative){
+        return response()->json($representative->regions()->get());
+    }
+
+    public function api_user(Representative $representative){
+        return response()->json($representative->user()->first());
+    }
+
+
 
     public function api_selectList(){
         $listAll = Representative::all();

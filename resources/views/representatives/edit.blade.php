@@ -14,7 +14,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <edit-representative :representative_id="{{$representative->id}}"></edit-representative>
+            <create-representative :prepresentativeid="{{$representative->id}}"></create-representative>
         </div>
     </div>
 
