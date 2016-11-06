@@ -73,9 +73,11 @@ class OrdersController extends Controller
      * @param  int  $id
      * @ret/urn \Illuminate\Http\Response
      */
-    public function update(OrderRequest $request, Order $order)
+    public function update(Request $request, Order $order)
     {
-        $order->update($request->all());
+        $order->fill($request->all());
+        $order->save();
+        $order->products()->sync($request->products);
         return response()->json($order);
     }
 
@@ -110,5 +112,9 @@ class OrdersController extends Controller
                     ->get();
 
         return response()->json($orders);
-    } 
+    }
+    public function api_getProducts($id){
+        $order = Order::with('products')->where('id', $id)->get();//where('id', $id)->with('products');
+        return response()->json($order);
+    }
 }

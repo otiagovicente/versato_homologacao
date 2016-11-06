@@ -412,11 +412,20 @@ export default{
         _this.getCustomers();
         _this.getRepresentatives();
         _this.getProducts(Versato.brand_id);
-        
-        //if(this.porder) this.loadOrder();
+
+        if(_this.porder) _this.loadOrder();
     },
     methods:{
+        loadOrder: function(){
 
+        },
+        getOrderProducts: function(id){
+            this.$http.get('/api/orders/getProductsFromOrder/'+_this.porder.id).then(response => {
+                var obj = response.json();
+            //_this.order = obj[0];
+            console.log(obj);
+        });
+        },
         deleteProduct: function(index){
             _this.orderProductsDelete.push(this.order.products[index]);
             _this.order.products.splice(index, 1);

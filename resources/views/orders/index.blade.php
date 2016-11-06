@@ -37,12 +37,13 @@
                         <td>{{count($order->products)}}</td>
                         <td>${{$order->total}}</td>
                         <td>
-                            <button
-                                class="btn grey"
-                                @click="deleteProduct($index)"
+                            <a class="btn blue btn-outline sbold"
+                               data-toggle="modal"
+                               href="/orders/{{$order->id}}/edit"
                             >
-                            Visualizar
-                            </button>
+                                Editar
+                            </a>
+
                         </td>
                     </tr>
                 @endforeach

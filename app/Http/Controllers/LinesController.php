@@ -115,13 +115,9 @@ class LinesController extends Controller
         return response()->json($results);
     }
    public function api_list(){
-
         $products = Line::
                     groupBy('brand_id')
                     ->get();
-
         return $products;
-
-
     }
 }

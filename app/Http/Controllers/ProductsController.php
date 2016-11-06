@@ -257,6 +257,7 @@ class ProductsController extends Controller
                     ->with('gridsAndSizes')
                     ->with('tags')
                     ->where('updated_at', '>=',date_format($date, 'Y-m-d H:i:s'))
+                    ->where('published', '1')
                     ->get();
 
 
