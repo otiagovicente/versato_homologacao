@@ -204,7 +204,7 @@ require('./bootstrap');
 
 Vue.component(
     'regions-form',
-    require('./components/regions/RegionsForm.vue')
+    require('./components/regions/regionsForm.vue')
 );
 Vue.component(
     'macroregions-form',
@@ -217,7 +217,7 @@ Vue.component(
 
 Vue.component(
     'shop-form',
-    require('./components/shops/ShopForm.vue')
+    require('./components/shops/shopForm.vue')
 );
 
 Vue.component(
