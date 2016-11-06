@@ -360,9 +360,6 @@
         </div>
     </div>
     <!--End - Modal de Produtos -->
-    <pre>
-        {{order | json}}
-    </pre>
 </template>
 
 <script>
