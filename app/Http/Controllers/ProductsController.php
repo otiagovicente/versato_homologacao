@@ -121,6 +121,7 @@ class ProductsController extends Controller
     {
         $grids  = Grid::where('brand_id', session()->get('brand')->id)->get();
         $tags = Tag::where('brand_id', session()->get('brand')->id)->get();
+
         return view('products.edit',[
             'grids' =>$grids,
             'tags' => $tags,
@@ -233,12 +234,12 @@ class ProductsController extends Controller
 
         $product = Product::
             where('id', $id)
-            ->with('brand', 'line','reference','material','color', 'grids', 'tags')
+            ->with('brand', 'line','material','color', 'grids', 'tags')
             ->first();
 
         //carrega os atributos extras
         $product->line_code = $product->line->code;
-        $product->reference_code = $product->reference->code;
+
         $product->material_code = $product->material->code;
         $product->color_code = $product->color->code;
         $product->grids_list = $product->grids->pluck('id');
