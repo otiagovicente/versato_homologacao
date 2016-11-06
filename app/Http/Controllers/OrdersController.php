@@ -12,7 +12,10 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        //$orders = Order::all();
+        $orders = Order::with('products')
+            ->with('representative')
+            ->with('customer')
+            ->paginate(20);
         return view('orders.index', compact('orders'));
     }
 
@@ -37,16 +40,7 @@ class OrdersController extends Controller
         $order = new Order;
         $order->fill($request->all());
         $order->save();
-        //$order->products()->sync($request->orderProducts);
-
-        foreach ($request->orderProducts as $product){
-            var_dump($product);
-            $orderProduct = new OrderProduct();
-            $orderProduct->order_id = $order->id;
-            $orderProduct->fill($product);
-            $orderProduct->save();
-        }
-
+        $order->products()->sync($request->products);
         return response()->json($order);
     }
 
@@ -79,9 +73,11 @@ class OrdersController extends Controller
      * @param  int  $id
      * @ret/urn \Illuminate\Http\Response
      */
-    public function update(OrderRequest $request, Order $order)
+    public function update(Request $request, Order $order)
     {
-        $order->update($request->all());
+        $order->fill($request->all());
+        $order->save();
+        $order->products()->sync($request->products);
         return response()->json($order);
     }
 
@@ -116,5 +112,9 @@ class OrdersController extends Controller
                     ->get();
 
         return response()->json($orders);
-    } 
+    }
+    public function api_getProducts($id){
+        $order = Order::with('products')->where('id', $id)->get();//where('id', $id)->with('products');
+        return response()->json($order);
+    }
 }

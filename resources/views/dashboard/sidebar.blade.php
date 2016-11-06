@@ -48,10 +48,9 @@
                                             <span class="title">Dashboard de Productos</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </li>
-                             <li class="nav-item ">
+                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-trademark"></i>
                                     <span class="title">Marcas</span>
@@ -70,6 +69,24 @@
                                         <a href="{{ url('/brands/create') }}" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
                                             <span class="title">Criar Marca</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-trademark"></i>
+                                    <span class="title">Gerenciais</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="{{ url('/reports') }}" class="nav-link nav-toggle">
+                                            <i class="fa fa-bars"></i>
+                                            <span class="title">Pedidos</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>

@@ -18,7 +18,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 
-
 //Rotas dedicadas às marcas
 
 Route::get('/brands', 'BrandsController@api_index');
@@ -116,8 +115,6 @@ Route::get('/users/selectlist', 'UsersController@api_selectList');
 //Rotas dedicadas a Pedidos
 
 Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
-Route::resource('orders','OrdersController',['parameters' => 'singular']);
-
 
 
 

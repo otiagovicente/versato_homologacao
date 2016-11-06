@@ -150,5 +150,15 @@ class CustomersController extends Controller
     public function api_getDeliveryCenters(Customer $customer){
         return $customer->deliverycenters()->get();
     }
+    public function api_aggregates(Customer $customer){
+        $aggregates = Customer::where('id', $customer->id)->with('deliverycenters')->with('shops')->get();
+        return response()->json($aggregates);
+    }
+    public function api_sync($dtSincronizacao){
+        $date = date_create($dtSincronizacao);
+        $customers = Customer::where('updated_at', '>=',date_format($date, 'Y-m-d H:i:s'))
+            ->get();
 
+        return response()->json($customers);
+    }
 }

@@ -151,22 +151,24 @@
                                                             <th>Producto</th>
                                                             <th>Costo</th>
                                                             <th>Precio</th>
-                                                            <th>Descuento Cliente</th>
-                                                            <th>Descuento Representante</th>
+                                                            <th>Grid</th>
+                                                            <th>Desc. Cliente</th>
+                                                            <th>Desc. Representante</th>
                                                             <th>Total</th>
                                                             <th>Acciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="op in order.orderProducts">
+                                                        <tr v-for="op in order.products">
                                                             <td>{{op.strLine}} {{op.strMaterial}} {{op.strColor}}</td>
                                                             <td>{{op.cost | currency}}</td>
                                                             <td>{{op.price | currency}}</td>
+                                                            <td>{{op.strGrid}}</td>
                                                             <td>{{op.client_discount}}</td>
                                                             <td>{{op.representative_discount}}</td>
                                                             <td>{{op.total | currency}}</td>
                                                             <td>
-                                                                <button 
+                                                                <button
                                                                     class="btn grey"
                                                                     @click="deleteProduct($index)"
                                                                 >
@@ -187,22 +189,23 @@
                                             <table class="table table-striped table-bordered table-hover table-checkable order-column">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="6" style="text-align:center"><b>Geral</b></th>
+                                                        <th colspan="7" style="text-align:center"><b>Geral</b></th>
                                                     </tr>
                                                     
                                                     <tr>
                                                         <th colspan="3">Descuento Cliente: {{order.client_discount}}%</th>
-                                                        <th colspan="3">Descuento Representante: {{order.representative_discount}}%</th>
+                                                        <th colspan="4">Descuento Representante: {{order.representative_discount}}%</th>
                                                     </tr>
                                                     
                                                     <tr>
-                                                        <th colspan="6" style="text-align:center"><b>Productos</b></th>
+                                                        <th colspan="7" style="text-align:center"><b>Productos</b></th>
                                                     </tr>
                                                     
                                                     <tr>
                                                         <th style="width: 400px">Producto</th>
                                                         <th>Costo</th>
                                                         <th>Precio</th>
+                                                        <th>Grid</th>
                                                         <th>Descuento Cliente</th>
                                                         <th>Descuento Representante</th>
                                                         <th style="width: 100px"><i class="fa fa-shopping-cart"></i> Total</th>
@@ -213,17 +216,18 @@
                                                         <th style="text-align:left">Totales</th>
                                                         <th style="text-align:center">{{order.cost | currency}}</th>
                                                         <th style="text-align:center">{{order.price | currency}}</th>
-                                                        <th colspan="3" style="text-align:center">Total:&nbsp;&nbsp; {{order.total | currency}}</th>
+                                                        <th colspan="4" style="text-align:center">Total:&nbsp;&nbsp; {{order.total | currency}}</th>
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                    <tr v-for="op in order.orderProducts">
+                                                    <tr v-for="op in order.products">
                                                         <td>{{op.strLine}} {{op.strMaterial}} {{op.strColor}}</td>
                                                         <td style="text-align:right">{{op.cost | currency}}</td>
                                                         <td style="text-align:right">{{op.price | currency}}</td>
+                                                        <td style="text-align:center">{{op.strGrid}}</td>
                                                         <td style="text-align:center">{{op.client_discount}}%</td>
                                                         <td style="text-align:center">{{op.representative_discount}}%</td>
-                                                        <td>${{op.total | currency}}</td>
+                                                        <td>{{op.total | currency}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -289,6 +293,7 @@
                                 <th>Desc. Cliente</th>
                                 <th>Desc. Representante</th>
                                 <th>Grid</th>
+                                <th>Qtd.</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -319,12 +324,20 @@
                                 </td>
                                 <td>
                                     <v-select
-                                        v-bind:options.sync="p.grids_select" :value.sync="p.grid_id"
+                                        v-bind:options.sync="p.grids_select" :value.sync="p.grid_id" :selected.sync="p.strGrid"
                                         placeholder="grid" class="form-control"
                                         id="customer-input" name="customer[]"
                                         search justified required close-on-select>
                                     </v-select>
 
+                                </td>
+                                <td>
+                                    <input
+                                            id="code-input"
+                                            class="form-control input-sm"
+                                            type="number"
+                                            v-model="p.qtd"
+                                    />
                                 </td>
                                 <td>
                                     <a
@@ -347,6 +360,9 @@
         </div>
     </div>
     <!--End - Modal de Produtos -->
+    <pre>
+        {{order | json}}
+    </pre>
 </template>
 
 <script>
@@ -384,7 +400,7 @@ export default{
                 status_id:1,
                 customer_id:[],
                 representative_id:[],
-                orderProducts:[],
+                products:[],
                 delivery_id:[],
                 comment: '',
             },
@@ -396,14 +412,23 @@ export default{
         _this.getCustomers();
         _this.getRepresentatives();
         _this.getProducts(Versato.brand_id);
-        
-        //if(this.porder) this.loadOrder();
+
+        if(_this.porder) _this.loadOrder();
     },
     methods:{
+        loadOrder: function(){
 
+        },
+        getOrderProducts: function(id){
+            this.$http.get('/api/orders/getProductsFromOrder/'+_this.porder.id).then(response => {
+                var obj = response.json();
+            //_this.order = obj[0];
+            console.log(obj);
+        });
+        },
         deleteProduct: function(index){
-            _this.orderProductsDelete.push(this.order.orderProducts[index]);
-            _this.order.orderProducts.splice(index, 1);
+            _this.orderProductsDelete.push(this.order.products[index]);
+            _this.order.products.splice(index, 1);
         },
 
         updateOrderValues: function(){
@@ -412,22 +437,23 @@ export default{
             _this.order.total = 0;
             _this.order.overalldiscount = 0;
 
-            for (var i = 0; i < this.order.orderProducts.length; i++) {
-                var finalPrice = this.calcFinalPrice(_this.order.orderProducts[i]);
-                _this.order.orderProducts[i].total = finalPrice.finalPrice;
-                _this.order.orderProducts[i].discount = finalPrice.totalDiscount;
+            for (var i = 0; i < this.order.products.length; i++) {
+                var finalPrice = this.calcFinalPrice(_this.order.products[i]);
+                _this.order.products[i].total = finalPrice.finalPrice;
+                _this.order.products[i].discount = finalPrice.totalDiscount;
 
-                _this.order.cost            += parseFloat(_this.order.orderProducts[i].cost);
-                _this.order.price           += parseFloat(_this.order.orderProducts[i].price);
-                _this.order.total           += parseFloat(_this.order.orderProducts[i].total);
-                _this.order.overalldiscount += parseFloat(_this.order.orderProducts[i].discount);
+                _this.order.cost            += parseFloat(_this.order.products[i].cost);
+                _this.order.price           += parseFloat(_this.order.products[i].price);
+                _this.order.total           += parseFloat(_this.order.products[i].total);
+                _this.order.overalldiscount += parseFloat(_this.order.products[i].discount);
             }
         },
 
         addToProductList: function(product){
             if(!_this.sarchByIdAndGrid(product)){
                 var finalPrice = _this.calcFinalPrice(product);
-                _this.order.orderProducts.push({
+
+                _this.order.products.push({
                     product_id:product.id,
                     code:product.code,
                     strLine:product.line.description,
@@ -442,20 +468,19 @@ export default{
                     total: finalPrice.finalPrice,
                     discount:finalPrice.totalDiscount,
                     grid_id:product.grid_id,
+                    strGrid: '',
+                    qtd:product.qtd,
                 });
-                return _this.order.orderProducts[_this.order.orderProducts.length - 1];
+                return _this.order.products[_this.order.products.length - 1];
             }else{
                 toastr.warning('Atención', 'Producto ya se ha registrado para esta grid!');
             }
-
-
         },
         sarchByIdAndGrid: function(product){
-            for (var i=0; i < _this.order.orderProducts.length; ++i) {
-                var txt = _this.order.orderProducts[i].product_id + ' - ' +  _this.order.orderProducts[i].grid_id;
-                console.log(txt);
-                if (_this.order.orderProducts[i].product_id == product.id &&
-                        _this.order.orderProducts[i].grid_id == product.grid_id) {
+            for (var i=0; i < _this.order.products.length; ++i) {
+                var txt = _this.order.products[i].product_id + ' - ' +  _this.order.products[i].grid_id;
+                if (_this.order.products[i].product_id == product.id &&
+                        _this.order.products[i].grid_id == product.grid_id) {
                     return true;
                 }
             }
@@ -466,14 +491,15 @@ export default{
             var finalDiscount           = 0;
             var totalGeneralDiscount    = 0;
             var totalIndividualDiscount = 0;
+            var qtd = product.qtd ? product.qtd : 1;
 
             totalGeneralDiscount    = _this.calcGeneralDiscount();
             totalIndividualDiscount = _this.calcIndidualDiscount(product);
             
             finalDiscount = totalIndividualDiscount? totalIndividualDiscount : totalGeneralDiscount;
-            
+
             finalPrice.totalDiscount = ((parseFloat(finalDiscount)/100) * parseFloat(product.price));
-            finalPrice.finalPrice = (parseFloat(product.price) - parseFloat(finalPrice.totalDiscount));
+            finalPrice.finalPrice = (parseFloat(product.price) - parseFloat(finalPrice.totalDiscount)) * qtd;
             
             return finalPrice;
         },
@@ -513,22 +539,34 @@ export default{
         },
 
         submitData: function(){
-            if(_this.order.orderProducts.length > 0){
+            if(_this.validFields()){
                 if(!_this.order.id)
                     _this.insertData();
                 else
                     _this.updateData();
-            }else {
-                toastr.warning('Atencion!', 'Elije Productos para el Pedido!')
             }
 
         },
-        
+        validFields: function(){
+            if(!_this.order.customer_id){
+                toastr.warning('Atención', 'Elije el Cliente!');
+                return false;
+            }
+            if(!_this.order.representative_id){
+                toastr.warning('Atención', 'Elije el Representante!');
+                return false;
+            }
+            if(!_this.order.delivery_id){
+                toastr.warning('Atención', 'Elije el Cientro de Distribuición!');
+                return false;
+            }
+            if(_this.order.products.length == 0){
+                toastr.warning('Atencion!', 'Elije Productos para el Pedido!');
+                return false;
+            }
+            return true;
+        },
         insertData: function(){
-            Vue.http.interceptors.push((request, next) => {
-                request.headers['X-CSRF-TOKEN'] = Laravel.csrfToken;
-                next();
-            });
             this.$http.post('/orders', _this.order)
             .then((response) => {
               toastr.success('Sucesso!','Pedido creado con sucesso!');
@@ -555,7 +593,7 @@ export default{
     },
 
     watch: {
-        'order.orderProducts': function (val, oldVal) {
+        'order.products': function (val, oldVal) {
             _this.updateOrderValues();
         },
         'order.client_discount': function(val, oldVal){

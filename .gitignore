@@ -8,3 +8,4 @@ Homestead.yaml
 .env
 storage/oauth-private.key
 storage/oauth-public.key
+app/Representative.php
