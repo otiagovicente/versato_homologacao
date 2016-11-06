@@ -11,7 +11,6 @@ use App\Product;
 use App\Brand;
 use App\Grid;
 use App\Line;
-use App\Reference;
 use App\Material;
 use App\Color;
 use App\Tag;
@@ -36,7 +35,6 @@ class ProductsController extends Controller
         $products = Product::
             with('brand')
             ->with('line')
-            ->with('reference')
             ->with('material')
             ->with('color')
             ->with('grids')
@@ -190,7 +188,6 @@ class ProductsController extends Controller
         $products = Product::
                     with('brand')
                     ->with('line')
-                    ->with('reference')
                     ->with('material')
                     ->with('color')
                     ->with('gridsAndSizes')
@@ -205,7 +202,6 @@ class ProductsController extends Controller
         $products = Product::
             with('brand')
             ->with('line')
-            ->with('reference')
             ->with('material')
             ->with('color')
             ->with('grids')
@@ -219,7 +215,6 @@ class ProductsController extends Controller
 
         $product = Product::with('brand')
                     ->with('line')
-                    ->with('reference')
                     ->with('material')
                     ->with('color')
                     ->with('gridsAndSizes')
@@ -252,7 +247,6 @@ class ProductsController extends Controller
         $products = Product::
                     with('brand')
                     ->with('line')
-                    ->with('reference')
                     ->with('material')
                     ->with('color')
                     ->with('gridsAndSizes')
