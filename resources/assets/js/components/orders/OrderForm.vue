@@ -414,6 +414,8 @@ export default{
     },
     methods:{
         loadOrder: function(){
+            _this.order.id = _this.porder.id;
+
 
         },
         getOrderProducts: function(id){

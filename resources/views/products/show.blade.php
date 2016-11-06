@@ -15,7 +15,7 @@
                         <div class="portlet-title">
                             <div class="caption font-blue">
                                 <h3><i class="fa fa-tag font-blue"></i> Código:
-                                <span class="h4" id="line-code">{{ $product->line->code.' '.$product->reference->code.' '.$product->material->code.' '.$product->color->code }}</span>
+                                <span class="h4" id="line-code">{{ $product->line->code.' '.$product->material->code.' '.$product->color->code }}</span>
                                 </h3>
                             </div>
                         </div>
@@ -43,12 +43,7 @@
 
 
                                         </div>
-                                        <div class="form-group form-line-input " id="reference-input">
-
-                                            <small class="font-blue">Referência</small><br>
-                                            <span>{{$product->reference->description}}</span>
-
-                                        </div>
+                                        
                                         <div class="form-group form-line-input " id="material-input">
                                             <small class="font-blue">Material</small><br>
                                             <span>{{$product->material->description}}</span>
