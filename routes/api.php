@@ -115,7 +115,5 @@ Route::get('/users/selectlist', 'UsersController@api_selectList');
 //Rotas dedicadas a Pedidos
 
 Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
-
 Route::get('/orders/getProductsFromOrder/{id}', 'OrdersController@api_getProducts');
-
-
+Route::resource('orders','OrdersController');
