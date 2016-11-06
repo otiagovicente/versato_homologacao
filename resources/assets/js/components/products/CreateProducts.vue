@@ -456,11 +456,11 @@
                     valid = false;
                 }
 
-                if(_this.product.reference_id == null){
-                    $('#reference_id').addClass('has-error');
-                    toastr.error('Necesita el numero de modelo');
-                    valid = false;
-                }
+                //if(_this.product.reference_id == null){
+                //    $('#reference_id').addClass('has-error');
+                //    toastr.error('Necesita el numero de modelo');
+                //    valid = false;
+                //}
 
                 if(_this.product.material_id == null){
                     $('#material_id').addClass('has-error');
