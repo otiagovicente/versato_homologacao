@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\RequestsOrder;
-use App\OrderProduct;
 use App\Order;
 
 class OrdersController extends Controller
 {
     public function index()
     {
-        $orders = Order::all();//with('products')
-            //->with('representative')
-            //->with('customer')
-            //->paginate(20);
+        $orders = Order::with('products')
+            ->with('representative')
+            ->with('customer')
+            ->paginate(20);
         return view('orders.index', compact('orders'));
     }
 
