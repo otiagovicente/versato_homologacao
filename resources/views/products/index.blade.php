@@ -51,7 +51,7 @@
         .product-index-product-box{
 
             background-color: #FFFFFF;
-            border: 1px solid #eaeaea;
+            border: 3px solid #ebeef0;
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
