@@ -40,7 +40,7 @@ class ProductsController extends Controller
             ->with('grids')
             ->with('tags')
             ->where('brand_id', session()->get('brand')->id)
-            ->paginate(10);
+            ->paginate(50);
             //->get();
 
         //return $products;

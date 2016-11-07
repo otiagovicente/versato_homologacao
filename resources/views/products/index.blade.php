@@ -12,31 +12,27 @@
         <div class="row">
 
                 @foreach($products as $product)
-                    
-                    <div class="container-fluid product-list-row">
-                        <div class="col-md-2">
-                            <img class="product-list-photo" src="{{$product->photo}}" alt="{{$product->code}}">
-                        </div>
-                        <div class="col-md-offset-1 col-md-3">
-                            <h1>
-                                <small>Código:</small>
-                                {{$product->code}}
-                            </h1>
-                        </div>
-                        <div class="pull-right col-md-2">
-                            <br>
-                            <a href="/products/{{$product->id}}">
-                                <button class="btn btn-block green">Visualizar</button>
-                            </a>
-                            <br>
-                            <a href="/products/{{$product->id}}/edit">
-                                <button class="btn btn-block blue">Editar</button>
-                            </a>
+                <a href="/products/{{$product->id}}">
+                    <div class="col-md-3">
+                        <div class="product-index-product-box">
+                            <div class="row">
 
+                                <div class="col-md-12">
+                                    <img class="product-index-list-photo" src="{{$product->photo}}" alt="{{$product->code}}">
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <h4>{{$product->line->description.' '.$product->material->description}}</h4>
+                                <h5>{{$product->color->description}}</h5>
+                            </div>
                         </div>
-                        
+
+
+
                     </div>
-                    
+                </a>
+
                 @endforeach
         </div>
     </div>
@@ -46,18 +42,22 @@
 
     <style>
 
-        div .product-list-photo{
+        .product-index-list-photo{
 
-            height: 150px;
-            width: auto;
+            width: 100%;
 
         }
 
-        div .product-list-row{
+        .product-index-product-box{
 
             background-color: #FFFFFF;
+            border: 1px solid #eaeaea;
+            border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
+            text-align: center;
+
+
 
         }
 
