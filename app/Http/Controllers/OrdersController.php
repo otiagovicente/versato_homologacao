@@ -14,7 +14,7 @@ class OrdersController extends Controller
     {
         $orders = Order::with('products')
             ->with('representative')
-            ->with('customer')
+            //->with('customer')
             ->paginate(20);
         return view('orders.index', compact('orders'));
     }
