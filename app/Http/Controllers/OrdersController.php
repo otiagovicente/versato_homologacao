@@ -12,10 +12,10 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        $orders = Order::all()//with('products')
+        $orders = Order::all();//with('products')
             //->with('representative')
             //->with('customer')
-            ->paginate(20);
+            //->paginate(20);
         return view('orders.index', compact('orders'));
     }
 
