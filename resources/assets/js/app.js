@@ -234,6 +234,11 @@ Vue.component(
     require('./components/orders/OrderForm.vue')
 );
 
+Vue.component(
+    'order-report-by-customer',
+    require('./components/orders/ReportOrdersByCustomer.vue')
+);
+
 window.app = new Vue({
     el: 'body',
     methods: {

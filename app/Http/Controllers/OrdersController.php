@@ -64,7 +64,10 @@ class OrdersController extends Controller
     {
         return view('orders.edit', compact('order'));
     }
+    public function reportByCustomer(){
 
+        return view('orders.reports.byCustomer');
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -113,7 +116,8 @@ class OrdersController extends Controller
         return response()->json($orders);
     }
     public function api_getProducts($id){
-        $order = Order::with('products')->where('id', $id)->get();//where('id', $id)->with('products');
+        $order = Order::with('products')->where('id', $id)->get();
         return response()->json($order);
     }
+
 }
