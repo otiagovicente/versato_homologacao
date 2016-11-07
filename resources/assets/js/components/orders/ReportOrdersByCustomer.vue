@@ -14,13 +14,25 @@
 
                 <div class="portlet-body">
                     <div id="code-input" class="form-group" >
-                        <label class="col-md-3 control-label">Nome</label>
-                        <div class="col-md-7" id="code">
-                            <input type="text"
-                                   name="code"
-                                   class="form-control"
-                                   placeholder="Nombre"
-                            >
+                        <label class="col-md-3 control-label">Cliente</label>
+                        <div class="col-md-7" id="client">
+                            <v-select
+                                v-bind:options.sync="customers_select" :value.sync="order.customer_id"
+                                placeholder="Elige el cliente" class="form-control"
+                                id="customer-input" name="customer[]"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div id="code-input" class="form-group" >
+                        <label class="col-md-3 control-label">Representante</label>
+                        <div class="col-md-7" id="representative">
+                            <v-select
+                                v-bind:options.sync="representatives_select" :value.sync="order.representative_id"
+                                placeholder="Elige el representante" class="form-control"
+                                id="representative-input" name="representative[]"
+                                search justified required close-on-select>
+                            </v-select>
                         </div>
                     </div>
                 </div>
@@ -45,6 +57,7 @@
 
         data(){
             return{
+
                 customers_select:[],
                 representatives_select:[],
                 brands_select:[],
@@ -73,14 +86,25 @@
         ready(){
             window._this = this;
             toastr.options.closeButton = true;
-            //_this.getCustomers();
-            //_this.getRepresentatives();
+            _this.getCustomers();
+            _this.getRepresentatives();
             //_this.getProducts(Versato.brand_id);
 
             if(_this.porder) _this.loadOrder();
         },
         methods:{
-
+            getCustomers: function(){
+                this.$http.get('/api/customers/selectlist')
+                .then(response => {
+                    _this.customers_select = response.json();
+                });
+            },
+            getRepresentatives: function(){
+                this.$http.get('/api/representatives/selectlist')
+                .then(response => {
+                    _this.representatives_select = response.json();
+                });
+            },
         },
 
         watch: {
