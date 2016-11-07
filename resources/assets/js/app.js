@@ -125,10 +125,10 @@ require('./bootstrap');
         'create-product',
         require('./components/products/CreateProducts.vue')
     );
-    Vue.component(
-        'edit-product',
-        require('./components/products/EditProducts.vue')
-    );
+    // Vue.component(
+    //     'edit-product',
+    //     require('./components/products/EditProducts.vue')
+    // );
 
 
 
@@ -234,10 +234,10 @@ Vue.component(
     require('./components/orders/OrderForm.vue')
 );
 
-Vue.component(
-    'order-report-by-customer',
-    require('./components/orders/ReportOrdersByCustomer.vue')
-);
+// Vue.component(
+//     'order-report-by-customer',
+//     require('./components/orders/ReportOrdersByCustomer.vue')
+// );
 
 window.app = new Vue({
     el: 'body',

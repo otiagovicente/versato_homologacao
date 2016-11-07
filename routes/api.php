@@ -73,6 +73,7 @@ Route::get('/regions', 'RegionsController@api_index');
 //Rotas dedicadasa a produtos
 
 Route::get('/products/sync/{dtSincronizacao}', 'ProductsController@api_sync');
+
 Route::get('/products/list', 'ProductsController@api_list');
 Route::get('/products/{product}/edit', 'ProductsController@api_edit');
 Route::get('/products/{product}', 'ProductsController@api_show');

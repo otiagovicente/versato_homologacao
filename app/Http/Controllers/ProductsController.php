@@ -213,12 +213,7 @@ class ProductsController extends Controller
 
     public function api_show(Product $product){
 
-        $product = Product::with('brand')
-                    ->with('line')
-                    ->with('material')
-                    ->with('color')
-                    ->with('gridsAndSizes')
-                    ->with('tags')
+        $product = Product::with('brand','line', 'material', 'color', 'gridsAndSizes', 'tags')
                     ->find($product->id);
 
         return response()->json($product);

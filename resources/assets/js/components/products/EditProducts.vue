@@ -197,7 +197,7 @@
 
 </template>
 
-<script>
+<script type="text/babel">
 
 import VueStrap from 'vue-strap'
 import algoliasearch from 'algoliasearch'

@@ -244,26 +244,47 @@
 
             }
         },
+        props:['pproductid'],
         ready(){
-            window._this = this;
-            _this.product.brand_id = Versato.brand_id;
-            _this.product.launchdisplay = moment().format('DD/MM/YYYY');
-            _this.getGrids();
-            _this.getTags();
-            _this.configureDropbox(_this.product);
-            _this.configureAlgolia();
-            _this.configureAutocomplete();
+            window._CreateProducts = this;
+            _CreateProducts.product.brand_id = Versato.brand_id;
+            _CreateProducts.product.launchdisplay = moment().format('DD/MM/YYYY');
+            _CreateProducts.getGrids();
+            _CreateProducts.getTags();
+            _CreateProducts.configureDropzone(_CreateProducts.product);
+            _CreateProducts.configureAlgolia();
+            _CreateProducts.configureAutocomplete();
+
+            if(_CreateProducts.pproductid){
+                _CreateProducts.getProduct();
+            }
 
 
         },
         methods:{
-            submitData: function(){
 
-                if(!_this.validateInputs()){
+            /*
+             * Funções de envio
+             */
+
+            submit: function () {
+
+
+                if (!_CreateProducts.product.id) {
+                    _CreateProducts.store();
+                } else {
+                    _CreateProducts.update();
+                }
+
+            },
+
+            store: function(){
+
+                if(!_CreateProducts.validateInputs()){
                     return false;
                 }
 
-                this.$http.post('/products', _this.product)
+                this.$http.post('/products', _CreateProducts.product)
                         .then(function (response) {
                             console.log(response);
                             toastr.success('Producto guardado');
@@ -275,19 +296,64 @@
                 });
                 console.log('submitData');
             },
+
+            update: function(){
+
+                if(!_CreateProducts.validateInputs()){
+                    return false;
+                }
+
+                this.$http.patch('/products/'+_CreateProducts.productid, _CreateProducts.product)
+                        .then(function (response) {
+                            console.log(response);
+                            toastr.success('Producto guardado');
+                        }).catch(function (response) {
+                    $.each(response.data, function (key, value) {
+                        toastr.error(value);
+                        $('#'+key).addClass('has-error');
+                    });
+                });
+                console.log('submitData');
+            },
+
+
+            /*
+             * Função de carregamentos
+             */
+
             getGrids: function(){
                 this.$http.get('/api/grids/selectlist/'+Versato.brand_id)
                         .then(response => {
-                            _this.grids_select = response.json();
+                            _CreateProducts.grids_select = response.json();
                         });
             },
             getTags: function(){
                 this.$http.get('/api/tags/selectlist/'+Versato.brand_id)
                         .then(response => {
-                            _this.tags_select = response.json();
+                            _CreateProducts.tags_select = response.json();
                         });
             },
-            configureDropbox: function(callback){
+            getProduct: function(){
+                this.$http.get('/api/products/'+_CreateProducts.productid)
+                        .then(response => {
+                            var product = response.json();
+                            product.launch = moment(product.launch, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY');
+                            product.launchdisplay = product.launch;
+                            product.grids = product.grids_list;
+                            product.tags = product.tags_list;
+
+                            $('#line-input').val(product.line.description);
+                            $('#material-input').val(product.material.description);
+                            $('#color-input').val(product.color.description);
+
+                            _CreateProducts.product = product;
+                        });
+            },
+
+            /*
+             * Configura DropZone
+             */
+            configureDropzone: function(callback){
                 Dropzone.autoDiscover = false;
                 var dropzoneOptions = {
                     maxFiles: 1,
@@ -295,7 +361,7 @@
                     paramName: 'photo',
                     acceptedFiles: '.jpeg, .jpg, .png',
                     autoProcessQueue: false,
-                    dictDefaultMessage: 'Elije el archivo',
+                    dictDefaultMessage: 'Elige el archivo',
                     url: "/products/photo",
                     headers: {
                         'X-CSRF-TOKEN': Laravel.csrfToken
@@ -308,10 +374,10 @@
 
                     init: function() {
                         this.on("maxfilesexceeded", function(file){
-                            toastr.warning('Número de arquivos excedido!', 'Você só pode inserir um arquivo');
+                            toastr.warning('Numero de archivos excedido!', 'Solo puede poner un archivo');
                         });
                         this.on("error", function(file, errorMessage){
-                            toastr.error('Erro!', "Confira se o arquivo possui as características necessárias!");
+                            toastr.error('Erro!', "La foto no tiene las caracteristicas que se necesita!");
                             this.removeAllFiles(true);
                         });
                     }
@@ -335,18 +401,25 @@
 
 
             },
+            /*
+             *  Confitura Algolia
+             */
             configureAlgolia: function(){
                 //initializes algolia
-                _this.client = window.algoliasearch(Scout.app_id, Scout.search_key);
-                _this.linesIndex = _this.client.initIndex(Scout.prefix+'lines');
-                _this.materialsIndex = _this.client.initIndex(Scout.prefix+'materials');
-                _this.colorsIndex = _this.client.initIndex(Scout.prefix+'colors');
+                _CreateProducts.client = window.algoliasearch(Scout.app_id, Scout.search_key);
+                _CreateProducts.linesIndex = _CreateProducts.client.initIndex(Scout.prefix+'lines');
+                _CreateProducts.materialsIndex = _CreateProducts.client.initIndex(Scout.prefix+'materials');
+                _CreateProducts.colorsIndex = _CreateProducts.client.initIndex(Scout.prefix+'colors');
             },
+
+            /*
+             * Configura o Autocomplete
+             */
             configureAutocomplete: function(){
 
                 autocomplete('#line-input', { hint: false }, [
                     {
-                        source: autocomplete.sources.hits(_this.linesIndex, {
+                        source: autocomplete.sources.hits(_CreateProducts.linesIndex, {
                             hitsPerPage: 5,
                             filters: 'brand_id='+Versato.brand_id
                         }),
@@ -359,8 +432,8 @@
                         }
                     }
                 ]).on('autocomplete:selected', function(event, suggestion, dataset) {
-                    _this.product.line_id = suggestion.id;
-                    _this.product.line_code = suggestion.code;
+                    _CreateProducts.product.line_id = suggestion.id;
+                    _CreateProducts.product.line_code = suggestion.code;
                     $('#line_id').removeClass('has-error');
                 });
 
@@ -368,7 +441,7 @@
 
                 autocomplete('#material-input', { hint: false }, [
                     {
-                        source: autocomplete.sources.hits(_this.materialsIndex, {
+                        source: autocomplete.sources.hits(_CreateProducts.materialsIndex, {
                             hitsPerPage: 5,
                             filters: 'brand_id='+Versato.brand_id
                         }),
@@ -381,14 +454,14 @@
                         }
                     }
                 ]).on('autocomplete:selected', function(event, suggestion, dataset) {
-                    _this.product.material_id = suggestion.id;
-                    _this.product.material_code = suggestion.code;
+                    _CreateProducts.product.material_id = suggestion.id;
+                    _CreateProducts.product.material_code = suggestion.code;
                     $('#material_id').removeClass('has-error');
                 });
 
                 autocomplete('#color-input', { hint: false }, [
                     {
-                        source: autocomplete.sources.hits(_this.colorsIndex, {
+                        source: autocomplete.sources.hits(_CreateProducts.colorsIndex, {
                             hitsPerPage: 5,
                             filters: 'brand_id='+Versato.brand_id
                         }),
@@ -400,31 +473,34 @@
                         }
                     }
                 ]).on('autocomplete:selected', function(event, suggestion, dataset) {
-                    _this.product.color_id = suggestion.id;
-                    _this.product.color_code = suggestion.code;
+                    _CreateProducts.product.color_id = suggestion.id;
+                    _CreateProducts.product.color_code = suggestion.code;
                     $('#color_id').removeClass('has-error');
                 });
 
             },
+            /*
+             * Valida os inputs
+             */
             validateInputs: function(){
                 console.log('validating...');
                 console.log('done.');
-                _this.product.launch = moment(_this.product.launchdisplay, "DD/MM/YYYY").format("YYYY-MM-DD");
+                _CreateProducts.product.launch = moment(_CreateProducts.product.launchdisplay, "DD/MM/YYYY").format("YYYY-MM-DD");
 
                 var valid = true;
-                if(_this.product.code == ''){
+                if(_CreateProducts.product.code == ''){
                     $('#code').addClass('has-error');
                     toastr.error('Se necesita el codigo de producto');
                     valid = false;
                 }
 
-                if(_this.product.code_beirario == ''){
+                if(_CreateProducts.product.code_beirario == ''){
                     $('#code_beirario').addClass('has-error');
                     toastr.error('Necesita el codigo del fabricante!');
                     valid = false;
                 }
 
-                if(_this.product.line_id == null){
+                if(_CreateProducts.product.line_id == null){
                     $('#line_id').addClass('has-error');
                     toastr.error('Necesita una Línea');
                     valid = false;
@@ -432,30 +508,30 @@
 
 
 
-                if(_this.product.material_id == null){
+                if(_CreateProducts.product.material_id == null){
                     $('#material_id').addClass('has-error');
                     toastr.error('Necesita eligir material');
                     valid = false;
                 }
-                if(_this.product.color_id == null){
+                if(_CreateProducts.product.color_id == null){
                     $('#color_id').addClass('has-error');
                     toastr.error('Necesita eligir una color');
                     valid = false;
                 }
 
-                if(_this.product.price <= 0){
+                if(_CreateProducts.product.price <= 0){
                     $('#price').addClass('has-error');
                     toastr.error('El precio necesita ser mas grande que zero');
                     valid = false;
                 }
 
-                if(_this.product.cost <= 0){
+                if(_CreateProducts.product.cost <= 0){
                     $('#cost').addClass('has-error');
                     toastr.error('El costo necesita ser mas grande que zero');
                     valid = false;
                 }
 
-                if(_this.product.cost >= _this.product.price){
+                if(_CreateProducts.product.cost >= _CreateProducts.product.price){
                     $('#price').addClass('has-error');
                     $('#cost').addClass('has-error');
                     toastr.error('El precio hay que ser mas grande que el costo');

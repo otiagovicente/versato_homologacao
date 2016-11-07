@@ -14,7 +14,7 @@
 
     <div class="x_content">
 
-        <edit-product :productid="{{$product->id}}"></edit-product>
+        <create-product :pproductid="{{$product->id}}"></create-product>
 
     </div>
 
