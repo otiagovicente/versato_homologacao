@@ -99,6 +99,13 @@ class RegionsController extends Controller
         $region->delete();
     }
 
+
+    public function api_index(){
+        $regions = Region::get();
+        return response()->json($regions);
+    }
+
+
     public function api_selectList(){
         $regions = Region::all();
         foreach($regions as $region){

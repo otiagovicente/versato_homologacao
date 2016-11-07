@@ -23,7 +23,7 @@ class RepresentativeRequest extends FormRequest
      */
     public function rules()
     {
-        switch ($this->method) {
+        switch ($this->method()) {
 
             case 'GET':
             case 'POST':

@@ -66,6 +66,7 @@ Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo')
 Route::get('/macroregions/{macroregion}/regions', 'MacroregionsController@api_regions');
 
 Route::get('/regions/selectlist', 'RegionsController@api_selectList');
+Route::get('/regions', 'RegionsController@api_index');
 
 
 

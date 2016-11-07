@@ -94,6 +94,7 @@
         ready(){
             window._SelectBrands = this;
             _SelectBrands.getBrands();
+
         },
         showSelectRegionModal: function () {
 
@@ -109,8 +110,6 @@
                 }else{
                     // toastr.error('');
                 }
-
-
 
             });
             return true;
@@ -134,7 +133,10 @@
              * Funcões de Janela
              */
 
-            openWindow: function () {
+            openWindow: function (brands = null) {
+                if(brands){
+                    _SelectBrands.syncBrands(brands);
+                }
                 $('#select-brands').modal();
             },
             closeWindow: function () {
@@ -154,16 +156,16 @@
                             _SelectBrands.brands = [];
                             _.forEach(response.json(), function(brand) {
                                 brand.selected = false;
-                                brand.comission = 0.00;
+                                brand.comission = 0.00 ;
                                 _SelectBrands.brands.push(brand);
                             });
                         })
                         .catch(response => {
-                            toastr.error('No fue possible cargar las marcas');
+                            toastr.error('No fue possible cargar las marcas - Select Brands');
                         });
 
             },
-            chooseBrand: function(brand){
+            chooseBrand: function (brand){
 
                 if(brand.selected){
                     brand.selected = false;
@@ -174,6 +176,15 @@
 
                 _CreateRepresentative.brands = _SelectBrands.selected_brands;
             },
+            syncBrands: function(brands){
+                _.forEach(brands, function (brand) {
+                    var index = _.findIndex(_SelectBrands.brands, function (item) {
+                        return item.id == brand.id;
+                    });
+                    _SelectBrands.brands[index].selected = true;
+                    _SelectBrands.brands[index].comission = brand.comission;
+                });
+            }
 
 
         }

@@ -11,7 +11,7 @@
                 </div>
                 <div class="portlet-body form">
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-8">
 
                                 <div class="col-md-12" style="cursor:pointer;" @click="openSelectUser()">
                                     <small>Nombre</small>
@@ -60,7 +60,7 @@
 
 
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-4">
 
                                 <img v-bind:src="user.photo" class="user-photo pull-right" @click="openSelectUser()"/>
 
@@ -115,32 +115,40 @@
                 regions: null,
                 brands: null
             }
-
         },
-        props:['prepresentativeid'],
+        props: ['prepresentativeid'],
         computed: {
-            'representative.user_id': function () {
+            'computeUserId': function () {
                 _CreateRepresentative.representative.user_id = _CreateRepresentative.user.id;
 
             },
-            'representative.regions': function () {
-                _CreateRepresentative.representative.regions = [];
+            'computeRegionsArray': function () {
+                _CreateRepresentative.representative.regions = new Array();
                 _.forEach(_CreateRepresentative.regions, function (region) {
                     _CreateRepresentative.representative.regions.push(region.id);
                 });
             },
-            'representative.brands': function () {
-                _CreateRepresentative.representative.brands = [];
+            'computeBrandsArray': function () {
+                _CreateRepresentative.representative.brands = new Array();
                 _.forEach(_CreateRepresentative.brands, function (brand) {
-                    if(brand.pivot.comission){ brand.comission = brand.pivot.comission}
-                    var brandArray = { brand_id : brand.id, comission : brand.comission };
-                    _CreateRepresentative.representative.brands.push(brandArray);
+
+                    // _CreateRepresentative.representative.brands.push([
+                    //     brand.id, {comission: parseFloat(brand.comission)}
+                    // ]);
+                    //
+
+                    _CreateRepresentative.representative.brands.push({
+                        brand_id: brand.id, comission: parseFloat(brand.comission)
+                    });
+
+
+
                 });
             },
         },
         ready(){
             window._CreateRepresentative = this;
-            if(_CreateRepresentative.prepresentativeid){
+            if (_CreateRepresentative.prepresentativeid) {
                 _CreateRepresentative.loadData();
             }
 
@@ -162,7 +170,7 @@
 
             loadRepresentative: function () {
 
-                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid)
+                this.$http.get('/api/representatives/' + _CreateRepresentative.prepresentativeid)
                         .then(response => {
                             _CreateRepresentative.representative = response.json();
                         })
@@ -173,9 +181,9 @@
 
             },
 
-            loadUser: function(){
+            loadUser: function () {
 
-                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid+'/user')
+                this.$http.get('/api/representatives/' + _CreateRepresentative.prepresentativeid + '/user')
                         .then(response => {
                             _CreateRepresentative.user = response.json();
                         })
@@ -186,9 +194,8 @@
 
             },
             getBrands: function () {
-                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid+'/brands')
+                this.$http.get('/api/representatives/' + _CreateRepresentative.prepresentativeid + '/brands')
                         .then(response => {
-                            __
                             _CreateRepresentative.brands = response.json();
                         })
                         .catch(response => {
@@ -199,7 +206,7 @@
 
             getRegions: function () {
 
-                this.$http.get('/api/representatives/'+_CreateRepresentative.prepresentativeid+'/regions')
+                this.$http.get('/api/representatives/' + _CreateRepresentative.prepresentativeid + '/regions')
                         .then(response => {
                             _CreateRepresentative.regions = response.json();
                         })
@@ -214,18 +221,20 @@
              */
             submit: function () {
 
-                if(!_CreateRepresentative.representative.id){
+                _CreateRepresentative.representative.user_id = _CreateRepresentative.user.id;
+
+                if (!_CreateRepresentative.representative.id) {
                     _CreateRepresentative.store();
-                }else{
+                } else {
                     _CreateRepresentative.update();
                 }
 
             },
-            store: function(){
+            store: function () {
 
                 this.$http.post('/representatives', _CreateRepresentative.representative)
                         .then(response => {
-                            console.log();
+                            console.log(response.json());
                             toastr.success('Representante creado con exito');
                         })
                         .catch(response => {
@@ -238,9 +247,9 @@
             },
             update: function () {
 
-                this.$http.patch('/representatives/'+_CreateRepresentative.prepresentativeid , _CreateRepresentative.representative)
+                this.$http.patch('/representatives/' + _CreateRepresentative.prepresentativeid, _CreateRepresentative.representative)
                         .then(response => {
-                            console.log();
+                            console.log(response.json());
                             toastr.success('Representante guardado con exito');
                         })
                         .catch(response => {
@@ -259,9 +268,15 @@
                 _SelectUser.openWindow();
             },
             openSelectRegion: function () {
+                if (_CreateRepresentative.regions) {
+                    _SelectRegion.openWindow(_CreateRepresentative.regions);
+                }
                 _SelectRegion.openWindow();
             },
             openSelectBrands: function () {
+                if (_CreateRepresentative.brands) {
+                    _SelectBrands.openWindow(_CreateRepresentative.brands);
+                }
                 _SelectBrands.openWindow();
             }
 

@@ -18,7 +18,7 @@ class CreateRepresentativesBrandsTable extends Migration
             $table->increments('id');
             $table->integer('brand_id')->unsigned();
             $table->integer('representative_id')->unsigned();
-            $table->double('comission', 3, 2)->unsigned();
+            $table->double('comission', 8, 2)->unsigned();
             $table->timestamps();
 
             $table->foreign('brand_id')->references('id')->on('brands');

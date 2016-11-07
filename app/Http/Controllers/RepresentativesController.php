@@ -77,11 +77,14 @@ class RepresentativesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Representative $representative)
+    public function update(RepresentativeRequest $request, Representative $representative)
     {
+
+
         $representative->fill($request->all());
         $representative->save();
         $representative->regions()->sync($request->regions);
+
         $representative->brands()->sync($request->brands);
         return $representative;
     }
@@ -112,7 +115,12 @@ class RepresentativesController extends Controller
 
     public function api_brands(Representative $representative){
 
-        return response()->json($representative->brands()->get());
+        foreach ($representative->brands()->get() as $brand) {
+            $brand['comission'] = $brand->pivot->comission;
+            $brands[] = $brand;
+        }
+
+        return response()->json($brands);
 
     }
 

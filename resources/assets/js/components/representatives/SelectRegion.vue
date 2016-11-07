@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                                 <div style="height:400px; overflow-y: scroll;">
-                                    <div v-for="region in regions | filterBy search" class="row">
+                                    <div v-for="region in regions | filterBy macroregion" class="row">
                                         <div class="col-md-12 ">
                                             <div class="region-box col-md-12" style="padding-top:5px;" v-bind:class="{ 'selected': region.selected }" @click="chooseRegion(region)">
                                                     <h3 > <strong>{{region.description}} </strong></h3>
@@ -94,7 +94,7 @@
                 search: '',
                 macroregions_select: new Array(),
                 macroregion : null,
-                regions: new Array()
+                regions: []
             }
         },
         showSelectRegionModal: function () {
@@ -111,15 +111,11 @@
         ready(){
             window._SelectRegion = this;
             _SelectRegion.getMacroRegions();
+            _SelectRegion.getRegions();
         },
         computed:{
             selected_regions: function(){
                 return _.filter(_SelectRegion.regions, function(region) { return region.selected; });
-            }
-        },
-        watch:{
-            'macroregion': function () {
-                _SelectRegion.getRegions(_SelectRegion.macroregion);
             }
         },
         methods:{
@@ -131,7 +127,7 @@
                         });
             },
             getRegions: function(regionid){
-                this.$http.get('/api/macroregions/'+regionid+'/regions')
+                this.$http.get('/api/regions')
                         .then(response=>{
                             _SelectRegion.regions = [];
                             _.forEach(response.json(), function(region) {
@@ -154,11 +150,34 @@
 
                 _CreateRepresentative.regions = _SelectRegion.selected_regions;
             },
+            syncRegion: function (regions) {
+
+                _.forEach(regions, function (region) {
+                    _SelectRegion.macroregion = region.macroregion_id;
+
+                        console.log(region);
+                        var index = _.findIndex(_SelectRegion.regions, function (item) {
+                            console.log(item.id);
+                            console.log(region.id);
+                            return item.id === region.id;
+                        });
+                        console.log(index);
+                        console.log(region);
+                        _SelectRegion.regions[index].selected = true;
+
+
+
+                });
+
+            },
             /*
              * Funcões de Janela
              */
 
-            openWindow: function () {
+            openWindow: function (regions = null) {
+                if(regions){
+                    _SelectRegion.syncRegion(regions);
+                }
                 $('#select-region').modal();
 
             },
