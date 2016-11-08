@@ -334,7 +334,8 @@
                         });
             },
             getProduct: function(){
-                this.$http.get('/api/products/'+_CreateProducts.pproductid+'/edit')
+	                this.$http.get('/api/products/'+_CreateProducts.pproductid+'/edit')
+
                         .then(response => {
                             var product = response.json();
                             product.launch = moment(product.launch, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY');
