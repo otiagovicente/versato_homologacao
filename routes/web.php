@@ -21,6 +21,8 @@ use App\Mail\NewOrderMail;
 Auth::routes();
 
 
+Route::get('/enviamail/{id}','OrdersController@sendNewOrderMail');
+
 Route::group(['middleware' => 'auth'], function () {
 	
 	Route::resource('orders','OrdersController',['parameters' => 'singular']);

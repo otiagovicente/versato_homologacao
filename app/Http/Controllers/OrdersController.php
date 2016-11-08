@@ -42,7 +42,7 @@ class OrdersController extends Controller
         $order->fill($request->all());
         $order->save();
         $order->products()->sync($request->products);
-        $this->sendNewOrderMail($order->id);
+
         return response()->json($order);
     }
 
@@ -100,7 +100,9 @@ class OrdersController extends Controller
 
     public function sendNewOrderMail($id){
 
-        $order = Order::find($id)->with('products', 'representative', 'customer');
+        $order = Order::find($id)->with('products', 'representative', 'customer')->get();
+
+        return response()->json($order);
 
             Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
 
