@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\RequestsOrder;
 use App\Order;
-
 use App\Mail\NewOrderMail;
+use Mail;
 
 class OrdersController extends Controller
 {
@@ -43,7 +43,8 @@ class OrdersController extends Controller
         $order->save();
         $order->products()->sync($request->products);
 
-        return response()->json($order);
+        return $this->sendNewOrderMail($order->id);
+        //return response()->json($order);
     }
 
     /**
@@ -98,15 +99,18 @@ class OrdersController extends Controller
     }
 
 
+    /**
+     * @param $id
+     */
     public function sendNewOrderMail($id){
-
-        $order = Order::find($id)->with('products', 'representative', 'customer')->get();
-
-        return response()->json($order);
-
-            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        $order = Order::
+        with('products', 'representative', 'customer')
+            ->find($id);
 
 
+        //$order = Order::with('products')->find($id);//where('id', $id)->with('products', 'representative', 'customer')->first();
+       // return $order;
+        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
     }
 
    public function api_list(){

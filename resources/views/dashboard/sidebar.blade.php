@@ -328,16 +328,9 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="/regions" class="nav-link nav-toggle">
-                                            <i class="fa fa-map-marker"></i>
-                                            <span class="title">Ver Todos</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
                                         <a href="/regions/create" class="nav-link nav-toggle">
                                             <i class="fa fa-map-marker"></i>
-                                            <span class="title">Crear</span>
+                                            <span class="title">Editar</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>

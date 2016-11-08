@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+
 class NewOrderMail extends Mailable
 {
     use Queueable, SerializesModels;
@@ -18,7 +19,6 @@ class NewOrderMail extends Mailable
      */
 
     public $order;
-    public $from;
 
     public function __construct($order)
     {
