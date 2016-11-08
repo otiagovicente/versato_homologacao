@@ -177,7 +177,7 @@
                         <div class="container-fluid">
                             <div class="col-md-3 pull-right">
                                 <div class="form-group">
-                                    <button type="button" @click="submitData()" class="btn blue btn-block" id="send-btn">Salvar</button>
+                                    <button type="button" @click="submit()" class="btn blue btn-block" id="send-btn">Salvar</button>
                                 </div>
                             </div>
                             <div class="col-md-3 pull-right">
@@ -303,7 +303,7 @@
                     return false;
                 }
 
-                this.$http.patch('/products/'+_CreateProducts.productid, _CreateProducts.product)
+                this.$http.patch('/products/'+_CreateProducts.pproductid, _CreateProducts.product)
                         .then(function (response) {
                             console.log(response);
                             toastr.success('Producto guardado');
@@ -334,7 +334,7 @@
                         });
             },
             getProduct: function(){
-                this.$http.get('/api/products/'+_CreateProducts.productid)
+                this.$http.get('/api/products/'+_CreateProducts.pproductid+'/edit')
                         .then(response => {
                             var product = response.json();
                             product.launch = moment(product.launch, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY');
@@ -367,8 +367,9 @@
                         'X-CSRF-TOKEN': Laravel.csrfToken
                     },
 
+
                     success: function(file, response){
-                        Vue.set(callback, 'photo', response);
+                        _CreateProducts.product.photo = response;
                         this.removeAllFiles(true);
                     },
 
@@ -562,15 +563,6 @@
                     return isNaN(number) ? 0 : parseFloat(number).toFixed(2);
                 }
             }
-        },
-        watch: {
-            'product.grids': function (val, oldVal) {
-                if(val.length > 0){
-                    $('#grids').removeClass('has-error');
-                }
-            }
-
-
         }
     }
 

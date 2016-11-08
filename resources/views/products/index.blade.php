@@ -6,7 +6,24 @@
         'actions' => []
     ])
     <hr>
-    {{ $products->links() }}
+    <div class="md-col-12">
+        <form action="/products/search">
+            <div class="col-md-7">
+                <div class="form-group form-line-input search">
+                    <h4>Buscar</h4>
+
+                    <div class="input-icon input-icon-lg right">
+                        <i class="fa fa-search font-green"></i>
+                        <input id="search-input" class="form-control input-lg" type="text" name="search">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="col-md-5 pull-right">
+            {{ $products->links() }}
+        </div>
+    </div>
     <hr>
     <div class="container-fluid">
         <div class="row">

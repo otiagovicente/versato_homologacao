@@ -12,7 +12,10 @@
         ]
     ])
 
-    <div class="x_content">
+    <div class="container-fluid">
+
+        {{$product->id}}
+
 
         <create-product :pproductid="{{$product->id}}"></create-product>
 

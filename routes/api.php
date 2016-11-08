@@ -79,6 +79,7 @@ Route::get('/products/{product}/edit', 'ProductsController@api_edit');
 Route::get('/products/{product}', 'ProductsController@api_show');
 Route::get('/products/list/{brand}', 'ProductsController@api_list');
 Route::get('/products/listPaginate/{brand}', 'ProductsController@api_listPaginate');
+Route::get('/products/search/{search}/{brand}', 'ProductsController@api_search');
 
 
 //Rotas dedicadas a Linhas
