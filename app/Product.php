@@ -26,6 +26,8 @@ class Product extends Model
         'color_id' => 'integer',
 
     ];
+
+
 //    protected $hidden = ['cost'];
 
     public function brand(){
@@ -53,6 +55,12 @@ class Product extends Model
     public function grids_select(){
         return $this->belongsToMany(Grid::class)->select(['id as value', 'description as label']);;
     }
+    public function tags_select(){
+        return $this->belongsToMany(Tag::class)->select(['id as value', 'description as label']);;
+    }
+
+
+
     public function setLineIdAttribute($value){
         $this->attributes['line_id'] = (int) $value;
     }

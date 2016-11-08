@@ -76,8 +76,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('/products', 'ProductsController', [
 			'parameters' => 'singular'
 		]);
+    Route::get('/products/search/{search}', 'ProductsController@search');
 	Route::post('/products/photo', 'ProductsController@addPhoto');
-	Route::post('/colors/search', 'ColorsController@search');
+
+
+    Route::post('/colors/search', 'ColorsController@search');
 	Route::resource('/colors', 'ColorsController', [
 			'parameters' => 'singular'
 		]);

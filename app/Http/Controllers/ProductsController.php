@@ -18,13 +18,6 @@ use App\Tag;
 class ProductsController extends Controller
 {
 
-    private $imagesPath;
-    private $brand_id;
-
-    public function __construct(){
-
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -49,6 +42,15 @@ class ProductsController extends Controller
 
 
     }
+
+
+    public function search(Request $request){
+
+        $products = Product::search($request->search)->where('brand_id',session()->get('brand')->id)->paginate();
+        return view('products.index', compact($products));
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -172,10 +174,12 @@ class ProductsController extends Controller
         $image = $request->file('photo')->store('products','s3');
         //Torna acessível publicamente a imagem
         Storage::disk('s3')->setVisibility($image, 'public');
+
+
 //        Espera 5 segundos para garantir que a visibilidade do
 //        arquivo no driver S3 seja público para que a imagem
 //        seja exibida
-        sleep(5);
+//        sleep(5);
 
         //Retorna a url completa da imagem que será salva no campo photo do produto
         return Storage::disk('s3')->url($image);
@@ -213,7 +217,7 @@ class ProductsController extends Controller
 
     public function api_show(Product $product){
 
-        $product = Product::with('brand','line', 'material', 'color', 'gridsAndSizes', 'tags')
+        $product = Product::with('brand','line', 'material', 'color', 'grids', 'tags')
                     ->find($product->id);
 
         return response()->json($product);
@@ -254,4 +258,13 @@ class ProductsController extends Controller
 
         return response()->json($products);
     }
+
+    public function api_search($search, Brand $brand){
+
+        $products = Product::search($search)->where('brand_id', $brand->id)->get();
+
+        return $products;
+    }
+
+
 }
