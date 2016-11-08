@@ -14,9 +14,6 @@
 
     <div class="container-fluid">
 
-        {{$product->id}}
-
-
         <create-product :pproductid="{{$product->id}}"></create-product>
 
     </div>
