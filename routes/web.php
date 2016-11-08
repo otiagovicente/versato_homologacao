@@ -24,7 +24,8 @@ Auth::routes();
 Route::get('/enviamail/{id}','OrdersController@sendNewOrderMail');
 
 Route::group(['middleware' => 'auth'], function () {
-	
+
+    Route::get('orders/reportByCustomer','OrdersController@reportByCustomer');
 	Route::resource('orders','OrdersController',['parameters' => 'singular']);
     Route::resource('deliverycenters','DeliverycentersController',['parameters' => 'singular']);
 	Route::resource('shops','ShopsController',['parameters' => 'singular']);
