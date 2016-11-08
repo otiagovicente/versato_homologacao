@@ -26,7 +26,6 @@ Route::get('/brands/selectlist', 'BrandsController@api_selectList');
 Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
 Route::get('/brands/list', 'BrandsController@api_list');
 Route::get('/brands/selectlist', 'BrandsController@api_selectList');
-Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
 
 
 //Rotas dedicadas a clientes
@@ -44,19 +43,20 @@ Route::get('/shops/{shop}', 'ShopsController@api_show');
 
 //Rotas dedicadas aos centros de entrega
 
-Route::get('/deliverycenters/{deliverycenter}', 'DeliverycentersController@api_show');
 Route::get('/deliverycenters/selectlist/{id}', 'DeliverycentersController@api_selectList');
+Route::get('/deliverycenters/{deliverycenter}', 'DeliverycentersController@api_show');
 
 
 
 //Rotas dedicada a representante
+
+Route::get('/representatives/selectlist', 'RepresentativesController@api_selectList');
 
 Route::get('/representatives','RepresentativesController@api_index');
 Route::get('/representatives/{representative}','RepresentativesController@api_show');
 Route::get('/representatives/{representative}/brands', 'RepresentativesController@api_brands');
 Route::get('/representatives/{representative}/regions', 'RepresentativesController@api_regions');
 Route::get('/representatives/{representative}/user', 'RepresentativesController@api_user');
-Route::get('/representatives/selectlist', 'RepresentativesController@api_selectList');
 
 
 //Rotas dedicadas à Macro Regiões e Regiões

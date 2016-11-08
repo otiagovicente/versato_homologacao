@@ -7,6 +7,8 @@ use App\Http\Requests;
 use App\Http\RequestsOrder;
 use App\Order;
 
+use App\Mail\NewOrderMail;
+
 class OrdersController extends Controller
 {
     public function index()
@@ -40,6 +42,7 @@ class OrdersController extends Controller
         $order->fill($request->all());
         $order->save();
         $order->products()->sync($request->products);
+        $this->sendNewOrderMail($order->id);
         return response()->json($order);
     }
 
@@ -91,8 +94,19 @@ class OrdersController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+
     }
+
+
+    public function sendNewOrderMail($id){
+
+        $order = Order::find($id)->with('products', 'representative', 'customer');
+
+            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+
+
+    }
+
    public function api_list(){
         $orders = Order::all();
         return $orders;

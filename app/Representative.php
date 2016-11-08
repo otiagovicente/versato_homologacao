@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
+
 class Representative extends Model
 {
     use Searchable;
@@ -24,7 +25,7 @@ class Representative extends Model
     }
 
     public function orders(){
-        return $this->hasMany(Order::class)->withTimestamps();
+        return $this->hasMany('App\Order');
     }
 
 }

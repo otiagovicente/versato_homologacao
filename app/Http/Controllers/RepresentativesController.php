@@ -101,6 +101,25 @@ class RepresentativesController extends Controller
     }
 
 
+    public function api_selectList(){
+
+
+        $representatives = new Representative();
+
+        $listAll = $representatives->get();
+        $selectList = [];
+
+        foreach($listAll as $item){
+            $selectItem['value'] = $item->id;
+            $selectItem['label'] = $item->code;
+            $selectList[] = $selectItem;
+        }
+        return response()->json($selectList);
+    }
+
+
+
+
     public function api_index(){
 
         $representatives = Representative::with('user', 'regions')->get();
@@ -128,21 +147,11 @@ class RepresentativesController extends Controller
         return response()->json($representative->regions()->get());
     }
 
+
     public function api_user(Representative $representative){
         return response()->json($representative->user()->first());
     }
 
 
 
-    public function api_selectList(){
-        $listAll = Representative::all();
-        $selectList = [];
-
-        foreach($listAll as $item){
-            $selectItem['value'] = $item->id;
-            $selectItem['label'] = $item->code;
-            $selectList[] = $selectItem;
-        }
-        return response()->json($selectList);
-    }
 }
