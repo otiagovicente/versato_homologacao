@@ -24,5 +24,10 @@
 
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <list-products :id="{{$color->id}}" type="color"></list-products>
+        </div>
+    </div>
 </div>
 @endsection

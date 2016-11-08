@@ -23,8 +23,9 @@
 			</a>
 		</div>
 		<div class="clearfix"></div>
-		<div class="col-md-6">
-			@include('lines.partials.bests-sales')
+		<div class="col-md-12">
+			<list-products :id="{{$line->id}}" type="line"></list-products>
+			{{--@include('lines.partials.bests-sales')--}}
 		</div>
 
 

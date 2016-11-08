@@ -125,11 +125,11 @@ require('./bootstrap');
         'create-product',
         require('./components/products/CreateProducts.vue')
     );
-    // Vue.component(
-    //     'edit-product',
-    //     require('./components/products/EditProducts.vue')
-    // );
 
+    Vue.component(
+        'list-products',
+        require('./components/products/ListProducts.vue')
+    );
 
 
 /*

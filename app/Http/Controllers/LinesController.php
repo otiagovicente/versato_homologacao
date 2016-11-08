@@ -120,4 +120,10 @@ class LinesController extends Controller
                     ->get();
         return $products;
     }
+
+    public function api_products(Line $line){
+        return $line->products()->get();
+    }
+
+
 }

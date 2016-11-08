@@ -24,6 +24,9 @@
                 
 
             </div>
+            <div class="col-md-12">
+                <list-products :id="{{$material->id}}" type="material"></list-products>
+            </div>
         </div>
     </div>
 @stop

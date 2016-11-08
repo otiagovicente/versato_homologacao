@@ -15,7 +15,7 @@ class Material extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     public function products(){
-    	return $this->hasMany('App\Product');
+    	return $this->hasMany('App\Product')->with('line', 'material', 'color', 'brand');
     }
 
 }

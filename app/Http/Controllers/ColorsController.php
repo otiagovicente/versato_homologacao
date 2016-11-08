@@ -125,4 +125,9 @@ class ColorsController extends Controller
 
 
     }
+
+    public function api_products(Color $color){
+        return $color->products()->get();
+    }
+
 }

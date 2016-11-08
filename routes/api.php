@@ -85,6 +85,7 @@ Route::get('/products/search/{search}/{brand}', 'ProductsController@api_search')
 //Rotas dedicadas a Linhas
 
 Route::get('/lines/list', 'LinesController@api_list');
+Route::get('/lines/{line}/products', 'LinesController@api_products');
 
 
 //Rotas dedicadas a referencias
@@ -92,10 +93,12 @@ Route::get('/references/list', 'ReferencesController@api_list');
 
 //Rotas dedicadas a materiais
 Route::get('/materials/list', 'MaterialsController@api_list');
+Route::get('/materials/{material}/products', 'MaterialsController@api_products');
 
 //Rotas dedicadas a cores
-Route::get('/colors/{brand_id}', 'ColorsController@api_index');
+Route::get('/colors/{color}/products', 'ColorsController@api_products');
 Route::get('/colors/list', 'ColorsController@api_list');
+Route::get('/colors/{brand_id}', 'ColorsController@api_index');
 
 //Rotas dedicadas a grids
 Route::get('/grids/list', 'GridsController@api_list');

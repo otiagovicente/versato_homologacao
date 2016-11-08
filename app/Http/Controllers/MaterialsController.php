@@ -133,5 +133,8 @@ class MaterialsController extends Controller
 
 
     }
+    public function api_products(Material $material){
+        return $material->products()->get();
+    }
 
 }

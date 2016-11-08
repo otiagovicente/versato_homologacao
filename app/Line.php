@@ -15,6 +15,6 @@ class Line extends Model{
 
 
     public function products(){
-    	return $this->hasMany('App\Product');
+        return $this->hasMany('App\Product')->with('line', 'material', 'color', 'brand');
     }
 }
