@@ -10,7 +10,6 @@
         <div class="col-md-12">
             <div class="portlet light bordered" id="form_wizard_1">        
                 <div class="portlet-body form">
-                    
                     <form class="form-horizontal" id="submit_form">
                         <div class="form-wizard">
                             <div class="form-body">
@@ -410,7 +409,7 @@ export default{
         _this.getRepresentatives();
         _this.getProducts(Versato.brand_id);
 
-        if(_this.porder) _this.loadOrder();
+        //if(_this.porder) _this.loadOrder();
     },
     methods:{
         loadOrder: function(){
@@ -426,11 +425,9 @@ export default{
             delivery_id=[];
         },
         getOrderProducts: function(id){
-            this.$http.get('/api/orders/getProductsFromOrder/'+_this.porder.id).then(response => {
-                var obj = response.json();
-            //_this.order = obj[0];
-            console.log(obj);
-        });
+            //this.$http.get('/api/orders/getProductsFromOrder/'+_this.porder.id).then(response => {
+                //var obj = response.json();
+            //});
         },
         deleteProduct: function(index){
             _this.orderProductsDelete.push(this.order.products[index]);
