@@ -502,7 +502,7 @@ export default{
             finalDiscount = totalIndividualDiscount? totalIndividualDiscount : totalGeneralDiscount;
 
             finalPrice.totalDiscount = ((parseFloat(finalDiscount)/100) * parseFloat(product.price));
-            finalPrice.finalPrice = (parseFloat(product.price) - parseFloat(finalPrice.totalDiscount)) * qtd;
+            finalPrice.finalPrice = ((parseFloat(product.price) - parseFloat(finalPrice.totalDiscount)) * (qtd*12)) ;
             
             return finalPrice;
         },
