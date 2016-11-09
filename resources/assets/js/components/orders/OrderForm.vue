@@ -407,7 +407,7 @@ export default{
         toastr.options.closeButton = true;
         _this.getCustomers();
         _this.getRepresentatives();
-        _this.getProducts(Versato.brand_id);
+        //_this.getProducts(Versato.brand_id);
 
         //if(_this.porder) _this.loadOrder();
     },
