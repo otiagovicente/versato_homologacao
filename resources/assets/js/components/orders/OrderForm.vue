@@ -362,7 +362,7 @@
     <!--End - Modal de Produtos -->
 </template>
 
-<script>
+<script type="text/babel">
     import toastr from 'toastr'
     import VueStrap from 'vue-strap'
 
