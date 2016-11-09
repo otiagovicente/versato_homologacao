@@ -519,7 +519,8 @@ export default{
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
-                _this.products = response.data;
+                console.log(response.data);
+                //_this.products = response.data;
             });
         },
         getCustomers: function(){
