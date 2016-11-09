@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\RequestsOrder;
 use App\Order;
 use App\Mail\NewOrderMail;
+use League\Flysystem\Exception;
 use Mail;
 
 class OrdersController extends Controller
@@ -43,8 +44,8 @@ class OrdersController extends Controller
         $order->save();
         $order->products()->sync($request->products);
 
-        return $this->sendNewOrderMail($order->id);
-        //return response()->json($order);
+        $this->sendNewOrderMail($order->id);
+        return response()->json($order);
     }
 
     /**
@@ -106,11 +107,8 @@ class OrdersController extends Controller
         $order = Order::
         with('products', 'representative', 'customer')
             ->find($id);
-
-
-        //$order = Order::with('products')->find($id);//where('id', $id)->with('products', 'representative', 'customer')->first();
-       // return $order;
-        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        //return $order;
+        Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
     }
 
    public function api_list(){
