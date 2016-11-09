@@ -297,7 +297,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="p in products" :key="p.id">
+                            <tr v-for="p in products" track-by="$index">
                                 <td>
                                     <img class="product-list-photo" :src="p.photo" :alt="p.code" />
                                     <br/>
@@ -519,8 +519,8 @@ export default{
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
-                console.log(response.data);
-                //_this.products = response.data;
+                //console.log(response.data);
+                _this.products = response.data;
             });
         },
         getCustomers: function(){
