@@ -200,7 +200,7 @@ class ProductsController extends Controller
                     ->where('brand_id', $brand->id)
                     ->get();
 
-        return $products;
+        return response()->json($products);
     }
     public function api_listPaginate(Brand $brand){
         $products = Product::
