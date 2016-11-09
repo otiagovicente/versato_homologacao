@@ -520,7 +520,7 @@ export default{
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
                 //console.log(response.data);
-                _this.products = response.data;
+                _this.products = response.json();
             });
         },
         getCustomers: function(){
