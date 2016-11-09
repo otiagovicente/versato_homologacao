@@ -126,5 +126,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
     Route::get('/orders/getProductsFromOrder/{id}', 'OrdersController@api_getProducts');
+    Route::get('/orders/listOrdersByRepresentative/{id}','OrdersController@api_listOrdersByRepresentative');
     Route::resource('orders','OrdersController');
 });
