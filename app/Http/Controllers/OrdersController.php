@@ -137,5 +137,10 @@ class OrdersController extends Controller
         $order = Order::with('products')->where('id', $id)->get();
         return response()->json($order);
     }
-
+    public function api_listOrdersByRepresentative($id){
+        $orders = Order::where('representative_id', $id)
+            ->with('products', 'representative', 'customer')
+            ->get();
+        return response()->json($orders);
+    }
 }
