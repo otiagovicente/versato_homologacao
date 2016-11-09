@@ -297,7 +297,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="p in products" track-by="id">
+                            <tr v-for="p in products" track-by="p.id">
                                 <td>
                                     <img class="product-list-photo" :src="p.photo" :alt="p.code" />
                                     <br/>
