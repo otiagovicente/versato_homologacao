@@ -138,7 +138,7 @@ class RepresentativesController extends Controller
             $qrCode = new QrCode();
             $qrCode
                 ->setText($token)
-                ->setSize(300)
+                ->setSize(600)
                 ->setPadding(10)
                 ->setErrorCorrection('high')
                 ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
