@@ -42,13 +42,11 @@ class RepresentativesController extends Controller
      */
     public function store(RepresentativeRequest $request)
     {
-
         $representative = new Representative($request->all());
         $representative->save();
         $representative->regions()->sync($request->regions);
         $representative->brands()->sync($request->brands);
-        return $representative;
-
+        return $request->all();
     }
 
     /**
@@ -82,12 +80,9 @@ class RepresentativesController extends Controller
      */
     public function update(RepresentativeRequest $request, Representative $representative)
     {
-
-
         $representative->fill($request->all());
         $representative->save();
         $representative->regions()->sync($request->regions);
-
         $representative->brands()->sync($request->brands);
         return $representative;
     }
@@ -207,6 +202,11 @@ class RepresentativesController extends Controller
 
     public function api_user(Representative $representative){
         return response()->json($representative->user()->first());
+    }
+
+    public function api_representative($idUser){
+        $rep = Representative::where('user_id', '$idUser')->get();
+        return response()->json($rep);
     }
 
 
