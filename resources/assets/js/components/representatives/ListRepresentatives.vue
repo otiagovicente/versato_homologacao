@@ -23,7 +23,7 @@
 
 </template>
 
-<style>
+<style scoped>
 
     .search{
         position: relative;
@@ -89,7 +89,7 @@
                         });
             },
             goToRepresentative: function(representative_id){
-                window.location.href = '/representatives/'+representative_id;
+                window.location.href = '/representatives/'+representative_id+'/grantaccess';
             }
         }
     }

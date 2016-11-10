@@ -79,6 +79,8 @@ class CreateRegionsTable extends Migration
             $table->increments('id');
             $table->string('code')->unique();
             $table->integer('user_id')->unsigned()->unique();
+            $table->longText('token')->nullable();
+            $table->longText('qrcode')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
