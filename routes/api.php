@@ -12,11 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::get('/user', function (Request $request) {
-
-    return $request->user();
-
+    return $request->user()->load('representative');
 })->middleware('auth:api');
 
 
@@ -61,6 +58,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/representatives/{representative}/brands', 'RepresentativesController@api_brands');
     Route::get('/representatives/{representative}/regions', 'RepresentativesController@api_regions');
     Route::get('/representatives/{representative}/user', 'RepresentativesController@api_user');
+
+
 
 
     //Rotas dedicadas à Macro Regiões e Regiões
