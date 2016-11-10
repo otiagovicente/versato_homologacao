@@ -95,7 +95,7 @@ class ProductsController extends Controller
             $product->grids()->attach($grid);
         }
 
-        return response($product);
+        return response()->json($product);
 
 
     }
@@ -147,7 +147,7 @@ class ProductsController extends Controller
         $product->tags()->sync($request->tags);
         $product->grids()->sync($request->grids);
 
-        return response($product);
+        return response()->json($product);
 
     }
 
@@ -212,7 +212,7 @@ class ProductsController extends Controller
             ->with('tags')
             ->where('brand_id', $brand->id)
             ->paginate(10);
-        return $products;
+        return response()->json($products);
     }
 
     public function api_show(Product $product){
@@ -238,7 +238,7 @@ class ProductsController extends Controller
         $product->color_code = $product->color->code;
         $product->grids_list = $product->grids->pluck('id');
         $product->tags_list = $product->tags->pluck('id');
-        return $product;
+        return response()->json($product);
     }
 
     public function api_sync($dtSincronizacao){
@@ -263,7 +263,7 @@ class ProductsController extends Controller
 
         $products = Product::search($search)->where('brand_id', $brand->id)->get();
 
-        return $products;
+        return response()->json($products);
     }
 
 
