@@ -266,7 +266,7 @@
             update: function () {
                 _CreateRepresentative.loadBrandsToData();
                 _CreateRepresentative.loadRegionsToData();
-                
+
                 this.$http.patch('/representatives/' + _CreateRepresentative.prepresentativeid, _CreateRepresentative.representative)
                         .then(response => {
                             console.log(response.json());
