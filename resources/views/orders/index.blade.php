@@ -6,7 +6,6 @@
 		'url' => '/orders',
 		'actions' => []
 	])
-
 	<div class="content-fluid" style="padding:20px;">
 		<div class="row">
             <table class="table table-striped table-hover">
