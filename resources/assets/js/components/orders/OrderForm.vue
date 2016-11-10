@@ -407,7 +407,7 @@ export default{
         toastr.options.closeButton = true;
         _this.getCustomers();
         _this.getRepresentatives();
-        //_this.getProducts(Versato.brand_id);
+        _this.getProducts(Versato.brand_id);
 
         //if(_this.porder) _this.loadOrder();
     },
@@ -519,7 +519,8 @@ export default{
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
-                _this.products = response.data;
+                //console.log(response.data);
+                _this.products = response.json();
             });
         },
         getCustomers: function(){
