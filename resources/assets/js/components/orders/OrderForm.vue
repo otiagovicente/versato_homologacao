@@ -519,7 +519,7 @@ export default{
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
-                //console.log(response.data);
+                console.log(response.json());
                 _this.products = response.json();
             });
         },

@@ -105,7 +105,9 @@
             return {
                 representative: {
                     code: '',
-                    user_id: null,
+                    user_id: '',
+                    regions: [],
+                    brands: []
                 },
                 user: {
                     photo: '/images/default-placeholder.jpg',
@@ -124,9 +126,6 @@
             },
             'computeRegionsArray': function () {
                 _CreateRepresentative.representative.regions = new Array();
-                _.forEach(_CreateRepresentative.regions, function (region) {
-                    _CreateRepresentative.representative.regions.push(region.id);
-                });
             },
             'computeBrandsArray': function () {
                 _CreateRepresentative.representative.brands = new Array();
@@ -231,6 +230,8 @@
 
             },
             store: function () {
+                _CreateRepresentative.loadBrandsToData();
+                _CreateRepresentative.loadRegionsToData();
 
                 this.$http.post('/representatives', _CreateRepresentative.representative)
                         .then(response => {
@@ -243,10 +244,29 @@
                                 $('#' + key).addClass('has-error');
                             });
                         });
-
+            },
+            loadBrandsToData: function(){
+                var blAdd = true;
+                _.forEach(_CreateRepresentative.regions, function (region){
+                    for (var i=0; i < _CreateRepresentative.representative.regions.length; ++i) {
+                        if (_CreateRepresentative.representative.regions[i].id == region.id) blAdd = false;
+                    }
+                    if(blAdd) _CreateRepresentative.representative.regions.push(region.id);
+                });
+            },
+            loadRegionsToData: function(){
+                var blAdd = true;
+                _.forEach(_CreateRepresentative.brands, function (brand) {
+                    for (var i=0; i < _CreateRepresentative.representative.brands.length; ++i) {
+                        if (_CreateRepresentative.representative.brands[i].id == brand.id) blAdd = false;
+                    }
+                    if(blAdd) _CreateRepresentative.representative.brands.push({brand_id: brand.id, representative_comision:brand.comission});
+                });
             },
             update: function () {
-
+                _CreateRepresentative.loadBrandsToData();
+                _CreateRepresentative.loadRegionsToData();
+                
                 this.$http.patch('/representatives/' + _CreateRepresentative.prepresentativeid, _CreateRepresentative.representative)
                         .then(response => {
                             console.log(response.json());
