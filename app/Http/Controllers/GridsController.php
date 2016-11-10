@@ -55,9 +55,9 @@ class GridsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Grid $grid)
     {
-        //
+        return view('grids.show', compact('grid'));
     }
 
     /**
@@ -100,6 +100,13 @@ class GridsController extends Controller
         $products = Grid::get();
 
         return $products;
+
+
+    }
+
+    public function api_show(Grid $grid){
+
+        return $grid->load('sizes');
 
 
     }

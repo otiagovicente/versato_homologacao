@@ -153,6 +153,15 @@ require('./bootstrap');
     );
 
 
+/*
+ * Componentes de Grids
+ */
+
+    Vue.component(
+        'show-grid',
+        require('./components/grids/ShowGrid.vue')
+    );
+
 
 
 

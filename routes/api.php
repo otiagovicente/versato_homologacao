@@ -105,6 +105,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/colors/{brand_id}', 'ColorsController@api_index');
 
     //Rotas dedicadas a grids
+    Route::get('/grids/{grid}', 'GridsController@api_show');
     Route::get('/grids/list', 'GridsController@api_list');
     Route::get('/grids/selectlist/{brand}', 'GridsController@api_selectList');
 

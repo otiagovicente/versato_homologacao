@@ -94,5 +94,9 @@ Route::group(['middleware' => 'auth'], function () {
         'parameters' => 'singular'
     ]);
 
+    Route::resource('/grids', 'GridsController',[
+        'parameters' => 'singular'
+    ]);
+
 
 });

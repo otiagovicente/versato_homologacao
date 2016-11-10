@@ -52,7 +52,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/babel">
     export default {
         /*
          * The component's data.
@@ -78,7 +78,7 @@
             getTokens() {
                 this.$http.get('/oauth/tokens')
                         .then(response => {
-                            this.tokens = response.data;
+                            this.tokens = response.json();
                         });
             },
 
