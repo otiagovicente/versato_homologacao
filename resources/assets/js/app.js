@@ -113,6 +113,11 @@ require('./bootstrap');
         require('./components/representatives/SelectBrands.vue')
     );
 
+    Vue.component(
+        'grant-access-to-versato-app',
+        require('./components/representatives/GrantAccessToVersatoApp.vue')
+    );
+
 
 
 

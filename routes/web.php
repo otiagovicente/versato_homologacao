@@ -20,7 +20,7 @@ use App\Mail\NewOrderMail;
 
 Auth::routes();
 
-
+Route::get('/representatives/qrcode', 'RepresentativesController@createTokenQRCode');
 Route::get('/enviamail/{id}','OrdersController@sendNewOrderMail');
 
 Route::group(['middleware' => 'auth'], function () {
@@ -36,7 +36,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('regions','RegionsController',['parameters' => 'singular']);
 	Route::resource('customers','CustomersController',['parameters' => 'singular']);
 	Route::post('/customers/photo', 'CustomersController@addPhoto');
-    
+
+
+    Route::get('/representatives/{representative}/grantaccess','RepresentativesController@showGrantAccess');
+    Route::post('/representatives/{representative}/grantaccess', 'RepresentativesController@grantAccess');
 	Route::resource('representatives','RepresentativesController',['parameters' => 'singular']);
 
     Route::get('/','PagesController@productsDashboard');

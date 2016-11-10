@@ -10,8 +10,9 @@ class Representative extends Model
 {
     use Searchable;
 
-    protected $fillable = ['code', 'user_id'];
+    protected $fillable = ['code', 'user_id', 'token', 'qrcode'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['token', 'qrcode'];
 
     public function user(){
         return $this->belongsTo('App\User');
