@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 
 use App\Product;
 use App\Brand;
 use App\Grid;
-use App\Line;
-use App\Material;
-use App\Color;
 use App\Tag;
 
 class ProductsController extends Controller
@@ -188,7 +184,6 @@ class ProductsController extends Controller
 
 
     public function api_list(Brand $brand){
-        $lstProducts = [];
         $products = Product::
                     with('brand')
                     ->with('line')
