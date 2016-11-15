@@ -27,7 +27,7 @@ class CreateOrderTable extends Migration
             $table->double('representative_discount', 8,2)->nullable();
             $table->integer('delivery_id')->nullable()->nullable();
             $table->double('customer_discount', 8,2)->nullable();
-
+            $table->double('total', 8,2)->nullable();
             $table->timestamps();
         });
     }

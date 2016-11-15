@@ -66,7 +66,7 @@ class CreateProductsTable extends Migration
             $table->string('code_beirario')->index()->nullable();
             $table->integer('brand_id')->unsigned()->index();
             $table->integer('line_id')->unsigned()->index();
-            $table->integer('reference_id')->unsigned()->index();
+            $table->integer('reference_id')->nullable();
             $table->integer('material_id')->unsigned()->index();
             $table->integer('color_id')->unsigned()->index();
             $table->string('photo');
