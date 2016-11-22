@@ -45,8 +45,9 @@ class RepresentativesController extends Controller
         $representative = new Representative($request->all());
         $representative->save();
         $representative->regions()->sync($request->regions);
-        $representative->brands()->sync($request->brands);
-        return $request->all();
+        //$representative->brands()->sync($request->brands);
+
+        return response($request->all());
     }
 
     /**
@@ -106,32 +107,23 @@ class RepresentativesController extends Controller
      */
 
         public function showGrantAccess(Representative $representative){
-
             return view('representatives.versatoapp', compact('representative'));
-
         }
 
         public function grantAccess(Representative $representative){
-
             $token = $this->createToken($representative);
             $QRCode = $this->createTokenQRCode($token);
             $representative->token = $token;
             $representative->qrcode = $this->createTokenQRCodeBase64($QRCode);
             $this->sendVersatoAppAccessMail($QRCode, $representative);
-
-
-
             return response($representative->qrcode);
         }
 
         public function createToken($representative){
-
             $user = User::find($representative->user->id);
             $token = $user->createToken('VersatoApp')->accessToken;
             $representative->save();
-
             return $token;
-
         }
 
         public function createTokenQRCode($token){

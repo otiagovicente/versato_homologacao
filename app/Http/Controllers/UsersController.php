@@ -96,7 +96,6 @@ class UsersController extends Controller
         $user = User::where('email', $email)->first();
 
         if(Hash::check($request->current, $user->password)){
-
             $user->password = Hash::make($request->password);
             $user->save();
             return response('Senha Alterada!');
