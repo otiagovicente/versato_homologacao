@@ -67,3 +67,10 @@ Vue.http.interceptors.push((request, next) => {
 });
 
 
+/*Vue.http.interceptors.push((request, next)  => {
+    next((response) => {
+        response.data = JSON.parse(response.data);
+    });
+});
+*/
+
