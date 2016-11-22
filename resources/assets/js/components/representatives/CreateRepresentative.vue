@@ -54,8 +54,10 @@
                                             </div>
                                         </div>
                                     </div>
-
-
+                                </div>
+                                <hr />
+                                <div class="col-md-12" style="cursor:pointer;">
+                                    <input type="checkbox" value="" v-model="representative.manager"> Gerente? </label>
                                 </div>
 
 
@@ -107,7 +109,9 @@
                     code: '',
                     user_id: '',
                     regions: [],
-                    brands: []
+                    brands: [],
+                    manager:null,
+                    macroregion:null
                 },
                 user: {
                     photo: '/images/default-placeholder.jpg',
@@ -237,6 +241,8 @@
                         .then(response => {
                             console.log(response.json());
                             toastr.success('Representante creado con exito');
+                            _CreateRepresentative.regions = null;
+                            _CreateRepresentative.brands = null;
                         })
                         .catch(response => {
                             $.each(response.data, function (key, value) {
@@ -271,6 +277,8 @@
                         .then(response => {
                             console.log(response.json());
                             toastr.success('Representante guardado con exito');
+                            _CreateRepresentative.regions = null;
+                            _CreateRepresentative.brands = null;
                         })
                         .catch(response => {
                             $.each(response.data, function (key, value) {

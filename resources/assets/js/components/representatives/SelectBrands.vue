@@ -150,7 +150,6 @@
 
             },
             getBrands: function(){
-
                 this.$http.get('/api/brands')
                         .then(response => {
                             _SelectBrands.brands = [];
