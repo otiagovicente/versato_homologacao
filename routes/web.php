@@ -101,5 +101,5 @@ Route::group(['middleware' => 'auth'], function () {
         'parameters' => 'singular'
     ]);
 
-
+    Route::resource('charts','ChartsController',['parameters' => 'singular']);
 });
