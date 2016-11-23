@@ -55,9 +55,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                <hr />
+                                <hr/>
                                 <div class="col-md-12" style="cursor:pointer;">
-                                    <input type="checkbox" value="" v-model="representative.manager"> Gerente? </label>
+                                    Gerente? <input type="checkbox" value="" v-model="representative.manager">
+
+                                    <div v-if="representative.manager">
+                                        <v-select
+                                                v-bind:options.sync="macroregions_select"
+                                                :value.sync="representative.macroregion_id"
+                                                placeholder="Elige la macro región"
+                                                id="macroregions-input"
+                                                name="macroregions[]"
+                                                search justified required close-on-select
+                                        ></v-select>
+                                    </div>
                                 </div>
 
 
@@ -90,6 +101,9 @@
     <select-region></select-region>
     <select-brands></select-brands>
 
+    <pre>
+        {{ representative | json}}
+    </pre>
 
 </template>
 
@@ -102,6 +116,7 @@
 </style>
 <script type="text/babel">
     import VueStrap from 'vue-strap'
+
     export default{
         data(){
             return {
@@ -111,7 +126,7 @@
                     regions: [],
                     brands: [],
                     manager:null,
-                    macroregion:null
+                    macroregion_id:[]
                 },
                 user: {
                     photo: '/images/default-placeholder.jpg',
@@ -119,8 +134,13 @@
                     lastname: ''
                 },
                 regions: null,
-                brands: null
+                brands: null,
+                macroregions_select: new Array(),
             }
+        },
+        components: {
+            vSelect: VueStrap.select,
+            vOption: VueStrap.option,
         },
         props: ['prepresentativeid'],
         computed: {
@@ -134,18 +154,9 @@
             'computeBrandsArray': function () {
                 _CreateRepresentative.representative.brands = new Array();
                 _.forEach(_CreateRepresentative.brands, function (brand) {
-
-                    // _CreateRepresentative.representative.brands.push([
-                    //     brand.id, {comission: parseFloat(brand.comission)}
-                    // ]);
-                    //
-
                     _CreateRepresentative.representative.brands.push({
                         brand_id: brand.id, comission: parseFloat(brand.comission)
                     });
-
-
-
                 });
             },
         },
@@ -154,11 +165,15 @@
             if (_CreateRepresentative.prepresentativeid) {
                 _CreateRepresentative.loadData();
             }
-
-
+            _CreateRepresentative.getMacroRegions();
         },
         methods: {
-
+            getMacroRegions: function(){
+                this.$http.get('/api/macroregions/selectlist')
+                        .then(response => {
+                            this.macroregions_select = response.json();
+                        });
+            },
 
             /*
              * Funções de Carregamento

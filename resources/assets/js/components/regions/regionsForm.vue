@@ -14,7 +14,7 @@
         <v-select 
           v-bind:options.sync="macroregions_select"
           :value.sync="macroregion"  
-          placeholder="Elije la macro región"  
+          placeholder="Elige la macro región"
           id="macroregions-input" 
           name="macroregions[]" 
           search justified required close-on-select
