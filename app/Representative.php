@@ -10,7 +10,7 @@ class Representative extends Model
 {
     use Searchable;
 
-    protected $fillable = ['code', 'user_id', 'token', 'qrcode'];
+    protected $fillable = ['code', 'user_id', 'token', 'qrcode', 'manager', 'macroregion_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['token', 'qrcode'];
 
