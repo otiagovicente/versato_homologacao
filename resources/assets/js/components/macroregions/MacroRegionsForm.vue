@@ -1,6 +1,6 @@
 <style>
     map {
-        width:100%;
+        width:600px;
         height: 600px;
         display: block;
     }
@@ -32,21 +32,13 @@
 
   <div id="code-input" class="form-group">
     <label class="col-md-3 control-label">Macro Região</label>
-      <div class="col-md-12" style="padding:15px">                
-        <map
-          :center.sync="center"
-          :zoom.sync="zoom"
-          :map-type-id.sync="mapType"
-          :options="{styles: mapStyles, scrollwheel: scrollwheel}"
-          :bounds.sync="mapBounds"
-        >
-          <polygon 
-            :paths.sync="loadpolygon" 
-            :editable="canedit" 
-            :options="{geodesic:true, strokeColor:'#FF0000', fillColor:'#000000', draggable: canedit}"
-          ></polygon>
-        </map>
+    <hr>
+    <div class="row">
+      <div class="col-md-12">
+          <button v-show="selectedShape" id="delete-button" class="btn blue btn-block">Borrar Macro Región</button>
+          <div class="map" v-el:macroregionmap></div>
       </div>
+    </div>
   </div>
   
   <div class="row">
@@ -58,7 +50,7 @@
           <button 
             v-show="canedit"
             type="button" 
-            @click="submitData()" 
+            @click="submitData" 
             class="btn blue btn-block"
           >
             Salvar
@@ -75,10 +67,13 @@
       </div>
     </div>
   </div>
+  <pre>
+    {{macroregion | json}}
+  </pre>
 </template>
 
 <script>
-    import {load, Map, Polygon} from 'vue-google-maps'
+    //import {load, Map, Polygon} from 'vue-google-maps'
     import toastr from 'toastr'
     
 
@@ -88,26 +83,21 @@ export default{
       'pmacroregion',
       'isedit'
     ],
-    components: {
-            Map,
-            Polygon
+    events: {
+      MapsApiLoaded: function () {
+        this.createMap();
+        return true;
+      },
     },
     data(){
         return{
             center: { lat: -34.612829, lng: -58.434704 },
             zoom: 5,
-            mapType: 'roadmap',
-            mapStyle: 'normal',
-            scrollwheel: true,
-            mapBounds: {},
-            pgvisible: true,
             canedit:true,
-            loadpolygon:[[
-                  {lat: -34.81375546971009, lng: -63.63490624999997},
-                  {lat: -34.83179331290262, lng: -61.23988671874997},
-                  {lat: -36.4565891377291, lng: -61.26185937499997},
-                  {lat: -36.42123554842336, lng: -63.61293359374997},
-                ]],
+            selectedShape: null, 
+            selectColor: null,
+            drawingManager: null,
+            loadpolygon:null,
             macroregion: {
                 id:'',
                 code: '',
@@ -117,57 +107,168 @@ export default{
         }
     },
     ready(){
+        window._Macroregion = this;
         toastr.options.closeButton = true;
-        this.configureMapsApi();
-        if(this.pmacroregion) this.loadMacroregion();
+        if(_Macroregion.pmacroregion) this.loadMacroregion();
     },
     methods:{
-      configureMapsApi: function(){
-        if (!(typeof google === 'object' && typeof google.maps === 'object')) {
-          load(Maps.maps_key, Maps.maps_version);
+      
+      createMap: function () {
+        _Macroregion.googleMap = new google.maps.Map(_Macroregion.$els.macroregionmap, {
+            center: _Macroregion.center,
+            zoom: _Macroregion.zoom,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            disableDefaultUI: true,
+            zoomControl: true
+        });
+        _Macroregion.initDrawer();
+      },
+      
+      initDrawer: function(){
+        var polyOptions = {
+          strokeWeight: 0,
+          fillOpacity: 0.45,
+          editable: true
+        };
+        
+        _Macroregion.drawingManager = new google.maps.drawing.DrawingManager({
+          drawingMode: google.maps.drawing.OverlayType.POLYGON,
+          drawingControl: true,
+          drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: [
+              google.maps.drawing.OverlayType.POLYGON,
+              //google.maps.drawing.OverlayType.RECTANGLE
+            ]
+          },
+          rectangleOptions: polyOptions,
+          polygonOptions: polyOptions
+        });
+        
+        _Macroregion.drawingManager.setMap(_Macroregion.googleMap);
+        _Macroregion.initListeners();
+      },
+      
+      initListeners: function(){
+        google.maps.event.addListener(_Macroregion.drawingManager, 'overlaycomplete', function (e) {
+          if (e.type !== google.maps.drawing.OverlayType.MARKER) {
+            _Macroregion.drawingManager.setDrawingMode(null);
+            var newShape = e.overlay;
+            newShape.type = e.type;
+            newShape.setDraggable(true);
+            google.maps.event.addListener(newShape, 'click', function (e) {
+              _Macroregion.setSelection(newShape);
+            });
+            _Macroregion.setSelection(newShape);
+          }
+        });
+        
+        //google.maps.event.addListener(_Macroregion.drawingManager, 'drawingmode_changed', _Macroregion.clearSelection);
+        google.maps.event.addListener(_Macroregion.googleMap, 'click', _Macroregion.clearSelection);
+        google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', _Macroregion.deleteSelectedShape);
+        
+        google.maps.event.addListener(_Macroregion.drawingManager, 'polygoncomplete', function (polygon) {
+          _Macroregion.loadpolygon = (polygon.getPath().getArray());
+          _Macroregion.drawingManager.setOptions({
+            drawingControl: false
+          });
+        });
+        
+        google.maps.event.addListener(_Macroregion.drawingManager, 'rectanglecomplete', function (rectangle) {
+          var coordinates = (rectangle.getBounds());
+          console.log(coordinates);
+          _Macroregion.drawingManager.setOptions({
+            drawingControl: false
+          });
+        });
+      },
+      
+      clearSelection: function(){
+        if (_Macroregion.selectedShape) {
+            _Macroregion.selectedShape.setEditable(false);
+            _Macroregion.selectedShape = null;
         }
       },
-        loadMacroregion: function(){
-          this.macroregion.id = this.pmacroregion.id,
-          this.macroregion.code = this.pmacroregion.code,
-          this.macroregion.description = this.pmacroregion.description,
-          this.loadpolygon = JSON.parse(this.pmacroregion.geo);
-          this.canedit = this.isedit;
-        },
+      
+      setSelection: function (shape) {
+        _Macroregion.clearSelection();
+        _Macroregion.selectedShape = shape;
+        shape.setEditable(true);
+      },
+      
+      deleteSelectedShape: function() {
+        if (_Macroregion.selectedShape) {
+          _Macroregion.selectedShape.setMap(null);
+          _Macroregion.selectedShape = null;
+          _Macroregion.macroregion.geo = null;
+           _Macroregion.drawingManager.setOptions({
+            drawingControl: true
+          });
+        }
+      },
+      
+      loadMacroregion: function(){
+        _Macroregion.macroregion.id = _Macroregion.pmacroregion.id,
+        _Macroregion.macroregion.code = _Macroregion.pmacroregion.code,
+        _Macroregion.macroregion.description = _Macroregion.pmacroregion.description,
+        _Macroregion.loadpolygon = JSON.parse(_Macroregion.pmacroregion.geo);
+        _Macroregion.canedit = _Macroregion.isedit;
+        _Macroregion.createpolygon();
+      },
+      createpolygon: function(){
+        console.log(_Macroregion.loadpolygon);
         
-        submitData: function(){
-            if(!this.macroregion.id)
-              this.insertData();
-            else
-              this.updateData();
-        },
+        var triangleCoords = [
+          {lat: 25.774, lng: -80.190},
+          {lat: 18.466, lng: -66.118},
+          {lat: 32.321, lng: -64.757},
+          {lat: 25.774, lng: -80.190}
+        ];
+        var bermudaTriangle = new google.maps.Polygon({});
+        /*var bermudaTriangle = new google.maps.Polygon({
+          paths: triangleCoords,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+        */
+        //bermudaTriangle.setMap(_Macroregion.googlemap);
+      },
+      submitData: function(){
+          if(!this.macroregion.id)
+            this.insertData();
+          else
+            this.updateData();
+      },
         
-        insertData: function(){
-          this.macroregion.geo = JSON.stringify(this.loadpolygon);
-            this.$http.post('/macroregions', this.macroregion)
-            .then((response) => {
-              toastr.success('Sucesso!','Macro Região incluída com sucesso');
-            }, (response) => { 
-              this.showErrors(response.data); 
-            }); 
-        },
+      insertData: function(){
+        _Macroregion.macroregion.geo = JSON.stringify(_Macroregion.loadpolygon);
+        this.$http.post('/macroregions', this.macroregion)
+        .then((response) => {
+          toastr.success('Sucesso!','Macro Região incluída com sucesso');
+        }, (response) => { 
+          this.showErrors(response.data); 
+        }); 
+      },
         
-        updateData: function(){
-          this.macroregion.geo = JSON.stringify(this.loadpolygon);
-          this.$http.put('/macroregions/'+this.macroregion.id, this.macroregion)
-          .then((response) => {
-            toastr.success('Sucesso!','Macro Região atualizada com sucesso');
-          }, (response) => { 
-            this.showErrors(response.data); 
-          }); 
-        },
-        
-        showErrors: function(data){
-          $.each(data, function (key, value) {
-            toastr.warning('Atención', value);
-            $('#'+key).addClass('has-error');
-          }); 
-        },
+      updateData: function(){
+        this.macroregion.geo = JSON.stringify(_Macroregion.loadpolygon);
+        this.$http.put('/macroregions/'+this.macroregion.id, this.macroregion)
+        .then((response) => {
+          toastr.success('Sucesso!','Macro Região atualizada com sucesso');
+        }, (response) => { 
+          this.showErrors(response.data); 
+        }); 
+      }, 
+      
+      showErrors: function(data){
+        $.each(data, function (key, value) {
+          toastr.warning('Atención', value);
+          $('#'+key).addClass('has-error');
+        }); 
+      },
     },
 
     filters: {

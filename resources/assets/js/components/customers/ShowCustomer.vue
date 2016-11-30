@@ -177,9 +177,7 @@
                 });
             },
             centerMap: function (lat, lng) {
-
                 _showCustomer.googleMap.setCenter({lat: lat, lng: lng});
-
             },
             addMarker: function (lat, lng) {
 
