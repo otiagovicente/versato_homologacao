@@ -13,14 +13,6 @@ use App\Brand;
 
 class ColorsController extends Controller
 {
-
-
-
-    public function __construct(){
-    }
-
-
-
     /**
      * Display a listing of the resource.
      *
@@ -88,7 +80,6 @@ class ColorsController extends Controller
      */
     public function update(ColorRequest $request, Color $color)
     {
-
         $color->fill($request->all());
         $color->brand_id = (int) session()->get('brand')->id;
         $color->save();
@@ -119,11 +110,8 @@ class ColorsController extends Controller
        return $colors;
    }
    public function api_list(){
-
         $colors = Color::all();
         return $colors;
-
-
     }
 
     public function api_products(Color $color){
