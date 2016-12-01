@@ -156,6 +156,10 @@ require('./bootstrap');
         'colors-list',
         require('./components/colors/ColorsList.vue')
     );
+    Vue.component(
+        'color-form',
+        require('./components/colors/ColorForm.vue')
+    );
 
 
 /*
