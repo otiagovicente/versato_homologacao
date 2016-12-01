@@ -68,7 +68,7 @@
     </div>
   </div>
   <pre>
-    {{macroregion | json}}
+    {{$data | json}}
   </pre>
 </template>
 
