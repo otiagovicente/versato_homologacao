@@ -23,7 +23,7 @@ class ProductRequest extends Request
      */
     public function rules()
     {
-      switch ($this->method) {
+      switch ($this->method()) {
 
             case 'GET':
             case 'POST':

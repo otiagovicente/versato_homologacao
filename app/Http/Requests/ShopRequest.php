@@ -23,7 +23,7 @@ class ShopRequest extends FormRequest
      */
     public function rules()
     {
-        switch ($this->method) {
+        switch ($this->method()) {
             case 'GET':
             case 'POST':
                 $rules = [
