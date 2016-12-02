@@ -1,21 +1,24 @@
 @extends('layouts.dashboard')
 
-@section('content')
-@include('colors.partials.header',[
-    'pageTitle' => 'Criar Cor',
-    'url' => '/colors/create',
-    'actions' => []
-])
-<div class="container">
-    <div class="row">
-        <div class="col-md-10">
-            
-            @include('colors.partials.form', [
-            'action' => 'create',
-            'sendButtonText' => 'Criar Cor'
-            ])    
+@section('styles')
+    <link href="/dashboard/global/plugins/jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
+@stop
+@section('scripts')
+    <script src="/dashboard/global/plugins/jquery-minicolors/jquery.minicolors.min.js" type="text/javascript"></script>
+    <script src="/dashboard/pages/scripts/components-color-pickers.js" type="text/javascript"></script>
+@stop
 
-        </div>
+@section('content')
+    @include('general.pageheader',[
+        'section' => 'Colores',
+        'sectionUrl' => '/colors',
+        'pageTitle' => 'Crear Color',
+        'url' => '/colors/create',
+        'actions' => [
+            'Mostrar Todos' => '/colors',
+        ]
+    ])
+    <div class="container-fluid">
+        <color-form/>
     </div>
-</div>
-@endsection
+@stop

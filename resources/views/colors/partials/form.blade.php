@@ -1,5 +1,4 @@
 <div class="portlet light">
-
     <div class="portlet-title">
         <div class="caption font-blue">
         	@if($action==='edit')
@@ -82,34 +81,26 @@
 @stop
 
 @section('scripts')
-
     <script src="/dashboard/global/plugins/jquery-minicolors/jquery.minicolors.min.js" type="text/javascript"></script>
 	<!-- DATA CASTING & FORM SEND-->
     <script src="/dashboard/pages/scripts/components-color-pickers.js" type="text/javascript"></script>
     <script>
-
-
-
         $('#color').minicolors({
             change: function(value, opacity) {
                 console.log(value + ' - ' + opacity);
             }
         });
 
-        $('#send-btn').on('click', function(event) {
-             
+        $('#send-btn').on('click', function(event) {         
             var data = $('#form-color').serialize();
-            
             $.ajax({
-
             	@if($action==='edit')
                 type: "PATCH",
-                url: '{{ url('/colors/'.$color->id) }}',
+                url: '{{ url('/colors/'.$color->id.'/edit') }}',
                 @elseif($action==='create')
                 type: "POST",
                 url: '{{ url('/colors') }}',
                 @endif
-
                  data: data,
                  success: function(response) {
                     toastr.success('Sucesso!','Linha atualizada com sucesso');
@@ -118,11 +109,9 @@
                     $('#color-input').removeClass('has-error');
                  },
                  error: function(responseError) {
-
                     var errors = JSON.parse(responseError.responseText);
                     toastr.error('Erro!', 'Alguns dados não foram preenchidos corretamente');
                     $.each(errors, function(key, value){
-
                         if(key == 'code'){
                             toastr.error('Erro!', value);
                             $('#code-input').addClass('has-error');
@@ -142,8 +131,6 @@
                 }
             });
              return false;
-             
-
         });            
     </script>
 @stop
