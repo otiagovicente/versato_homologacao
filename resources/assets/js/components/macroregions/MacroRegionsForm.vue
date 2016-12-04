@@ -50,14 +50,14 @@
 
 </div>
 
-    div
+
     <div class="map" v-el:macroregionmap></div>
 
 
-    <pre> {{$data | json}} </pre>
+    <pre> {{$data.macroregion | json}} </pre>
 </template>
 
-<script >
+<script type="text/babel">
     import toastr from 'toastr'
 	
     export default{
@@ -107,7 +107,10 @@
                     disableDefaultUI: true,
                     zoomControl: true
                 });
-                if(_Macroregion.pmacroregion) _Macroregion.createPolygon(_Macroregion.googleMap);
+                if(_Macroregion.pmacroregion){
+                    _Macroregion.createPolygon(_Macroregion.googleMap);
+
+                }
                 _Macroregion.initDrawer();
             },
 
@@ -214,6 +217,7 @@
                 }
             },
             createPolygon: function (map) {
+                console.log('createPolygon initialized');
                 var polygon = new google.maps.Polygon({
                     paths: _Macroregion.loadPolygon,
                     strokeWeight: 0,
@@ -222,15 +226,25 @@
                     draggable:true
                 });
                 polygon.setMap(map);
+                console.log('set map');
+                console.log(map);
+
+                console.log('polygon');
+                console.log(polygon);
 
                 google.maps.event.addListener(polygon.getPath(), 'insert_at', function(index, obj) {
+                    console.log('polygon dentro da funcao insert_at');
+                    console.log(polygon);
                     _Macroregion.teste(polygon.getPath().getArray());
                 });
                 google.maps.event.addListener(polygon.getPath(), 'set_at', function(index, obj) {
+                    console.log('polygon dentro da funcao set_at');
+                    console.log(polygon);
                     _Macroregion.teste(polygon.getPath().getArray());
                 });
             },
             teste: function(p){
+                console.log('passou então');
                 console.log(p);
                 _Macroregion.macroregion.geo = p;
                 _Macroregion.macroregion.teste = p;
@@ -264,8 +278,8 @@
             },
 
             updateData: function () {
-                this.macroregion.geo = JSON.stringify(_Macroregion.loadPolygon);
-                this.$http.put('/macroregions/' + this.macroregion.id, this.macroregion)
+                _Macroregion.macroregion.geo = JSON.stringify(_Macroregion.macroregion.geo);
+                this.$http.put('/macroregions/' + _Macroregion.macroregion.id, _Macroregion.macroregion)
                         .then((response) => {
                             toastr.success('Sucesso!', 'Macro Região atualizada com sucesso');
                         }).catch((response) => {
