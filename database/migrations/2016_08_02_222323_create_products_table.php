@@ -12,6 +12,7 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('brands', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -86,11 +87,8 @@ class CreateProductsTable extends Migration
             $table->foreign('reference_id')->references('id')->on('references');
             $table->foreign('material_id')->references('id')->on('materials');
             $table->foreign('color_id')->references('id')->on('colors');
-
-
-
         });
-
+        
         Schema::create('sizes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('size');
@@ -127,6 +125,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
 
         });
+        
     }
 
     /**
@@ -136,7 +135,7 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-
+        
         Schema::table('products', function($table){
 
             $table->dropForeign('products_brand_id_foreign');
@@ -168,7 +167,6 @@ class CreateProductsTable extends Migration
         Schema::drop('products');
         Schema::drop('grids');
         Schema::drop('sizes');
-
 
     }
 }

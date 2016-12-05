@@ -21,7 +21,7 @@ class MacroregionsController extends Controller
      */
     public function index()
     {
-        $macroregions = Macroregion::paginate(10);
+        $macroregions = Macroregion::all();
         return view('macroregions.index', compact('macroregions'));
     }
 

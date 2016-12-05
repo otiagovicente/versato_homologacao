@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10">
-                <macroregions-form :pmacroregion="{{$macroregion}}" :isedit='true'></<macroregions-form>
+                <macroregions-form :pmacroregion="{{$macroregion}}"></<macroregions-form>
             </div>
         </div>
     </div>
