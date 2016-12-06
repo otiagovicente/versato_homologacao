@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10">
-            <macroregions-form/>
+            <macroregions-form :pmacroregion="{{}}"/>
         </div>
     </div>
 </div>

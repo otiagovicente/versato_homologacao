@@ -38,10 +38,10 @@ class CreateTagsTable extends Migration
      */
     public function down()
     {
-//        Schema::table('product_tag', function($table){
-//            $table->dropForeign('product_tag_product_id_foreign');
-//            $table->dropForeign('product_tag_tag_id_foreign');
-//        });
+        Schema::table('product_tag', function($table){
+            $table->dropForeign('product_tag_product_id_foreign');
+            $table->dropForeign('product_tag_tag_id_foreign');
+        });
         Schema::drop('product_tag');
         Schema::drop('tags');
     }
