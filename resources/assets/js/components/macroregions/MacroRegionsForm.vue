@@ -1,4 +1,4 @@
-<style>
+<style scoped>
     .map {
         width:100%;
         height: 600px;
@@ -17,11 +17,11 @@
 	border: 1px solid rgba(72, 181, 233, 0.6);
 	border-radius: 2px 2px 10px 10px;
 }
-#iw-container {
+.iw-container {
 	margin-bottom: 10px;
 	width: 100%;
 }
-#iw-container .iw-title {
+.iw-container .iw-title {
 	font-family: 'Open Sans Condensed', sans-serif;
 	font-size: 22px;
 	font-weight: 400;
@@ -31,7 +31,7 @@
 	margin: 0;
 	border-radius: 2px 2px 0 0;
 }
-#iw-container .iw-content {
+.iw-container .iw-content {
 	font-size: 13px;
 	line-height: 18px;
 	font-weight: 400;
@@ -83,9 +83,38 @@
     </div>
 
     <div class="map" v-el:macroregionmap style="width:100%;height:800px;"></div>
+
+    <div v-for="lstPolygons in polygon">
+        oi
+        <div v-bind:id="amem-$index" class="iw-container">
+            <div class="iw-title">Macro Região</div>
+            <div class="iw-content">
+                <div class="row">
+                    <div class="col-md-10">
+                        <span class="blue">Codigo</span>
+                        <div class="form-group form-line-input">
+                            <input id="code-input" v-model="lstPolygons[$index].code" class="form-control input-sm" type="text"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10">
+                        <span class="blue">Descrición</span>
+                        <div class="form-group form-line-input">
+                            <input id="description-input" v-model="lstPolygons[$index].description" class="form-control input-sm" type="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="iw-bottom-gradient"></div>
+        </div>
+    </div>
+
+
+
 </template>
 
-<script >
+<script type="text/babel">
     import toastr from 'toastr'
 	
     export default{
@@ -100,6 +129,8 @@
                 drawingManager: null,
                 lstPolygons:[],
                 infowindow:null,
+                macroregions: {},
+                teste: 'alok',
             }
         },
 
@@ -249,7 +280,7 @@
                 '            <div class="col-md-10">'+
                 '                <span class="blue">Codigo</span>'+
                 '                <div class="form-group form-line-input" id="code">'+
-                '                    <input id="code-input" class="form-control input-sm" type="text" value="'+polygon.code+'"/>'+
+                '                    <input id="code-input" v-model="teste" class="form-control input-sm" type="text" value="'+polygon.code+'"/>'+
                 '                </div>'+
                 '            </div>'+
                 '        </div>'+
