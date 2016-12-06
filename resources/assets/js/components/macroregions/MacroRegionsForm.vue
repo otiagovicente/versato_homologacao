@@ -8,6 +8,59 @@
         position: absolute;
         z-index:2;
     }
+    	.gm-style-iw {
+	width: 350px !important;
+	top: 15px !important;
+	left: 0px !important;
+	background-color: #fff;
+	box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+	border: 1px solid rgba(72, 181, 233, 0.6);
+	border-radius: 2px 2px 10px 10px;
+}
+#iw-container {
+	margin-bottom: 10px;
+	width: 100%;
+}
+#iw-container .iw-title {
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-size: 22px;
+	font-weight: 400;
+	padding: 10px;
+	background-color: #48b5e9;
+	color: white;
+	margin: 0;
+	border-radius: 2px 2px 0 0;
+}
+#iw-container .iw-content {
+	font-size: 13px;
+	line-height: 18px;
+	font-weight: 400;
+	margin-right: 1px;
+	padding: 15px 5px 20px 15px;
+	max-height: 140px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.iw-content img {
+	float: right;
+	margin: 0 5px 5px 10px;	
+}
+.iw-subTitle {
+	font-size: 16px;
+	font-weight: 700;
+	padding: 5px 0;
+}
+.iw-bottom-gradient {
+	position: absolute;
+	width: 326px;
+	height: 25px;
+	bottom: 10px;
+	right: 18px;
+	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
 </style>
 
 <template>
@@ -29,8 +82,7 @@
         </div>
     </div>
 
-    <div class="map" v-el:macroregionmap></div>
-
+    <div class="map" v-el:macroregionmap style="width:100%;height:800px;"></div>
 </template>
 
 <script >
@@ -48,20 +100,12 @@
                 drawingManager: null,
                 lstPolygons:[],
                 infowindow:null,
-                
-                macroregion: {
-                    id: '',
-                    code: '',
-                    description: '',
-                    geo: '',
-                },
             }
         },
 
         ready(){
             window._Macroregion = this;
             toastr.options.closeButton = true;
-            //if (_Macroregion.pmacroregions) this.loadMacroregions();
         },
 
         methods: {
@@ -69,17 +113,16 @@
              *  Funções de inicialização do GoogleMaps
              */
             createMap: function () {
-                var map = new google.maps.Map(_Macroregion.$els.macroregionmap, {
+                _Macroregion.googleMap = new google.maps.Map(_Macroregion.$els.macroregionmap, {
                     center: _Macroregion.center,
                     zoom: _Macroregion.zoom,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
                     disableDefaultUI: true,
                     zoomControl: true
                 });
-                _Macroregion.googleMap = map;
                 _Macroregion.initDrawer();
                 _Macroregion.initInfoWindow();
-                if(_Macroregion.pmacroregions) this.loadMacroregions(map);
+                if(_Macroregion.pmacroregions) this.loadMacroregions();
             },
 
             initDrawer: function () {
@@ -103,40 +146,66 @@
                     },
                     polygonOptions: polyOptions
                 });
+                
                 _Macroregion.drawingManager.setMap(_Macroregion.googleMap);
                 _Macroregion.initListeners(_Macroregion.googleMap);
             },
 
-            initListeners: function (map) {
+            initListeners: function () {
                 google.maps.event.addListener(_Macroregion.drawingManager, 'overlaycomplete', function (e) {
                     if (e.type !== google.maps.drawing.OverlayType.MARKER) {
                         _Macroregion.drawingManager.setDrawingMode(null);
                         var polygon = e.overlay;
                         polygon.type = e.type;
                         polygon.setDraggable(true);
-                        _Macroregion.createPolygonListeners(polygon, map);
+                        _Macroregion.createPolygonListeners(polygon);
                     }
                 });
-
-                //google.maps.event.addListener(_Macroregion.drawingManager, 'drawingmode_changed', _Macroregion.clearSelection);
                 _Macroregion.initClickListener();
                 _Macroregion.initDeleteButtonListener();
             },
+            
             initClickListener(){
-                google.maps.event.addListener(_Macroregion.googleMap, 'click', _Macroregion.clearSelection);
+                google.maps.event.addListener(_Macroregion.googleMap, 'click', function() {
+                    _Macroregion.clearSelection();
+                    _Macroregion.infowindow.close();
+                });
             },
+
             initDeleteButtonListener(){
                 google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', _Macroregion.deleteSelectedShape);
             },
+
             initInfoWindow(){
                 _Macroregion.infowindow = new google.maps.InfoWindow({
-                    size: new google.maps.Size(150, 50)
+                    maxWidth: 350
+                });
+
+                _Macroregion.initInfoWindowListeners();
+            },
+
+            initInfoWindowListeners(){
+                google.maps.event.addListener(_Macroregion.infowindow, 'domready', function() {
+                    var iwOuter = $('.gm-style-iw');
+                    var iwBackground = iwOuter.prev();
+                    iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+                    iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+                    iwOuter.parent().parent().css({left: '115px'});
+                    iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+                    iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+                    iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1'});
+                    var iwCloseBtn = iwOuter.next();
+                    iwCloseBtn.css({opacity: '1', right: '38px', top: '3px', border: '7px solid #48b5e9', 'border-radius': '13px', 'box-shadow': '0 0 5px #3990B9'});
+                    if($('.iw-content').height() < 140){
+                        $('.iw-bottom-gradient').css({display: 'none'});
+                    }
+                    iwCloseBtn.mouseout(function(){
+                        $(this).css({opacity: '1'});
+                    });
                 });
             },
             
-            createPolygon(map, objMacroregion) {
-                //alert(objMacroregion.geo);
-                
+            createPolygon(objMacroregion) {
                 var polygon = new google.maps.Polygon({
                     paths: JSON.parse(objMacroregion.geo),
                     strokeWeight: 2,
@@ -147,29 +216,55 @@
                     code: objMacroregion.code,
                     description: objMacroregion.description,
                 });
-                polygon.setMap(map);
-                _Macroregion.createPolygonListeners(polygon, map);
+                polygon.setMap(_Macroregion.googleMap);
+                _Macroregion.createPolygonListeners(polygon);
             },
 
-            createPolygonListeners(polygon,map){
+            createPolygonListeners(polygon){
                 google.maps.event.addListener(polygon, 'click', function (event) {
                     _Macroregion.setSelection(polygon);
-
-                    _Macroregion.infowindow.setContent('info window maneira');
-                    _Macroregion.infowindow.setPosition(event.latLng);
-                    _Macroregion.infowindow.open(map);
+                    _Macroregion.loadInfoWindow(event, polygon);
                 });
                 
                 google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
-                    console.log(polygon.getPath().getArray());
+                    //console.log(polygon.getPath().getArray());
                 });
                 google.maps.event.addListener(polygon.getPath(), 'insert_at', function() {
-                    console.log(polygon.getPath().getArray());
+                   //console.log(polygon.getPath().getArray());
                 });
                 //_Macroregion.setSelection(polygon);
                 _Macroregion.lstPolygons.push(polygon);
             },
-
+            
+            loadInfoWindow(event, polygon){
+                _Macroregion.infowindow.setContent(_Macroregion.loadInfoWindowContent(polygon));
+                _Macroregion.infowindow.setPosition(event.latLng);
+                _Macroregion.infowindow.open(_Macroregion.googleMap);
+            },
+            loadInfoWindowContent(polygon){
+                return '<div id="iw-container">'+
+                '    <div class="iw-title">Macro Região</div>'+
+                '    <div class="iw-content">'+
+                '        <div class="row">'+
+                '            <div class="col-md-10">'+
+                '                <span class="blue">Codigo</span>'+
+                '                <div class="form-group form-line-input" id="code">'+
+                '                    <input id="code-input" class="form-control input-sm" type="text" value="'+polygon.code+'"/>'+
+                '                </div>'+
+                '            </div>'+
+                '        </div>'+
+                '        <div class="row">'+
+                '            <div class="col-md-10">'+
+                '                <span class="blue">Descrición</span>'+
+                '                <div class="form-group form-line-input" id="description">'+
+                '                    <input id="description-input" class="form-control input-sm" type="text" value="'+polygon.description+'"/>'+
+                '                </div>'+
+                '            </div>'+
+                '        </div>'+
+                '    </div>'+
+                '    <div class="iw-bottom-gradient"></div>'+
+                '</div>';
+            },
             /*
              * Funções de manipulação do GoogleMaps
              */
@@ -192,36 +287,30 @@
                     _Macroregion.selectedShape = null;
                 }
             },
-            loadMacroregions: function (map) {
+            
+            loadMacroregions: function () {
                 for (var i = 0; i < this.pmacroregions.length; i ++ ){
-                    _Macroregion.createPolygon(map, this.pmacroregions[i]);
+                    _Macroregion.createPolygon(this.pmacroregions[i]);
                 }
-                //_Macroregion.macroregion.id = _Macroregion.pmacroregion.id,
-                //_Macroregion.macroregion.code = _Macroregion.pmacroregion.code,
-                //_Macroregion.macroregion.description = _Macroregion.pmacroregion.description,
-                //_Macroregion.loadPolygon = JSON.parse(_Macroregion.pmacroregion.geo);
             },
 
             /*
              * Funções de envio de dados
              */
-
             submitData: function () {
                 for (var i = 0; i < this.lstPolygons.length; i ++ ){
                     var macroregion = {
-                        id:''
+                        id: this.lstPolygons[i].id
                         , code: this.lstPolygons[i].code
                         , description:this.lstPolygons[i].description
                         , geo:JSON.stringify(this.lstPolygons[i].getPath().getArray())
                     };
-                    //this.insertData(macroregion);
+                    //if (!macroregion.id) this.insertData(macroregion);
+                    //else this.updateData(macroregion);
                 }
-                //if (!this.macroregion.id) this.insertData();
-                //else this.updateData();
             },
 
             insertData: function (macroregion) {
-                //_Macroregion.macroregion.geo = JSON.stringify(_Macroregion.loadPolygon);
                 this.$http.post('/macroregions', macroregion)
                 .then( (response) => {
                     toastr.success('Sucesso!', 'Macro Região incluída com sucesso');
@@ -230,9 +319,8 @@
                 });
             },
 
-            updateData: function () {
-                this.macroregion.geo = JSON.stringify(_Macroregion.loadPolygon);
-                this.$http.put('/macroregions/' + this.macroregion.id, this.macroregion)
+            updateData: function (macroregion) {
+                this.$http.put('/macroregions/' + macroregion.id, macroregion)
                 .then((response) => {
                     toastr.success('Sucesso!', 'Macro Região atualizada com sucesso');
                 }).catch((response) => {
