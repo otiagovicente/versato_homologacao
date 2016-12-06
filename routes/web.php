@@ -22,6 +22,17 @@ Auth::routes();
 
 Route::get('/representatives/qrcode', 'RepresentativesController@createTokenQRCode');
 Route::get('/enviamail/{id}','OrdersController@sendNewOrderMail');
+Route::get('/resizeimage', function(){
+
+	$file = "https://s3-sa-east-1.amazonaws.com/sistema-versato/products/96ce32aeac4385131c0a4bab7ba0b9ed.jpeg";
+//	$file = "http://kraken-php.com/build/img/index/logo-php-adbac78231.png";
+	$img = Image::make(file_get_contents($file));
+
+	$img->resize(500, null, function ($constraint) {
+		$constraint->aspectRatio();
+	});
+	return $img->response();
+});
 
 Route::group(['middleware' => 'auth'], function () {
 
