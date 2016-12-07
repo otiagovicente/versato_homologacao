@@ -123,13 +123,10 @@
     </div>
 </template>
 
-<script>
+<script type="text/babel">
     import toastr from 'toastr'
 	
     export default{
-        props: [
-            'pmacroregions'
-        ],
         data(){
             return {
                 center: {lat: -34.612829, lng: -58.434704},
@@ -162,7 +159,7 @@
                 });
                 _Macroregion.initDrawer();
                 _Macroregion.initInfoWindow();
-                if(_Macroregion.pmacroregions) this.loadMacroregions();
+                this.loadMacroregions();
             },
 
             initDrawer: function () {
@@ -320,9 +317,19 @@
             },
             
             loadMacroregions: function () {
-                for (var i = 0; i < this.pmacroregions.length; i ++ ){
-                    _Macroregion.createPolygon(this.pmacroregions[i]);
-                }
+
+                this.$http.get('/api/macroregions')
+                        .then( (response) => {
+
+                            // console.log(response.json());
+                            _.each(response.json(), function(value, key){
+                                _Macroregion.createPolygon(value.geo);
+                            });
+                        })
+                        .catch((response) => {
+                            console.log('no fue possible cargar las macroregiones');
+                        });
+
             },
 
             /*

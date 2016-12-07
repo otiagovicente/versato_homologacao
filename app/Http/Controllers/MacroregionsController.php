@@ -112,6 +112,14 @@ class MacroregionsController extends Controller
         return response()->json($macroregion);
     }
 
+
+    public function api_index(){
+
+    	     $macroregions = Macroregion::all();
+    	     return response()->json($macroregions);
+
+    }
+
     public function api_regions(Macroregion $macroregion){
         return response()->json($macroregion->regions()->get());
     }
