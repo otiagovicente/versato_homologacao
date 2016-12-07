@@ -323,7 +323,7 @@
 
                             // console.log(response.json());
                             _.each(response.json(), function(value, key){
-                                _Macroregion.createPolygon(value.geo);
+                                _Macroregion.createPolygon(value);
                             });
                         })
                         .catch((response) => {
