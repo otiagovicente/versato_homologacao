@@ -108,7 +108,10 @@ class OrdersController extends Controller
         with('products', 'representative', 'customer')
             ->find($id);
         //return $order;
+        Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
         Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
+        Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
+        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
     }
 
    public function api_list(){
