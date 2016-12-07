@@ -84,31 +84,43 @@
 
     <div class="map" v-el:macroregionmap style="width:100%;height:800px;"></div>
 
-    <div v-for="polygon in lstPolygons" class="infowindow-modal">
-        <div v-bind:id="lstPolygons[$index].inside_id" class="iw-container" >
-            <div class="iw-title">Macro Região</div>
-            <div class="iw-content">
-                <div class="row">
-                    <div class="col-md-10">
-                        <span class="blue">Codigo</span>
-                        <div class="form-group form-line-input">
-                            <input id="code-input" v-model="lstPolygons[$index].code" class="form-control input-sm" type="text"/>
+    <div id="macroregion-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div v-for="polygon in lstPolygons" class="infowindow-modal">
+                        
+                        <div v-bind:id="lstPolygons[$index].inside_id" class="iw-container" style="display:none">
+                            <div class="iw-title">Macro Região</div>
+                            <div class="iw-content">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <span class="blue">Codigo</span>
+                                        <div class="form-group form-line-input">
+                                            <input id="code-input" v-model="lstPolygons[$index].code" class="form-control input-sm" type="text"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <span class="blue">Descrición</span>
+                                        <div class="form-group form-line-input">
+                                            <input id="description-input" v-model="lstPolygons[$index].description" class="form-control input-sm" type="text" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        <span class="blue">Descrición</span>
-                        <div class="form-group form-line-input">
-                            <input id="description-input" v-model="lstPolygons[$index].description" class="form-control input-sm" type="text" />
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-            <div class="iw-bottom-gradient"></div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -185,6 +197,9 @@
                         _Macroregion.drawingManager.setDrawingMode(null);
                         var polygon = e.overlay;
                         polygon.type = e.type;
+                        polygon.set('id', null);
+                        polygon.set('code', null);
+                        polygon.set('description', null);
                         polygon.setDraggable(true);
                         _Macroregion.createPolygonListeners(polygon);
                     }
@@ -250,8 +265,9 @@
 
             createPolygonListeners(polygon){
                 google.maps.event.addListener(polygon, 'click', function (event) {
+                     _Macroregion.showModal(polygon);
+                    //_Macroregion.loadInfoWindow(event, polygon);
                     _Macroregion.setSelection(polygon);
-                    _Macroregion.loadInfoWindow(event, polygon);
                 });
                 
                 google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
@@ -264,7 +280,13 @@
                 polygon.set('inside_id', _Macroregion.inside_id++);
                 _Macroregion.lstPolygons.push(polygon);
             },
-            
+            showModal(polygon){
+                $('.iw-container').each(function(i, obj) {
+                    $(this).hide();
+                });
+                $('.iw-container#'+ polygon.inside_id).show();
+                $('#macroregion-modal').modal('show');
+            },
             loadInfoWindow(event, polygon){
                 _Macroregion.infowindow.setContent(_Macroregion.loadInfoWindowContent(polygon));
                 _Macroregion.infowindow.setPosition(event.latLng);
