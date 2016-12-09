@@ -93,7 +93,10 @@ class MacroregionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deletedRows = Macroregion::where('id', $id)->delete();
+        //$macroregion = Macroregion::get($id);
+        //$macroregion->destroy();
+        return response($deletedRows);
     }
     
     public function selectList(){
