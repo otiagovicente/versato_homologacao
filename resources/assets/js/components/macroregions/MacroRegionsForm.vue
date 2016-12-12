@@ -192,12 +192,16 @@
                     _Macroregion.setSelection(polygon);
                 });
                 google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
-                    polygon.setOptions({fillColor: 'yellow'});
-                    polygon.set('edited', true);
+                    if(polygon.id){
+                        polygon.setOptions({fillColor: 'yellow'});
+                        polygon.set('edited', true);
+                    }
                 });
                 google.maps.event.addListener(polygon.getPath(), 'insert_at', function() {
-                   polygon.setOptions({fillColor: 'yellow'});
-                   polygon.set('edited', true);
+                   if(polygon.id){
+                        polygon.setOptions({fillColor: 'yellow'});
+                        polygon.set('edited', true);
+                    }
                 });
                 google.maps.event.addListener(polygon, "mousemove", function(event) {
                     _Macroregion.setInfoDescription(polygon);
@@ -262,15 +266,11 @@
             },
             deleteSelectedShape() {
                 if (_Macroregion.selectedShape) {
-                    //Caso o polygon possua um id, ou seja, já esta na base de dados
-                    //inclui o polygon na lista de macro regiões a serem deletadas
                     if(_Macroregion.selectedShape.id) _Macroregion.deletePolygons.push(_Macroregion.selectedShape);
                     
-                    //Deleta o polygon da lista de polygons dinâmica
                     var index = _Macroregion.lstPolygons.indexOf(_Macroregion.selectedShape);
                     if (index > -1) _Macroregion.lstPolygons.splice(index, 1);
                     
-                    //Deleta o polygon do mapa
                     _Macroregion.selectedShape.setMap(null);
                     _Macroregion.selectedShape = null;
                 }
@@ -288,6 +288,14 @@
                 };
             },
             submitData: function () {
+                //deleta macro regiões 
+                if(_Macroregion.deletePolygons.length > 0){
+                    for (var x = 0; x < _Macroregion.deletePolygons.length; x++ ){
+                        if(_Macroregion.deletePolygons[x].id) _Macroregion.deleteData(_Macroregion.deletePolygons[x].id);
+                    }
+                    _Macroregion.deletePolygons = [];
+                }
+
                 //salva e atualiza macro regioões criadas no mapa
                 for (var i = 0; i < _Macroregion.lstPolygons.length; i ++ ){
                     if(_Macroregion.lstPolygons[i].code && _Macroregion.lstPolygons[i].description){
@@ -299,15 +307,6 @@
                         _Macroregion.setInfoError(_Macroregion.lstPolygons[i]);
                     }
                 }
-                //deleta macro regiões 
-                if(_Macroregion.deletePolygons.length > 0){
-                    for (var x = 0; x < _Macroregion.deletePolygons.length; x++ ){
-                        if(_Macroregion.deletePolygons[x].id) _Macroregion.deleteData(_Macroregion.deletePolygons[x].id);
-                    }
-                    _Macroregion.deletePolygons = [];
-                }
-                
-
             },
             loadMacroregions: function () {
                 this.$http.get('/api/macroregions')
@@ -325,7 +324,7 @@
                 this.$http.post('/macroregions', macroregion)
                 .then( (response) => {
                     _Macroregion.setSelection(polygon);
-                    _Macroregion.deleteSelectedShape();
+                    _Macroregion.selectedShape.setMap(null);
                     _Macroregion.createPolygon(response.json());
                     toastr.success('Sucesso!', 'Macro Região creada con successo!');
                 }).catch( (response) => {
@@ -337,7 +336,7 @@
                 this.$http.put('/macroregions/' + macroregion.id, macroregion)
                 .then((response) => {
                     _Macroregion.setSelection(polygon);
-                    _Macroregion.deleteSelectedShape();
+                    _Macroregion.selectedShape.setMap(null);
                     _Macroregion.createPolygon(response.json());
 
                     toastr.success('Sucesso!', 'Macro Região actualizada con successo!');
