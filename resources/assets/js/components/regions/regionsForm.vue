@@ -4,13 +4,85 @@
         height: 600px;
         display: block;
     }
+    .form-container{
+        position: absolute;
+        z-index:2;
+    }
+    .control-ui{
+      background-color: white;
+      cursor: pointer;
+      text-align: center;
+  }
+  .control-text{
+    font-family: Arial,sans-serif;
+    font-size: 12px;
+    padding: 4px 4px;
+  }
 </style>
 
-<template> 
-  <div id="code-input" class="form-group" >
-    <label class="col-md-3 control-label">Macro Regiones</label>
-      <div class="col-md-7" id="code">                
-        
+<template>
+  <div class="form-container">
+        <div class="button-group">
+            <button
+                type="button"
+                @click="submitData"
+                class="btn blue btn-block"
+            >
+                Salvar
+            </button>
+            <button v-show="selectedShape" id="delete-button" class="btn blue btn-block">
+                Borrar Macro Región
+            </button>
+            <a href="/regions/">
+                <button type="button" class="btn grey btn-block">Cancel</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="map" v-el:regionmap style="width:100%;height:800px;"></div>
+    
+    <!-- MODAL  -->
+    <div id="region-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div v-for="polygon in lstPolygons" class="infowindow-modal">
+                        
+                        <div v-bind:id="lstPolygons[$index].inside_id" class="iw-container" style="display:none">
+                            <div class="iw-title">Macro Região</div>
+                            <div class="iw-content">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <span class="blue">Codigo</span>
+                                        <div class="form-group form-line-input">
+                                            <input id="code-input" v-model="lstPolygons[$index].code" class="form-control input-sm" type="text"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <span class="blue">Descrición</span>
+                                        <div class="form-group form-line-input">
+                                            <input id="description-input" v-model="lstPolygons[$index].description" class="form-control input-sm" type="text" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <div id="control-div" class="control-div">
+    <div id= "control-ui" class="control-ui" title = "Click to set the map to Home">
+      <div id="control-text" class="control-text">
         <v-select 
           v-bind:options.sync="macroregions_select"
           :value.sync="macroregion"  
@@ -20,217 +92,254 @@
           search justified required close-on-select
         ></v-select>
       </div>
-  </div>
-
-  <div id="code-input" class="form-group">
-      <div class="col-md-12" style="padding:15px">
-        <button v-show="macroregion" type="button" class="btn grey btn-block" @click="addNewRegion">Nueva Región</button>
-        <br/>
-        
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th class="col-md-3">Región</th>
-              <th class="col-md-3">Descripción</th>
-              <th class="col-md-3">Borrar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="r in regions">
-              <td>
-                <input type="text" 
-                  name="code"
-                  class="form-control" 
-                  placeholder="Región"
-                  v-model="r.code"
-                >
-              </td>
-              <td>
-                <input type="text" 
-                  name="description"
-                  class="form-control" 
-                  placeholder="Descripción"
-                  v-model="r.description"
-                >
-              </td>
-              <td>
-                <button 
-                  v-show="canedit"
-                  type="button" 
-                  class="btn blue btn-block"
-                  
-                  @click="deleteRegion($index)"
-                >Borrar</button> 
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-  </div>
-  
-  <div id="code-input" class="form-group">
-    <label class="col-md-3 control-label">Regiones</label>
-      <div class="col-md-12" style="padding:15px">
-        <br/>
-        <map
-          :center.sync="center"
-          :zoom.sync="zoom"
-          :map-type-id.sync="mapType"
-          :options="{styles: mapStyles, scrollwheel: scrollwheel}"
-          :bounds.sync="mapBounds"
-        >
-          <polygon 
-            :paths.sync="loadpolygon" 
-            :editable="false" 
-            :options="{geodesic:true, strokeColor:'#8080ff', fillColor:'#668cff', draggable: false}"
-          ></polygon>
-          
-          <polygon
-            v-for="r in regions"
-            :paths.sync="r.path" 
-            :editable="true" 
-            :options="{geodesic:true, strokeColor:'#33ff33', fillColor:'#00e600', draggable: true}"
-          >
-          </polygon>
-        </map>
-      </div>
-  </div>
-  
-  <div class="row">
-    <hr>
-    <div class="container-fluid" >
-      <div class="col-md-3 pull-right">
-        <div class="form-group">
-          <button 
-            v-show="canedit"
-            type="button" 
-            @click="submitData()" 
-            class="btn blue btn-block"
-          >
-            Salvar
-          </button>
-        </div>
-      </div>  
-      
-      <div class="col-md-3 pull-right" >
-        <div class="form-group">
-          <a href="/regions/">
-              <button type="button" class="btn grey btn-block" v-show="canedit">Cancel</button>
-          </a>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
-<script type="text/babel">
-    import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon, PlaceInput} from 'vue-google-maps'
+<script>
     import toastr from 'toastr'
     import VueStrap from 'vue-strap'
-    
 
 export default{
-    props:[
-      'pregions',
-      'isedit',
-      'pmacroregions'
-    ],
     components: {
-      vSelect: VueStrap.select,
-      vOption: VueStrap.option,
-      Map,
-      Polygon
+        vSelect: VueStrap.select,
+        vOption: VueStrap.option,
     },
-    
+
     data(){
-        return{
-            center: { lat: -34.612829, lng: -58.434704 },
+        return {
+            center: {lat: -34.612829, lng: -58.434704},
             zoom: 5,
-            mapType: 'roadmap',
-            mapStyle: 'normal',
-            scrollwheel: true,
-            mapBounds: {},
-            canedit:true,
-            macroregions_select: new Array(),
-            regions:[],
-            deleteRegions:[],
+            selectedShape: null,
+            drawingManager: null,
+            lstPolygons:[],
+            infowindow:null,
+            inside_id:0,
+            deletePolygons:[],
+            selectedMacroRegion:null,
+            macroregions_select:[],
             macroregion:[],
-            loadpolygon:[],
-            regionsEven: false,
+            selectedMacroregion:null, 
         }
     },
     
     ready(){
+        window._Region = this;
         toastr.options.closeButton = true;
-        this.configureMapsApi();
         this.getMacroRegions();
-
     },
     
     methods:{
-      configureMapsApi: function(){
-        if (!(typeof google === 'object' && typeof google.maps === 'object')) {
-          load(Maps.maps_key, Maps.maps_version);
-        }
-      },
-        submitData: function(){
-            if(this.regions){
-              if(this.deleteRegions)
-                this.cleanRegions();
+        createMap() {
+            _Region.googleMap = new google.maps.Map(_Region.$els.regionmap, {
+                center: _Region.center,
+                zoom: _Region.zoom,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true,
+                zoomControl: true
+            });
+            _Region.initDrawer();
+            _Region.initInfoWindow();
+            _Region.initControls();
+        },
+        initDrawer(){
+            var polyOptions = {
+                strokeWeight: 0,
+                fillOpacity: 0.50,
+                fillColor: '#FF0000',
+                editable: true
+            };
+            _Region.drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: null,
+                drawingControl: true,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.RIGHT_TOP,
+                    drawingModes: [
+                        google.maps.drawing.OverlayType.POLYGON,
+                    ]
+                },
+                polygonOptions: polyOptions
+            });
+            _Region.drawingManager.setMap(_Region.googleMap);
+            _Region.initListeners(_Region.googleMap);
+        },
+        initListeners() {
+            google.maps.event.addListener(_Region.drawingManager, 'overlaycomplete', function (e) {
+                if (e.type !== google.maps.drawing.OverlayType.MARKER) {
+                    _Region.drawingManager.setDrawingMode(null);
+                    var polygon = e.overlay;
+                    polygon.type = e.type;
+                    polygon.set('id', '');
+                    polygon.set('code', '');
+                    polygon.set('description', '');
+                    polygon.set('macroregion_id', _Region.selectedMacroregion.id);
+                    
+                    polygon.setDraggable(true);
+                    _Region.createRegionPolygonListeners(polygon);
+                }
+            });
+            
+            _Region.initClickListener();
+            _Region.initDeleteButtonListener();
+        },
+        initClickListener(){
+            google.maps.event.addListener(_Region.googleMap, 'click', function() {
+                _Region.clearSelection();
+                _Region.infowindow.close();
+            });
+        },
+        initDeleteButtonListener(){
+            google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', _Region.deleteSelectedShape);
+        },
+        initInfoWindow(){
+            _Region.infowindow = new google.maps.InfoWindow({
+                maxWidth: 350
+            });
+            _Region.initInfoWindowListeners();
+        },
+        initInfoWindowListeners(){
+            google.maps.event.addListener(_Region.infowindow, 'domready', function() {
+                
+            });
+        },
+        showModal(polygon){
+            $('.iw-container').each(function(i, obj) {
+                $(this).hide();
+            });
+            $('.iw-container#'+ polygon.inside_id).show();
+            $('#region-modal').modal('show');
+        },
+        initControls(){
+            var controlDiv =$("#control-div");
+            var controlUI = $("#control-ui");
+            var controlText = $("#control-text");
+            controlDiv.index = 1;
+            _Region.googleMap.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv[0]);
+        },
+        getPolygonCenter(polygon){
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < polygon.getPath().getArray().length; i++) {
+                bounds.extend(polygon.getPath().getArray()[i]);
+            }
+            return bounds.getCenter();
+        },
+        createPolygon(obj, type) {
+            var polygon;
+            switch (type){
+            case 'macroregion':
+                polygon = new google.maps.Polygon({
+                paths: JSON.parse(obj.geo),
+                fillOpacity: 0.50,
+                editable: false,
+                fillColor: 'blue',
+                draggable:false,
+                id: obj.id,
+                code: obj.code,
+                description: obj.description,
+                });
+                _Region.createMacroRegionPolygonListeners(polygon);
+                break;
+            
+            case 'region':
+                polygon = new google.maps.Polygon({
+                    paths: JSON.parse(obj.geo),
+                    fillOpacity: 0.50,
+                    editable: true,
+                    fillColor: 'pink',
+                    draggable:true,
+                    id: obj.id,
+                    code: obj.code,
+                    description: obj.description,
+                    macroregion_id:obj.macroregion_id,
+                    edited:false,
+                });
+                _Region.createRegionPolygonListeners(polygon);
+                break;
+            }
+            polygon.setMap(_Region.googleMap);
+            return polygon;
+        },
+        createMacroRegionPolygonListeners(polygon){
 
-              for (var i = 0; i < this.regions.length; i ++ ){
-                if(this.regions[i].id)
-                  this.updateData(this.regions[i]);
-                else
-                  this.insertData(this.regions[i]);
-              }
+        },
+        createRegionPolygonListeners(polygon){
+            google.maps.event.addListener(polygon, 'click', function (event) {
+                _Region.showModal(polygon);
+                _Region.setSelection(polygon);
+            });
+            google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
+                if(polygon.id){
+                    polygon.setOptions({fillColor: 'yellow'});
+                    polygon.set('edited', true);
+                }
+            });
+            google.maps.event.addListener(polygon.getPath(), 'insert_at', function() {
+                if(polygon.id){
+                    polygon.setOptions({fillColor: 'yellow'});
+                    polygon.set('edited', true);
+                }
+            });
+            google.maps.event.addListener(polygon, "mousemove", function(event) {
+                _Region.setInfoDescription(polygon);
+                polygon.setOptions({strokeWeight: 3.0, strokeColor:'green'});
+            });
+            google.maps.event.addListener(polygon, "mouseout", function(event) {
+                polygon.setOptions({strokeWeight: 0, strokeColor:'green'});
+                _Region.infowindow.close(_Region.googleMap);
+            });
+            
+            polygon.set('inside_id', _Region.inside_id++);
+            _Region.lstPolygons.push(polygon);
+        },
+        setInfoDescription(polygon){
+            if(polygon.description){
+                _Region.infowindow.setContent(_Region.setInfoDescriptionContent(polygon));
+                _Region.infowindow.setPosition(_Region.getPolygonCenter(polygon));
+                _Region.infowindow.open(_Region.googleMap);
             }
         },
-
-        getMacroRegions: function(){
+        setInfoError(polygon){
+            _Region.infowindow.setContent(_Region.setInfoErrorContent(polygon));
+            _Region.infowindow.setPosition(_Region.getPolygonCenter(polygon));
+            _Region.infowindow.open(_Region.googleMap);
+        },
+        setInfoErrorContent(polygon){
+            return 'Complete la información de la región!';
+            //$('.iw-container#'+ polygon.inside_id).html();
+        },
+        setInfoDescriptionContent(polygon){
+            return polygon.description;
+        },
+        getMacroRegions(){
             this.$http.get('/api/macroregions/selectlist')
             .then(response => {
                 this.macroregions_select = response.json();
             });
         },
 
-        addNewRegion: function(){
-          this.regions.push({
-              id:'',
-              code:'',
-              description: '',
-              macroregion_id:this.macroregion, 
-              path:[[
-                {lat: -34.81375546971009, lng: -63.63490624999997},
-                {lat: -34.83179331290262, lng: -61.23988671874997},
-                {lat: -36.4565891377291, lng: -61.26185937499997},
-                {lat: -36.42123554842336, lng: -63.61293359374997},
-              ]],
-              geo:'',
-            });
-            return this.regions[this.regions.length - 1];
-        },
-
-        addRegion: function(region){
-          this.regions.push({
-              id:region.id,
-              code:region.code,
-              description: region.description,
-              macroregion_id:region.macroregion_id, 
-              path:JSON.parse(region.geo),
-              geo:region.geo,
-            });
-            return this.regions[this.regions.length - 1];
-        },
-
-        deleteRegion: function(index){
-          this.deleteRegions.push(this.regions[index]);
-          this.regions.splice(index, 1);
+        submitData(){
+            if(_Region.lstPolygons){
+                if(_Region.deleteRegions) _Region.cleanRegions();
+                
+                for (var i = 0; i < _Region.lstPolygons.length; i ++ ){
+                    if(_Region.lstPolygons[i].id) _Region.updateData(_Region.lstPolygons[i]);
+                    else _Region.insertData(_Region.lstPolygons[i]);
+                }
+            }
         },
         
-        insertData: function(region){
-          region.geo = JSON.stringify(region.path);
-          this.$http.post('/regions', region)
+        loadRegion: function(polygon){
+            return {
+                id: polygon.id
+                , code: polygon.code
+                , description:polygon.description
+                , macroregion_id: polygon.macroregion_id
+                , geo:JSON.stringify(polygon.getPath().getArray())
+            };
+        },
+        
+        insertData: function(polygon){
+          this.$http.post('/regions', _Region.loadRegion(polygon))
           .then((response) => {
             toastr.success('Sucesso!','Região incluída com sucesso');
           }, (response) => { 
@@ -238,67 +347,92 @@ export default{
           });
         },
         
-        updateData: function(region){
-          region.geo = JSON.stringify(region.path);
-          this.$http.put('/regions/'+region.id, region)
-          .then((response) => {
-            toastr.success('Sucesso!','Região alterada com sucesso');
-          }, (response) => { 
-            this.showErrors(response.data); 
-          });
+        updateData: function(polygon){
+            var region = _Region.loadRegion(polygon);
+            this.$http.put('/regions/' + region.id, region)
+            .then((response) => {
+                toastr.success('Sucesso!','Região alterada com sucesso');
+            }, (response) => { 
+                this.showErrors(response.data); 
+            });
         },
 
         cleanRegions(){
-          for (var i = 0; i < this.deleteRegions.length; i ++ ){
-            this.$http.delete('/regions/'+this.deleteRegions[i].id)
-            .then((response) => {
-              console.log('Região excluída com sucesso');
-            }, (response) => { 
-              consolo.log(response.data); 
-            });
-          }
+            for (var i = 0; i < this.deleteRegions.length; i ++ ){
+                this.$http.delete('/regions/' + _Region.deleteRegions[i].id)
+                .then((response) => {
+                    console.log('Região excluída com sucesso');
+                }, (response) => { 
+                    consolo.log(response.data); 
+                });
+            }
         },
-
-        showErrors: function(data){
-          $.each(data, function (key, value) {
-            toastr.warning('Atención', value);
-            $('#'+key).addClass('has-error');
-          }); 
+        clearPolygonsRegions(){
+            for (var i = 0; i < _Region.lstPolygons.length; i ++ ){
+                _Region.lstPolygons[i].setMap(null);
+            }
+            _Region.lstPolygons = [];
+            _Region.deleteRegions = [];
+        },
+        clearSelection() {
+            if (_Region.selectedShape) {
+                _Region.selectedShape.setEditable(false);
+                _Region.selectedShape = null;
+            }
+        },
+        setSelection(shape) {
+            _Region.clearSelection();
+            _Region.selectedShape = shape;
+            shape.setEditable(true);
+        },
+        deleteSelectedShape() {
+            if (_Region.selectedShape) {
+                //Caso o polygon possua um id, ou seja, já esta na base de dados
+                //inclui o polygon na lista de  regiões a serem deletadas
+                if(_Region.selectedShape.id) _Region.deleteRegions.push(_Region.selectedShape);
+                
+                //Deleta o polygon da lista de polygons dinâmica
+                var index = _Region.lstPolygons.indexOf(_Region.selectedShape);
+                if (index > -1) _Region.lstPolygons.splice(index, 1);
+                
+                //Deleta o polygon do mapa
+                _Region.selectedShape.setMap(null);
+                _Region.selectedShape = null;
+            }
         },
     },
     
     watch: {
         'macroregion': function (val, oldVal) {
-          this.regions = [];
-          this.deleteRegions = [];
+            if(_Region.macroregion){
+                _Region.clearPolygonsRegions();
+                if(_Region.selectedMacroregion) _Region.selectedMacroregion.setMap(null);
 
-          if(this.macroregion){
-            this.$http.get('/api/macroregions/geo/'+this.macroregion)
-            .then((response) => {
-              var objMacroregions = response.json();
-               
-              //seta variáveis
-              this.loadpolygon = JSON.parse(objMacroregions.geo);
-              this.zoom = 6;
+                this.$http.get('/api/macroregions/geo/' + this.macroregion)
+                .then((response) => {
+                    var objMacroregions = response.json();
+                    _Region.selectedMacroregion = _Region.createPolygon(objMacroregions, 'macroregion');
+                    _Region.googleMap.setCenter(_Region.getPolygonCenter(_Region.selectedMacroregion));
+                    _Region.googleMap.setZoom(7);
 
-              // calcula o centro 
-              var objCenter = {lat:'', lng:''};
-              objCenter.lat = this.loadpolygon[0][0].lat + ((this.loadpolygon[0][3].lat - this.loadpolygon[0][0].lat) / 2);
-              objCenter.lng = this.loadpolygon[0][0].lng + ((this.loadpolygon[0][3].lng - this.loadpolygon[0][0].lng) / 2);
-              this.center = objCenter;
-              
-              
-              //se a macro região possui regiões cadastradas, carrega as regiões na tela
-              if(objMacroregions.regions){
-                for (var i = 0; i < objMacroregions.regions.length; i ++ ){
-                  this.addRegion(objMacroregions.regions[i]);
-                }
-              }
-            }, (response) => {
-              toastr.error('erro!', console.log(response.data));
-            });
-          }
+                    //se a macro região possui regiões cadastradas, carrega as regiões na tela
+                    if(objMacroregions.regions){
+                        for (var i = 0; i < objMacroregions.regions.length; i ++ ){
+                            _Region.createPolygon(objMacroregions.regions[i], 'region');
+                            //this.addRegion(objMacroregions.regions[i]);
+                        }
+                    }
+                }, (response) => {
+                    toastr.error('erro!', console.log(response.data));
+                });
+            }
         },
-    }
+    },
+    events: {
+            MapsApiLoaded: function () {
+                this.createMap();
+                return true;
+            },
+        },
 }
 </script>

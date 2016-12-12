@@ -16,7 +16,6 @@ Route::get('/user', function (Request $request) {
     return $request->user()->load('representative');
 })->middleware('auth:api');
 
-
 Route::group(['middleware' => 'auth:api'], function () {
 
     //Rotas dedicadas às marcas
@@ -65,12 +64,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Rotas dedicadas à Macro Regiões e Regiões
 
 	Route::get('/macroregions/', 'MacroregionsController@api_index');
-     Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
-     Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
-     Route::get('/macroregions/{macroregion}/regions', 'MacroregionsController@api_regions');
+    Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
+    Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
+    Route::get('/macroregions/{macroregion}/regions', 'MacroregionsController@api_regions');
+    Route::get('/macroregions/{id}', 'MacroregionsController@api_macroregion');
 
-     Route::get('/regions/selectlist', 'RegionsController@api_selectList');
-     Route::get('/regions', 'RegionsController@api_index');
+    Route::get('/regions/selectlist', 'RegionsController@api_selectList');
+    Route::get('/regions', 'RegionsController@api_index');
+    //Route::resource('macroregions','MacroregionsController');
+    //Route::resource('regions','RegionsController');
 
 
 

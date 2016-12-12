@@ -30,7 +30,7 @@
     </div>
 
     <div class="map" v-el:macroregionmap style="width:100%;height:800px;"></div>
-
+    <!-- MODAL  -->
     <div id="macroregion-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -226,9 +226,6 @@
                     _Macroregion.infowindow.open(_Macroregion.googleMap);
                 }
             },
-            setInfoDescriptionContent(polygon){
-                return polygon.description;
-            },
             setInfoError(polygon){
                 _Macroregion.infowindow.setContent(_Macroregion.setInfoErrorContent(polygon));
                 _Macroregion.infowindow.setPosition(_Macroregion.getPolygonCenter(polygon));
@@ -237,6 +234,9 @@
             setInfoErrorContent(polygon){
                 return 'Complete la información de la macro región!';
                 //$('.iw-container#'+ polygon.inside_id).html();
+            },
+            setInfoDescriptionContent(polygon){
+                return polygon.description;
             },
             getPolygonCenter(polygon){
                 var bounds = new google.maps.LatLngBounds();

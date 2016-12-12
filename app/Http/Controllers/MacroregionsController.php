@@ -21,8 +21,8 @@ class MacroregionsController extends Controller
      */
     public function index()
     {
-        $macroregions = Macroregion::all();
-        return view('macroregions.index', compact('macroregions'));
+        //$macroregions = Macroregion::all();
+        return view('macroregions.index');
     }
 
     /**
@@ -117,10 +117,8 @@ class MacroregionsController extends Controller
 
 
     public function api_index(){
-
-    	     $macroregions = Macroregion::all();
-    	     return response()->json($macroregions);
-
+        $macroregions = Macroregion::all();
+        return response()->json($macroregions);
     }
 
     public function api_regions(Macroregion $macroregion){

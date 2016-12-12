@@ -23,7 +23,7 @@ class RegionsController extends Controller
      */
     public function index()
     {
-        //
+        return view('regions.index');
     }
 
     /**
@@ -33,8 +33,7 @@ class RegionsController extends Controller
      */
     public function create()
     {
-        $macroregions = Macroregion::all();
-        return view('regions.create', compact('macroregions'));
+        
     }
 
     /**
