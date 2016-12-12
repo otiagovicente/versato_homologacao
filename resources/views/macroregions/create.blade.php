@@ -1,18 +1,14 @@
 @extends('layouts.dashboard')
 
 @section('content')
-@include('macroregions.partials.header',[
-    'pageTitle' => 'Criar macroregions',
-    'url' => '/macroregions/create',
-    'actions' => []
-])
+{{--@include('macroregions.partials.header',[--}}
+    {{--'pageTitle' => 'Criar macroregions',--}}
+    {{--'url' => '/macroregions/create',--}}
+    {{--'actions' => []--}}
+{{--])--}}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-10">
+<div class="container-fluid">
             <macroregions-form />
-        </div>
-    </div>
 </div>
 @endsection
 
