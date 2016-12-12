@@ -328,7 +328,7 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="/regions/create" class="nav-link nav-toggle">
+                                        <a href="/regions" class="nav-link nav-toggle">
                                             <i class="fa fa-map-marker"></i>
                                             <span class="title">Editar</span>
                                             <span class="selected"></span>
