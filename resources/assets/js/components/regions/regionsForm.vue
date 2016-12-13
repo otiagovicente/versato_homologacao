@@ -320,10 +320,16 @@ export default{
         submitData(){
             if(_Region.lstPolygons){
                 if(_Region.deleteRegions) _Region.cleanRegions();
-                
+
                 for (var i = 0; i < _Region.lstPolygons.length; i ++ ){
-                    if(_Region.lstPolygons[i].id) _Region.updateData(_Region.lstPolygons[i]);
-                    else _Region.insertData(_Region.lstPolygons[i]);
+                    if(_Region.lstPolygons[i].code && _Region.lstPolygons[i].description){
+                        if (!_Region.lstPolygons[i].id) _Region.insertData(_Region.lstPolygons[i]);
+                        else {
+                            if(_Region.lstPolygons[i].edited) _Region.updateData(_Region.lstPolygons[i]);
+                        }
+                    }else{
+                        _Region.setInfoError(_Region.lstPolygons[i]);
+                    }
                 }
             }
         },
@@ -339,18 +345,34 @@ export default{
         },
         
         insertData: function(polygon){
-          this.$http.post('/regions', _Region.loadRegion(polygon))
-          .then((response) => {
-            toastr.success('Sucesso!','Região incluída com sucesso');
-          }, (response) => { 
-            this.showErrors(response.data); 
-          });
+            this.$http.post('/regions', _Region.loadRegion(polygon))
+            .then((response) => {
+                var index = _Region.lstPolygons.indexOf(_Region.selectedShape);
+                if (index > -1) _Region.lstPolygons.splice(index, 1);
+                
+                _Region.setSelection(polygon);
+                _Region.selectedShape.setMap(null);
+                
+                _Region.createPolygon(response.json(), 'region');
+                
+                toastr.success('Sucesso!','Região incluída com sucesso');
+            }, (response) => { 
+                console.log(response.data); 
+            });
         },
         
         updateData: function(polygon){
             var region = _Region.loadRegion(polygon);
             this.$http.put('/regions/' + region.id, region)
             .then((response) => {
+                var index = _Region.lstPolygons.indexOf(_Region.selectedShape);
+                if (index > -1) _Region.lstPolygons.splice(index, 1);
+                
+                _Region.setSelection(polygon);
+                _Region.selectedShape.setMap(null);
+
+                _Region.createPolygon(response.json(), 'region');
+                
                 toastr.success('Sucesso!','Região alterada com sucesso');
             }, (response) => { 
                 this.showErrors(response.data); 
@@ -419,7 +441,6 @@ export default{
                     if(objMacroregions.regions){
                         for (var i = 0; i < objMacroregions.regions.length; i ++ ){
                             _Region.createPolygon(objMacroregions.regions[i], 'region');
-                            //this.addRegion(objMacroregions.regions[i]);
                         }
                     }
                 }, (response) => {

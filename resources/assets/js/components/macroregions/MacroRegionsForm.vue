@@ -323,9 +323,13 @@
                 var macroregion = _Macroregion.loadMacroregion(polygon);
                 this.$http.post('/macroregions', macroregion)
                 .then( (response) => {
+                    var index = _Macroregion.lstPolygons.indexOf(_Macroregion.selectedShape);
+                    if (index > -1) _Macroregion.lstPolygons.splice(index, 1);
+                    
                     _Macroregion.setSelection(polygon);
                     _Macroregion.selectedShape.setMap(null);
                     _Macroregion.createPolygon(response.json());
+                    
                     toastr.success('Sucesso!', 'Macro Região creada con successo!');
                 }).catch( (response) => {
                     console.log(response);
@@ -335,6 +339,9 @@
                 var macroregion = _Macroregion.loadMacroregion(polygon);
                 this.$http.put('/macroregions/' + macroregion.id, macroregion)
                 .then((response) => {
+                    var index = _Macroregion.lstPolygons.indexOf(_Macroregion.selectedShape);
+                    if (index > -1) _Macroregion.lstPolygons.splice(index, 1);
+                    
                     _Macroregion.setSelection(polygon);
                     _Macroregion.selectedShape.setMap(null);
                     _Macroregion.createPolygon(response.json());
