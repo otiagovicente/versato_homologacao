@@ -151,7 +151,7 @@ export default{
             };
             _Region.drawingManager = new google.maps.drawing.DrawingManager({
                 drawingMode: null,
-                drawingControl: true,
+                drawingControl: false,
                 drawingControlOptions: {
                     position: google.maps.ControlPosition.RIGHT_TOP,
                     drawingModes: [
@@ -169,11 +169,12 @@ export default{
                     _Region.drawingManager.setDrawingMode(null);
                     var polygon = e.overlay;
                     polygon.type = e.type;
+                    
                     polygon.set('id', '');
                     polygon.set('code', '');
                     polygon.set('description', '');
                     polygon.set('macroregion_id', _Region.selectedMacroregion.id);
-                    
+                
                     polygon.setDraggable(true);
                     _Region.createRegionPolygonListeners(polygon);
                 }
@@ -427,6 +428,8 @@ export default{
     watch: {
         'macroregion': function (val, oldVal) {
             if(_Region.macroregion){
+                _Region.drawingManager.setOptions({drawingControl: true});
+                
                 _Region.clearPolygonsRegions();
                 if(_Region.selectedMacroregion) _Region.selectedMacroregion.setMap(null);
 
@@ -446,6 +449,10 @@ export default{
                 }, (response) => {
                     toastr.error('erro!', console.log(response.data));
                 });
+            }else{
+                if(!val && typeof(oldVal) != 'object'){
+                    _Region.drawingManager.setOptions({drawingControl: false});
+                }
             }
         },
     },
