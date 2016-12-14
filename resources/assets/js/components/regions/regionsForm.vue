@@ -41,22 +41,21 @@
 
     <div class="map" v-el:regionmap style="width:100%;height:800px;"></div>
     
-    <!-- MODAL  -->
+<!-- MODAL  -->
     <div id="region-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
-                    <div v-for="polygon in lstPolygons" class="infowindow-modal">
-                        
-                        <div v-bind:id="lstPolygons[$index].inside_id" class="iw-container" style="display:block">
+                    <div class="infowindow-modal">
+                        <div class="iw-container" style="display:block">
                             <div class="iw-title">Región</div>
                             <div class="iw-content">
                                 <div class="row">
                                     <div class="col-md-10">
                                         <span class="blue">Codigo</span>
                                         <div class="form-group form-line-input">
-                                            <input id="code-input" v-model="lstPolygons[$index].code" class="form-control input-sm" type="text"/>
+                                            <input id="code-input" v-model="region.code" class="form-control input-sm" type="text"/>
                                         </div>
                                     </div>
                                 </div>
@@ -64,17 +63,16 @@
                                     <div class="col-md-10">
                                         <span class="blue">Descrición</span>
                                         <div class="form-group form-line-input">
-                                            <input id="description-input" v-model="lstPolygons[$index].description" class="form-control input-sm" type="text" />
+                                            <input id="description-input" v-model="region.description" class="form-control input-sm" type="text" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" @click="ModalSave">Salvar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -120,6 +118,11 @@ export default{
             selectedMacroRegion:null,
             macroregions_select:[],
             macroregion:[], 
+            region: {
+                inside_id:'',
+                code: '',
+                description:''
+            },
         }
     },
     
@@ -130,6 +133,13 @@ export default{
     },
     
     methods:{
+        ModalSave(){
+            var index = _Region.lstPolygons.indexOf(_Region.selectedShape);
+            _Region.lstPolygons[index].code = _Region.region.code;
+            _Region.lstPolygons[index].description = _Region.region.description;
+            _Region.lstPolygons[index].edited = true;
+            if(_Region.lstPolygons[index].id) _Region.lstPolygons[index].setOptions({fillColor: 'yellow'});
+        },
         createMap() {
             _Region.googleMap = new google.maps.Map(_Region.$els.regionmap, {
                 center: _Region.center,
@@ -174,8 +184,6 @@ export default{
                     polygon.set('code', '');
                     polygon.set('description', '');
                     polygon.set('macroregion_id', _Region.selectedMacroregion.id);
-                
-                    
                     _Region.createRegionPolygonListeners(polygon);
                 }
             });
@@ -204,10 +212,8 @@ export default{
             });
         },
         showModal(polygon){
-            //$('.iw-container').each(function(i, obj) {
-            //    $(this).hide();
-            //});
-            $('.iw-container#'+ polygon.inside_id).show();
+            _Region.region.code = polygon.code;
+            _Region.region.description = polygon.description; 
             $('#region-modal').modal('show');
         },
         initControls(){
@@ -265,8 +271,9 @@ export default{
         },
         createRegionPolygonListeners(polygon){
             google.maps.event.addListener(polygon, 'click', function (event) {
-                _Region.showModal(polygon);
                 _Region.setSelection(polygon);
+                _Region.showModal(polygon);
+                
             });
             google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
                 if(polygon.id){
