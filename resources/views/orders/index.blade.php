@@ -24,11 +24,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($orders as $order)
+                    @foreach($orders as $order)
                     <tr>
                         <td>#{{$order->id}}</td>
-                        <td>{{$order->representative->user->name}}</td>
-                        <td>{{$order->customer->name}}</td>
+                        <td>
+                             @if ($order->representative)
+                                {{$order->representative->user->name}}
+                            @endif
+                        </td>
+                        <td>
+                            @if ($order->customer)
+                                {{$order->customer->name}}
+                            @endif
+                        </td>
                         <td>${{$order->cost}}</td>
                         <td>${{$order->price}}</td>
                         <td>{{$order->client_discount}}</td>
@@ -45,8 +53,7 @@
 
                         </td>
                     </tr>
-                @endforeach
-
+                    @endforeach
                 </tbody>
             </table>
 
