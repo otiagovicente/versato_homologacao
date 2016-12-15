@@ -19,3 +19,8 @@
     </div>
 
 @endsection
+@section('scripts')
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=<?php echo env('MAP_KEY');?>&callback=app.initMap&libraries=places">
+    </script>
+@endsection
