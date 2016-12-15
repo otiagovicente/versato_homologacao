@@ -31,10 +31,7 @@
                          <hr>
                          <div class="row">
                             <div class="col-md-12">
-                                <div class="map" v-el:customermap>
-
-
-                                </div>
+                                <div class="map" v-el:customermap></div>
                             </div>
                          </div>
                         <hr>
@@ -44,12 +41,8 @@
                                  <a class="btn green btn-outline sbold pull-right" style="margin-right:10px;" @click="showCreateDeliveryCenter()"> Crear Centro de Entrega </a>
                              </div>
                          </div>
-
-
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -83,22 +76,16 @@
         height: 200px;
     }
 </style>
-<script type="text/babel">
-    //    import shopForm from '../shops/shopForm.vue'
+<script>
     import VueStrap from 'vue-strap'
     import Dropzone from 'dropzone'
-    import {Map, load, Marker, InfoWindow} from 'vue-google-maps'
-
 
     export default{
         components: {
-            Map,
-            load,
-            Marker,
-            InfoWindow,
-//            'shop-form': shopForm,
+           
         },
         props: ['pcustomer_id'],
+        
         data(){
             return {
                 customer: {
@@ -130,6 +117,7 @@
                 console.log(_showCustomer.map.center)
             }
         },
+        
         events: {
             MapsApiLoaded: function () {
                 _showCustomer.createMap();
@@ -152,9 +140,9 @@
         ready(){
             window._showCustomer = this;
         },
+        
         methods: {
             getCustomer: function () {
-
                 this.$http.get('/api/customers/' + _showCustomer.pcustomer_id)
                         .then((response)=> {
                             _showCustomer.customer = response.json();
@@ -167,7 +155,6 @@
                         }).catch((response)=> {
                     toastr.error('No se puede conectar al servidor. getCustomer Fails');
                 });
-
             },
 
             createMap: function () {
@@ -176,11 +163,12 @@
                     zoom: _showCustomer.map.zoom
                 });
             },
+
             centerMap: function (lat, lng) {
                 _showCustomer.googleMap.setCenter({lat: lat, lng: lng});
             },
-            addMarker: function (lat, lng) {
 
+            addMarker: function (lat, lng) {
                 var marker = new google.maps.Marker({
                     map: _showCustomer.googleMap,
                     animation: google.maps.Animation.DROP,
@@ -189,23 +177,21 @@
                 _showCustomer.map.markers.push(marker);
 
             },
-            emptyMarkers: function(){
 
+            emptyMarkers: function(){
                 _.forEach(_showCustomer.map.markers, function(value) {
                     value.setMap(null);
                 });
                 _showCustomer.map.markers = [];
                 _showCustomer.customer.geo = "";
             },
+            
             showCreateDeliveryCenter: function () {
-
                 this.$broadcast('showCreateDeliveryCenterModal');
-
             },
+
             showShopsForm: function () {
                 this.$broadcast('showShopsFormModal');
-
-
             }
         }
     }
