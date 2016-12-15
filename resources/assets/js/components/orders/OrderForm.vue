@@ -361,7 +361,7 @@
     <!--End - Modal de Produtos -->
 </template>
 
-<script type="text/babel">
+<script>
     import toastr from 'toastr'
     import VueStrap from 'vue-strap'
 
@@ -519,7 +519,6 @@ export default{
         getProducts:function(brandid){
             this.$http.get('/api/products/list/'+brandid)
             .then(response => {
-                console.log(response.json());
                 _this.products = response.json();
             });
         },
