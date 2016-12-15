@@ -214,6 +214,7 @@
                 googleMap:'',
                 zoom: 12,
                 autocomplete:'',
+                marker:'',
             }
         },
         
@@ -247,7 +248,9 @@
                 _createCustomer.customer.zip = '';
             },
             createMarkerAndCenter(place){
-                var marker = new google.maps.Marker({
+                if(_createCustomer.marker) _createCustomer.marker.setMap(null);
+                
+                _createCustomer.marker = new google.maps.Marker({
                     map: _createCustomer.googleMap,
                     title: place.formatted_address,
                     position: place.geometry.location,
@@ -255,10 +258,15 @@
                 });
                 _createCustomer.googleMap.setCenter(place.geometry.location);
             },
+            setCustomerGeo(place){
+                var geo = {lat:place.geometry.location.lat(), lng:place.geometry.location.lng()}
+                _createCustomer.customer.geo = JSON.stringify(geo);
+            },
             fillInAddress() {
                 var place = _createCustomer.autocomplete.getPlace();
                 if(place) {
                     _createCustomer.createMarkerAndCenter(place);
+                    _createCustomer.setCustomerGeo(place);
                     
                     _createCustomer.cleanAddressFields();
                     _createCustomer.customer.address = place.formatted_address;
