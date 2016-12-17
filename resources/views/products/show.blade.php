@@ -1,11 +1,15 @@
 @extends('layouts.dashboard')
 @section('content')
-    @include('products.partials.header',[
-        'pageTitle' => $product->code,
-        'url' => '/products/'.$product->id.'/show',
-        'actions' => ['Editar Produto' => '/products/'.$product->id.'/edit']
+    @include('general.pageheader',[
+        'section' => 'Productos',
+        'sectionUrl' => '/products',
+        'pageTitle' => 'Produto ',
+        'url' => '/products/'.$product->id,
+        'actions' => [
+            'Mostrar Todos' => '/products',
+            'Crear Producto' => '/products/create'
+        ]
     ])
-
     <div class="container">
         <div class="row">
 
@@ -14,9 +18,9 @@
 
                         <div class="portlet-title">
                             <div class="caption font-blue">
-                                <h3><i class="fa fa-tag font-blue"></i> Código:
-                                <span class="h4" id="line-code">{{ $product->line->code.' '.$product->material->code.' '.$product->color->code }}</span>
-                                </h3>
+                                <h2>
+                                    {{ $product->line->description.' '.$product->material->description.' '.$product->color->description }}
+                                </h2>
                             </div>
                         </div>
 

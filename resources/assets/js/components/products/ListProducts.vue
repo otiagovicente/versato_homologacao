@@ -47,7 +47,7 @@
 
     </div>
 </template>
-<style>
+<style scoped>
     .list-product-index-list-photo{
 
         width: 100%;

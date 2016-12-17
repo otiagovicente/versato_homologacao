@@ -121,32 +121,6 @@
                                 </ul>
                             </li>
 
-                            <li class="nav-item ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-barcode"></i>
-                                    <span class="title">Referencias</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item">
-                                        <a href="/references" class="nav-link nav-toggle">
-                                            <i class="fa fa-bars"></i>
-                                            <span class="title">Ver Todas</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/references/create" class="nav-link nav-toggle">
-                                            <i class="fa fa-plus"></i>
-                                            <span class="title">Criar Referencia</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </li>
-
                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-diamond"></i>

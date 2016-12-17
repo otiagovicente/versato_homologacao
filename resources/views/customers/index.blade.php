@@ -1,10 +1,17 @@
 @extends('layouts.dashboard')
 @section('content')
-    @include('macroregions.partials.header',[
-        'pageTitle' => 'Clientes',
-        'url' => '/macroregions',
-        'actions' => []
+
+    @include('general.pageheader',[
+        'section' => 'Clientes',
+        'sectionUrl' => '/customers',
+        'pageTitle' => 'Mostrar',
+        'url' => '/customers',
+        'actions' => [
+            'Mostrar Todos' => '/customers',
+            'Crear Cliente' => '/customers/create'
+        ]
     ])
+
 
     <div class="container-fluid">
 

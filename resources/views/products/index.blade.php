@@ -1,58 +1,63 @@
 @extends('layouts.dashboard')
 @section('content')
-    @include('products.partials.header',[
+
+    @include('general.pageheader',[
+        'section' => 'Productos',
+        'sectionUrl' => '/products',
         'pageTitle' => 'Produtos '.session()->get('brand')->name,
-        'url' => '/products/',
-        'actions' => []
+        'url' => '/products',
+        'actions' => [
+            'Mostrar Todos' => '/products',
+            'Crear Producto' => '/products/create'
+        ]
     ])
     <hr>
     <div class="md-col-12">
-        <form action="/products/search">
-            <div class="col-md-7">
+        <div class="row">
+            <form action="/products/search">
                 <div class="form-group form-line-input search">
                     <h4>Buscar</h4>
-
                     <div class="input-icon input-icon-lg right">
                         <i class="fa fa-search font-green"></i>
                         <input id="search-input" class="form-control input-lg" type="text" name="search">
                     </div>
                 </div>
-            </div>
-        </form>
-
-        <div class="col-md-5 pull-right">
-            {{ $products->links() }}
+            </form>
         </div>
+
+        <div class="row">
+            <div class="col-md-5 pull-right">
+                {{ $products->links() }}
+            </div>
+        </div>
+
     </div>
     <hr>
-    <div class="container-fluid">
         <div class="row">
+            @foreach($products as $product)
+            <a href="/products/{{$product->id}}">
+                <div class="col-md-3">
+                    <div class="product-index-product-box">
+                        <div class="row">
 
-                @foreach($products as $product)
-                <a href="/products/{{$product->id}}">
-                    <div class="col-md-3">
-                        <div class="product-index-product-box">
-                            <div class="row">
-
-                                <div class="col-md-12">
-                                    <img class="product-index-list-photo" src="{{$product->photo}}" alt="{{$product->code}}">
-                                </div>
-
+                            <div class="col-md-12">
+                                <img class="product-index-list-photo" src="{{$product->photo}}" alt="{{$product->code}}">
                             </div>
-                            <div class="row">
-                                <h4>{{$product->line->description.' '.$product->material->description}}</h4>
-                                <h5>{{$product->color->description}}</h5>
-                            </div>
+
                         </div>
-
-
-
+                        <div class="row">
+                            <h4>{{$product->line->description.' '.$product->material->description}}</h4>
+                            <h5>{{$product->color->description}}</h5>
+                        </div>
                     </div>
-                </a>
 
-                @endforeach
+
+
+                </div>
+            </a>
+
+            @endforeach
         </div>
-    </div>
 @stop
 
 @section('styles')

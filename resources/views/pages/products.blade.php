@@ -65,19 +65,6 @@
             </a>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            <a class="dashboard-stat dashboard-stat-v2 blue-steel" href="/references">
-                <div class="visual">
-                    <i class="fa fa-barcode"></i>
-                </div>
-                <div class="details">
-                    <div class="number">
-                        <span data-counter="counterup" data-value="{{$referencesCount}}">0</span>
-                    </div>
-                    <div class="desc"> Referencias </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
             <a class="dashboard-stat dashboard-stat-v2 green-steel" href="/materials">
                 <div class="visual">
                     <i class="fa fa-diamond"></i>
