@@ -279,14 +279,7 @@
                                     <li class="nav-item">
                                         <a href="/macroregions" class="nav-link nav-toggle">
                                             <i class="fa fa-map"></i>
-                                            <span class="title">Ver Todos</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/macroregions/create" class="nav-link nav-toggle">
-                                            <i class="fa fa-map"></i>
-                                            <span class="title">Crear</span>
+                                            <span class="title">Editar</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>

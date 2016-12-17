@@ -36,16 +36,15 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
-                    <div v-for="polygon in lstPolygons" class="infowindow-modal">
-                        
-                        <div v-bind:id="lstPolygons[$index].inside_id" class="iw-container" style="display:none">
-                            <div class="iw-title">Macro Região</div>
+                    <div class="infowindow-modal">
+                        <div class="iw-container" style="display:block">
+                            <div class="iw-title">Región</div>
                             <div class="iw-content">
                                 <div class="row">
                                     <div class="col-md-10">
                                         <span class="blue">Codigo</span>
                                         <div class="form-group form-line-input">
-                                            <input id="code-input" v-model="lstPolygons[$index].code" class="form-control input-sm" type="text"/>
+                                            <input id="code-input" v-model="macroregion.code" class="form-control input-sm" type="text"/>
                                         </div>
                                     </div>
                                 </div>
@@ -53,21 +52,25 @@
                                     <div class="col-md-10">
                                         <span class="blue">Descrición</span>
                                         <div class="form-group form-line-input">
-                                            <input id="description-input" v-model="lstPolygons[$index].description" class="form-control input-sm" type="text" />
+                                            <input id="description-input" v-model="macroregion.description" class="form-control input-sm" type="text" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" @click="ModalSave">Salvar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+
 </template>
 
 <script>
@@ -81,9 +84,14 @@
                 drawingManager: null,
                 lstPolygons:[],
                 infowindow:null,
-                macroregions: {},
+                macroregions: {}, 
                 inside_id:0,
                 deletePolygons:[],
+                macroregion: {
+                    inside_id:'',
+                    code: '',
+                    description:''
+                },
             }
         },
         ready(){
@@ -92,6 +100,13 @@
         },
 
         methods: {
+            ModalSave(){
+                var index = _Macroregion.lstPolygons.indexOf(_Macroregion.selectedShape);
+                _Macroregion.lstPolygons[index].code = _Macroregion.macroregion.code;
+                _Macroregion.lstPolygons[index].description = _Macroregion.macroregion.description;
+                _Macroregion.lstPolygons[index].edited = true;
+                _Macroregion.lstPolygons[index].setOptions({fillColor: 'yellow'});
+            },
             /*
              *  Funções de inicialização do GoogleMaps
              */
@@ -139,6 +154,7 @@
                         polygon.set('id', '');
                         polygon.set('code', '');
                         polygon.set('description', '');
+                        
                         polygon.setDraggable(true);
                         _Macroregion.createPolygonListeners(polygon);
                     }
@@ -188,8 +204,9 @@
 
             createPolygonListeners(polygon){
                 google.maps.event.addListener(polygon, 'click', function (event) {
-                    _Macroregion.showModal(polygon);
                     _Macroregion.setSelection(polygon);
+                    _Macroregion.showModal(polygon);
+                    
                 });
                 google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
                     if(polygon.id){
@@ -216,10 +233,8 @@
                 _Macroregion.lstPolygons.push(polygon);
             },
             showModal(polygon){
-                $('.iw-container').each(function(i, obj) {
-                    $(this).hide();
-                });
-                $('.iw-container#'+ polygon.inside_id).show();
+                _Macroregion.macroregion.code = polygon.code;
+                _Macroregion.macroregion.description = polygon.description; 
                 $('#macroregion-modal').modal('show');
             },
             
@@ -369,6 +384,9 @@
         },
 
         filters: {
+
+        },
+        watch:{
 
         },
     }
