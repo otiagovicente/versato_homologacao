@@ -123,6 +123,11 @@ export default{
                 code: '',
                 description:''
             },
+            fillColorEdit: 'yellow',
+            fillColorNew: 'red',
+            fillColorSaved: 'green',
+            fillColorMouseOver: 'black',
+            fillColorMacroregion: 'blue',
         }
     },
     
@@ -137,8 +142,11 @@ export default{
             var index = _Region.lstPolygons.indexOf(_Region.selectedShape);
             _Region.lstPolygons[index].code = _Region.region.code;
             _Region.lstPolygons[index].description = _Region.region.description;
-            _Region.lstPolygons[index].edited = true;
-            if(_Region.lstPolygons[index].id) _Region.lstPolygons[index].setOptions({fillColor: 'yellow'});
+            
+            if(_Region.lstPolygons[index].id) {
+                _Region.lstPolygons[index].edited = true;
+                _Region.lstPolygons[index].setOptions({fillColor: _Region.fillColorEdit});
+            }
         },
         createMap() {
             _Region.googleMap = new google.maps.Map(_Region.$els.regionmap, {
@@ -156,7 +164,7 @@ export default{
             var polyOptions = {
                 strokeWeight: 0,
                 fillOpacity: 0.50,
-                fillColor: '#FF0000',
+                fillColor: _Region.fillColorNew,
                 editable: true
             };
             _Region.drawingManager = new google.maps.drawing.DrawingManager({
@@ -237,8 +245,9 @@ export default{
                     polygon = new google.maps.Polygon({
                     paths: JSON.parse(obj.geo),
                     fillOpacity: 0.50,
+                    strokeWeight:0,
                     editable: false,
-                    fillColor: 'blue',
+                    fillColor: _Region.fillColorMacroregion,
                     draggable:false,
                     id: obj.id,
                     code: obj.code,
@@ -251,8 +260,9 @@ export default{
                     polygon = new google.maps.Polygon({
                         paths: JSON.parse(obj.geo),
                         fillOpacity: 0.50,
+                        strokeWeight:0,
                         editable: true,
-                        fillColor: 'pink',
+                        fillColor: _Region.fillColorSaved,
                         draggable:true,
                         id: obj.id,
                         code: obj.code,
@@ -277,22 +287,22 @@ export default{
             });
             google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
                 if(polygon.id){
-                    polygon.setOptions({fillColor: 'yellow'});
+                    polygon.setOptions({fillColor: _Region.fillColorEdit});
                     polygon.set('edited', true);
                 }
             });
             google.maps.event.addListener(polygon.getPath(), 'insert_at', function() {
                 if(polygon.id){
-                    polygon.setOptions({fillColor: 'yellow'});
+                    polygon.setOptions({fillColor: _Region.fillColorEdit});
                     polygon.set('edited', true);
                 }
             });
             google.maps.event.addListener(polygon, "mousemove", function(event) {
                 _Region.setInfoDescription(polygon);
-                polygon.setOptions({strokeWeight: 3.0, strokeColor:'green'});
+                polygon.setOptions({strokeWeight: 3.0, strokeColor:_Region.fillColorMouseOver});
             });
             google.maps.event.addListener(polygon, "mouseout", function(event) {
-                polygon.setOptions({strokeWeight: 0, strokeColor:'green'});
+                polygon.setOptions({strokeWeight: 0});
                 _Region.infowindow.close(_Region.googleMap);
             });
             
@@ -383,7 +393,7 @@ export default{
                 
                 toastr.success('Sucesso!','Região alterada com sucesso');
             }, (response) => { 
-                this.showErrors(response.data); 
+                console.log(response.data); 
             });
         },
 
@@ -393,7 +403,7 @@ export default{
                 .then((response) => {
                     console.log('Região excluída com sucesso');
                 }, (response) => { 
-                    consolo.log(response.data); 
+                    console.log(response.data); 
                 });
             }
         },
