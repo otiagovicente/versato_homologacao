@@ -115,10 +115,10 @@ class OrdersController extends Controller
             Mail::to($order->representative->user->email)->send(new NewOrderMail($order));
         }*/
         
-        //Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
+        Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
         Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
-        //Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
-        //Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
+        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
     }
 
    public function api_list(){
