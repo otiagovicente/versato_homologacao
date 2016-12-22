@@ -28,4 +28,7 @@ class Order extends Model
     public function customer(){
         return $this->belongsTo(Customer::class);
     }
+    public function deliverycenter(){
+        return $this->belongsTo(Deliverycenter::class);
+    }
 }
