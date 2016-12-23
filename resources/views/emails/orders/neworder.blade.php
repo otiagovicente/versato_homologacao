@@ -126,7 +126,9 @@
           <span style="margin-left:4%;font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;  width: 100%; text-align:center"><b>Totales</b></span>
         </td>
         <td valign="center" align="center" bgcolor="#f2f2f2" width="16%">
-          <span style="margin-left:5px; font-family: Helvetica, 'Arial', sans-serif; font-size:16px; font-weight:normal; color: #000; margin-top: 15px;   width: 100%; text-align:center"><b>${{$order->price}}</b></span>
+          <span style="margin-left:5px; font-family: Helvetica, 'Arial', sans-serif; font-size:16px; font-weight:normal; color: #000; margin-top: 15px;   width: 100%; text-align:center">
+            <b></b>
+          </span>
         </td>
         <!-- Deve manter, por motivos de alinhamento -->
         <td valign="center" align="center" bgcolor="#f2f2f2" width="10%">
