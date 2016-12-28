@@ -14,7 +14,8 @@
     <table cellspacing="0" cellpading="0" width="100%" height="100px" style="margin-top:50px;">
       <tr>
         <td valign="center" bgcolor="#33495F" width="60%">
-            <img src="logo.jpg" alt="" style="float:left; margin-left:30px;">
+            <img src="https://s3-sa-east-1.amazonaws.com/sistema-versato/products/7ce92de2da23db33cd9296a768e5fdd7.jpeg" 
+              alt="" style="float:left; margin-left:30px;">
         </td>
         <td valign="top" bgcolor="#33495F" width="40%" align="right">
           <!-- linha 1 -->
