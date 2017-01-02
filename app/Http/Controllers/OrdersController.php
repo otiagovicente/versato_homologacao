@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\RequestsOrder;
 use App\Order;
+use App\Product;
+use App\Customer;
+use App\Representative;
 use App\Mail\NewOrderMail;
+use App\Mail\FavoritesMail;
 use League\Flysystem\Exception;
 use Mail;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -115,10 +120,23 @@ class OrdersController extends Controller
             Mail::to($order->representative->user->email)->send(new NewOrderMail($order));
         }*/
         
-        Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
+        //Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
         Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        //Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
+        //Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+    }
+    public function api_sendFavoritesMail($idRep, $idCustomer, $lstProducts){
+        $products = Product::
+                with('line')
+                ->with('material')
+                ->with('color')
+                ->whereIn('id', explode(',', $lstProducts))->get();
+        
+        $representative = Representative::with('user')->find($idRep);
+        $customer       = Customer::find($idCustomer);
+ 
+        if($representative && $customer && $products)
+            Mail::to('bruno@magnaestrategia.com')->send(new FavoritesMail($products, $representative, $customer));
     }
 
    public function api_list(){
@@ -152,5 +170,17 @@ class OrdersController extends Controller
             ->with('products', 'representative', 'customer')
             ->get();
         return response()->json($orders);
+    }
+    public function api_getSalesByBrand(){
+        $totalSalesByBrand = Order::
+                                select('brands.name', DB::raw('SUM(order_product.total) as Total, COUNT(order_product.code) as qtd_pedidos'))
+                                ->join('order_product', 'orders.id', '=', 'order_product.order_id')                       
+                                ->join('products', 'products.id', '=', 'order_product.product_id')
+                                ->join('brands', 'brands.id', '=', 'products.brand_id')
+                                ->whereBetween('order_product.created_at', ['2016-12-01 00:00:00', '2016-12-31 23:59:59'])
+                                ->groupBy('brands.id')
+                                ->get();
+        
+        return response()->json($totalSalesByBrand);
     }
 }
