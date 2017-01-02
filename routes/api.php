@@ -16,6 +16,8 @@ Route::get('/user', function (Request $request) {
     return $request->user()->load('representative');
 })->middleware('auth:api');
 
+Route::get('/orders/getSalesByBrand', 'OrdersController@api_getSalesByBrand');
+
 Route::group(['middleware' => 'auth:api'], function () {
 
     //Rotas dedicadas às marcas
@@ -127,6 +129,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //Rotas dedicadas a Pedidos
 
+    Route::post('/orders/sendfavorites/{idRep}/{idCustomer}/{lstProducts}','OrdersController@api_sendFavoritesMail');
+
+    
+    
     Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
     Route::get('/orders/getProductsFromOrder/{id}', 'OrdersController@api_getProducts');
     Route::get('/orders/listOrdersByRepresentative/{id}','OrdersController@api_listOrdersByRepresentative');

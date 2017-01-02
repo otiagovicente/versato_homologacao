@@ -22,6 +22,8 @@ Auth::routes();
 
 Route::get('/representatives/qrcode', 'RepresentativesController@createTokenQRCode');
 Route::get('/enviamail/{id}','OrdersController@sendNewOrderMail');
+Route::get('/orders/sendfavorites/{idRep}/{idCustomer}/{lstProducts}','OrdersController@api_sendFavoritesMail');
+
 Route::get('/resizeimage', function(){
 
 	$file = "https://s3-sa-east-1.amazonaws.com/sistema-versato/products/96ce32aeac4385131c0a4bab7ba0b9ed.jpeg";
@@ -113,4 +115,5 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
 
     Route::resource('charts','ChartsController',['parameters' => 'singular']);
+	Route::resource('reports','ReportsController',['parameters' => 'singular']);
 });
