@@ -6,7 +6,7 @@
 <html>
   <body>
 
-<!-- inner email -->
+<!-- inner email  -->
 <table cellpadding="0" cellspacing="0" width="100%" height="100%">
   <tr>
     <td valign="top" align="center" bgcolor="#F3F3F3" width="100%">
