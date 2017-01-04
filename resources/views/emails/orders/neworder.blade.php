@@ -33,18 +33,18 @@
       <tr>
         <td valign="center" align="center" bgcolor="#FFFFFF" width="50%">
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f;">
-                Customer: <b>{{$order->customer->name}}</b>
+                Cliente: <b>{{$order->customer->name}}</b>
             </span> <br><br>
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f; padding-top: 10px;">
-                Delivery Center:
+                Centro de Entrega:
             </span>
         </td>
         <td valign="center" align="center" bgcolor="#FFFFFF" width="50%">
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f;  ">
-                Desconto de Cliente: <b>{{$order->client_discount? $order->client_discount:0}}%</b>
+                Descuento del Cliente: <b>{{$order->client_discount? $order->client_discount:0}}%</b>
             </span><br><br>
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f; margin-top: 10px; ">
-                Desconto de Representante: <b>{{$order->representative_discount? $order->representative_discount:0}}%</b>
+                Descuento del Representante: <b>{{$order->representative_discount? $order->representative_discount:0}}%</b>
             </span>
         </td>
       </tr>
@@ -54,13 +54,13 @@
     <table cellspacing="5" cellpading="0" width="100%" height="60px" >
       <tr>
         <td valign="center" align="left" bgcolor="#f2f2f2" width="32%">
-          <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;  width: 100%; text-align:center"><b>Produto</b></span>
+          <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;  width: 100%; text-align:center"><b>Producto</b></span>
         </td>
         <td valign="center" align="center" bgcolor="#f2f2f2" width="16%">
           <span style="margin-left:5px; font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;   width: 100%; text-align:center"><b>Precio</b></span>
         </td>
         <td valign="center" align="center" bgcolor="#f2f2f2" width="10%">
-          <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;   width: 100%; text-align:center"><b>Grid</b></span>
+          <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;   width: 100%; text-align:center"><b>Tarea</b></span>
         </td>
         <td valign="center" align="center" bgcolor="#f2f2f2" width="10%">
           <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;   width: 100%; text-align:center"><b>Desc. Cliente</b></span>
