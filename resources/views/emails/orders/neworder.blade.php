@@ -36,7 +36,7 @@
                 Cliente: <b>{{$order->customer->name}}</b>
             </span> <br><br>
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f; padding-top: 10px;">
-                Centro de Entrega:
+                <!--Centro de Entrega:-->
             </span>
         </td>
         <td valign="center" align="center" bgcolor="#FFFFFF" width="50%">
