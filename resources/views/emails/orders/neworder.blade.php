@@ -41,7 +41,7 @@
         </td>
         <td valign="center" align="center" bgcolor="#FFFFFF" width="50%">
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f;  ">
-                Descuento del Cliente: <b>{{$order->client_discount? $order->client_discount:0}}%</b>
+                Descuento del Cliente: <b>{{$order->customer_discount? $order->customer_discount:0}}%</b>
             </span><br><br>
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f; margin-top: 10px; ">
                 Descuento del Representante: <b>{{$order->representative_discount? $order->representative_discount:0}}%</b>
