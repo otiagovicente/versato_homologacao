@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/brands/selectlist', 'BrandsController@api_selectList');
     Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
     Route::get('/brands/list', 'BrandsController@api_list');
+    Route::get('/brands/{brand}/products', 'BrandsController@api_products');
     Route::get('/brands/selectlist', 'BrandsController@api_selectList');
 
 
