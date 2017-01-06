@@ -67,10 +67,6 @@
             </div>
         </div>
     </div>
-
-
-
-
 </template>
 
 <script>
@@ -92,6 +88,10 @@
                     code: '',
                     description:''
                 },
+                fillColorEdit: 'yellow',
+                fillColorNew: 'red',
+                fillColorSaved: 'green',
+                fillColorMouseOver: 'black',
             }
         },
         ready(){
@@ -104,8 +104,11 @@
                 var index = _Macroregion.lstPolygons.indexOf(_Macroregion.selectedShape);
                 _Macroregion.lstPolygons[index].code = _Macroregion.macroregion.code;
                 _Macroregion.lstPolygons[index].description = _Macroregion.macroregion.description;
-                _Macroregion.lstPolygons[index].edited = true;
-                _Macroregion.lstPolygons[index].setOptions({fillColor: 'yellow'});
+                
+                if(_Macroregion.lstPolygons[index].id){
+                    _Macroregion.lstPolygons[index].edited = true;
+                    _Macroregion.lstPolygons[index].setOptions({fillColor: _Macroregion.fillColorEdit});
+                }
             },
             /*
              *  Funções de inicialização do GoogleMaps
@@ -127,7 +130,7 @@
                 var polyOptions = {
                     strokeWeight: 0,
                     fillOpacity: 0.50,
-                    fillColor: '#FF0000',
+                    fillColor: _Macroregion.fillColorNew,
                     editable: true
                 };
                 _Macroregion.drawingManager = new google.maps.drawing.DrawingManager({
@@ -197,6 +200,8 @@
                     code: objMacroregion.code,
                     description: objMacroregion.description,
                     edited:false,
+                    strokeWeight: 0,
+                    fillColor: _Macroregion.fillColorSaved,
                 });
                 polygon.setMap(_Macroregion.googleMap);
                 _Macroregion.createPolygonListeners(polygon);
@@ -210,22 +215,22 @@
                 });
                 google.maps.event.addListener(polygon.getPath(), 'set_at', function() {
                     if(polygon.id){
-                        polygon.setOptions({fillColor: 'yellow'});
+                        polygon.setOptions({fillColor: _Macroregion.fillColorEdit});
                         polygon.set('edited', true);
                     }
                 });
                 google.maps.event.addListener(polygon.getPath(), 'insert_at', function() {
                    if(polygon.id){
-                        polygon.setOptions({fillColor: 'yellow'});
+                        polygon.setOptions({fillColor: fillColorEdit});
                         polygon.set('edited', true);
                     }
                 });
                 google.maps.event.addListener(polygon, "mousemove", function(event) {
                     _Macroregion.setInfoDescription(polygon);
-                    polygon.setOptions({strokeWeight: 3.0, strokeColor:'green'});
+                    polygon.setOptions({strokeWeight: 3.0, strokeColor:_Macroregion.fillColorMouseOver});
                 });
                 google.maps.event.addListener(polygon, "mouseout", function(event) {
-                    polygon.setOptions({strokeWeight: 0, strokeColor:'green'});
+                    polygon.setOptions({strokeWeight: 0});
                     _Macroregion.infowindow.close(_Macroregion.googleMap);
                 });
                 
@@ -252,7 +257,6 @@
             },
             setInfoErrorContent(polygon){
                 return 'Complete la información de la macro región!';
-                //$('.iw-container#'+ polygon.inside_id).html();
             },
             setInfoDescriptionContent(polygon){
                 return polygon.description;

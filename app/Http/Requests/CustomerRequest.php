@@ -31,7 +31,8 @@ class CustomerRequest extends FormRequest
                     'cuit' => 'required|unique:customers,cuit',
                     'company' => 'required',
                     'name' => 'required',
-                    'address' => 'required'
+                    'address' => 'required',
+                    'email' => 'required'
                 ];
                 break;
             case 'PUT':
@@ -41,7 +42,8 @@ class CustomerRequest extends FormRequest
                     'cuit' => 'required',
                     'company' => 'required',
                     'name' => 'required',
-                    'address' => 'required'
+                    'address' => 'required',
+                    'email' => 'required'
                 ];
                 break;
 
@@ -51,7 +53,8 @@ class CustomerRequest extends FormRequest
                     'cuit' => 'required',
                     'company' => 'required',
                     'name' => 'required',
-                    'address' => 'required'
+                    'address' => 'required',
+                    'email' => 'required'
                 ];
                 break;
         }
@@ -67,6 +70,7 @@ class CustomerRequest extends FormRequest
             'cuit.required' => 'necesita poner el cuit del cliente',
             'company.required' => 'necesita poner la razón social del cliente',
             'address.required' => 'necesita poner la ubicación del cliente',
+            'email.required' => 'necesita poner el email del cliente',
             'geo.required' => 'necesita el geocode del cliente',
         ];
     }

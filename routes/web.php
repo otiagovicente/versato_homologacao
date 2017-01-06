@@ -1,8 +1,6 @@
 <?php
 
 use App\Mail\NewOrderMail;
-use Illuminate\Http\Request;
-use App\Contracts\ShoppingCart;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,24 +13,10 @@ use App\Contracts\ShoppingCart;
 |
 */
 
-Route::get('/shoppingcart', function (ShoppingCart $shoppingCart){
-
-	$order = new \App\Order();
-	$shoppingCart->startShopping($order);
-	$shoppingCart->setCustomer(
-		\App\Customer::first()
-	);
-
-	dd(session('ShoppingCart'));
-	$shoppingCart->test();
-});
-
-Route::get('/continueShopping', function (ShoppingCart $shoppingCart){
-	$brand = new \App\Brand;
-	$brand = $brand->first();
-	$shoppingCart->setBrand($brand);
-//	dd(session('ShoppingCart'));
-});
+//// Authentication routes...
+//Route::get('/login', 'Auth\AuthController@showLoginForm');
+//Route::post('/login', 'Auth\AuthController@login');
+//Route::get('/logout', 'Auth\AuthController@logout');
 
 Auth::routes();
 
@@ -147,4 +131,5 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
+	Route::resource('reports','ReportsController',['parameters' => 'singular']);
 });

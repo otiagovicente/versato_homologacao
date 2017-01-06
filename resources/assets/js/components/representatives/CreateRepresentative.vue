@@ -56,22 +56,6 @@
                                     </div>
                                 </div>
                                 <hr/>
-                                <div class="col-md-12" style="cursor:pointer;">
-                                    Gerente? <input type="checkbox" value="" v-model="representative.manager">
-
-                                    <div v-if="representative.manager">
-                                        <v-select
-                                                v-bind:options.sync="macroregions_select"
-                                                :value.sync="representative.macroregion_id"
-                                                placeholder="Elige la macro región"
-                                                id="macroregions-input"
-                                                name="macroregions[]"
-                                                search justified required close-on-select
-                                        ></v-select>
-                                    </div>
-                                </div>
-
-
                             </div>
                             <div class="col-md-4">
 
@@ -114,7 +98,7 @@
         right : 10px;
     }
 </style>
-<script type="text/babel">
+<script>
     import VueStrap from 'vue-strap'
 
     export default{
@@ -124,9 +108,7 @@
                     code: '',
                     user_id: '',
                     regions: [],
-                    brands: [],
-                    manager:null,
-                    macroregion_id:[]
+                    brands: []
                 },
                 user: {
                     photo: '/images/default-placeholder.jpg',
@@ -165,14 +147,14 @@
             if (_CreateRepresentative.prepresentativeid) {
                 _CreateRepresentative.loadData();
             }
-            _CreateRepresentative.getMacroRegions();
+            //_CreateRepresentative.getMacroRegions();
         },
         methods: {
             getMacroRegions: function(){
                 this.$http.get('/api/macroregions/selectlist')
-                        .then(response => {
-                            this.macroregions_select = response.json();
-                        });
+                .then(response => {
+                    this.macroregions_select = response.json();
+                });
             },
 
             /*
