@@ -97,11 +97,12 @@ class SalesmanShoppingCart implements ShoppingCart{
 	public function addProduct($product_id, $grid_id ,$amount = 1, $discount = 0.00, $representative_discount = 0.00){
 
 		if($this->startShopping()){
+
+
 			$brand_id = Product::find($product_id)->brand->id;
 
 			$this->setBrand($brand_id);
 		}
-
 
 		if(!$this->checkBrand($product_id)){
 			return false;
@@ -201,9 +202,14 @@ class SalesmanShoppingCart implements ShoppingCart{
 	{
 		$product = Product::with('brand')->find($product_id);
 		$brand_id = $product->brand->id;
-		if($this->getBrand()->id != $brand_id){
-			return false;
+
+		if($this->getBrand()){
+			if($this->getBrand()->id != $brand_id){
+
+				return false;
+			}
 		}
+
 		return true;
 	}
 

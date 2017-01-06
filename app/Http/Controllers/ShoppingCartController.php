@@ -15,8 +15,8 @@ class ShoppingCartController extends Controller
 
 	public function addProduct(AddProductToOrderRequest $request, ShoppingCart $shoppingCart){
 
-//		return response()->json($request);
 		$product = $request;
+
 		$shoppingCart->addProduct($product->product, $product->grid, $product->amount, $product->discount, $product->representativeDiscount);
 		return response()->json($shoppingCart->getProducts());
 

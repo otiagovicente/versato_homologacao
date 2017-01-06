@@ -12,9 +12,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-3 block-center">
-                                <h2 v-show="customer" class="font-blue">{{customer.name}}</h2>
-                                <small v-show="customer">{{customer.company}} - cuit: {{customer.cuit}}</small>
-                                <button v-show="!customer" class="btn blue" v-on:click="addCustomer()">Agregar Cliente</button>
+                                <h2 v-show="customer.id" class="font-blue">{{customer.name}}</h2>
+                                <small v-show="customer.id">{{customer.company}} - cuit: {{customer.cuit}}</small>
+                                <button v-show="!customer.id" class="btn blue" v-on:click="addCustomer()">Agregar Cliente</button>
 
 
                             </div>
@@ -64,12 +64,12 @@
 
                     </div>
                     <div class="portlet-body">
-                            <div class="product-list-list">
-                                <div class="col-md-12" v-for="product in products">
+                            <div class="product-list-list" v-if="products.length > 0">
+                                <div  class="col-md-12" v-for="product in products">
 
                                     <div class="col-md-12 product-list-product-box">
                                         <div class="col-md-2">
-                                            <img v-bind:src="product.product.photo" class="product-list-photo">
+                                            <img v-show="product.product.photo" v-bind:src="product.product.photo" class="product-list-photo">
                                         </div>
                                         <div class="col-md-10">
                                             <div class="col-md-12">
@@ -88,7 +88,7 @@
                                                 <div class="col-md-3">
                                                     <h4 class="font-blue">Tarea <strong>{{ product.total | currency '$' }}</strong></h4>
                                                     <h5 class="font-blue">{{product.total_sum }}</h5>
-                                                    <h5 class="font-blue">{{product.product.price | currency '$' }} un</h5>
+                                                    <h5 class="font-blue" v-show="product.product.price">{{product.product.price | currency '$' }} un</h5>
                                                 </div>
 
 
@@ -154,7 +154,11 @@
         },
         data(){
             return {
-                customer: null,
+                customer: {
+                    cuit :'',
+                    name : '',
+                    company : ''
+                },
                 products: {
                     product: {
                         total: 0,
@@ -223,8 +227,6 @@
 
             calculateTotal(){
                 var total = 0.00;
-
-                if(this.$data.products.length > 1){
                     _.each(this.$data.products, function (product, key) {
 
                         product.total_sum = ((product.product.price * product.grid.total) * product.amount);
@@ -244,7 +246,6 @@
 
                         total += Number(product.total, 2);
                     });
-                }
 
                 _Order.order.total = total;
             },
