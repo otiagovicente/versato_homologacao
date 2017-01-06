@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
     return $request->user()->load('representative');
 })->middleware('auth:api');
 
-Route::group(['middleware' => 'auth:api'], function () {
+//Route::group(['middleware' => 'auth:api'], function () {
 
     //Rotas dedicadas às marcas
 
@@ -26,15 +26,18 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
     Route::get('/brands/list', 'BrandsController@api_list');
     Route::get('/brands/selectlist', 'BrandsController@api_selectList');
+    Route::get('/brands/{brand}/products', 'BrandsController@api_products');
 
 
     //Rotas dedicadas a clientes
 
     Route::get('/customers', 'CustomersController@api_index');
+    Route::get('/customers/search', 'CustomersController@api_search');
     Route::get('/customers/selectlist', 'CustomersController@api_selectList');
     Route::get('/customers/{customer}', 'CustomersController@api_show');
     Route::get('/customers/{customer}/shops', 'CustomersController@api_getShops');
     Route::get('/customers/{customer}/deliverycenters', 'CustomersController@api_getDeliveryCenters');
+
 
 
     //Rotas dedicadas às lojas
@@ -80,12 +83,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('/products/sync/{dtSincronizacao}', 'ProductsController@api_sync');
 
-    Route::get('/products/list', 'ProductsController@api_list');
+    Route::get('/products', 'ProductsController@api_index');
     Route::get('/products/{product}/edit', 'ProductsController@api_edit');
     Route::get('/products/{product}', 'ProductsController@api_show');
     Route::get('/products/list/{brand}', 'ProductsController@api_list');
     Route::get('/products/listPaginate/{brand}', 'ProductsController@api_listPaginate');
-    Route::get('/products/search/{search}/{brand}', 'ProductsController@api_search');
+    Route::get('/products/search/{brand}', 'ProductsController@api_search');
 
 
     //Rotas dedicadas a Linhas
@@ -131,4 +134,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/orders/getProductsFromOrder/{id}', 'OrdersController@api_getProducts');
     Route::get('/orders/listOrdersByRepresentative/{id}','OrdersController@api_listOrdersByRepresentative');
     Route::resource('orders','OrdersController');
-});
+
+
+
+//});

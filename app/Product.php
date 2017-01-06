@@ -81,5 +81,16 @@ class Product extends Model
     public function getTagListAttribute(){
         return $this->tags()->pluck('id');
     }
+	public function toSearchableArray()
+	{
+		$data = $this->toArray();
+		$data['line'] = $this->line->toArray();
+		$data['color'] = $this->color->toArray();
+		$data['material'] = $this->material->toArray();
+		$data['brand'] = $this->brand->toArray();
+		$data['name'] = $this->line->description.' '.$this->material->description.' '.$this->color->description;
+
+		return $data;
+	}
 
 }

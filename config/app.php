@@ -183,6 +183,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 	    App\Providers\SalesmanUploadServiceProvider::class,
+	    App\Providers\ShoppingCartProvider::class,
 
     ],
 

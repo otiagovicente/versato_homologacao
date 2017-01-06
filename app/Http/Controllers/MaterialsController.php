@@ -134,7 +134,15 @@ class MaterialsController extends Controller
 
     }
     public function api_products(Material $material){
-        return $material->products()->get();
+        $products = $material->products()->with('brand')
+	        ->with('line')
+	        ->with('material')
+	        ->with('color')
+	        ->with('grids')
+	        ->with('tags')
+	        ->paginate(10);
+
+	    return response()->json($products);
     }
 
 }

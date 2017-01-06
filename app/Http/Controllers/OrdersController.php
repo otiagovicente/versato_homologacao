@@ -100,6 +100,10 @@ class OrdersController extends Controller
     }
 
 
+
+
+
+
     /**
      * @param $id
      */
@@ -113,6 +117,14 @@ class OrdersController extends Controller
         Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
         Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
     }
+
+
+
+   /*
+    *
+    *     Métodos utilizados pela api
+    *
+    */
 
    public function api_list(){
         $orders = Order::all();
@@ -146,4 +158,12 @@ class OrdersController extends Controller
             ->get();
         return response()->json($orders);
     }
+
+    public function api_startShopping(){
+
+
+
+    }
+
+
 }

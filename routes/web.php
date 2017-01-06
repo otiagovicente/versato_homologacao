@@ -1,6 +1,8 @@
 <?php
 
 use App\Mail\NewOrderMail;
+use Illuminate\Http\Request;
+use App\Contracts\ShoppingCart;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +15,24 @@ use App\Mail\NewOrderMail;
 |
 */
 
-//// Authentication routes...
-//Route::get('/login', 'Auth\AuthController@showLoginForm');
-//Route::post('/login', 'Auth\AuthController@login');
-//Route::get('/logout', 'Auth\AuthController@logout');
+Route::get('/shoppingcart', function (ShoppingCart $shoppingCart){
+
+	$order = new \App\Order();
+	$shoppingCart->startShopping($order);
+	$shoppingCart->setCustomer(
+		\App\Customer::first()
+	);
+
+	dd(session('ShoppingCart'));
+	$shoppingCart->test();
+});
+
+Route::get('/continueShopping', function (ShoppingCart $shoppingCart){
+	$brand = new \App\Brand;
+	$brand = $brand->first();
+	$shoppingCart->setBrand($brand);
+//	dd(session('ShoppingCart'));
+});
 
 Auth::routes();
 
@@ -113,4 +129,22 @@ Route::group(['middleware' => 'auth'], function () {
     ]);
 
     Route::resource('charts','ChartsController',['parameters' => 'singular']);
+
+
+
+	//Rotas do Carrinho de Compras
+	Route::post('/shopping-cart/add-product', 'ShoppingCartController@addProduct');
+	Route::get('/shopping-cart/get-products', 'ShoppingCartController@getProducts');
+	Route::get('/shopping-cart/get-order', 'ShoppingCartController@getOrder');
+	Route::get('/shopping-cart/delete-product/{product}', 'ShoppingCartController@deleteProduct');
+	Route::post('/shopping-cart/select-customer/{customer}', 'ShoppingCartController@selectCustomer');
+	Route::get('/shopping-cart/get-customer', 'ShoppingCartController@getCustomer');
+	Route::post('/shopping-cart/set-customer-discount', 'ShoppingCartController@setCustomerDiscount');
+	Route::post('/shopping-cart/set-representative-discount', 'ShoppingCartController@setRepresentativeDiscount');
+	Route::post('/shopping-cart/set-product-amount', 'ShoppingCartController@setProductAmount');
+	Route::post('/shopping-cart/set-product-customer-discount', 'ShoppingCartController@setProductCustomerDiscount');
+	Route::post('/shopping-cart/set-product-representative-discount', 'ShoppingCartController@setProductRepresentativeDiscount');
+
+
+
 });

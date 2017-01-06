@@ -115,7 +115,15 @@ class ColorsController extends Controller
     }
 
     public function api_products(Color $color){
-        return $color->products()->get();
+        $products = $color->products()->with('brand')
+				    ->with('line')
+				    ->with('material')
+				    ->with('color')
+				    ->with('grids')
+				    ->with('tags')
+				    ->paginate(10);
+
+        return response()->json($products);
     }
 
 }

@@ -122,7 +122,15 @@ class LinesController extends Controller
     }
 
     public function api_products(Line $line){
-        return $line->products()->get();
+        $products = $line->products()->with('brand')
+	        ->with('line')
+	        ->with('material')
+	        ->with('color')
+	        ->with('grids')
+	        ->with('tags')
+	        ->paginate(10);
+
+	    return response()->json($products);
     }
 
 

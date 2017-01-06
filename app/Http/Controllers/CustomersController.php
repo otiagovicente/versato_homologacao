@@ -161,4 +161,14 @@ class CustomersController extends Controller
 
         return response()->json($customers);
     }
+
+    public function api_search(Request $request){
+
+
+	    $customers = Customer::search($request->search)->get();
+
+	    return response()->json($customers);
+
+
+    }
 }

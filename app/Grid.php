@@ -22,4 +22,17 @@ class Grid extends Model
     public function products(){
     	return $this->belongsToMany(Product::class);
     }
+
+	public function getTotalAttribute($value)
+	{
+
+		$total = 0;
+		$sizes = $this->sizes()->get();
+		foreach ($sizes as $size){
+			$total += $size->pivot->amount;
+		}
+
+
+		return $total;
+	}
 }

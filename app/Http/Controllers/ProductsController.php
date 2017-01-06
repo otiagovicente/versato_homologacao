@@ -30,9 +30,6 @@ class ProductsController extends Controller
             ->with('tags')
             ->where('brand_id', session()->get('brand')->id)
             ->paginate(50);
-            //->get();
-
-        //return $products;
 
         return view('products.index', compact('products'));
 
@@ -183,20 +180,21 @@ class ProductsController extends Controller
     }
 
 
-    public function api_list(Brand $brand){
-        $products = Product::
-                    with('brand')
-                    ->with('line')
-                    ->with('material')
-                    ->with('color')
-                    ->with('gridsAndSizes')
-                    ->with('grids_select')
-                    ->with('tags')
-                    ->where('brand_id', $brand->id)
-                    ->get();
+    public function api_index(){
 
-        return response()->json($products);
+	    $products = Product::
+	          with('brand')
+		    ->with('line')
+		    ->with('material')
+		    ->with('color')
+		    ->with('grids')
+		    ->with('tags')
+//		    ->orderBy('line.description')
+		    ->paginate(50);
+
+	    return response()->json($products);
     }
+
     public function api_listPaginate(Brand $brand){
         $products = Product::
             with('brand')
@@ -254,11 +252,12 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
-    public function api_search($search, Brand $brand){
+    public function api_search(Brand $brand, Request $request){
 
-        $products = Product::search($search)->where('brand_id', $brand->id)->get();
+	    $products = Product::search($request->search)->where('brand_id', $brand->id)->paginate();
+	    $products->load('line', 'material','color');
 
-        return response()->json($products);
+         return response()->json($products);
     }
 
 

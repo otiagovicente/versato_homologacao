@@ -17,6 +17,7 @@
     "isotope-layout": "^3.0.1",
     "jquery": "^2.2.3",
     "jquery-bridget": "^2.0.1",
+    "jquery-knob": "^1.2.11",
     "laravel-echo": "^1.0.4",
     "laravel-elixir": "^6.0.0-9",
     "laravel-elixir-browserify-official": "^0.1.3",

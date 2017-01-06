@@ -18,7 +18,7 @@ window.toastr = require('toastr');
 
 window.algoliasearch = require('algoliasearch');
 window.autocomplete = require('autocomplete.js');
-
+window.jQueryKnob = require('jquery-knob');
 
 window.jQueryBridget = require('jquery-bridget');
 window.Masonry = require('masonry-layout');

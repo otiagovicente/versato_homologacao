@@ -248,6 +248,14 @@ Vue.component(
 */
 
 Vue.component(
+    'order',
+    require('./components/orders/Order.vue')
+);
+Vue.component(
+    'order-header-bar',
+    require('./components/orders/OrderHeaderBar.vue')
+);
+Vue.component(
     'order-form',
     require('./components/orders/OrderForm.vue')
 );

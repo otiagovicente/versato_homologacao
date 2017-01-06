@@ -186,4 +186,16 @@ class BrandsController extends Controller
         return response()->json($selectList);
     }
 
+    public function api_products(Brand $brand){
+	    $products = $brand->products()->with('brand')
+		    ->with('line')
+		    ->with('material')
+		    ->with('color')
+		    ->with('grids')
+		    ->with('tags')
+		    ->paginate(50);
+
+	    return response()->json($products);
+    }
+
 }
