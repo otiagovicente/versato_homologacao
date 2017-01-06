@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Rotas dedicadas a clientes
 
     Route::get('/customers', 'CustomersController@api_index');
-    Route::get('/customers/search', 'CustomerController@api_search');
+    Route::get('/customers/search', 'CustomersController@api_search');
     Route::get('/customers/selectlist', 'CustomersController@api_selectList');
     Route::get('/customers/{customer}', 'CustomersController@api_show');
     Route::get('/customers/{customer}/shops', 'CustomersController@api_getShops');
