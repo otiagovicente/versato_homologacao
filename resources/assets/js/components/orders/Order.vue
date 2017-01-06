@@ -154,7 +154,7 @@
         },
         data(){
             return {
-                customer: {},
+                customer: null,
                 products: {
                     product: {
                         total: 0,
