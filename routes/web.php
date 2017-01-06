@@ -128,7 +128,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/shopping-cart/set-product-amount', 'ShoppingCartController@setProductAmount');
 	Route::post('/shopping-cart/set-product-customer-discount', 'ShoppingCartController@setProductCustomerDiscount');
 	Route::post('/shopping-cart/set-product-representative-discount', 'ShoppingCartController@setProductRepresentativeDiscount');
-
+	Route::get('/shopping-cart/calculate-product/{product}', 'ShoppingCartController@calculateProductValue');
 
 
 	Route::resource('reports','ReportsController',['parameters' => 'singular']);

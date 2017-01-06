@@ -34,6 +34,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 			Session::put(['ShoppingCart.Order'=> $this->order]);
 			Session::put(['ShoppingCart.products' => collect([])]);
+			$this->calculateProductsValues();
 			return true;
 		}else{
 			return false;
@@ -118,6 +119,17 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 		$product['grid']['total'] = $product['grid']->total;
 		Session::push('ShoppingCart.products', $product);
+
+		$this->calculateProductsValues();
+	}
+
+	public function getProduct($product_id){
+		$products = $this->getProducts();
+		foreach ($products as $product) {
+			if($product['product']['id'] == $product_id){
+				return $product;
+			}
+		}
 	}
 
 	public function getProductAmount($product_id){
@@ -126,6 +138,16 @@ class SalesmanShoppingCart implements ShoppingCart{
 		foreach ($products as $product) {
 			if($product['product']['id'] == $product_id){
 				return $product['amount'];
+			}
+		}
+	}
+
+	public function getProductPrice($product_id){
+
+		$products = $this->getProducts();
+		foreach ($products as $product) {
+			if($product['product']['id'] == $product_id){
+				return $product['product']['price'];
 			}
 		}
 	}
@@ -138,6 +160,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 			}
 		}
 		Session::put('ShoppingCart.products', $products);
+		$this->calculateProductsValues();
 		return $products;
 
 	}
@@ -149,6 +172,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 				return $product['discount'];
 			}
 		}
+
 	}
 	public function setProductCustomerDiscount($product_id, $value){
 
@@ -159,6 +183,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 			}
 		}
 		Session::put('ShoppingCart.products', $products);
+		$this->calculateProductsValues();
 		return $products;
 
 	}
@@ -170,7 +195,71 @@ class SalesmanShoppingCart implements ShoppingCart{
 				return $product['representative_discount'];
 			}
 		}
+
 	}
+	public function calculateProductsValues(){
+
+		$orderTotal = 0.00;
+		$orderTotalSum = 0.00;
+		$orderTotalDiscount = 0.00;
+		$products = $this->getProducts()->toArray();
+		foreach ($products as $index => $product) {
+			$updatedProduct = $this->calculateProductValue($product['product']['id']);
+			$orderTotal += $updatedProduct['total'];
+			$orderTotalSum += $updatedProduct['total_sum'];
+			$orderTotalDiscount += $updatedProduct['total_discount'];
+		}
+
+		$order = $this->getOrder();
+		$order['total'] = $orderTotal;
+		$order['total_sum'] = $orderTotalSum;
+		$order['total_discount'] = $orderTotalDiscount;
+		Session::put('ShoppingCart.Order', $order);
+
+	}
+	public function calculateProductValue($product_id){
+
+		$product = $this->getProduct($product_id);
+
+		$productRepresentativedDiscount = $product['representative_discount'];
+		if($productRepresentativedDiscount <= 0){
+			$productRepresentativedDiscount = $this->getRepresentativeDiscount();
+		}
+
+		$productCustomerDiscount = $product['discount'];
+		if($productCustomerDiscount <= 0){
+			$productCustomerDiscount = $this->getCustomerDiscount();
+		}
+
+		$productAmount = $product['amount'];
+
+		$productPrice = $product['product']['price'];
+
+		$gridTotal = $product['grid']['total'];
+
+
+		$product['total_sum'] = (($productPrice * $gridTotal) * $productAmount);
+		$product['total_discount'] = ($product['total_sum'] * ($productRepresentativedDiscount / 100)) + ($product['total_sum'] * ($productCustomerDiscount / 100));
+
+		$product['total'] = $product['total_sum'] - $product['total_discount'];
+
+		$this->updateProduct($product);
+		return $product;
+
+	}
+
+	public function updateProduct($updatedProduct){
+		$product_id = $updatedProduct['product']['id'];
+		$products = $this->getProducts()->toArray();
+		foreach ($products as $index => $product) {
+			if($product['product']['id'] == $product_id){
+				$products[$index] = $updatedProduct;
+			}
+		}
+
+		Session::put('ShoppingCart.products', $products);
+	}
+
 	public function setProductRepresentativeDiscount($product_id, $value){
 
 		$products = $this->getProducts()->toArray();
@@ -180,6 +269,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 			}
 		}
 		Session::put('ShoppingCart.products', $products);
+		$this->calculateProductsValues();
 		return $products;
 
 	}
@@ -229,6 +319,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 	public function setRepresentative($representative_id){
 		Session::put('ShoppingCart.Order.representative_id', $representative_id);
+		$this->calculateProductsValues();
 	}
 	public function getRepresentative(){
 		$representative_id = Session::get('ShoppingCart.Order.representative_id');
@@ -238,6 +329,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 	public function setCustomer($customer_id){
 		Session::put('ShoppingCart.Order.customer_id', $customer_id);
+		$this->calculateProductsValues();
 	}
 	public function getCustomer(){
 		$customer_id = Session::get('ShoppingCart.Order.customer_id');
@@ -249,6 +341,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 	}
 	public function setCustomerDiscount($value){
 		Session::put('ShoppingCart.Order.customer_discount', $value);
+		$this->calculateProductsValues();
 	}
 
 	public function getRepresentativeDiscount(){
@@ -256,6 +349,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 	}
 	public function setRepresentativeDiscount($value){
 		Session::put('ShoppingCart.Order.representative_discount', $value);
+		$this->calculateProductsValues();
 	}
 	public function test(){
 		echo "ola";

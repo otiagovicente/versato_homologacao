@@ -73,5 +73,8 @@ class ShoppingCartController extends Controller
 		return response()->json($shoppingCart->getProductRepresentativeDiscount($request->product['id']));
 
 	}
+	public function calculateProductsValues(ShoppingCart $shoppingCart){
+		$shoppingCart->calculateProductsValues();
+	}
 
 }

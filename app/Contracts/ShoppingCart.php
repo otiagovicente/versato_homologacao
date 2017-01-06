@@ -35,12 +35,17 @@ interface ShoppingCart{
 
 	public function getProducts();
 	public function addProduct($product_id, $grid_id ,$amount = 1, $discount = 0.00, $representative_discount = 0.00);
+	public function getProduct($product_id);
+	public function getProductPrice($product_id);
 	public function getProductAmount($product_id);
 	public function setProductAmount($product_id, $value);
 	public function getProductCustomerDiscount($product_id);
 	public function setProductCustomerDiscount($product_id, $value);
 	public function getProductRepresentativeDiscount($product_id);
 	public function setProductRepresentativeDiscount($product_id, $value);
+	public function calculateProductsValues();
+	public function calculateProductValue($product_id);
+	public function updateProduct($product);
 	public function deleteProduct($product_id);
 
 	public function setBrand($brand_id);

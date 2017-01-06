@@ -27,8 +27,11 @@
                                 <h3>Descuento Rep.:</h3>
                                 <slider-component :slider_width="180" :slider_max="5" :slider_value.sync="order.representative_discount"></slider-component>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 pull-right">
                                 <h3 class="font-blue">Total <strong>{{order.total | currency '$ '}}</strong></h3>
+                                <h4 class="font-blue"><s> {{order.total_sum | currency '$ '}}</s></h4>
+
+                                <button class="btn blue">Agregar Representante</button>
                             </div>
                         </div>
                     </div>
@@ -64,7 +67,7 @@
 
                     </div>
                     <div class="portlet-body">
-                            <div class="product-list-list" v-if="products.length > 0">
+                            <div class="product-list-list" v-if="!products.product">
                                 <div  class="col-md-12" v-for="product in products">
 
                                     <div class="col-md-12 product-list-product-box">
@@ -87,7 +90,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <h4 class="font-blue">Tarea <strong>{{ product.total | currency '$' }}</strong></h4>
-                                                    <h5 class="font-blue">{{product.total_sum }}</h5>
+                                                    <h5 class="font-blue"><s>{{product.total_sum | currency '$'}}</s></h5>
                                                     <h5 class="font-blue" v-show="product.product.price">{{product.product.price | currency '$' }} un</h5>
                                                 </div>
 
@@ -187,7 +190,7 @@
                 _Order.setRepresentativeDiscount();
             },
             'products' : function(val){
-                _Order.calculateTotal();
+                // _Order.getOrder();
             }
 
         },
@@ -224,30 +227,13 @@
                             toastr.error('No fué posible cargar el pedido');
                         });
             },
+            calculateProductValue(product_id){
+                this.$http.get('/shopping-cart/calculate-product/'+product_id)
+                        .then(response => {
 
-            calculateTotal(){
-                var total = 0.00;
-                    _.each(this.$data.products, function (product, key) {
+                        }).catch(response => {
 
-                        product.total_sum = ((product.product.price * product.grid.total) * product.amount);
-                        product.total_customer_discount = (product.total_sum * (_Order.order.customer_discount / 100));
-                        product.total_representative_discount = (product.total_sum * (_Order.order.representative_discount / 100));
-
-                        if (product.discount) {
-                            product.total_customer_discount = Number((product.total_sum * (product.discount / 100)), 2);
-                        }
-                        if (product.representative_discount) {
-                            product.total_representative_discount = Number((product.total_sum * (product.representative_discount / 100)), 2);
-                        }
-
-                        product.total_discount =  Number((product.total_customer_discount + product.total_representative_discount), 2);
-
-                        product.total = Number((product.total_sum - product.total_discount), 2);
-
-                        total += Number(product.total, 2);
-                    });
-
-                _Order.order.total = total;
+                        });
             },
             deleteProduct(product_id){
                 this.$http.get('/shopping-cart/delete-product/' + product_id)
@@ -273,6 +259,7 @@
                 this.$http.post('/shopping-cart/set-customer-discount/', _Order.order)
                         .then(response => {
                             _Order.order.customer_discount = response.json();
+                            _Order.getProducts();
                             console.log('Disconto atualizado');
                         })
                         .catch(response => {
@@ -283,6 +270,7 @@
                 this.$http.post('/shopping-cart/set-representative-discount/', _Order.order)
                         .then(response => {
                             _Order.order.representative_discount = response.json();
+                            _Order.getProducts();
                             console.log('Disconto atualizado');
                         })
                         .catch(response => {
@@ -296,6 +284,7 @@
                 this.$http.post('/shopping-cart/set-product-amount', product)
                         .then(response => {
                             product.product.amount = response.json();
+                            _Order.getProducts();
                         })
                         .catch(response => {
                             toastr.error('No se aplicó el descuento');
@@ -308,6 +297,7 @@
                 this.$http.post('/shopping-cart/set-product-customer-discount', product)
                         .then(response => {
                             product.product.discount = response.json();
+                            _Order.getProducts();
                         })
                         .catch(response => {
                             toastr.error('No se aplicó el descuento');
@@ -320,6 +310,7 @@
                 this.$http.post('/shopping-cart/set-product-representative-discount', product)
                         .then(response => {
                             product.product.representative_discount = response.json();
+                            _Order.getProducts();
                         })
                         .catch(response => {
                             toastr.error('No se aplicó el descuento');
