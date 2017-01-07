@@ -71,7 +71,7 @@
                         }).bind(this);
             },
             selectCustomer(customer_id){
-                this.$http.post('/shopping-cart/select-customer/'+customer_id)
+                this.$http.post('/shopping-cart/set-customer/'+customer_id)
                         .then(response => {
                             toastr.success('Cliente eligido con exito');
                             this.$dispatch('load-order');

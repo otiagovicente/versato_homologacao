@@ -10,12 +10,15 @@ namespace App\Services;
 
 use App\Contracts\ShoppingCart;
 
+use App\Material;
 use App\Order;
 use App\Customer;
 use App\Product;
 use App\Representative;
 use App\Brand;
 use App\Grid;
+use App\Line;
+use App\Color;
 use Illuminate\Support\Facades\Session;
 
 class SalesmanShoppingCart implements ShoppingCart{
@@ -29,6 +32,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 		if($this->isClosed()) {
 			if($order == null){
 				$order = new Order();
+				$order->status_id = 1;
 			}
 				$this->order = $order;
 
@@ -37,6 +41,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 			$this->calculateProductsValues();
 			return true;
 		}else{
+			$this->calculateProductsValues();
 			return false;
 		}
 	}
@@ -50,7 +55,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 		$this->startShopping($order);
 	}
 	public function getOrder(){
-		$order = Session::get('ShoppingCart.Order');
+		$order = session('ShoppingCart.Order');
 		return $order;
 	}
 
@@ -64,19 +69,44 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 	}
 	public function save(){
-		session(['ShoppingCart.products' => $this->products]);
-		session(['ShoppingCart.Order'=> $this->order]);
+
+		$order = $this->getOrder();
+		$order = new Order(collect($order)->toArray());
+		$order->save();
+		Session::put('ShoppingCart.Order', $order);
+		$this->saveProducts();
+		return $order;
+
+
 	}
 
+	public function saveProducts(){
 
-	public function setStatus()
+		$order = $this->getOrder();
+		$order = new Order(collect($order)->toArray());
+		$products = $this->getProducts()->toArray();
+		$savingProducts = [];
+		foreach ($products as $key => $product) {
+
+
+			unset($product['grid']);
+			unset($product['product']);
+
+			$savingProducts.push($product);
+		}
+
+		$order->products()->sync($savingProducts);
+
+	}
+
+	public function setStatus($status_id)
 	{
-		// TODO: Implement setStatus() method.
+		session(['ShoppingCart.Order.status_id'=> $status_id]);
 	}
 
 	public function getStatus()
 	{
-		// TODO: Implement getStatus() method.
+		return session('ShoppingCart.Order.status_id');
 	}
 
 	public function isOpened(){
@@ -97,6 +127,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 	}
 	public function addProduct($product_id, $grid_id ,$amount = 1, $discount = 0.00, $representative_discount = 0.00){
 
+		$this->setStatus(1);
 		if($this->startShopping()){
 
 
@@ -111,7 +142,9 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 		$product = [
 			'product' => Product::find($product_id),
+			'product_id' => $product_id,
 			'grid' => Grid::find($grid_id),
+			'grid_id' => $grid_id,
 			'amount' => $amount,
 			'discount' => $discount,
 			'representative_discount' => $representative_discount
@@ -202,24 +235,31 @@ class SalesmanShoppingCart implements ShoppingCart{
 		$orderTotal = 0.00;
 		$orderTotalSum = 0.00;
 		$orderTotalDiscount = 0.00;
+		$orderTotalCost = 0.00;
+		$orderTotalRepresentativeComission = 0.00;
+
 		$products = $this->getProducts()->toArray();
 		foreach ($products as $index => $product) {
 			$updatedProduct = $this->calculateProductValue($product['product']['id']);
 			$orderTotal += $updatedProduct['total'];
-			$orderTotalSum += $updatedProduct['total_sum'];
+			$orderTotalSum += $updatedProduct['price'];
 			$orderTotalDiscount += $updatedProduct['total_discount'];
+			$orderTotalCost += $updatedProduct['cost'];
+			$orderTotalRepresentativeComission += $updatedProduct['representative_commission'];
 		}
 
 		$order = $this->getOrder();
 		$order['total'] = $orderTotal;
-		$order['total_sum'] = $orderTotalSum;
-		$order['total_discount'] = $orderTotalDiscount;
+		$order['price'] = $orderTotalSum;
+		$order['representative_commission'] = $orderTotalRepresentativeComission;
+		$order['overalldiscount'] = $orderTotalDiscount;
+		$order['cost'] = $orderTotalCost;
 		Session::put('ShoppingCart.Order', $order);
 
 	}
 	public function calculateProductValue($product_id){
 
-		$product = $this->getProduct($product_id);
+		$product = collect($this->getProduct($product_id));
 
 		$productRepresentativedDiscount = $product['representative_discount'];
 		if($productRepresentativedDiscount <= 0){
@@ -233,15 +273,26 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 		$productAmount = $product['amount'];
 
+		$productCost = $product['product']['cost'];
 		$productPrice = $product['product']['price'];
 
 		$gridTotal = $product['grid']['total'];
 
 
-		$product['total_sum'] = (($productPrice * $gridTotal) * $productAmount);
-		$product['total_discount'] = ($product['total_sum'] * ($productRepresentativedDiscount / 100)) + ($product['total_sum'] * ($productCustomerDiscount / 100));
 
-		$product['total'] = $product['total_sum'] - $product['total_discount'];
+		$product['cost'] = (($productCost * $gridTotal) * $productAmount);
+		$product['price'] = (($productPrice * $gridTotal) * $productAmount);
+		$product['discount'] = ($product['price'] * ($productCustomerDiscount / 100));
+		$product['representative_commission'] = $product['price'] * ($productRepresentativedDiscount / 100);
+		$product['total_discount'] = $product['representative_commission'] + $product['discount'];
+
+		$product['strLine'] = Line::find($product['product']['line_id'])['description'];
+		$product['strMaterial'] = Material::find($product['product']['material_id'])['description'];
+		$product['strColor'] = Color::find($product['product']['color_id'])['description'];
+		$product['strGrid'] = $product['grid']['description'];
+
+
+		$product['total'] = $product['price'] - $product['total_discount'];
 
 		$this->updateProduct($product);
 		return $product;
@@ -274,6 +325,15 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 	}
 
+	public function productExists($product_id){
+		$products = $this->getProducts()->toArray();
+		foreach ($products as $index => $product) {
+			if($product['product']['id'] == $product_id){
+				return true;
+			}
+		}
+		return false;
+	}
 	public function deleteProduct($product_id){
 
 			$products = $this->getProducts();
@@ -323,7 +383,7 @@ class SalesmanShoppingCart implements ShoppingCart{
 	}
 	public function getRepresentative(){
 		$representative_id = Session::get('ShoppingCart.Order.representative_id');
-		return Representative::find($representative_id);
+		return Representative::with('user')->find($representative_id);
 
 	}
 
@@ -334,6 +394,16 @@ class SalesmanShoppingCart implements ShoppingCart{
 	public function getCustomer(){
 		$customer_id = Session::get('ShoppingCart.Order.customer_id');
 		return Customer::find($customer_id);
+	}
+
+	public function setComment($value)
+	{
+		Session::put('ShoppingCart.Order.comment', $value);
+	}
+
+	public function getComment()
+	{
+		return Session::get('ShoppingCart.Order.comment');
 	}
 
 	public function getCustomerDiscount(){

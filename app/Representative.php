@@ -28,5 +28,11 @@ class Representative extends Model
     public function orders(){
         return $this->hasMany('App\Order');
     }
+	public function toSearchableArray()
+	{
+		$data = $this->toArray();
+		$data['user'] = $this->user->toArray();
 
+		return $data;
+	}
 }

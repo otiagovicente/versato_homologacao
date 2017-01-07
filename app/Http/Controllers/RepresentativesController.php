@@ -210,6 +210,14 @@ class RepresentativesController extends Controller
         return response()->json($representatives);
     }
 
+	public function api_search(Request $request){
 
+
+		$representatives = Representative::search($request->search)->get();
+		$representatives->load('user');
+		return response()->json($representatives);
+
+
+	}
 
 }

@@ -121,15 +121,22 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/shopping-cart/get-products', 'ShoppingCartController@getProducts');
 	Route::get('/shopping-cart/get-order', 'ShoppingCartController@getOrder');
 	Route::get('/shopping-cart/delete-product/{product}', 'ShoppingCartController@deleteProduct');
-	Route::post('/shopping-cart/select-customer/{customer}', 'ShoppingCartController@selectCustomer');
+	Route::post('/shopping-cart/set-customer/{customer}', 'ShoppingCartController@setCustomer');
 	Route::get('/shopping-cart/get-customer', 'ShoppingCartController@getCustomer');
+	Route::get('/shopping-cart/get-comment','ShoppingCartController@getComment');
+	Route::post('/shopping-cart/set-comment','ShoppingCartController@setComment');
+
 	Route::post('/shopping-cart/set-customer-discount', 'ShoppingCartController@setCustomerDiscount');
 	Route::post('/shopping-cart/set-representative-discount', 'ShoppingCartController@setRepresentativeDiscount');
 	Route::post('/shopping-cart/set-product-amount', 'ShoppingCartController@setProductAmount');
 	Route::post('/shopping-cart/set-product-customer-discount', 'ShoppingCartController@setProductCustomerDiscount');
 	Route::post('/shopping-cart/set-product-representative-discount', 'ShoppingCartController@setProductRepresentativeDiscount');
-	Route::get('/shopping-cart/calculate-product/{product}', 'ShoppingCartController@calculateProductValue');
+	Route::post('/shopping-cart/set-representative/{representative}', 'ShoppingCartController@setRepresentative');
+	Route::post('/shopping-cart/get-representative', 'ShoppingCartController@getRepresentative');
 
+	Route::post('/shopping-cart/set-status','ShoppingCartController@setStatus');
+	Route::get('/shopping-cart/get-status','ShoppingCartController@getStatus');
+	Route::post('/shopping-cart/save','ShoppingCartController@save');
 
 	Route::resource('reports','ReportsController',['parameters' => 'singular']);
 });

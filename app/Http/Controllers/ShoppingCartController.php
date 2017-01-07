@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Representative;
 use App\Shop;
 use Illuminate\Http\Request;
 use App\Http\Requests\AddProductToOrderRequest;
+use App\Http\Requests\ShoppingCartSaveRequest;
 use App\Contracts\ShoppingCart;
 
 use App\Product;
@@ -37,7 +39,7 @@ class ShoppingCartController extends Controller
 		return response()->json($deleted);
 	}
 
-	public function selectCustomer(Customer $customer, ShoppingCart $shoppingCart){
+	public function setCustomer(Customer $customer, ShoppingCart $shoppingCart){
 
 		$shoppingCart->setCustomer($customer->id);
 
@@ -45,6 +47,21 @@ class ShoppingCartController extends Controller
 	}
 	public function getCustomer(ShoppingCart $shoppingCart){
 		return response()->json($shoppingCart->getCustomer());
+	}
+
+	public function setRepresentative(Representative $representative, ShoppingCart $shoppingCart){
+		$shoppingCart->setRepresentative($representative->id);
+	}
+	public function getRepresentative(ShoppingCart $shoppingCart){
+		return response()->json($shoppingCart->getRepresentative());
+	}
+
+	public function setComment(Request $request, ShoppingCart $shoppingCart){
+		$shoppingCart->setComment($request->comment);
+	}
+
+	public function getComment(ShoppingCart $shoppingCart){
+		return response()->json($shoppingCart->getComment());
 	}
 
 	public function setCustomerDiscount(Request $request, ShoppingCart $shoppingCart){
@@ -73,8 +90,17 @@ class ShoppingCartController extends Controller
 		return response()->json($shoppingCart->getProductRepresentativeDiscount($request->product['id']));
 
 	}
-	public function calculateProductsValues(ShoppingCart $shoppingCart){
-		$shoppingCart->calculateProductsValues();
+
+	public function setStatus(Request $request, ShoppingCart $shoppingCart){
+		$shoppingCart->setStatus($request->status_id);
+		return $shoppingCart->getStatus();
+	}
+	public function getStatus(ShoppingCart $shoppingCart){
+		return $shoppingCart->getStatus();
+	}
+
+	public function save(ShoppingCartSaveRequest $request, ShoppingCart $shoppingCart){
+		return response()->json($shoppingCart->save($request));
 	}
 
 }

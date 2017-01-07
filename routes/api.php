@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/representatives/selectlist', 'RepresentativesController@api_selectList');
 
     Route::get('/representatives','RepresentativesController@api_index');
+    Route::get('/representatives/search', 'RepresentativesController@api_search');
     Route::get('/representatives/{representative}','RepresentativesController@api_show');
     Route::get('/representatives/{representative}/brands', 'RepresentativesController@api_brands');
     Route::get('/representatives/{representative}/regions', 'RepresentativesController@api_regions');

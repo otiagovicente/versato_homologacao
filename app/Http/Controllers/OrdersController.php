@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
+use App\Http\Requests\OrderRequest;
 use App\Http\RequestsOrder;
 use App\Order;
 use App\Mail\NewOrderMail;
@@ -37,7 +37,7 @@ class OrdersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
         $order = new Order;
         $order->fill($request->all());
@@ -80,7 +80,7 @@ class OrdersController extends Controller
      * @param  int  $id
      * @ret/urn \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(OrderRequest $request, Order $order)
     {
         $order->fill($request->all());
         $order->save();

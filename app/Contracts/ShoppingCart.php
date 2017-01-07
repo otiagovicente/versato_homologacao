@@ -31,7 +31,7 @@ interface ShoppingCart{
 	public function save();
 
 	public function getStatus();
-	public function setStatus();
+	public function setStatus($status_id);
 
 	public function getProducts();
 	public function addProduct($product_id, $grid_id ,$amount = 1, $discount = 0.00, $representative_discount = 0.00);
@@ -54,6 +54,10 @@ interface ShoppingCart{
 
 	public function setCommission($comission = 0.00);
 	public function getComission();
+
+	public function setComment($value);
+	public function getComment();
+
 
 	public function setRepresentative($representative_id);
 	public function getRepresentative();
