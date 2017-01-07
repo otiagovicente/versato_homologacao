@@ -129,6 +129,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //Rotas dedicadas a Pedidos
+    Route::post('/orders/sendfavorites/{idRep}/{idCustomer}/{lstProducts}','OrdersController@api_sendFavoritesMail');
+    
+    Route::get('/orders/getOrdersByBrand/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByBrand');
+    Route::get('/orders/getOrdersByRepresentative/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByRepresentative');
+    Route::get('/orders/getOrdersByCustomer/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByCustomer');
 
     Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
     Route::get('/orders/getProductsFromOrder/{id}', 'OrdersController@api_getProducts');
