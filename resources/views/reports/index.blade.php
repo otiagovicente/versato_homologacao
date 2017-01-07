@@ -1,7 +1,9 @@
 @extends('layouts.dashboard')
 
 @section('content')
-  <chart-sales-by-brand></chart-sales-by-brand>
+  <chart-orders-by-brand></chart-orders-by-brand>
+  <chart-orders-by-customer></chart-orders-by-customer>
+  <chart-orders-by-representative></chart-orders-by-representative>
 @endsection
 
 @section('scripts')

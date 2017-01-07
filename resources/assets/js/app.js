@@ -260,10 +260,33 @@ Vue.component(
     require('./components/orders/OrderForm.vue')
 );
 
-// Vue.component(
-//     'order-report-by-customer',
-//     require('./components/orders/ReportOrdersByCustomer.vue')
-// );
+Vue.component(
+    'chart-orders-by-brand',
+    require('./components/reports/charts/ChartOrdersBrands.vue')
+);
+
+Vue.component(
+    'chart-orders-by-representative',
+    require('./components/reports/charts/ChartOrdersRepresentative.vue')
+);
+Vue.component(
+    'chart-orders-by-customer',
+    require('./components/reports/charts/ChartOrdersCustomer.vue')
+);
+/*
+Vue.component(
+    'table-orders-by-brand',
+    require('./components/reports/tables/TabletOrdersBrands.vue')
+);
+Vue.component(
+    'table-orders-by-customer',
+    require('./components/reports/tables/TabletOrdersCustomer.vue')
+);
+Vue.component(
+    'table-orders-by-representative',
+    require('./components/reports/tables/TabletOrdersRepresentative.vue')
+);*/
+
 
 window.app = new Vue({
     el: 'body',
