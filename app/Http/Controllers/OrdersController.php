@@ -107,11 +107,24 @@ class OrdersController extends Controller
         $order = Order::
         with('products', 'representative', 'customer')
             ->find($id);
-        //return $order;
-        Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        
+        if($order->representative && $order->representative->user && $order->representative->user->email){
+            Mail::to($order->representative->user->email)->send(new NewOrderMail($order));    
+        }else{
+            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));    
+        }
+        
+        if($order->customer && $order->customer->email){
+            Mail::to($order->customer->email)->send(new NewOrderMail($order));
+        }else{
+            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        }
     }
 
    public function api_list(){
