@@ -107,7 +107,7 @@
                 </td>
                 <td valign="center" align="center" bgcolor="#ffffff" width="10%">
                     <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #000; margin-top: 15px;   width: 100%; text-align:center">
-                        {{$product->representative_discount? $product->representative_discount : 0}}%
+                        {{$product->pivot->representative_discount? product->pivot->representative_discount : 0}}%
                     </span>
                 </td>
                 <td valign="center" align="right" bgcolor="#ffffff" width="16%">
