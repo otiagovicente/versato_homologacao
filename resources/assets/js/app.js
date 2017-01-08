@@ -252,6 +252,10 @@ Vue.component(
     require('./components/orders/Order.vue')
 );
 Vue.component(
+    'list-orders',
+    require('./components/orders/ListOrders.vue')
+);
+Vue.component(
     'order-header-bar',
     require('./components/orders/OrderHeaderBar.vue')
 );

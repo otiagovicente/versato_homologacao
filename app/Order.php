@@ -15,11 +15,11 @@ class Order extends Model
     use Notifiable;
 
     protected $fillable = ['cost','price','overalldiscount','status_id','customer_id','representative_id',
-        'representative_commission','representative_discount', 'customer_discount', 'deliverycenter_id', 'comment', 'total'];
+        'representative_commission', 'representative_commission_discount', 'representative_discount', 'customer_discount', 'deliverycenter_id', 'comment', 'total'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     public function products(){
-        return $this->belongsToMany(Product::class)->withPivot('cost', 'price','discount', 'representative_id', 'representative_commission', 'representative_discount', 'discount', 'grid_id', 'total')
+        return $this->belongsToMany(Product::class)->withPivot('cost', 'price','discount', 'customer_discount','representative_id', 'representative_commission', 'representative_discount', 'total_discount', 'grid_id', 'total', 'amount')
             ->with('line','material','color', 'grids')->withTimestamps();
     }
     public function representative(){

@@ -13,9 +13,9 @@
                 </li>
                 <li>
                     <ul class="dropdown-menu-list scroller" style="height: 250px;">
-                        <li v-for="product in products" class="order-header-bar-product-box">
+                        <li v-for="product in order.products" class="order-header-bar-product-box">
                             <a href="#">
-                                <img v-bind:src="product.product.photo" />
+                                <img v-bind:src="product.photo" />
                             </a>
                         </li>
 
@@ -51,32 +51,26 @@
     export default{
         data(){
             return{
-                products: {},
-                order: {}
+                order: {
+                    products:{}
+                }
             }
         },
         computed: {
             // a computed getter
             amount: function () {
                 // `this` points to the vm instance
-                return this.products.length;
+                if(this.order.products){
+                    return this.order.products.length;
+                }
+                return 0;
             }
         },
         ready(){
             window._OrderHeaderBar = this;
-            _OrderHeaderBar.getProducts();
             _OrderHeaderBar.getOrder();
         },
         methods:{
-            getProducts(){
-                this.$http.get('/shopping-cart/get-products')
-                        .then(response => {
-                            _OrderHeaderBar.products = response.json();
-                        })
-                        .catch(response => {
-                            toastr.error('No fué possible cargar los productos');
-                        });
-            },
             getOrder(){
                 this.$http.get('/shopping-cart/get-order')
                         .then(response => {

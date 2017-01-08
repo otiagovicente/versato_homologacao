@@ -1,7 +1,7 @@
 <?php
 
 use App\Mail\NewOrderMail;
-
+use App\Order;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -134,9 +134,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/shopping-cart/set-representative/{representative}', 'ShoppingCartController@setRepresentative');
 	Route::post('/shopping-cart/get-representative', 'ShoppingCartController@getRepresentative');
 
+	Route::get('/shopping-cart/load-order/{id}','ShoppingCartController@loadOrder');
+	Route::get('/shopping-cart/order/{order_id}','ShoppingCartController@loadOrder');
+
+
 	Route::post('/shopping-cart/set-status','ShoppingCartController@setStatus');
 	Route::get('/shopping-cart/get-status','ShoppingCartController@getStatus');
 	Route::post('/shopping-cart/save','ShoppingCartController@save');
+	Route::post('/shopping-cart/stop-shopping','ShoppingCartController@stopShopping');
 
 	Route::resource('reports','ReportsController',['parameters' => 'singular']);
 });

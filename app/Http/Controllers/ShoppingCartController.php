@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Representative;
 use App\Shop;
 use Illuminate\Http\Request;
@@ -76,19 +77,15 @@ class ShoppingCartController extends Controller
 
 
 	public function setProductAmount(Request $request, ShoppingCart $shoppingCart){
-		$shoppingCart->setProductAmount($request->product['id'], round($request->amount));
-		return response()->json($shoppingCart->getProductAmount($request->product['id']));
+		$shoppingCart->setProductAmount($request->id, round($request->pivot['amount']));
+		return response()->json($shoppingCart->getProductAmount($request->id));
 	}
 
 	public function setProductCustomerDiscount(Request $request, ShoppingCart $shoppingCart){
-		$shoppingCart->setProductCustomerDiscount($request->product['id'], round($request->discount));
-		return response()->json($shoppingCart->getProductCustomerDiscount($request->product['id']));
-
+		$shoppingCart->setProductCustomerDiscount($request->id, round($request->pivot['discount']));
 	}
 	public function setProductRepresentativeDiscount(Request $request, ShoppingCart $shoppingCart){
-		$shoppingCart->setProductRepresentativeDiscount($request->product['id'], round($request->representative_discount));
-		return response()->json($shoppingCart->getProductRepresentativeDiscount($request->product['id']));
-
+		$shoppingCart->setProductRepresentativeDiscount($request->id, round($request->pivot['representative_discount']));
 	}
 
 	public function setStatus(Request $request, ShoppingCart $shoppingCart){
@@ -97,6 +94,15 @@ class ShoppingCartController extends Controller
 	}
 	public function getStatus(ShoppingCart $shoppingCart){
 		return $shoppingCart->getStatus();
+	}
+
+	public function loadOrder($order_id, ShoppingCart $shoppingCart){
+		$order =  Order::with('products', 'customer', 'representative')->find($order_id);
+		return response()->json($shoppingCart->loadOrder($order));
+	}
+
+	public function stopShopping(ShoppingCart $shoppingCart){
+		$shoppingCart->stopShopping();
 	}
 
 	public function save(ShoppingCartSaveRequest $request, ShoppingCart $shoppingCart){

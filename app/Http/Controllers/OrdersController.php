@@ -12,15 +12,17 @@ use Mail;
 
 class OrdersController extends Controller
 {
-    public function index()
-    {
-        $orders = Order::with('products')
-            ->with('representative')
-            ->with('customer')
-            ->paginate(20);
-        return view('orders.index', compact('orders'));
-    }
-
+	public function index(Request $request)
+	{
+		$orders = Order::with('products')
+			->with('representative')
+			->with('customer')
+			->paginate(20);
+		if($request->ajax()){
+			return response()->json($orders);
+		}
+		return view('orders.index');
+	}
     /**
      * Show the form for creating a new resource.
      *

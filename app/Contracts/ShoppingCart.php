@@ -22,6 +22,7 @@ interface ShoppingCart{
 	public function stopShopping();
 
 	public function getOrder();
+	public function setOrder($order);
 	public function loadOrder(Order $order);
 
 
@@ -33,6 +34,7 @@ interface ShoppingCart{
 	public function getStatus();
 	public function setStatus($status_id);
 
+	public function setProducts($products);
 	public function getProducts();
 	public function addProduct($product_id, $grid_id ,$amount = 1, $discount = 0.00, $representative_discount = 0.00);
 	public function getProduct($product_id);
@@ -51,9 +53,6 @@ interface ShoppingCart{
 	public function setBrand($brand_id);
 	public function checkBrand($product_id);
 	public function getBrand();
-
-	public function setCommission($comission = 0.00);
-	public function getComission();
 
 	public function setComment($value);
 	public function getComment();
