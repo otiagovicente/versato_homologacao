@@ -22,6 +22,8 @@ Auth::routes();
 
 Route::get('/representatives/qrcode', 'RepresentativesController@createTokenQRCode');
 Route::get('/enviamail/{id}','OrdersController@sendNewOrderMail');
+Route::get('/orders/getOrdersByCustomer/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByCustomer');
+
 Route::get('/resizeimage', function(){
 
 	$file = "https://s3-sa-east-1.amazonaws.com/sistema-versato/products/96ce32aeac4385131c0a4bab7ba0b9ed.jpeg";

@@ -109,11 +109,24 @@ class OrdersController extends Controller
         $order = Order::
         with('products', 'representative', 'customer')
             ->find($id);
-        //return $order;
-        Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
-        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        
+        if($order->representative && $order->representative->user && $order->representative->user->email){
+            Mail::to($order->representative->user->email)->send(new NewOrderMail($order));    
+        }else{
+            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));    
+        }
+        
+        if($order->customer && $order->customer->email){
+            Mail::to($order->customer->email)->send(new NewOrderMail($order));
+        }else{
+            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+        }
     }
 
    public function api_list(){
@@ -147,5 +160,39 @@ class OrdersController extends Controller
             ->with('products', 'representative', 'customer')
             ->get();
         return response()->json($orders);
+    }
+    
+    public function api_getOrdersByBrand($dtInicio, $dtFim){
+        $totalOrdersByBrand = Order::
+                                select('brands.name', DB::raw('SUM(order_product.total) as Total, COUNT(order_product.code) as qtd_pedidos'))
+                                ->join('order_product', 'orders.id', '=', 'order_product.order_id')                       
+                                ->join('products', 'products.id', '=', 'order_product.product_id')
+                                ->join('brands', 'brands.id', '=', 'products.brand_id')
+                                ->whereBetween('order_product.created_at', [$dtInicio, $dtFim])
+                                ->groupBy('brands.id')
+                                ->get();
+        
+        return response()->json($totalOrdersByBrand);
+    }
+    public function api_getOrdersByCustomer($dtInicio, $dtFim){
+        $totalOrdersByCustomer = Order::
+                                select('customers.name', DB::raw('SUM(orders.total) as Total, COUNT(orders.id) as qtd_pedidos'))
+                                ->join('order_product', 'orders.id', '=', 'order_product.order_id')
+                                ->join('customers', 'customers.id', '=', 'orders.customer_id')                       
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->groupBy('orders.customer_id')
+                                ->get();
+        return response()->json($totalOrdersByCustomer);
+    }
+    public function api_getOrdersByRepresentative($dtInicio, $dtFim){
+        $totalOrdersByRepresentative = Order::
+                                select('users.name', DB::raw('SUM(orders.total) as Total, COUNT(orders.id) as qtd_pedidos'))
+                                ->join('order_product', 'orders.id', '=', 'order_product.order_id')
+                                ->join('representatives', 'representatives.id', '=', 'orders.representative_id')
+                                ->join('users', 'users.id', '=', 'representatives.user_id')                       
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->groupBy('representatives.id')
+                                ->get();
+        return response()->json($totalOrdersByRepresentative);
     }
 }
