@@ -9,3 +9,5 @@ Homestead.yaml
 .env
 /storage/oauth-private.key
 /storage/oauth-public.key
+app/Facades/
+resources/assets/js/components/products/asdf.vue
