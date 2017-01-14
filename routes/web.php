@@ -122,6 +122,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/shopping-cart/add-product', 'ShoppingCartController@addProduct');
 	Route::get('/shopping-cart/get-products', 'ShoppingCartController@getProducts');
 	Route::get('/shopping-cart/get-order', 'ShoppingCartController@getOrder');
+	Route::post('/shopping-cart/update-order', 'ShoppingCartController@updateOrder');
+
+
 	Route::get('/shopping-cart/delete-product/{product}', 'ShoppingCartController@deleteProduct');
 	Route::post('/shopping-cart/set-customer/{customer}', 'ShoppingCartController@setCustomer');
 	Route::get('/shopping-cart/get-customer', 'ShoppingCartController@getCustomer');

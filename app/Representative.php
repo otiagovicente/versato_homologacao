@@ -4,11 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Illuminate\Notifications\Notifiable;
 
 
 class Representative extends Model
 {
-    use Searchable;
+    use Searchable, Notifiable;
 
     protected $fillable = ['code', 'user_id', 'token', 'qrcode'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -34,5 +35,9 @@ class Representative extends Model
 		$data['user'] = $this->user->toArray();
 
 		return $data;
+	}
+	public function routeNotificationForMail()
+	{
+		return $this->user['email'];
 	}
 }

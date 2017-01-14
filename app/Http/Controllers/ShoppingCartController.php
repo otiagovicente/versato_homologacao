@@ -26,13 +26,11 @@ class ShoppingCartController extends Controller
 	}
 
 	public function getProducts(ShoppingCart $shoppingCart){
-		$products = $shoppingCart->getProducts();
-
-		return response()->json($products);
+		return response()->json($shoppingCart->getProducts());
 	}
+
 	public function getOrder(ShoppingCart $shoppingCart){
-		$order = $shoppingCart->getOrder();
-		return response()->json($order);
+		return response()->json($shoppingCart->getOrder());
 	}
 
 	public function deleteProduct(Product $product, ShoppingCart $shoppingCart){
@@ -83,9 +81,13 @@ class ShoppingCartController extends Controller
 
 	public function setProductCustomerDiscount(Request $request, ShoppingCart $shoppingCart){
 		$shoppingCart->setProductCustomerDiscount($request->id, round($request->pivot['discount']));
+		return response()->json($shoppingCart->getProductCustomerDiscount($request->id));
+
 	}
 	public function setProductRepresentativeDiscount(Request $request, ShoppingCart $shoppingCart){
 		$shoppingCart->setProductRepresentativeDiscount($request->id, round($request->pivot['representative_discount']));
+		return response()->json($shoppingCart->getProductRepresentativeDiscount($request->id));
+
 	}
 
 	public function setStatus(Request $request, ShoppingCart $shoppingCart){
@@ -97,8 +99,10 @@ class ShoppingCartController extends Controller
 	}
 
 	public function loadOrder($order_id, ShoppingCart $shoppingCart){
-		$order =  Order::with('products', 'customer', 'representative')->find($order_id);
-		return response()->json($shoppingCart->loadOrder($order));
+		return response()->json($shoppingCart->loadOrder($order_id));
+	}
+	public function updateOrder(Request $request, ShoppingCart $shoppingCart){
+		return $shoppingCart->updateOrder($request);
 	}
 
 	public function stopShopping(ShoppingCart $shoppingCart){

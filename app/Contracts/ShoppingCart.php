@@ -23,7 +23,8 @@ interface ShoppingCart{
 
 	public function getOrder();
 	public function setOrder($order);
-	public function loadOrder(Order $order);
+	public function updateOrder($order);
+	public function loadOrder($order_id);
 
 
 	public function isOpened();
@@ -36,19 +37,24 @@ interface ShoppingCart{
 
 	public function setProducts($products);
 	public function getProducts();
+	public function hasProducts();
+	public function productExists($product_id, $grid_id);
 	public function addProduct($product_id, $grid_id ,$amount = 1, $discount = 0.00, $representative_discount = 0.00);
-	public function getProduct($product_id);
-	public function getProductPrice($product_id);
-	public function getProductAmount($product_id);
-	public function setProductAmount($product_id, $value);
-	public function getProductCustomerDiscount($product_id);
-	public function setProductCustomerDiscount($product_id, $value);
-	public function getProductRepresentativeDiscount($product_id);
-	public function setProductRepresentativeDiscount($product_id, $value);
+	public function getProduct($product_id,$grid_id);
+	public function updateProduct($updated_product);
+	public function deleteProduct($product_id, $grid_id);
+	public function calculateProductValue($product_id, $grid_id);
+
+	public function getProductPrice($product_id,$grid_id);
+	public function getProductAmount($product_id,$grid_id);
+	public function setProductAmount($product_id,$grid_id, $value);
+	public function getProductCustomerDiscount($product_id,$grid_id);
+	public function setProductCustomerDiscount($product_id,$grid_id, $value);
+	public function getProductRepresentativeDiscount($product_id,$grid_id);
+	public function setProductRepresentativeDiscount($product_id,$grid_id, $value);
 	public function calculateProductsValues();
-	public function calculateProductValue($product_id);
-	public function updateProduct($product);
-	public function deleteProduct($product_id);
+
+
 
 	public function setBrand($brand_id);
 	public function checkBrand($product_id);

@@ -86,7 +86,7 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group">
-                                <textarea class="form-control" rows="5" v-model="order.comment" placeholder="Comentarios" style="width:100%;"></textarea>
+                                <textarea class="form-control" rows="5" v-model="order.comment" debounce="500" placeholder="Comentarios" style="width:100%;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
 
                                             </div>
                                         </div>
-                                        <i class="fa fa-close delete-product" v-on:click="deleteProduct(product.id)"></i>
+                                        <i class="fa fa-close delete-product" v-on:click="deleteProduct(this)"></i>
                                     </div>
                                 </div>
 
@@ -317,6 +317,16 @@
                             toastr.error('No fué posible cargar el pedido');
                         });
             },
+            updateOrder(){
+                this.$http.post('/shopping-cart/update-order', _Order.order)
+                        .then(response => {
+                            _Order.order = response.json();
+                            console.log('pedido salvo');
+                        })
+                        .catch(response => {
+                            console.log('pedido não salvo');
+                        });
+            },
             calculateProductValue(product_id){
                 this.$http.get('/shopping-cart/calculate-product/' + product_id)
                         .then(response => {
@@ -325,14 +335,10 @@
 
                 });
             },
-            deleteProduct(product_id){
-                this.$http.get('/shopping-cart/delete-product/' + product_id)
-                        .then(response => {
-                            _Order.getOrder();
-                        })
-                        .catch(response => {
-                            toastr.error('No fué posible eliminar el producto');
-                        });
+            deleteProduct(product){
+                _Order.order.products.splice(product.$index, 1);
+                console.log(product.$index);
+                this.updateOrder();
             },
             getRepresentative(){
                 this.$http.post('/shopping-cart/get-representative')
@@ -358,81 +364,30 @@
                 _OrderAddCustomer.openWindow();
             },
             setComment(){
-                this.$http.post('/shopping-cart/set-comment', _Order.order)
-                        .then(response => {
-                            console.log('Comments saved');
-                        })
-                        .catch(response => {
-                            console.log("Comments didn't save");
-                        });
+                this.updateOrder();
             },
             setCustomerDiscount(){
-                this.$http.post('/shopping-cart/set-customer-discount/', _Order.order)
-                        .then(response => {
-                            _Order.getOrder();
-                            console.log('Disconto atualizado');
-                        })
-                        .catch(response => {
-                            console.log('Disconto não atualizado');
-                        });
+                this.updateOrder();
             },
             setRepresentativeDiscount(){
-                this.$http.post('/shopping-cart/set-representative-discount/', _Order.order)
-                        .then(response => {
-                            _Order.getOrder();
-
-                            console.log('Disconto atualizado');
-                        })
-                        .catch(response => {
-                            console.log('Disconto não atualizado');
-                        });
+                this.updateOrder();
             },
-            setProductAmount(product_id){
-                var product = _.find(_Order.order.products, function (obj) {
-                    return obj.id === product_id;
+            findProduct(product_id, grid_id){
+                return _.find(_Order.order.products, function (obj) {
+                    return (obj.id === product_id && obj.pivot.grid_id === grid_id);
                 });
-                this.$http.post('/shopping-cart/set-product-amount', product)
-                        .then(response => {
-                            _Order.getOrder();
-
-                        })
-                        .catch(response => {
-                            toastr.error('No se aplicó el descuento');
-                        });
+            },
+            setProductAmount(product_id, grid_id){
+                this.updateOrder();
             },
             setProductCustomerDiscount(product_id){
-                var product = _.find(_Order.order.products, function (obj) {
-                    return obj.id === product_id;
-                });
-                this.$http.post('/shopping-cart/set-product-customer-discount', product)
-                        .then(response => {
-                            _Order.getOrder();
-
-                        })
-                        .catch(response => {
-                            toastr.error('No se aplicó el descuento');
-                        });
+                this.updateOrder();
             },
             setProductRepresentativeDiscount(product_id){
-                var product = _.find(_Order.order.products, function (obj) {
-                    return obj.id === product_id;
-                });
-                this.$http.post('/shopping-cart/set-product-representative-discount', product)
-                        .then(response => {
-                            _Order.getOrder();
-
-                        })
-                        .catch(response => {
-                            toastr.error('No se aplicó el descuento');
-                        });
+                this.updateOrder();
             },
             setStatus(){
-                this.$http.post('/shopping-cart/set-status', _Order.order)
-                        .then(response => {
-                            _Order.getOrder();
-                        }).catch(response => {
-                    toastr.error('No fué posible atualizar el status del pedido');
-                });
+                this.updateOrder();
             },
             getStatus(){
             },
@@ -456,40 +411,6 @@
                         });
 
 
-            },
-            reload(){
-                 _Order.$data = {
-                    customer: {
-                        cuit: '',
-                        name: '',
-                        company: ''
-                    },
-                    representative: {
-                        code: '',
-                        user: {
-                            name: '',
-                            lastname: '',
-                            email: ''
-                        }
-                    },
-                    products: {
-                        product: {
-                            total: 0,
-                            total_sum: 0,
-                            total_customer_discount: 0,
-                            total_representative_discount: 0,
-                            total_discount: 0,
-                            price: 0.00,
-                            photo: '',
-                        }
-                    },
-                    order: {
-                        comment: '',
-                        status_id: 1,
-                        representative_discount: 0.00,
-                        customer_discount: 0.00
-                    }
-                };
             },
             showErrors: function (data) {
                 $.each(data, function (key, value) {

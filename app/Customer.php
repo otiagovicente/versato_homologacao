@@ -2,13 +2,14 @@
 
 namespace App;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use App\Shop;
 
 class Customer extends Model
 {
-    use Searchable;
+    use Searchable, Notifiable;
 
     protected $fillable = ['code', 'cuit', 'company', 'name', 'logo', 'address', 'city','state', 'zip', 'phone1', 'phone2','phone3','email', 'geo', 'region_id'];
 

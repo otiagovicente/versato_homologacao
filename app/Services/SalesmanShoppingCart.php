@@ -10,6 +10,8 @@ namespace App\Services;
 
 use App\Contracts\ShoppingCart;
 
+use App\Notifications\NewOrderPlaced;
+
 use App\Material;
 use App\Order;
 use App\Customer;
@@ -20,6 +22,7 @@ use App\Grid;
 use App\Line;
 use App\Color;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class SalesmanShoppingCart implements ShoppingCart{
 
@@ -35,9 +38,11 @@ class SalesmanShoppingCart implements ShoppingCart{
 				$order->status_id = 1;
 				$order['products'] = [];
 			}
-				$this->order = $order;
+			if(!isset($order['products'])){
+				$order['products'] = [];
+			}
 
-			Session::put('ShoppingCart.Order',collect($this->order)->toArray());
+			Session::put('ShoppingCart.Order',collect($order)->toArray());
 
 			$this->calculateProductsValues();
 			return true;
@@ -47,55 +52,95 @@ class SalesmanShoppingCart implements ShoppingCart{
 		}
 	}
 	public function stopShopping(){
-		Session::put('ShoppingCart.Order', null);
-		$this->startShopping();
+		Session::put('ShoppingCart', null);
 	}
 
-	public function loadOrder(Order $order){
-		if($order == null){
-			$order = new Order();
-			$order->status_id = 1;
+	public function loadOrder($order_id){
+
+		$order =  Order::with('products', 'customer', 'representative')->find($order_id);
+
+		$this->stopShopping();
+		if(!isset($order['products'])){
+			$order['products'] = [];
 		}
 
-		Session::put('ShoppingCart.Order',collect($order)->toArray());
+		$this->setOrder($order);
 		$this->calculateProductsValues();
-		return $order;
+		return $this->getOrder();
 	}
 	public function setOrder($order){
-		Session::put('ShoppingCart.Order', $order);
+		Session::put('ShoppingCart.Order', collect($order)->toArray());
 	}
+
+	public function updateOrder($order)
+	{
+		$this->setOrder($order);
+		$this->calculateProductsValues();
+		return $this->getOrder();
+	}
+
 	public function getOrder(){
-		$order = Session::get('ShoppingCart.Order');
-		return $order;
+		return collect(Session::get('ShoppingCart.Order'))->toArray();
 	}
 
 	public function isNew(){
 
-		if(!is_int($this->order->id)){
-			return true;
-		}else{
+		if(isset($this->getOrder()['id'])){
 			return false;
+		}else{
+			return true;
 		}
 
 	}
 	public function save(){
 
 
-		$order = new Order();
+		if(!$this->isNew()){
+			$order = Order::find($this->getOrder()['id']);
+		}else{
+			$order = new Order;
+		}
+
 		$order->fill($this->getOrder());
 		$order->save();
-		return $this->saveProducts($order);
+		if($this->hasProducts()){
+			 $this->saveProducts($order);
+		}
+
+		$representative = Representative::find($this->getOrder()['representative_id']);
+		$representative->notify(new NewOrderPlaced($order['id']));
+
+		$customer = Customer::find($this->getOrder()['customer_id']);
+		$customer->notify(new NewOrderPlaced($order['id']));
+
 		return $order;
 
 
 	}
-
 	public function saveProducts($order){
 
 		$products = $this->getProducts();
-		return $order->products()->sync($products);
+		foreach ($products as $key => $product) {
+			unset($product['pivot']['grid']);
+			$saveableProducts[$key] = $product['pivot'];
+		}
+		DB::table('order_product')->where('order_id', '=', $order['id'])->delete();
+		return $order->products()->attach($saveableProducts);
 
 	}
+
+	public function hasProducts(){
+
+		$order = Session::get('ShoppingCart.Order');
+		if(isset($order['products'])){
+			return count($order['products']);
+		}else{
+			$order['products'] = [];
+			$this->setOrder($order);
+			return false;
+		}
+	}
+
 
 	public function setStatus($status_id)
 	{
@@ -110,10 +155,11 @@ class SalesmanShoppingCart implements ShoppingCart{
 	}
 
 	public function isOpened(){
-		if(is_null(Session::get('ShoppingCart.Order'))){
-			return false;
-		}else{
+		$order = Session::get('ShoppingCart.Order');
+		if(isset($order)){
 			return true;
+		}else{
+			return false;
 		}
 	}
 	public function isClosed(){
@@ -121,19 +167,14 @@ class SalesmanShoppingCart implements ShoppingCart{
 	}
 
 	public function setProducts($products){
-		$order = $this->getOrder();
-		$order['products'] = $products;
-		$this->setOrder($order);
+		Session::put('ShoppingCart.Order.products',  collect($products)->toArray());
 	}
 	public function getProducts(){
-
-		$order = $this->getOrder();
-		return collect($order['products'])->toArray();
+		return collect(Session::get('ShoppingCart.Order.products'))->toArray();
 
 	}
 	public function addProduct($product_id, $grid_id ,$amount = 1, $discount = 0.00, $representative_discount = 0.00){
 
-		$this->setStatus(1);
 		if($this->startShopping()){
 
 
@@ -146,9 +187,19 @@ class SalesmanShoppingCart implements ShoppingCart{
 			return false;
 		}
 
+		if($this->productExists($product_id, $grid_id)){
+			$product = $this->getProduct($product_id, $grid_id);
+			if($product['pivot']['grid_id'] == $grid_id){
+				$product['pivot']['amount'] += $amount;
+				$this->updateProduct($product);
+				$this->calculateProductsValues();
+				return $product;
+			}
+		}
+
 		$product = Product::find($product_id)->toArray();
 		$product['pivot']['product_id'] = $product_id;
-		$product['pivot']['grid_id'] = $product_id;
+		$product['pivot']['grid_id'] = $grid_id;
 		$product['pivot']['grid'] = Grid::find($grid_id);
 		$product['pivot']['discount'] = $discount;
 		$product['pivot']['amount'] = $amount;
@@ -159,95 +210,74 @@ class SalesmanShoppingCart implements ShoppingCart{
 		$order = $this->getOrder();
 		$order['products'][] = $product;
 		$this->setOrder($order);
+
 		$this->calculateProductsValues();
+
+		return $product;
 	}
 
-	public function getProduct($product_id){
+	public function getProduct($product_id, $grid_id){
 		$products = $this->getProducts();
 		foreach ($products as $product) {
-			if($product['id'] == $product_id){
+			if(($product['id'] == $product_id) && ($product['pivot']['grid_id'] == $grid_id)){
 				return $product;
 			}
 		}
+		return false;
 	}
 
-	public function getProductAmount($product_id){
+	public function getProductAmount($product_id, $grid_id){
 
-		$products = $this->getProducts();
-		foreach ($products as $product) {
-			if($product['id'] == $product_id){
-				return $product['pivot']['amount'];
-			}
-		}
+		$product = $this->getProduct($product_id, $grid_id);
+		return $product['pivot']['amount'];
 	}
 
-	public function getProductPrice($product_id){
+	public function getProductPrice($product_id, $grid_id){
 
-		$products = $this->getProducts();
-		foreach ($products as $product) {
-			if($product['id'] == $product_id){
-				return $product['price'];
-			}
-		}
+		$product = $this->getProduct($product_id, $grid_id);
+		return $product['price'];
+
 	}
-	public function setProductAmount($product_id, $value){
+	public function setProductAmount($product_id, $grid_id, $value){
 
-		$products = $this->getProducts();
-		foreach ($products as $index => $product) {
-			if($product['id'] == $product_id){
-				$products[$index]['pivot']['amount'] = $value;
-			}
-		}
-		$this->setProducts($products);
+		$product = $this->getProduct($product_id, $grid_id);
+		$product['pivot']['amount'] = $value;
+
+		$this->updateProduct($product);
+
 		$this->calculateProductsValues();
-		return $products;
+	}
+	public function getProductCustomerDiscount($product_id, $grid_id){
+
+		$product = $this->getProduct($product_id, $grid_id);
+		return $product['pivot']['discount'];
 
 	}
-	public function getProductCustomerDiscount($product_id){
+	public function setProductCustomerDiscount($product_id, $grid_id, $value){
 
-		$products = $this->getProducts();
-		foreach ($products as $product) {
-			if($product['id'] == $product_id){
-				return $product['pivot']['discount'];
-			}
-		}
+		$product = $this->getProduct($product_id, $grid_id);
+		$product['pivot']['discount'] = $value;
 
-	}
-	public function setProductCustomerDiscount($product_id, $value){
+		$this->updateProduct($product);
 
-		$products = $this->getProducts();
-		foreach ($products as $index => $product) {
-			if($product['id'] == $product_id){
-				$products[$index]['pivot']['discount'] = $value;
-			}
-		}
-		$this->setProducts($products);
 		$this->calculateProductsValues();
-		return $products;
+
 
 	}
 
-	public function getProductRepresentativeDiscount($product_id){
-
-		$products = $this->getProducts();
-		foreach ($products as $product) {
-			if($product['id'] == $product_id){
-				return $product['pivot']['representative_discount'];
-			}
-		}
-
+	public function getProductRepresentativeDiscount($product_id, $grid_id){
+		$product = $this->getProduct($product_id, $grid_id);
+		return $product['pivot']['representative_discount'];
 	}
-	public function setProductRepresentativeDiscount($product_id, $value){
 
-		$products = $this->getProducts();
-		foreach ($products as $index => $product) {
-			if($product['id'] == $product_id){
-				$products[$index]['representative_discount'] = $value;
-			}
-		}
-		$this->setProducts($products);
+	public function setProductRepresentativeDiscount($product_id, $grid_id, $value){
+
+		$product = $this->getProduct($product_id, $grid_id);
+		$product['pivot']['representative_discount'] = $value;
+
+		$this->updateProduct($product);
+
 		$this->calculateProductsValues();
-		return $products;
 
 	}
 	public function calculateProductsValues(){
@@ -259,13 +289,14 @@ class SalesmanShoppingCart implements ShoppingCart{
 		$orderTotalRepresentativeComission = 0.00;
 
 		$products = $this->getProducts();
+
 		foreach ($products as $index => $product) {
-			$updatedProduct = $this->calculateProductValue($product['id']);
-			$orderTotal += $updatedProduct['pivot']['total'];
-			$orderTotalSum += $updatedProduct['pivot']['price'];
-			$orderTotalDiscount += $updatedProduct['pivot']['total_discount'];
-			$orderTotalCost += $updatedProduct['pivot']['cost'];
-			$orderTotalRepresentativeComission += $updatedProduct['pivot']['representative_commission'];
+			$updated_product = $this->calculateProductValue($product['id'], $product['pivot']['grid_id']);
+			$orderTotal += $updated_product['pivot']['total'];
+			$orderTotalSum += $updated_product['pivot']['price'];
+			$orderTotalDiscount += $updated_product['pivot']['total_discount'];
+			$orderTotalCost += $updated_product['pivot']['cost'];
+			$orderTotalRepresentativeComission += $updated_product['pivot']['representative_commission'];
 		}
 
 		$order = $this->getOrder();
@@ -274,21 +305,34 @@ class SalesmanShoppingCart implements ShoppingCart{
 		$order['representative_commission'] = $orderTotalRepresentativeComission;
 		$order['overalldiscount'] = $orderTotalDiscount;
 		$order['cost'] = $orderTotalCost;
-		Session::put('ShoppingCart.Order', $order);
+
+		$this->setOrder($order);
 
 	}
-	public function calculateProductValue($product_id){
+	public function calculateProductValue($product_id, $grid_id){
 
-		$product = $this->getProduct($product_id);
+		$product = $this->getProduct($product_id, $grid_id);
 
+		$product['pivot']['representative_id'] = Session::get('ShoppingCart.Order.representative_id');
 		$productRepresentativeDiscount = $product['pivot']['representative_discount'];
+
 		if($productRepresentativeDiscount <= 0){
-			$productRepresentativeDiscount = $this->getRepresentativeDiscount();
+			if($this->getRepresentativeDiscount()) {
+				$productRepresentativeDiscount = $this->getRepresentativeDiscount();
+			}else{
+				$productRepresentativeDiscount = 0;
+			}
+
 		}
 
 		$productCustomerDiscount = $product['pivot']['discount'];
 		if($productCustomerDiscount <= 0){
-			$productCustomerDiscount = $this->getCustomerDiscount();
+			if($this->getCustomerDiscount()){
+				$productCustomerDiscount = $this->getCustomerDiscount();
+			}else{
+				$productCustomerDiscount = 0;
+			}
+
 		}
 
 		$productAmount = $product['pivot']['amount'];
@@ -320,34 +364,37 @@ class SalesmanShoppingCart implements ShoppingCart{
 
 	}
 
-	public function updateProduct($updatedProduct){
-		$product_id = $updatedProduct['id'];
+	public function updateProduct($updated_product){
+		$product_id = $updated_product['id'];
+		$grid_id = $updated_product['pivot']['grid_id'];
 		$products = $this->getProducts();
 		foreach ($products as $index => $product) {
-			if($product['id'] == $product_id){
-				$products[$index] = $updatedProduct;
+			if(($product['id'] == $product_id) && ($product['pivot']['grid_id'] == $grid_id)){
+				$products[$index] = $updated_product;
 			}
 		}
+
 
 		$this->setProducts($products);
 	}
 
 
-	public function productExists($product_id){
+	public function productExists($product_id, $grid_id){
 		$products = $this->getProducts();
 		foreach ($products as $index => $product) {
-			if($product['id'] == $product_id){
-				return true;
+			if(($product['id'] == $product_id) && ($product['pivot']['grid_id'] == $grid_id)){
+				return $index;
 			}
 		}
 		return false;
 	}
-	public function deleteProduct($product_id){
+	public function deleteProduct($product_id, $grid_id){
+
 
 			$products = collect($this->getProducts());
-			$filtered = $products->where('product.id','!=', $product_id);
-
-			$this->setProducts($filtered->toArray());
+			$products->pull($this->productExists($product_id, $grid_id));
+			$this->setProducts($products->toArray());
+			$this->calculateProductsValues();
 
 	}
 
@@ -382,7 +429,6 @@ class SalesmanShoppingCart implements ShoppingCart{
 		$order = $this->getOrder();
 		$order['representative_id'] = $representative_id;
 		$this->setOrder($order);
-		$this->calculateProductsValues();
 	}
 	public function getRepresentative(){
 		$representative_id = Session::get('ShoppingCart.Order.representative_id');
@@ -394,7 +440,6 @@ class SalesmanShoppingCart implements ShoppingCart{
 		$order = $this->getOrder();
 		$order['customer_id'] = $customer_id;
 		$this->setOrder($order);
-		$this->calculateProductsValues();
 	}
 	public function getCustomer(){
 		$customer_id = Session::get('ShoppingCart.Order.customer_id');

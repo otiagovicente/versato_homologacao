@@ -120,7 +120,7 @@
                 this.$http.get('/shopping-cart/order/'+order_id)
                         .then(response => {
                             toastr.success('Cargo el pedido!');
-                            window.location.href = "/orders/create";
+                            // window.location.href = "/orders/create";
                         }).catch(response => {
                             toastr.error('No fué possible cargar el pedido');
                         });

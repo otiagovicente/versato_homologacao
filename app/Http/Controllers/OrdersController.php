@@ -111,21 +111,21 @@ class OrdersController extends Controller
             ->find($id);
         
         if($order->representative && $order->representative->user && $order->representative->user->email){
-            Mail::to($order->representative->user->email)->send(new NewOrderMail($order));    
+            Mail::to($order->representative->user->email)->send(new NewOrderMail($id));
         }else{
-            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
-            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
-            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
-            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));    
+            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($id));
+            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($id));
+            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($id));
+            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($id));
         }
         
         if($order->customer && $order->customer->email){
-            Mail::to($order->customer->email)->send(new NewOrderMail($order));
+            Mail::to($order->customer->email)->send(new NewOrderMail($id));
         }else{
-            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($order));
-            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($order));
-            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($order));
-            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+            Mail::to('jorge@magnaestrategia.com')->send(new NewOrderMail($id));
+            Mail::to('bruno@magnaestrategia.com')->send(new NewOrderMail($id));
+            Mail::to('roger@magnaestrategia.com')->send(new NewOrderMail($id));
+            Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($id));
         }
     }
 
