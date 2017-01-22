@@ -9,6 +9,7 @@ use App\Order;
 use App\Mail\NewOrderMail;
 use League\Flysystem\Exception;
 use Mail;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -195,4 +196,33 @@ class OrdersController extends Controller
                                 ->get();
         return response()->json($totalOrdersByRepresentative);
     }
+    public function api_getOrderListByBrand($dtInicio, $dtFim, $idBrand){
+        $ordersListByBrand = Order::where('brand_order.brand_id', $idBrand)
+                                ->join('brand_order', 'orders.id', '=', 'brand_order.order_id')
+                                ->join('brand', 'brand.id', '=', 'brand_order.brand_id')
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->get();
+        return response()->json($ordersListByBrand);
+    }
+    public function api_getOrderTotalByRegion($dtInicio, $dtFim){
+        $ordersListByRegion = Order::select('regions.description', DB::raw('regions.id, SUM(orders.total) as Total, COUNT(orders.id) as qtd_pedidos'))
+                                ->join('customers', 'customers.id', '=', 'orders.customer_id')
+                                ->join('regions', 'regions.id', '=', 'customers.region_id')
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->groupBy('regions.description')
+                                ->groupBy('regions.id')
+                                ->get();
+        return response()->json($ordersListByRegion);
+    }
+    public function api_getOrderListByRegion($dtInicio, $dtFim, $idRegion){
+        $ordersListByRegion = Order::
+                                join('customers', 'customers.id', '=', 'orders.customer_id')
+                                ->join('regions', 'regions.id', '=', 'customers.region_id')
+                                ->where('regions.id', $idRegion)
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->with('products', 'representative', 'customer')
+                                ->get();
+        return response()->json($ordersListByRegion);
+    }
+    
 }
