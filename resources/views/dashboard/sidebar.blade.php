@@ -418,6 +418,26 @@
                                 </ul>
                             </li>
 
+                            <li class="heading">
+                                <h3 class="uppercase">Útil</h3>
+                            </li>
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-bullhorn"></i>
+                                    <span class="title">Pré-Cadastro</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/imports/customer" class="nav-link nav-toggle">
+                                            <i class="fa fa-bullhorn"></i>
+                                            <span class="title">Clientes</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
 
 
