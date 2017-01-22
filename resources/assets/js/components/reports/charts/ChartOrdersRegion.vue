@@ -25,15 +25,13 @@
             <button class="btn blue" type="button" @click="loadChart">Buscar</button>
         </span>
     </div>
-
-    <canvas v-el:canvas style="width: 100%; height: 200px"></canvas>
-    
+        <canvas v-el:canvas style="width: 100%; height: 200px"></canvas>
     <hr/>
     
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th>Marca</>
+                <th>Região</>
                 <th>Total Pedidos</th>
                 <th>Valor Total de Pedidos</th>
                 <th>Aciones</th>
@@ -45,7 +43,7 @@
                 <td>{{m.qtd_pedidos}}</td>
                 <td>{{m.Total | currency}}</td>
                 <td>
-                    <button type="button" @click="loadListOrders" class="btn blue" data-toggle="modal" 
+                    <button type="button" @click="loadListOrders(m.id)" class="btn blue" data-toggle="modal" 
                         data-target="#myModal"
                     >Pedidos</button>
                 </td>
@@ -141,10 +139,11 @@
                         {val: 'vendas', label: 'Total de Vendas'},
                     ],
                 },
-                marcas:   new Array(),
-                labels:   new Array(),
-                datasets: new Array(),
-                lstOrders:new Array(),
+                
+                marcas:    new Array(),
+                labels:    new Array(),
+                datasets:  new Array(),
+                lstOrders: new Array(),
             }
         },
         
@@ -188,8 +187,9 @@
                 }
             },
             getChartData(){
-                this.$http.get('/api/orders/getOrdersByBrand/'+ this.toDate(this.dtInicial, 'ini') + '/' + this.toDate(this.dtFinal))
+                this.$http.get('/api/orders/getOrdersByRegion/'+ this.toDate(this.dtInicial, 'ini') + '/' + this.toDate(this.dtFinal))
                 .then(response => {
+                    
                     this.labels = new Array();
                     this.datasets = new Array();
                     var data = response.json();
@@ -197,7 +197,7 @@
                     for(var i=0; i < data.length; i++){
                         this.labels.push(data[i].name);
                         this.datasets.push({
-                            label:data[i].name
+                            label:data[i].description
                             , data: (this.tipo == 'quantidade'? [data[i].qtd_pedidos]:[data[i].Total])
                         });
                     }
@@ -206,18 +206,24 @@
             },
             loadTableData(data){
                 var marcas = new Array();
+                console.log(data);
                 for(var i=0; i < data.length; i++){
-                    marcas.push({name:data[i].name, qtd_pedidos:[data[i].qtd_pedidos], Total:[data[i].Total]});
+                    marcas.push({
+                            id:data[i].id,
+                            name:data[i].description, 
+                            qtd_pedidos:[data[i].qtd_pedidos], 
+                            Total:[data[i].Total]
+                    });
                 }
                 this.marcas = marcas;
             },
             
-            loadListOrders(brand){
-                this.$http.get('/api/orders/getOrdersListByBrand/'+ this.toDate(this.dtInicial, 'ini') + '/' + this.toDate(this.dtFinal) + '/01')
+            loadListOrders(id){
+                this.$http.get('/api/orders/getOrdersListByRegion/'+ this.toDate(this.dtInicial, 'ini') + '/' + this.toDate(this.dtFinal) + '/' + id)
                 .then(response => {
                     this.lstOrders = response.json();
-                    console.log(this.lstOrders);
                 });
+
             },
         },
         watch:{
