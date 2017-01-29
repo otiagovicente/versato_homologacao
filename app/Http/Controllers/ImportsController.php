@@ -18,19 +18,8 @@ class ImportsController extends Controller
         return view('imports.customers.index');
     }
     
-    public function downloadExcel($type)
-	{
-		$data = Item::get()->toArray();
-		return Excel::create('itsolutionstuff_example', function($excel) use ($data) {
-			$excel->sheet('mySheet', function($sheet) use ($data)
-	        {
-				$sheet->fromArray($data);
-	        });
-		})->download($type);
-	}
     public function importExcel(Request $request)
 	{
-
 		if($request->hasFile('import_file')){
 			$path = $request->file('import_file')->getRealPath();
 			$data = Excel::load($path, function($reader) {
@@ -47,8 +36,7 @@ class ImportsController extends Controller
                     }    
                 }
                 if(!empty($insert)){
-					DB::table('import_customer')->insert($insert);
-					dd('Insert Record successfully.');
+					DB::table('importcustomers')->insert($insert);
 				}
             })->get();
             

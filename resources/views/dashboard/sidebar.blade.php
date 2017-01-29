@@ -438,6 +438,24 @@
                                     </li>
                                 </ul>
                             </li>
+                            
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-bullhorn"></i>
+                                    <span class="title">Export</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/exports/orders" class="nav-link nav-toggle">
+                                            <i class="fa fa-bullhorn"></i>
+                                            <span class="title">Pedidos</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
 
 

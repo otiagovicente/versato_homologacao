@@ -10,6 +10,7 @@ use App\Mail\NewOrderMail;
 use League\Flysystem\Exception;
 use Mail;
 use Illuminate\Support\Facades\DB;
+use Excel;
 
 class OrdersController extends Controller
 {
@@ -225,4 +226,37 @@ class OrdersController extends Controller
         return response()->json($ordersListByRegion);
     }
     
+    public function api_exportListOrdersByDate($dtInicio, $dtFim){
+        $ordersList = Order::whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->with('products', 'customer')
+                                ->get();
+        $arrData = [];
+        foreach ($ordersList as $order) {
+            foreach ($order->products as $product) {
+                array_push($arrData, [$order->id, $order->customer->code, $product->code, $product->pivot->amount, $product->pivot->total]);
+            }
+        }
+        return response()->json($arrData);
+    }
+    public function api_exportOrdersByDate($dtInicio, $dtFim){
+        $ordersList = Order::whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->with('products', 'customer')
+                                ->get();
+        return Excel::create('orders', function($excel) use ($ordersList) {
+			$excel->sheet('pedidos', function($sheet) use ($ordersList)
+	        {
+                $intI = 1;
+                $sheet->row($intI++, array(
+                    'NUMERO', 'CLIENTE', 'COD_ALFA', 'CANTIDAD', 'PRECIO'
+                ));
+				foreach ($ordersList as $order) {
+                    foreach ($order->products as $product) {
+                        $sheet->row($intI++, array(
+                            $order->id, $order->customer->code, $product->code, $product->pivot->amount, $product->pivot->total
+                        ));
+                    }
+                }
+	        });
+		})->download('xls');
+    }
 }

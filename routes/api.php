@@ -30,15 +30,14 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //Rotas dedicadas a clientes
-
     Route::get('/customers', 'CustomersController@api_index');
     Route::get('/customers/search', 'CustomersController@api_search');
     Route::get('/customers/selectlist', 'CustomersController@api_selectList');
     Route::get('/customers/{customer}', 'CustomersController@api_show');
     Route::get('/customers/{customer}/shops', 'CustomersController@api_getShops');
     Route::get('/customers/{customer}/deliverycenters', 'CustomersController@api_getDeliveryCenters');
-
-
+    Route::get('/customers/getImportedCustomers', 'CustomersController@api_getImportedCustomers');
+    
     //Rotas dedicadas às lojas
     Route::get('/shops/{shop}', 'ShopsController@api_show');
 
@@ -134,7 +133,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/orders/getOrdersByBrand/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByBrand');
     Route::get('/orders/getOrdersByRepresentative/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByRepresentative');
     Route::get('/orders/getOrdersByCustomer/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByCustomer');
-
+    Route::get('/orders/getOrdersListByBrand/{dtInicio}/{dtFim}/{idBrand}', 'OrdersController@api_getOrderListByBrand');
+    Route::get('/orders/getOrdersByRegion/{dtInicio}/{dtFim}/', 'OrdersController@api_getOrderTotalByRegion');
+    Route::get('/orders/getOrdersListByRegion/{dtInicio}/{dtFim}/{idRegion}', 'OrdersController@api_getOrderListByRegion');
+    
+    Route::get('/orders/exportListOrdersByDate/{dtInicio}/{dtFim}', 'OrdersController@api_exportListOrdersByDate');
+    
+    
     Route::get('/orders/list/{idRepresentive}', 'OrdersController@api_listByRepresentive');
     Route::get('/orders/getProductsFromOrder/{id}', 'OrdersController@api_getProducts');
     Route::get('/orders/listOrdersByRepresentative/{id}','OrdersController@api_listOrdersByRepresentative');

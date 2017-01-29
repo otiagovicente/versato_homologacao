@@ -277,6 +277,15 @@ Vue.component(
     'chart-orders-by-customer',
     require('./components/reports/charts/ChartOrdersCustomer.vue')
 );
+Vue.component(
+    'chart-orders-by-region',
+    require('./components/reports/charts/ChartOrdersRegion.vue')
+);
+Vue.component(
+    'export-orders',
+    require('./components/exports/orders/ExportOrders.vue')
+);
+
 /*
 Vue.component(
     'table-orders-by-brand',

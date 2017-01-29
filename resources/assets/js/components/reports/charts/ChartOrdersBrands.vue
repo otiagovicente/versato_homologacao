@@ -150,6 +150,7 @@
         
         ready: function () {
             this.loadChart();
+            this.export();
         },
         
         methods:{
@@ -218,6 +219,11 @@
                     this.lstOrders = response.json();
                     console.log(this.lstOrders);
                 });
+            },
+            
+            export(){
+                var url = ('/orders/exportOrdersByDate/'+ this.toDate(this.dtInicial, 'ini') + '/' + this.toDate(this.dtFinal));
+                window.open(url);
             },
         },
         watch:{
