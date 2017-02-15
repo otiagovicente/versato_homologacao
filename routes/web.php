@@ -149,4 +149,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/shopping-cart/stop-shopping','ShoppingCartController@stopShopping');
 
 	Route::resource('reports','ReportsController',['parameters' => 'singular']);
+	
+	Route::get('imports/customer','ImportsController@customer');
+	Route::get('imports/customer/downloadExcel/{type}', 'ImportsController@downloadExcel');
+	Route::post('imports/customer/importExcel', 'ImportsController@importExcel');
+
+	Route::get('exports/orders', 'ExportsController@order');
+
+	Route::get('/orders/exportOrdersByDate/{dtInicio}/{dtFim}/', 'OrdersController@api_exportOrdersByDate');
+
 });

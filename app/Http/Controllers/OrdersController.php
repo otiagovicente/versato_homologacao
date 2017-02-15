@@ -9,8 +9,13 @@ use App\Order;
 use App\Mail\NewOrderMail;
 use League\Flysystem\Exception;
 use Mail;
+
 use Carbon\Carbon;
 use App\Contracts\ShoppingCart;
+use Illuminate\Support\Facades\DB;
+use Excel;
+
+
 class OrdersController extends Controller
 {
 	public function index(Request $request, ShoppingCart $shoppingCart)
@@ -199,6 +204,7 @@ class OrdersController extends Controller
         return response()->json($totalOrdersByRepresentative);
     }
 
+
     public function api_search(Request $request){
 
 //    	     $orders = Order::search($request->search);
@@ -224,5 +230,70 @@ class OrdersController extends Controller
 	    $orders = $orders->paginate(10);
 //	    $orders->load('products', 'customer', 'representative');
     	     return response()->json($orders);
+
+	}
+	
+    public function api_getOrderListByBrand($dtInicio, $dtFim, $idBrand){
+        $ordersListByBrand = Order::where('brand_order.brand_id', $idBrand)
+                                ->join('brand_order', 'orders.id', '=', 'brand_order.order_id')
+                                ->join('brand', 'brand.id', '=', 'brand_order.brand_id')
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->get();
+        return response()->json($ordersListByBrand);
+    }
+    public function api_getOrderTotalByRegion($dtInicio, $dtFim){
+        $ordersListByRegion = Order::select('regions.description', DB::raw('regions.id, SUM(orders.total) as Total, COUNT(orders.id) as qtd_pedidos'))
+                                ->join('customers', 'customers.id', '=', 'orders.customer_id')
+                                ->join('regions', 'regions.id', '=', 'customers.region_id')
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->groupBy('regions.description')
+                                ->groupBy('regions.id')
+                                ->get();
+        return response()->json($ordersListByRegion);
+    }
+    public function api_getOrderListByRegion($dtInicio, $dtFim, $idRegion){
+        $ordersListByRegion = Order::
+                                join('customers', 'customers.id', '=', 'orders.customer_id')
+                                ->join('regions', 'regions.id', '=', 'customers.region_id')
+                                ->where('regions.id', $idRegion)
+                                ->whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->with('products', 'representative', 'customer')
+                                ->get();
+        return response()->json($ordersListByRegion);
+    }
+    
+    public function api_exportListOrdersByDate($dtInicio, $dtFim){
+        $ordersList = Order::whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->with('products', 'customer')
+                                ->get();
+        $arrData = [];
+        foreach ($ordersList as $order) {
+            foreach ($order->products as $product) {
+                array_push($arrData, [$order->id, $order->customer->code, $product->code, $product->pivot->amount, $product->pivot->total]);
+            }
+        }
+        return response()->json($arrData);
+    }
+    public function api_exportOrdersByDate($dtInicio, $dtFim){
+        $ordersList = Order::whereBetween('orders.created_at', [$dtInicio, $dtFim])
+                                ->with('products', 'customer')
+                                ->get();
+        return Excel::create('orders', function($excel) use ($ordersList) {
+			$excel->sheet('pedidos', function($sheet) use ($ordersList)
+	        {
+                $intI = 1;
+                $sheet->row($intI++, array(
+                    'NUMERO', 'CLIENTE', 'COD_ALFA', 'CANTIDAD', 'PRECIO'
+                ));
+				foreach ($ordersList as $order) {
+                    foreach ($order->products as $product) {
+                        $sheet->row($intI++, array(
+                            $order->id, $order->customer->code, $product->code, $product->pivot->amount, $product->pivot->total
+                        ));
+                    }
+                }
+	        });
+		})->download('xls');
+
     }
 }

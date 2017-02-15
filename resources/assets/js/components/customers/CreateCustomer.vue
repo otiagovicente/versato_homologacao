@@ -38,7 +38,8 @@
 
             <div class="portlet-title">
                 <div class="caption font-blue">
-                    <i class="fa fa-plus font-blue"></i>Crear Cliente
+                    <i class="fa fa-plus font-blue"></i>Crear Cliente 
+                    <button type="button" @click="showModal" class="btn blue btn-block" id="send-btn">Atención al Cliente</button>
                 </div>
             </div>
 
@@ -177,6 +178,64 @@
         </div>
     </div>
 
+    <!-- MODAL  -->
+    <div id="cliente-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="infowindow-modal">
+                        <div class="iw-container" style="display:block">
+                            <div class="iw-title"></div>
+                            
+                            <div class="iw-content">
+                                <div class="md-col-12">
+                                    <div class="row">
+                                        <div class="form-group form-line-input search">
+                                            <h4>Buscar</h4>
+                                            <div class="input-icon input-icon-lg right">
+                                                <i class="fa fa-search font-green"></i>
+                                                <input id="search-input" class="form-control input-lg" type="text" name="search" v-model="query" v-on:keyup.enter="search()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="row">
+                                        <div class="col-md-5">
+                                            <nav aria-label="Page navigation">
+                                                <ul class="pagination">
+                                                    <li>
+                                                        <a aria-label="Previous" v-on:click="paginate(pagination.prev_page_url)" v-show="pagination.prev_page_url">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    <li v-for="page in paginationLinks">
+                                                        <a v-on:click="paginate(page.url)">{{ page.page }}1</a>
+                                                    </li>
+                                                    <li>
+                                                        <a aria-label="Next" v-on:click="paginate(pagination.next_page_url)" v-show="pagination.next_page_url">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                     </div>
+                                     <hr>
+                                     <div class="row">
+
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /MODAL  -->
 </template>
 
 <script>
@@ -215,6 +274,11 @@
                 zoom: 12,
                 autocomplete:'',
                 marker:'',
+                query: '',
+                pagination : {},
+                paginationLinks : {},
+                customers:{},
+                type:null,
             }
         },
         
@@ -222,9 +286,50 @@
             window._createCustomer = this;
             _createCustomer.configureDropbox();
             _createCustomer.getRegions();
+            _createCustomer.getImportedCustomers('search');
         },
         
         methods:{
+            getImportedCustomers(){
+                switch (_createCustomer.type) {
+                    case 'search':
+                        _createCustomer.getCustomersBySearch();
+                        break;
+                    default:
+                        _createCustomer.getAllImportedCustomers();
+                }
+            },
+            getCustomersBySearch(){
+                _createCustomer.url = '/api/customers/getImportedCustomersBySearch?search=bla bla'; //+ _createCustomer.query;
+                _createCustomer.paginate(this.url);
+            },
+            getAllImportedCustomers(){
+                _createCustomer.url = '/api/customers/getImportedCustomers';
+                _createCustomer.paginate(this.url);
+            },
+
+            paginate(paginationUrl){
+                console.log(paginationUrl);
+                this.$http.get(paginationUrl)
+                        .then(response => {
+                            _createCustomer.pagination = response.json();
+                            _createCustomer.pagination.data = null;
+                            _createCustomer.customers = response.json().data;
+                            _createCustomer.buildPaginationLinks();
+                        })
+                        .catch(response => {
+                            toastr.error('no fue possible cargar los productos');
+                        });
+            },
+            buildPaginationLinks(){
+                var o = {};
+                for (var i = 0; i < _ListProducts.pagination.last_page; i++) {
+                    o.url = _createCustomer.url+'?page='+(i + 1);
+                    o.page = (i+1);
+                    _createCustomer.paginationLinks[i] = o;
+                }
+            },
+
             createMap() {
                 _createCustomer.googleMap = new google.maps.Map(_createCustomer.$els.customermap, {
                     center: _createCustomer.center,
@@ -352,6 +457,9 @@
                     toastr.warning('Atención', value);
                     $('#'+key).addClass('has-error');
                 });
+            },
+            showModal(polygon){
+                $('#cliente-modal').modal('show');
             },
         },
         events: {
