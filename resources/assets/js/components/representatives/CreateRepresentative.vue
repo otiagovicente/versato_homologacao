@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <select-user></select-user>
+    <select-user :user_id.sync="representative.user_id"></select-user>
     <select-region></select-region>
     <select-brands></select-brands>
 
@@ -91,16 +91,17 @@
 
 </template>
 
-<style>
+<style scoped>
     .user-photo{
         height: 280px;
         cursor:pointer;
         right : 10px;
     }
 </style>
-<script>
-    import VueStrap from 'vue-strap'
-
+<script type="text/babel">
+    import SelectUser from './SelectUser.vue'
+    import SelectBrands from './SelectBrands.vue'
+    import SelectRegion from './SelectRegion.vue'
     export default{
         data(){
             return {
@@ -121,9 +122,11 @@
             }
         },
         components: {
-            vSelect: VueStrap.select,
-            vOption: VueStrap.option,
-        },
+            'select-user' : SelectUser,
+            'select-region' : SelectRegion,
+            'select-brands' : SelectBrands
+
+    },
         props: ['prepresentativeid'],
         computed: {
             'computeUserId': function () {
@@ -290,7 +293,7 @@
              * Funções de manejo de Componentes
              */
             openSelectUser: function () {
-                _SelectUser.openWindow();
+                this.$broadcast('open-user-select-window');
             },
             openSelectRegion: function () {
                 if (_CreateRepresentative.regions) {

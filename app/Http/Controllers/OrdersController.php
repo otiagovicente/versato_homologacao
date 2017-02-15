@@ -9,18 +9,21 @@ use App\Order;
 use App\Mail\NewOrderMail;
 use League\Flysystem\Exception;
 use Mail;
-
+use Carbon\Carbon;
+use App\Contracts\ShoppingCart;
 class OrdersController extends Controller
 {
-	public function index(Request $request)
+	public function index(Request $request, ShoppingCart $shoppingCart)
 	{
+
 		$orders = Order::with('products')
 			->with('representative')
-			->with('customer')
-			->paginate(20);
+			->with('customer');
+
 		if($request->ajax()){
-			return response()->json($orders);
+			return response()->json($orders->paginate());
 		}
+		$shoppingCart->startShopping();
 		return view('orders.index');
 	}
     /**
@@ -194,5 +197,32 @@ class OrdersController extends Controller
                                 ->groupBy('representatives.id')
                                 ->get();
         return response()->json($totalOrdersByRepresentative);
+    }
+
+    public function api_search(Request $request){
+
+//    	     $orders = Order::search($request->search);
+
+	    $orders = Order::with('products', 'customer', 'representative', 'representative.brands');
+	    $orders->where('id', 'LIKE' , '%'.$request->search.'%');
+	    if($request->customer_id){
+		    $orders->where('customer_id', $request->customer_id);
+	    }
+	    if($request->representative_id){
+		    $orders->where('representative_id', $request->representative_id);
+	    }
+	    if($request->status_id){
+		    $orders->where('status_id', $request->status_id);
+	    }
+	    if($request->start_date){
+		    $orders->where('updated_at','>=',Carbon::parse($request->start_date));
+	    }
+	    if($request->end_date){
+		    $orders->where('updated_at','<=',Carbon::parse($request->end_date));
+	    }
+	    $orders->orderBy('updated_at', 'desc');
+	    $orders = $orders->paginate(10);
+//	    $orders->load('products', 'customer', 'representative');
+    	     return response()->json($orders);
     }
 }

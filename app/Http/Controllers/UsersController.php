@@ -138,6 +138,12 @@ class UsersController extends Controller
         return response()->json($selectList);
 
     }
+	public function api_search(Request $request){
 
+		$users = User::search($request->search)->get();
+		return response()->json($users);
+
+
+	}
 
 }

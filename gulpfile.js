@@ -15,9 +15,11 @@ require('laravel-elixir-vue');
  */
 
 elixir(mix => {
-    mix.sass('app.scss')
-        .styles(['../../../node_modules/animate.css/animate.min.css',
+    mix.sass(['app.scss','../../../node_modules/materialize-css/sass/materialize.scss'])
+        .styles([
+            '../../../node_modules/animate.css/animate.min.css',
             '../../../node_modules/google-code-prettify/bin/prettify.min.css',
+            '../../../node_modules/daterangepicker/daterangepicker-bs3.min.css',
             'dropzone.css'
         ])
         .webpack('app.js');

@@ -172,12 +172,13 @@ class RepresentativesController extends Controller
 
     public function api_show(Representative $representative){
 
+    	     $representative->load('user', 'regions');
         return response()->json($representative);
 
     }
 
     public function api_brands(Representative $representative){
-
+	    $brands = [];
         foreach ($representative->brands()->get() as $brand) {
             $brand['comission'] = $brand->pivot->comission;
             $brands[] = $brand;

@@ -1,4 +1,4 @@
-<style>
+<style scoped>
     .dropzone {
         min-height: 150px;
         border: 2px dashed #eaeaea;

@@ -1,4 +1,4 @@
-<!-- BEGIN QUICK SIDEBAR -->
+x<!-- BEGIN QUICK SIDEBAR -->
 <a href="javascript:;" class="page-quick-sidebar-toggler"><i class="icon-close"></i></a>
 <div class="page-quick-sidebar-wrapper">
     <div class="page-quick-sidebar">

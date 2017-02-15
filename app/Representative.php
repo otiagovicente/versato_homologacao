@@ -23,7 +23,7 @@ class Representative extends Model
     }
 
     public function brands(){
-        return $this->belongsToMany('App\Brand')->withPivot('comission')->withTimestamps();
+        return $this->belongsToMany('App\Brand')->withPivot('commission', 'brand_id', 'representative_id')->withTimestamps();
     }
 
     public function orders(){
@@ -33,6 +33,7 @@ class Representative extends Model
 	{
 		$data = $this->toArray();
 		$data['user'] = $this->user->toArray();
+		$data['brands'] = $this->brands->toArray();
 
 		return $data;
 	}
