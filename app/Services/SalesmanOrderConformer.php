@@ -230,14 +230,14 @@ class SalesmanOrderConformer implements OrderConformer {
 		$product['pivot']['grid'] = Grid::find($grid_id);
 		$product['pivot']['company_discount'] = $company_discount;
 		$product['pivot']['products_amount'] = $products_amount;
-        $product['pivot']['grids_amount'] = $grids_amount;
+    $product['pivot']['grids_amount'] = $grids_amount;
 		$product['pivot']['representative_discount'] = $representative_discount;
 		$product['pivot']['representative_commission_total'] = $representative_commission_total;
-        $product['pivot']['representative_commission_price'] = $representative_commission_price;
-        $product['pivot']['representative_commission_company'] = Representative::find($this->order['representative_id'])->brands->find($brand_id)->pivot['commission'];
-        $product['pivot']['representative_commission_percentage'] = 0;
+    $product['pivot']['representative_commission_price'] = $representative_commission_price;
+    $product['pivot']['representative_commission_company'] = 5;//Representative::find($this->order['representative_id'])->brands->find($brand_id)->pivot['commission'];
+    $product['pivot']['representative_commission_percentage'] = 0;
 
-        $order = $this->get();
+    $order = $this->get();
 		$order['products'][] = $product;
 		$this->setOrder($order);
 

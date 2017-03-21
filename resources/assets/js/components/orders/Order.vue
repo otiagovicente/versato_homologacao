@@ -272,6 +272,28 @@
                 }
             }
         },
+        watch: {
+            'order.customer_id': function (val) {
+                if (val) {
+                    _Order.getCustomer();
+                }
+            },
+            'order.representative_id': function (val) {
+                if (val) {
+                    _Order.getRepresentative();
+                }
+            },
+            'order.representative_discount': function (val) {
+              if (val) {
+                  _Order.updateOrder();
+              }
+            },
+            'order.company_discount': function (val) {
+              if (val) {
+                  _Order.updateOrder();
+              }
+            },
+        },
         computed: {},
         events: {
             'load-order': function () {
