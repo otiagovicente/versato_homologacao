@@ -207,8 +207,9 @@ class SalesmanOrderConformer implements OrderConformer {
 
         return collect($this->order['products'])->toArray();
 	}
-    public function addProduct($product_id, $grid_id ,$products_amount = 1, $grids_amount, $company_discount = 0.00, $representative_discount = 0.00, $representative_commission_total = 0.00, $representative_commission_price = 0.00, $representative_commission_company = 0.00 ){
+  public function addProduct($product_id, $grid_id ,$products_amount = 1, $grids_amount, $company_discount = 0.00, $representative_discount = 0.00, $representative_commission_total = 0.00, $representative_commission_price = 0.00, $representative_commission_company = 0.00 ){
 
+		
 		$brand_id = Product::find($product_id)->brand->id;
 		$this->addBrand($brand_id);
 		if(!$this->checkBrand($product_id)){
@@ -241,7 +242,7 @@ class SalesmanOrderConformer implements OrderConformer {
 		$order['products'][] = $product;
 		$this->setOrder($order);
 
-        Session::push('ShoppingCart.products', $product);
+    Session::push('ShoppingCart.products', $product);
 
 		$this->calculateValues();
 
