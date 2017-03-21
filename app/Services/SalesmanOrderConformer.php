@@ -241,7 +241,7 @@ class SalesmanOrderConformer implements OrderConformer {
 
     $order = $this->get();
 
-		if ($this->order['id'] != null){
+		if (isset($this->order['id'])){
 			$product['pivot']['order_id'] = $this->order['id'];
 		}
 
