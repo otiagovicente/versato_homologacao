@@ -158,7 +158,8 @@
                     });
             },
             goToOrder(order_id){
-                window.location.href = '/orders/'+order_id+'/edit';
+              this.$http.post('/shopping-cart/stop-shopping');
+              window.location.href = '/orders/'+order_id+'/edit';
             },
             setPage(n){
               if (n < 1){
