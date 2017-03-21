@@ -88,9 +88,9 @@ class SalesmanOrderConformer implements OrderConformer {
 
 		$order->fill($this->get());
 		$order->save();
-		if($this->hasProducts()){
+		/*if($this->hasProducts()){
 			$this->saveProducts($order);
-		}
+		}*/
 
 		//$representative = Representative::find($this->get()['representative_id']);
 		//$representative->notify(new NewOrderPlaced($order['id']));
