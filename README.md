@@ -1,1 +1,0 @@
-# versato_homologacao

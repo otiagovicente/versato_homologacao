@@ -1,3 +1,0 @@
-{{--<create-products/>--}}
-
-{{--<product-form/>--}}
