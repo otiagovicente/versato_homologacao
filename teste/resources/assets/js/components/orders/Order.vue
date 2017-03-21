@@ -244,6 +244,7 @@
                             total_without_discount: 0,
                             total: 0,
                             company_total_discount:0,
+                            grid_id:0,
 
                         },
                         cost: 0.00,
@@ -270,42 +271,6 @@
                     status_id: 1,
                 }
             }
-        },
-        watch: {
-            'order.customer_id': function (val) {
-                if (val) {
-                    _Order.getCustomer();
-                }
-            },
-            'order.representative_id': function (val) {
-                if (val) {
-                    _Order.getRepresentative();
-                }
-            },
-            'order.comment': function (val) {
-                _Order.updateOrder();
-            },
-            'order.company_discount': function (val, oldVal) {
-                if (val) {
-                    _Order.updateOrder();
-                }
-            },
-            'order.status_id': function (val, oldVal) {
-                if ((val != oldVal) && (val != null)) {
-                    _Order.updateOrder();
-                }
-            },
-            'order.representative_discount': function (val, oldVal) {
-                if (val != oldVal) {
-                    _Order.updateOrder();
-                }
-            },
-            'order.representative_commission_company': function (val, oldVal) {
-                if (val != oldVal) {
-                    _Order.updateOrder();
-                }
-            },
-
         },
         computed: {},
         events: {

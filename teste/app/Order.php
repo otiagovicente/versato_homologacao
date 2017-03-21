@@ -20,7 +20,7 @@ class Order extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     public function products(){
-        return $this->belongsToMany('App\Product')->withPivot('product_id','cost','price',
+        return $this->belongsToMany('App\Product')->withPivot('product_id','cost','price', 'grid_id',
             'representative_commission', 'total', 'representative_commission_total', 'representative_commission_company',
             'representative_commission_price', 'company_total_discount', 'total_without_discount', 'products_amount',
             'representative_commission_discount', 'representative_commission_percentage', 'company_discount', 'representative_discount')
