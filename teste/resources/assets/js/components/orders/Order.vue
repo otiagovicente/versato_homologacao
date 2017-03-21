@@ -305,11 +305,6 @@
                     _Order.updateOrder();
                 }
             },
-            'product.pivot.products_amount': function (val, oldVal) {
-                if (val != oldVal) {
-                    _Order.updateOrder();
-                }
-            },
 
         },
         computed: {},
