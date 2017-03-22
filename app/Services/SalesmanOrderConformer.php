@@ -88,9 +88,9 @@ class SalesmanOrderConformer implements OrderConformer {
 
 		$order->fill($this->get());
 		$order->save();
-		/*if($this->hasProducts()){
+		if($this->hasProducts()){
 			$this->saveProducts($order);
-		}*/
+		}
 
 		//$representative = Representative::find($this->get()['representative_id']);
 		//$representative->notify(new NewOrderPlaced($order['id']));
@@ -150,6 +150,7 @@ class SalesmanOrderConformer implements OrderConformer {
 			$saveableProducts[$key] = $product['pivot'];
 		}
 		DB::table('order_product')->where('order_id', '=', $order['id'])->delete();
+		dd($saveableProducts);
 		return $order->products()->attach($saveableProducts);
 
 	}
