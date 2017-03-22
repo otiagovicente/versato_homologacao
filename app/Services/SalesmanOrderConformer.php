@@ -242,7 +242,7 @@ class SalesmanOrderConformer implements OrderConformer {
     $product['pivot']['representative_commission_company'] = 5;//Representative::find($this->order['representative_id'])->brands->find($brand_id)->pivot['commission'];
     $product['pivot']['representative_commission_percentage'] = 0;
 
-    //$order = $this->get();
+    $order = $this->get();
 
 		$order['products'][] = $product;
 		$this->setOrder($order);
