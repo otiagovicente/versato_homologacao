@@ -149,7 +149,7 @@ class SalesmanOrderConformer implements OrderConformer {
 			unset($product['pivot']['grid']);
 			$saveableProducts[$key] = $product['pivot'];
 		}
-		DB::table('order_product')->where('order_id', '=', $order['id'])->delete();
+		//DB::table('order_product')->where('order_id', '=', $order['id'])->delete();
 		return $order->products()->attach($saveableProducts);
 
 	}
