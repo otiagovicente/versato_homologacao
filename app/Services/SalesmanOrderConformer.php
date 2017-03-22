@@ -150,7 +150,6 @@ class SalesmanOrderConformer implements OrderConformer {
 			$saveableProducts[$key] = $product['pivot'];
 		}
 		DB::table('order_product')->where('order_id', '=', $order['id'])->delete();
-		dd($saveableProducts);
 		return $order->products()->attach($saveableProducts);
 
 	}
@@ -228,6 +227,9 @@ class SalesmanOrderConformer implements OrderConformer {
 
 
 		$product = Product::find($product_id)->toArray();
+		if (isset($this->order['id'])){
+			$product['pivot']['order_id'] = $this->order['id'];
+		}
 		$product['pivot']['product_id'] = $product_id;
 		$product['pivot']['grid_id'] = $grid_id;
 		$product['pivot']['grid'] = Grid::find($grid_id);
@@ -241,10 +243,6 @@ class SalesmanOrderConformer implements OrderConformer {
     $product['pivot']['representative_commission_percentage'] = 0;
 
     $order = $this->get();
-
-		if (isset($this->order['id'])){
-			$product['pivot']['order_id'] = $this->order['id'];
-		}
 
 		$order['products'][] = $product;
 		$this->setOrder($order);
