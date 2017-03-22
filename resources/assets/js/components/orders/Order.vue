@@ -233,7 +233,6 @@
                 order: {
                     products: {
                         pivot: {
-                            order_id: 0,
                             products_amount: 0,
                             grids_amount: 0,
                             company_discount: 0,
