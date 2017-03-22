@@ -232,7 +232,7 @@ class SalesmanOrderConformer implements OrderConformer {
 		}
 		$product['pivot']['product_id'] = $product_id;
 		$product['pivot']['grid_id'] = $grid_id;
-		$product['pivot']['grid'] = Grid::find($grid_id);
+		//$product['pivot']['grid'] = Grid::find($grid_id);
 		$product['pivot']['company_discount'] = $company_discount;
 		$product['pivot']['products_amount'] = $products_amount;
     $product['pivot']['grids_amount'] = $grids_amount;
