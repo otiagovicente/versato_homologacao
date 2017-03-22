@@ -211,10 +211,10 @@ class SalesmanOrderConformer implements OrderConformer {
 
 
 		$brand_id = Product::find($product_id)->brand->id;
-		$this->addBrand($brand_id);
-		if(!$this->checkBrand($product_id)){
-			return false;
-		}
+		//$this->addBrand($brand_id);
+		//if(!$this->checkBrand($product_id)){
+			//return false;
+		//}
 
 
 		if($this->productExists($product_id, $grid_id)){
@@ -242,7 +242,7 @@ class SalesmanOrderConformer implements OrderConformer {
     $product['pivot']['representative_commission_company'] = 5;//Representative::find($this->order['representative_id'])->brands->find($brand_id)->pivot['commission'];
     $product['pivot']['representative_commission_percentage'] = 0;
 
-    $order = $this->get();
+    //$order = $this->get();
 
 		$order['products'][] = $product;
 		$this->setOrder($order);
