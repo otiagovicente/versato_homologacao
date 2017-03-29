@@ -110,7 +110,7 @@
     }
 
 </style>
-<script type="text/babel">
+<script>
 
     export default{
         data(){
@@ -123,7 +123,7 @@
                 search: '',
                 entries: 10,
                 page: 1,
-                campo: 'id',
+                campo: 'name',
                 cp: '',
                 sequence: 'asc',
             }

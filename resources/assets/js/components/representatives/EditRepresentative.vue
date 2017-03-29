@@ -75,12 +75,9 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
-
 </template>
 
 <style>
@@ -112,7 +109,6 @@
             _this.getRepresentative();
         },
         methods : {
-
             getUsers: function(){
                 this.$http.get('/api/users/selectlist/')
                         .then(response => {
@@ -150,9 +146,6 @@
                                 $('#'+key).addClass('has-error');
                             });
                         });
-
-
-
             }
 
         }

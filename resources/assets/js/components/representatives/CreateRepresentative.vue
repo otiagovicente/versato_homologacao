@@ -84,11 +84,6 @@
     <select-user></select-user>
     <select-region></select-region>
     <select-brands></select-brands>
-
-    <pre>
-        {{ representative | json}}
-    </pre>
-
 </template>
 
 <style>
