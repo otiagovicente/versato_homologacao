@@ -19,7 +19,7 @@ class CustomersController extends Controller
      */
     public function index()
     {
-        $customers = Customer::paginate(10);
+        $customers = Customer::orderBy('name')->take(10)->get();
 
         return view('customers.index', compact('customers'));
     }
@@ -114,11 +114,6 @@ class CustomersController extends Controller
         //Retorna a url completa da imagem que será salva no campo photo do produto
         return Storage::disk('s3')->url($image);
     }
-
-
-
-
-
 
     public function api_index(Request $request){
         $customers = Customer::where('name', 'like', '%'. $request->input('search') .'%')
