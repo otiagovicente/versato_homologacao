@@ -4808,3 +4808,10 @@ ul.notifications {
   border: 1px solid #e5e5e5;
 }
 /** /Dropzone.js **/
+
+.list-customer-index-product-box h3, .list-customer-index-product-box h5 {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

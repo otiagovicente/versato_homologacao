@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <div class="modal fade" id="select-brands" tabindex="-1" role="select-brands" aria-hidden="true" style="display: none;">
+        <div class="modal fade s" id="select-brands" tabindex="-1" role="select-brands" aria-hidden="true" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -47,8 +47,9 @@
                             </div>
                         </div>
 
-
-
+                    </div>
+                    <div class="modal-footer">
+                          <button class="btn blue" data-dismiss="modal">Cerrar</button>  
                     </div>
                 </div>
             </div>

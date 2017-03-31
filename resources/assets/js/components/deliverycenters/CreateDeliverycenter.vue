@@ -216,11 +216,14 @@
                 this.$http.get('/api/deliverycenters/' + deliveryCenterId)
                         .then(response => {
                             _CreateDeliveryCenter.deliverycenter = response.json();
-                            if (!(_CreateDeliveryCenter.deliverycenter.geo == '')) {
+
+                            _CreateDeliveryCenter.fetchAddress();
+
+                            /*if (!(_CreateDeliveryCenter.deliverycenter.geo == '')) {
                                 var geo = JSON.parse(_CreateDeliveryCenter.deliverycenter.geo);
                                 _CreateDeliveryCenter.centerMap(geo.lat, geo.lng);
                                 _CreateDeliveryCenter.addMarker(geo.lat, geo.lng);
-                            }
+                            }*/
                         }).catch(response => {
                     toastr.error('No fue possible cargar a la tienda');
                 });
@@ -309,7 +312,7 @@
             reload: function () {
 
                 _CreateDeliveryCenter.emptyMarkers();
-                _CreateDeliveryCenter.deliverycenter = {
+                _CreateDeliveryCenter.deliverycenter = $.extend(_CreateDeliveryCenter.deliverycenter, {
                     id: '',
                     logo: "/images/default-placeholder.jpg",
                     address: "",
@@ -320,8 +323,9 @@
                     cuit: '',
                     name: '',
                     region_id: [],
+                    description: "",
                     geo: ''
-                };
+                });
                 _CreateDeliveryCenter.regions_select= [];
 
                 _CreateDeliveryCenter.map = {

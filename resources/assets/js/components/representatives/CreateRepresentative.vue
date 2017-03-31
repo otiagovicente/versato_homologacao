@@ -25,8 +25,8 @@
                                     <h4 class="font-blue" >
                                         <div v-if="regions" >
                                             <span v-for=" region in regions">
-                                            {{region.description}},
-                                        </span>
+                                                {{region.description}},
+                                            </span>
                                         </div>
                                         <div v-else>
                                             <span class="font-red" >Elige la región</span>
@@ -127,6 +127,11 @@
             },
             'computeRegionsArray': function () {
                 _CreateRepresentative.representative.regions = new Array();
+                _.forEach(_CreateRepresentative.regions, function (region) {
+                    _CreateRepresentative.representative.regions.push({
+                        id: region.id
+                    });
+                });
             },
             'computeBrandsArray': function () {
                 _CreateRepresentative.representative.brands = new Array();
@@ -243,22 +248,36 @@
                             });
                         });
             },
-            loadBrandsToData: function(){
-                var blAdd = true;
-                _.forEach(_CreateRepresentative.regions, function (region){
-                    for (var i=0; i < _CreateRepresentative.representative.regions.length; ++i) {
-                        if (_CreateRepresentative.representative.regions[i].id == region.id) blAdd = false;
+            loadRegionsToData: function(){
+                _CreateRepresentative.representative.regions = new Array();
+                _.forEach(_CreateRepresentative.regions, function (region) {
+                    _CreateRepresentative.representative.regions.push(region.id);
+                });
+
+                var blAdd = true,
+                    _this = _CreateRepresentative;
+
+                _.forEach(_this.regions, function (region){
+                    for (var i=0; i < _this.representative.regions.length; ++i) {
+                        if (!!_this.representative.regions[i] == region.id) blAdd = false;
                     }
-                    if(blAdd) _CreateRepresentative.representative.regions.push(region.id);
+                    if(blAdd) _this.representative.regions.push(region.id);
                 });
             },
-            loadRegionsToData: function(){
+            loadBrandsToData: function(){
+                _CreateRepresentative.representative.brands = new Array();
+                _.forEach(_CreateRepresentative.brands, function (brand) {
+                    _CreateRepresentative.representative.brands.push({
+                        brand_id: brand.id, commission: parseFloat(brand.comission)
+                    });
+                });
+
                 var blAdd = true;
                 _.forEach(_CreateRepresentative.brands, function (brand) {
                     for (var i=0; i < _CreateRepresentative.representative.brands.length; ++i) {
-                        if (_CreateRepresentative.representative.brands[i].id == brand.id) blAdd = false;
+                        if (_CreateRepresentative.representative.brands[i].brand_id == brand.id) blAdd = false;
                     }
-                    if(blAdd) _CreateRepresentative.representative.brands.push({brand_id: brand.id, representative_comision:brand.comission});
+                    if(blAdd) _CreateRepresentative.representative.brands.push({brand_id: brand.id, commision:brand.comission});
                 });
             },
             update: function () {

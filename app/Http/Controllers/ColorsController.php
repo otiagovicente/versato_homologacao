@@ -113,8 +113,11 @@ class ColorsController extends Controller
        ->paginate($request->input('entries'));
        return response()->json($colors);
    }
-   public function api_list(){
-        $colors = Color::all();
+   public function api_list(Request $request){
+        $colors = Color::select()
+            ->where('description', 'like', '%'. $request->input('search') .'%')
+            ->orWhere('code', 'like', '%'. $request->input('search') .'%' )
+            ->paginate(20);
         return $colors;
     }
 

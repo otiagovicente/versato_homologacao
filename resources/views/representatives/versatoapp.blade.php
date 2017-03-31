@@ -8,7 +8,8 @@
         'url' => '/representatives/grantaccess',
         'actions' => [
             'Mostrar Todos' => '/representatives',
-            'Crear Representante' => '/representatives/create'
+            'Crear Representante' => '/representatives/create',
+            'Editar Representante' => '/representatives/'.$representative->id.'/edit'
         ]
     ])
 

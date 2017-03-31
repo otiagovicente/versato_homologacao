@@ -7,7 +7,8 @@
         'url' => '/products/'.$product->id,
         'actions' => [
             'Mostrar Todos' => '/products',
-            'Crear Producto' => '/products/create'
+            'Crear Producto' => '/products/create',
+            'Editar Producto' => '/products/'.$product->id.'/edit'
         ]
     ])
     <div class="container">

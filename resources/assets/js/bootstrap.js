@@ -38,10 +38,10 @@ window.bootbox = require('bootbox');
 
 import Echo from "laravel-echo"
 
-window.Echo = new Echo({
+/*window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '6c3dd34a782803571d89'
-});
+});*/
 
 
 

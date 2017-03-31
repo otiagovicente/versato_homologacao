@@ -16,3 +16,9 @@
   width: 150px;
   height: auto;
 }
+.list-customer-index-product-box h3, .list-customer-index-product-box h5 {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -177,7 +177,7 @@ class RepresentativesController extends Controller
     }
 
     public function api_brands(Representative $representative){
-
+        $brands = [];
         foreach ($representative->brands()->get() as $brand) {
             $brand['comission'] = $brand->pivot->comission;
             $brands[] = $brand;
@@ -205,7 +205,7 @@ class RepresentativesController extends Controller
 
     public function api_selectList(){
 
-        $representatives = Representative::select(['id as value', 'code as label'])->get();
+        $representatives = Representative::with('user', 'regions')->paginate(20);
 
         return response()->json($representatives);
     }

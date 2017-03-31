@@ -16,7 +16,7 @@
                         </div>
 
                     </div>
-                    <div class="col-md-6 blue call-to-action">
+                    <div class="col-md-6 blue call-to-action grantaccess-container">
 
                         <br><br>
 
@@ -75,6 +75,7 @@
 
                 this.$http.post('/representatives/'+_GrantAccessToVersatoApp.representativeid+'/grantaccess')
                           .then(response => {
+                            $('.grantaccess-container').removeClass('col-md-6').addClass('col-md-12');
                               _GrantAccessToVersatoApp.qrcode = response.data;
                           })
                           .catch(response => {
