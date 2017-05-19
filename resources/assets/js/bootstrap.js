@@ -53,6 +53,7 @@ import Echo from "laravel-echo"
 
 window.Vue = require('vue');
 window.VueResource = require('vue-resource');
+window.EventBus = new Vue({});
 Vue.use(VueResource);
 
 /**

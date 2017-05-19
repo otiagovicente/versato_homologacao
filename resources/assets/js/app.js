@@ -6,7 +6,7 @@
  */
 
 require('./bootstrap');
-
+//require('./event-bus');
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the body of the page. From here, you may begin adding components to
@@ -283,6 +283,12 @@ Vue.component(
     'list-orders',
     require('./components/orders/ListOrders.vue')
 );
+
+Vue.component(
+    'export-data',
+    require('./components/orders/ExportData.vue')
+);
+
 /*
 Vue.component(
     'table-orders-by-brand',
@@ -303,7 +309,9 @@ window.app = new Vue({
     methods: {
         initMap: function(){
             this.$broadcast('MapsApiLoaded');
+        },
+        clickRoot: function() {
+            this.$emit('fromRoot');
         }
     }
-
 });

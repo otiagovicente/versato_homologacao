@@ -6,7 +6,7 @@
 		'url' => '/orders',
 		'actions' => []
 	])
-<div class="container-fluid">
+<div class="container-fluid"> 
 			<list-orders></list-orders>
 </div>
 @stop

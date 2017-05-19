@@ -9,6 +9,7 @@ use App\Order;
 use App\Mail\NewOrderMail;
 use League\Flysystem\Exception;
 use Mail;
+use \Excel;
 
 class OrdersController extends Controller
 {
@@ -18,7 +19,10 @@ class OrdersController extends Controller
             ->with('representative')
             ->with('customer')
             ->paginate(20);
-        return view('orders.index', compact('orders'));
+        $statuses = [['id' => 1, 'label' => 'Activos'], ['id' => 0, 'label' => 'Inactivos']];
+        $exportToExcel = true;
+        //$token = Form::token();
+        return view('orders.index', compact('orders', 'exportToExcel'));
     }
 
     /**
@@ -149,21 +153,171 @@ class OrdersController extends Controller
             ->get();
         return response()->json($orders);
     }
+
+    public function api_generateSheet(Request $request){
+        //\DB::enableQueryLog();
+
+        $search = $request->input('search');
+        $requestBrand = $request->input('brand');
+        $requestMacroregion = $request->input('macroregion');
+        $requestRegion = $request->input('region');
+        $requestRepresentative = $request->input('representative');
+        $requestStatus = $request->input('status_id');
+
+        $orders = Order::with('representative')
+            ->with('representative.regions')
+            ->with('representative.regions.macroregion')
+            ->with('customer')
+            ->with('products')
+            ->where(function($q) use($request, $search) {
+                return $q->where('id', 'like', '%'. $search .'%')
+                    //->orWhere('representative.user.name', 'like', '%'. $request->input('search') .'%')
+                    //->orWhere('customer.name', 'like', '%'. $request->input('search') .'%')
+                    ->orWhere('cost', 'like', '%'. $search .'%')
+                    ->orWhere('price', 'like', '%'. $search .'%')
+                    ->orWhere('cost', 'like', '%'. $search .'%')
+                    ->orWhere('company_discount', 'like', '%'. $search .'%')
+                    ->orWhere('representative_discount', 'like', '%'. $search .'%')
+                    ->orWhere('products_amount', 'like', '%'. $search .'%')
+                    ->orWhere('total', 'like', '%'. $search .'%');
+            });
+
+        if (!empty($requestRepresentative) && is_numeric($requestRepresentative) && (int)$requestRepresentative > 0) {
+            $orders->where('representative_id', '=', $requestRepresentative);
+        }
+
+        if (!empty($requestStatus) && is_numeric($requestStatus) && (int)$requestStatus > 0) {
+            $orders->where('status_id', '=', $requestStatus);
+        }
+
+        if (!empty($requestBrand) && is_numeric($requestBrand) && (int)$requestBrand > 0) {
+            $orders->whereHas('products', function($q) use($requestBrand) {
+                $q->where('brand_id', '=', $requestBrand);
+            });
+        }
+
+        if (!empty($requestMacroregion) && is_numeric($requestMacroregion) && (int)$requestMacroregion > 0) {
+            if (!empty($requestRegion) && is_numeric($requestRegion) && (int)$requestRegion > 0) {
+                $orders->whereHas('representative.regions', function($q) use($requestRegion) {
+                    $q->where('regions.id', '=', $requestRegion);
+                });
+            }
+
+            $orders->whereHas('representative.regions.macroregion', function($q) use($requestMacroregion) {
+                $q->where('id', '=', $requestMacroregion);
+            });
+        }
+
+        $orders = $orders
+            ->orderBy($request->input('campo'), $request->input('sequence'))
+            ->get()
+            /*->paginate($request->input('entries'))*/;
+
+        //$d = \DB::getQueryLog();
+
+        Excel::create('Pedidos', function($excel) use ($orders) {
+            $excel->sheet('Planilha de Pedidos', function($sheet) use ($orders) {
+                $ordersArray = $orders->toArray();
+
+                foreach ($ordersArray as &$order) {
+                    $order = [
+                        'Pedido' => $order['id'],
+                        'Representante' => !empty($order['representative']) && !empty($order['representative']['user']) ? $order['representative']['user']['name'] : '',
+                        'Cliente' => !empty($order['customer']) ? $order['customer']['name'] : '',
+                        'Costo' => $order['cost'],
+                        'Precio' => $order['price'],
+                        'Desc.' => $order['company_discount'],
+                        'Desc. Representante' => $order['representative_discount'],
+                        'Qtd. Productos' => $order['products_amount'],
+                        'Total' => $order['total'],
+                    ];
+                }
+
+                if (count($ordersArray) == 0) {
+                    $ordersArray = [
+                        [
+                            'Pedido' => '',
+                            'Representante' => '',
+                            'Cliente' => '',
+                            'Costo' => '',
+                            'Precio' => '',
+                            'Desc.' => '',
+                            'Desc. Representante' => '',
+                            'Qtd. Productos' => '',
+                            'Total' => '',
+                        ]
+                    ];
+                }
+
+                $sheet->fromArray($ordersArray, null,  'A1', true, true);
+            });
+        })->export('xlsx');
+    }
+
     public function api_index(Request $request){
-      $orders = Order::with('representative')
-          ->with('customer')
-          ->where('id', 'like', '%'. $request->input('search') .'%')
-          //->orWhere('representative.user.name', 'like', '%'. $request->input('search') .'%')
-          //->orWhere('customer.name', 'like', '%'. $request->input('search') .'%')
-          ->orWhere('cost', 'like', '%'. $request->input('search') .'%')
-          ->orWhere('price', 'like', '%'. $request->input('search') .'%')
-          ->orWhere('cost', 'like', '%'. $request->input('search') .'%')
-          ->orWhere('company_discount', 'like', '%'. $request->input('search') .'%')
-          ->orWhere('representative_discount', 'like', '%'. $request->input('search') .'%')
-          ->orWhere('products_amount', 'like', '%'. $request->input('search') .'%')
-          ->orWhere('total', 'like', '%'. $request->input('search') .'%')
-          ->orderBy($request->input('campo'), $request->input('sequence'))
-          ->paginate($request->input('entries'));
-        return response()->json($orders);
+        \DB::enableQueryLog();
+
+        $search = $request->input('search');
+        $requestBrand = $request->input('brand');
+        $requestMacroregion = $request->input('macroregion');
+        $requestRegion = $request->input('region');
+        $requestRepresentative = $request->input('representative');
+        $requestStatus = $request->input('status_id');
+
+        $orders = Order::with('representative')
+            ->with('representative.regions')
+            ->with('representative.regions.macroregion')
+            ->with('customer')
+            ->with('products')
+            ->where(function($q) use($request, $search) {
+                return $q->where('id', 'like', '%'. $search .'%')
+                    //->orWhere('representative.user.name', 'like', '%'. $request->input('search') .'%')
+                    //->orWhere('customer.name', 'like', '%'. $request->input('search') .'%')
+                    ->orWhere('cost', 'like', '%'. $search .'%')
+                    ->orWhere('price', 'like', '%'. $search .'%')
+                    ->orWhere('cost', 'like', '%'. $search .'%')
+                    ->orWhere('company_discount', 'like', '%'. $search .'%')
+                    ->orWhere('representative_discount', 'like', '%'. $search .'%')
+                    ->orWhere('products_amount', 'like', '%'. $search .'%')
+                    ->orWhere('total', 'like', '%'. $search .'%');
+            });
+
+        if (!empty($requestRepresentative) && is_numeric($requestRepresentative) && (int)$requestRepresentative > 0) {
+            $orders->where('representative_id', '=', $requestRepresentative);
+        }
+
+        if (!empty($requestStatus) && is_numeric($requestStatus) && (int)$requestStatus > 0) {
+            $orders->where('status_id', '=', $requestStatus);
+        }
+
+        if (!empty($requestBrand) && is_numeric($requestBrand) && (int)$requestBrand > 0) {
+            $orders->whereHas('products', function($q) use($requestBrand) {
+                $q->where('brand_id', '=', $requestBrand);
+            });
+        }
+
+        if (!empty($requestMacroregion) && is_numeric($requestMacroregion) && (int)$requestMacroregion > 0) {
+            if (!empty($requestRegion) && is_numeric($requestRegion) && (int)$requestRegion > 0) {
+                $orders->whereHas('representative.regions', function($q) use($requestRegion) {
+                    $q->where('regions.id', '=', $requestRegion);
+                });
+            }
+
+            $orders->whereHas('representative.regions.macroregion', function($q) use($requestMacroregion) {
+                $q->where('id', '=', $requestMacroregion);
+            });
+        }
+
+        $orders = $orders
+            ->orderBy($request->input('campo'), $request->input('sequence'))
+            ->paginate($request->input('entries'));
+
+        $d = \DB::getQueryLog();
+
+        $response = response()->json($orders);
+
+        //print_r($d);
+
+        return $response;
     }
 }

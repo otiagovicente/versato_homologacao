@@ -21,12 +21,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Rotas dedicadas às marcas
 
     Route::get('/brands', 'BrandsController@api_index');
-    Route::get('/brands/{brand}', 'BrandsController@api_show');
     Route::get('/brands/selectlist', 'BrandsController@api_selectList');
     Route::get('/brands/selectlistByRepresentativeId/{id}', 'BrandsController@api_selectListByRepresentativeId');
     Route::get('/brands/list', 'BrandsController@api_list');
+    Route::get('/brands/{brand}', 'BrandsController@api_show');
     Route::get('/brands/{brand}/products', 'BrandsController@api_products');
-    Route::get('/brands/selectlist', 'BrandsController@api_selectList');
+    //Route::get('/brands/selectlist', 'BrandsController@api_selectList');
 
 
     //Rotas dedicadas a clientes
@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Rotas dedicada a representante
 
     Route::get('/representatives/selectlist', 'RepresentativesController@api_selectList');
+    Route::get('/representatives/selectlistsimple', 'RepresentativesController@api_selectListSimple');
 
     Route::get('/representatives','RepresentativesController@api_index');
     Route::get('/representatives/search', 'RepresentativesController@api_search');
@@ -66,10 +67,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //Rotas dedicadas à Macro Regiões e Regiões
 
-	Route::get('/macroregions/', 'MacroregionsController@api_index');
-    Route::get('/macroregions/selectlist/', 'MacroregionsController@selectList');
+	Route::get('/macroregions', 'MacroregionsController@api_index');
+    Route::get('/macroregions/selectlist', 'MacroregionsController@selectList');
     Route::get('/macroregions/geo/{id}', 'MacroregionsController@getMacroregionGeo');
     Route::get('/macroregions/{macroregion}/regions', 'MacroregionsController@api_regions');
+    Route::get('/macroregions/{macroregion}/regionsselectlist', 'MacroregionsController@api_regionsselectlist');
     Route::get('/macroregions/{id}', 'MacroregionsController@api_macroregion');
 
     Route::get('/regions/selectlist', 'RegionsController@api_selectList');

@@ -26,6 +26,7 @@ class Order extends Model
             'representative_commission_discount', 'representative_commission_percentage', 'company_discount', 'representative_discount')
             ->withTimestamps();
     }
+
     public function representative(){
         return $this->belongsTo(Representative::class)->with('user');
     }

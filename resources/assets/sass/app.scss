@@ -22,3 +22,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.form-group.v-select .form-control {
+  height: auto;
+}

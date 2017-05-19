@@ -18,20 +18,70 @@
         <div class="row">
             <div class="md-col-12">
                 <div class="col-md-12">
-                  <div class="col-md-2">
-                    <div class="form-group">
-                      <select class="form-control" v-model="entries" v-on:change="getOrders()">
-                        <option>10</option>
-                        <option>15</option>
-                        <option>25</option>
-                        <option>50</option>
-                        <option>100</option>
-                      </select>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select class="form-control" v-model="entries" v-on:change="getOrders()">
+                                <option>10</option>
+                                <option>15</option>
+                                <option>25</option>
+                                <option>50</option>
+                                <option>100</option>
+                            </select>
+                        </div>
                     </div>
-                  </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="status_select" :value.sync="status_id"
+                                placeholder="Status" class="form-control"
+                                id="status-input" name="status"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="brands_select" :value.sync="brand_id"
+                                placeholder="Marca" class="form-control"
+                                id="brand-input" name="brand"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="macroregions_select" :value.sync="macroregion_id"
+                                placeholder="Macro regiones" class="form-control"
+                                id="macroregion-input" name="macroregion"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="regions_select" :value.sync="region_id"
+                                placeholder="Regiones" class="form-control"
+                                id="region-input" name="region"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="representatives_select" :value.sync="representative_id"
+                                placeholder="Representante" class="form-control"
+                                id="representative-input" name="representative"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
+        </div>
         <hr>
         <div class="content-fluid" style="padding:20px;">
 		<div class="row">
@@ -79,7 +129,19 @@
             </ul>
             </div>
         </div>
-
+        <div class="hide form-excel">
+            <form action='/orders/generate-sheet' method="post" class="hide">
+                <input type="hidden" name="search" :value.sync="search"/>
+                <input type="hidden" name="campo" :value.sync="campo"/>
+                <input type="hidden" name="sequence" :value.sync="sequence"/>
+                <input type="hidden" name="brand" :value.sync="brand_id"/>
+                <input type="hidden" name="representative" :value.sync="representative_id"/>
+                <input type="hidden" name="macroregion" :value.sync="macroregion_id"/>
+                <input type="hidden" name="region" :value.sync="region_id"/>
+                <input type="hidden" name="status_id" :value.sync="status_id"/>
+                <input type="submit" />
+            </form>
+        </div>
     </div>
 </template>
 
@@ -110,10 +172,34 @@
 
 </style>
 <script type="text/babel">
-
+    import VueStrap from 'vue-strap';
+    
     export default{
+        components: {
+            vSelect: VueStrap.select,
+            vOption: VueStrap.option
+        },
         data(){
             return{
+                brands_select:[],
+                macroregions_select:[],
+                regions_select:[],
+                representatives_select:[],
+                status_select: [
+                    { value: 1, label: 'Abierto' },
+                    { value: 2, label: 'Aprovado' },
+                    { value: 3, label: 'Reprovado' },
+                    { value: 4, label: 'Faturado' },
+                    { value: 5, label: 'Enviado' },
+                    { value: 6, label: 'Recebido' },
+                ],/*
+                <option value="1">Abierto</option>
+                                <option value="2">Aprovado</option>
+                                <option value="3">Reprovado</option>
+                                <option value="4">Faturado</option>
+                                <option value="5">Enviado</option>
+                                <option value="6">Recebido</option>
+                */
                 orders: {
                     data: {
                       data: [],
@@ -124,11 +210,31 @@
                 page: 1,
                 campo: 'id',
                 sequence: 'asc',
+                brand_id: null,
+                macroregion_id: null,
+                region_id: null,
+                representative_id: null,
+                status_id: null,
             }
         },
         watch: {
+            'brand_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
+            },
+            'macroregion_id': function (val) {
+                _listOrders.getRegions(val, doIt => _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id));
+            },
+            'region_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
+            },
+            'representative_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
+            },
+            'status_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
+            },
             'search': function (val) {
-                _listOrders.getOrders();
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
             },
             'orders.data.last_page': function (val) {
                if(_listOrders.page > val){
@@ -139,15 +245,91 @@
         },
         ready(){
             window._listOrders = this;
+            _listOrders.getBrands();
+            _listOrders.getMacroregions();
+            //_listOrders.getRegions();
+            _listOrders.getRepresentatives();
             _listOrders.getOrders();
 
+            _listOrders.$parent.$on('fromRoot', () => _listOrders.methodMeiLoco());
         },
         methods:{
-            getOrders: function(){
+            methodMeiLoco: function() {
+                /*var brand = _listOrders.brand_id || '';
+                var representative = _listOrders.representative_id || '';
+                var macroRegion = _listOrders.macroregion_id || '';
+                var region = _listOrders.region_id || '';
+                var _this = this;
+                _this.$http.post('/api/orders/generate-sheet', {
+                    campo : _listOrders.campo,
+                    sequence : _listOrders.sequence,
+                    brand : brand,
+                    representative : representative,
+                    macroregion : macroRegion,
+                    region : region,
+                    search :_listOrders.search
+                })
+                .then(response => {
+                    _this.brands_select = response.json();
+                });*/
+                $('input[type="hidden"][name="_token"]').appendTo($('.form-excel form'));
+                $('.form-excel form input[type=submit]').click();
+            },
+            getBrands: function(){
+                var _this = this;
+                _this.$http.get('/api/brands/selectlist')
+                .then(response => {
+                    _this.brands_select = response.json();
+                });
+            },
+            getMacroregions: function(){
+                var _this = this;
+                _this.$http.get('/api/macroregions/selectlist')
+                .then(response => {
+                    _this.macroregions_select = response.json();
+                });
+            },
+            getRegions: function(macroRegion, cb){
+                var _this = this;
+
+                if (!!_this.region_id)
+                    _this.region_id = null;
+
+                if (!macroRegion) {
+                    _this.regions_select = [];
+                    cb();
+                    return;
+                }
+
+                _this.$http.get('/api/macroregions/'+macroRegion+'/regionsselectlist')
+                .then(response => {
+                    cb();
+                    _this.regions_select = response.json();
+                });
+            },
+            getRepresentatives: function(){
+                var _this = this;
+                _this.$http.get('/api/representatives/selectlistsimple')
+                .then(response => {
+                    _this.representatives_select = response.json();
+                });
+            },
+            getOrders: function(brand, representative){
+                var brand = brand || '';
+                var representative = representative || '';
+                var macroRegion = _listOrders.macroregion_id || '';
+                var region = _listOrders.region_id || '';
+                var status = _listOrders.status_id || '';
+
                 this.$http.get('/api/orders/listIndex?page=' + _listOrders.page +
                 '&entries=' + _listOrders.entries  +
                 '&campo='+_listOrders.campo +
                 '&sequence='+_listOrders.sequence +
+                '&brand='+ brand +
+                '&representative='+ representative +
+                '&macroregion='+ macroRegion +
+                '&region='+ region +
+                '&status_id='+ status +
                 '&search='+_listOrders.search)
                     .then((response) => {
 
@@ -168,8 +350,9 @@
               if (n > _listOrders.orders.data.last_page){
                 n = _listOrders.orders.data.last_page;
               }
+              
               _listOrders.page=n;
-              _listOrders.getOrders();
+              _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
             },
             setCampo(cp){
               if (_listOrders.campo != cp){
@@ -178,7 +361,7 @@
                 _listOrders.sequence = 'desc';
               }
               _listOrders.campo = cp;
-              _listOrders.getOrders();
+              _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
             }
         }
     }

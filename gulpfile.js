@@ -13,7 +13,6 @@ require('laravel-elixir-vue');
  | file for our application, as well as publishing vendor resources.
  |
  */
-
 elixir(mix => {
     mix.sass('app.scss')
         .styles(['../../../node_modules/animate.css/animate.min.css',

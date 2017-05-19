@@ -63,6 +63,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/users/changepassword', 'UsersController@changePassword');
     Route::resource('users','UsersController',['parameters' => 'singular']);
 
+	
+    Route::post('/orders/generate-sheet', 'OrdersController@api_generateSheet');
+
 	//Route::get('/home', 'HomeController@index');
 
     Route::get('/brands/select', 'BrandsController@select');

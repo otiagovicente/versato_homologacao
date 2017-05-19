@@ -209,6 +209,19 @@ class RepresentativesController extends Controller
 
         return response()->json($representatives);
     }
+    
+    public function api_selectListSimple(){
+        $representatives = Representative::with('user')->get();
+        $selectList = [];
+        
+        foreach($representatives as $representative){
+            $selectItem['value'] = $representative->id;
+            $selectItem['label'] = $representative->user->name;
+            $selectList[] = $selectItem;
+        }
+
+        return response()->json($selectList);
+    }
 
 	public function api_search(Request $request){
 

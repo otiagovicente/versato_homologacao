@@ -147,11 +147,7 @@ class BrandsController extends Controller
     public function setSelected(Request $request, Brand $brand){
         $request->session()->put('brand', $brand);
         return redirect('/');
-
     }
-
-
-
 
     public function api_index(){
         $brands = Brand::all();
@@ -168,13 +164,16 @@ class BrandsController extends Controller
 
     public function api_selectList(){
         $brands = Brand::all();
+        $selectList = [];
         foreach($brands as $brand){
+            $selectItem = [];
             $selectItem['value'] = $brand->id;
             $selectItem['label'] = $brand->name;
             $selectList[] = $selectItem;
         }
         return response()->json($selectList);
     }
+
     public function api_selectListByRepresentativeId($id){
         $brands = Brand::all();
         
@@ -183,6 +182,7 @@ class BrandsController extends Controller
             $selectItem['label'] = $brand->name;
             $selectList[] = $selectItem;
         }
+
         return response()->json($selectList);
     }
 
