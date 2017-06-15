@@ -11,7 +11,7 @@
   <tr>
     <td valign="top" align="center" bgcolor="#F3F3F3" width="100%">
     <!-- mail header -->
-    <table cellspacing="0" cellpading="0" width="100%" height="100px" style="margin-top:50px;">
+    <table cellspacing="0" cellpadding="0" width="100%" height="100px" style="margin-top:50px;">
       <tr>
         <td valign="center" bgcolor="#33495F" width="60%">
             <img src="https://s3-sa-east-1.amazonaws.com/sistema-versato/products/7ce92de2da23db33cd9296a768e5fdd7.jpeg" 
@@ -29,7 +29,7 @@
     </table>
     <!-- /mail header -->
     <!-- info pedido -->
-    <table cellspacing="0" cellpading="0" width="100%" height="80px" >
+    <table cellspacing="0" cellpadding="0" width="100%" data-height="80px" >
       <tr>
         <td valign="center" align="center" bgcolor="#FFFFFF" width="50%">
             <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:13px; font-weight:normal; color: #33495f;">
@@ -51,7 +51,7 @@
     </table>
     <!-- /info pedido -->
     <!-- product list header -->
-    <table cellspacing="5" cellpading="0" width="100%" height="60px" >
+    <table cellspacing="5" cellpadding="0" width="100%" data-height="60px" >
       <tr>
         <td valign="center" align="left" bgcolor="#f2f2f2" width="32%">
           <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;  width: 100%; text-align:center"><b>Producto</b></span>
@@ -77,7 +77,7 @@
     <!-- product list -->
 
     
-    <table cellspacing="1" cellpading="0" width="100%" >
+    <table cellspacing="1" cellpadding="0" width="100%" >
       <!-- row 1 -->
         @foreach( $order->products as $product )
             <tr>
@@ -102,12 +102,12 @@
                 </td>
                 <td valign="center" align="center" bgcolor="#ffffff" width="10%">
                     <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #000; margin-top: 15px;   width: 100%; text-align:center">
-                        {{$product->client_discount? $product->client_discount:0}}%
+                        {{$product->discount? $product->discount:0}}%
                     </span>
                 </td>
                 <td valign="center" align="center" bgcolor="#ffffff" width="10%">
                     <span style="font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #000; margin-top: 15px;   width: 100%; text-align:center">
-                        {{$product->representative_discount? $product->representative_discount : 0}}%
+                        {{$product->pivot->representative_discount? $product->pivot->representative_discount : 0}}%
                     </span>
                 </td>
                 <td valign="center" align="right" bgcolor="#ffffff" width="16%">
@@ -121,7 +121,7 @@
     </table>
     <!-- /product-list  -->
     <!-- totais -->
-    <table cellspacing="4" cellpading="0" width="100%" height="60px" style="border:1px solid #e2e2e2; margin-top:5px;">
+    <table cellspacing="4" cellpadding="0" width="100%" data-height="60px" style="border:1px solid #e2e2e2; margin-top:5px;">
       <tr>
         <td valign="center" align="left" bgcolor="#f2f2f2" width="35%">
           <span style="margin-left:4%;font-family: Helvetica, 'Arial', sans-serif; font-size:12px; font-weight:normal; color: #999; margin-top: 15px;  width: 100%; text-align:center"><b>Totales</b></span>

@@ -13,7 +13,7 @@ class OrderProduct extends Model
     use Searchable;
     //use Notifiable;
 
-    protected $fillable = ['cost','price','discount','representative_id','representative_comision'
+    protected $fillable = ['cost','price','discount','representative_id','representative_commission'
         ,'representative_discount','grid_id', 'order_id', 'product_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 

@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CustomerRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 
 use App\Customer;
+use App\ImportCustomer;
 
 class CustomersController extends Controller
 {
@@ -140,9 +142,6 @@ class CustomersController extends Controller
         return response()->json($selectList);
     }
 
-
-
-
     public function api_getShops(Customer $customer){
         return $customer->shops()->get();
     }
@@ -163,12 +162,18 @@ class CustomersController extends Controller
     }
 
     public function api_search(Request $request){
-
-
 	    $customers = Customer::search($request->search)->get();
-
 	    return response()->json($customers);
-
-
+    }
+    
+    public function api_getImportedCustomers(){
+        return 'bla bla';
+        
+        $importCustomers = DB::table('importcustomers')->get();
+        return response()->json($importCustomers);
+    }
+    public function api_getImportedCustomersBySearch(Request $request){
+        $importCustomers = DB::table('importcustomers')->search($request->search)->get();
+        return response()->json($importCustomers);
     }
 }

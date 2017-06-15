@@ -8,7 +8,7 @@
 
                         <div class="portlet light" >
                             <div class="portlet-title">
-                                <div class="caption font-blue">
+                                <div class="caption font-blue"x>
                                     <i class="fa fa-map-pin font-blue"></i>Regiones
                                 </div>
                             </div>

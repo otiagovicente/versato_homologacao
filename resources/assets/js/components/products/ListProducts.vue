@@ -147,7 +147,7 @@
                 url : '',
                 products: {},
                 pagination : {},
-                paginationLinks : [],
+                paginationLinks : {},
             }
         },
         components:{

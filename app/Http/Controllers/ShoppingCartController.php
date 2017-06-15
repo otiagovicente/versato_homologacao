@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Representative;
 use App\Shop;
 use Illuminate\Http\Request;
@@ -25,13 +26,11 @@ class ShoppingCartController extends Controller
 	}
 
 	public function getProducts(ShoppingCart $shoppingCart){
-		$products = $shoppingCart->getProducts();
-
-		return response()->json($products);
+		return response()->json($shoppingCart->getProducts());
 	}
+
 	public function getOrder(ShoppingCart $shoppingCart){
-		$order = $shoppingCart->getOrder();
-		return response()->json($order);
+		return response()->json($shoppingCart->getOrder());
 	}
 
 	public function deleteProduct(Product $product, ShoppingCart $shoppingCart){
@@ -76,18 +75,18 @@ class ShoppingCartController extends Controller
 
 
 	public function setProductAmount(Request $request, ShoppingCart $shoppingCart){
-		$shoppingCart->setProductAmount($request->product['id'], round($request->amount));
-		return response()->json($shoppingCart->getProductAmount($request->product['id']));
+		$shoppingCart->setProductAmount($request->id, round($request->pivot['amount']));
+		return response()->json($shoppingCart->getProductAmount($request->id));
 	}
 
 	public function setProductCustomerDiscount(Request $request, ShoppingCart $shoppingCart){
-		$shoppingCart->setProductCustomerDiscount($request->product['id'], round($request->discount));
-		return response()->json($shoppingCart->getProductCustomerDiscount($request->product['id']));
+		$shoppingCart->setProductCustomerDiscount($request->id, round($request->pivot['discount']));
+		return response()->json($shoppingCart->getProductCustomerDiscount($request->id));
 
 	}
 	public function setProductRepresentativeDiscount(Request $request, ShoppingCart $shoppingCart){
-		$shoppingCart->setProductRepresentativeDiscount($request->product['id'], round($request->representative_discount));
-		return response()->json($shoppingCart->getProductRepresentativeDiscount($request->product['id']));
+		$shoppingCart->setProductRepresentativeDiscount($request->id, round($request->pivot['representative_discount']));
+		return response()->json($shoppingCart->getProductRepresentativeDiscount($request->id));
 
 	}
 
@@ -97,6 +96,17 @@ class ShoppingCartController extends Controller
 	}
 	public function getStatus(ShoppingCart $shoppingCart){
 		return $shoppingCart->getStatus();
+	}
+
+	public function loadOrder($order_id, ShoppingCart $shoppingCart){
+		return response()->json($shoppingCart->loadOrder($order_id));
+	}
+	public function updateOrder(Request $request, ShoppingCart $shoppingCart){
+		return $shoppingCart->updateOrder($request);
+	}
+
+	public function stopShopping(ShoppingCart $shoppingCart){
+		$shoppingCart->stopShopping();
 	}
 
 	public function save(ShoppingCartSaveRequest $request, ShoppingCart $shoppingCart){

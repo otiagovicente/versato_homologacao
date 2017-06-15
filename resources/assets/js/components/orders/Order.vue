@@ -19,17 +19,8 @@
                 <div class="page-toolbar">
                     <button class="btn green-jungle pull-right" style="margin-right:10px;" v-on:click="save()">Guardar Pedido</button>
                    <a href="/products"><button class="btn blue pull-right" style="margin-right:10px;">Adicionar Producto</button></a>
-                    <div class="form-group">
-                        <label for="sel1">Status:</label>
-                        <select class="form-control" id="sel1" v-model="order.status_id">
-                            <option value="1">Abierto</option>
-                            <option value="2">Aprovado</option>
-                            <option value="3">Reprovado</option>
-                            <option value="4">Faturado</option>
-                            <option value="5">Enviado</option>
-                            <option value="6">Recebido</option>
-                        </select>
-                    </div>
+                   <button class="btn red" style="margin-right:10px;" v-on:click="cancelOrder()">Cancelar Pedido</button>
+
                 </div>
             </div>
 
@@ -37,9 +28,28 @@
 
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">
-                        <span class="caption-subject bold uppercase">Pedido</span>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+
+                            <h1>Pedido</h1>
+
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <div class="col-md-12 col-sm-12 col-xs-12 form-group pull-right">
+                                <select class="col-md-9 col-sm-9 col-xs-9 form-control"  v-model="order.status_id">
+                                    <option value="1">Abierto</option>
+                                    <option value="2">Aprovado</option>
+                                    <option value="3">Reprovado</option>
+                                    <option value="4">Faturado</option>
+                                    <option value="5">Enviado</option>
+                                    <option value="6">Recebido</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
                 <div class="portlet-body">
 
@@ -76,7 +86,7 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group">
-                                <textarea class="form-control" rows="5" v-model="order.comment" placeholder="Comentarios" style="width:100%;"></textarea>
+                                <textarea class="form-control" rows="5" v-model="order.comment" debounce="500" placeholder="Comentarios" style="width:100%;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -115,37 +125,37 @@
 
                     </div>
                     <div class="portlet-body">
-                            <div class="product-list-list" v-if="!products.product">
-                                <div  class="col-md-12 col-sm-12 col-xs-12" v-for="product in products">
+                            <div class="product-list-list" v-if="!order.products.pivot">
+                                <div  class="col-md-12 col-sm-12 col-xs-12" v-for="product in order.products">
 
                                     <div class="col-md-12 col-sm-12 col-xs-12 product-list-product-box">
                                         <div class="col-md-2 col-sm-2 col-xs-2">
-                                            <img v-show="product.product.photo" v-bind:src="product.product.photo" class="product-list-photo">
+                                            <img v-show="product.photo" v-bind:src="product.photo" class="product-list-photo">
                                         </div>
                                         <div class="col-md-10 col-sm-10 col-xs-10">
                                             <div class="col-md-12 col-sm-12 col-xs-12">
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
                                                     <div class="input-group">
-                                                        <slider-component :slider_value.sync="product.amount" v-on:update="setProductAmount(product.product.id)" :slider_max="250"></slider-component>
+                                                        <slider-component :slider_value.sync="product.pivot.amount" v-on:update="setProductAmount(product.id)" :slider_max="250"></slider-component>
                                                         <!--<input class="form-control" type="number" min="0" v-model="product.amount" aria-label="Cantidad">-->
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
-                                                    <slider-component :slider_value.sync="product.discount"  v-on:update="setProductCustomerDiscount(product.product.id)" :slider_max="10" slider_fgcolor="#8bed8c"></slider-component>
+                                                    <slider-component :slider_value.sync="product.pivot.discount"  v-on:update="setProductCustomerDiscount(product.id)" :slider_max="10" slider_fgcolor="#8bed8c"></slider-component>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
-                                                    <slider-component :slider_value.sync="product.representative_discount" v-on:update="setProductRepresentativeDiscount(product.product.id)" :slider_max="5" slider_fgcolor="#8bed8c"></slider-component>
+                                                    <slider-component :slider_value.sync="product.pivot.representative_discount" v-on:update="setProductRepresentativeDiscount(product.id)" :slider_max="5" slider_fgcolor="#8bed8c"></slider-component>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
-                                                    <h4 class="font-blue">Tarea <strong>{{ product.total | currency '$' }}</strong></h4>
-                                                    <h5 class="font-blue"><s>{{product.total_sum | currency '$'}}</s></h5>
-                                                    <h5 class="font-blue" v-show="product.product.price">{{product.product.price | currency '$' }} un</h5>
+                                                    <h4 class="font-blue">Tarea <strong>{{ product.pivot.total | currency '$' }}</strong></h4>
+                                                    <h5 class="font-blue"><s>{{ product.pivot.price | currency '$'}}</s></h5>
+                                                    <h5 class="font-blue" v-show="product.price">{{product.price | currency '$' }} un</h5>
                                                 </div>
 
 
                                             </div>
                                         </div>
-                                        <i class="fa fa-close delete-product" v-on:click="deleteProduct(product.product.id)"></i>
+                                        <i class="fa fa-close delete-product" v-on:click="deleteProduct(this)"></i>
                                     </div>
                                 </div>
 
@@ -221,18 +231,20 @@
                         email: ''
                     }
                 },
-                products: {
-                    product: {
-                        total: 0,
-                        total_sum: 0,
-                        total_customer_discount: 0,
-                        total_representative_discount: 0,
-                        total_discount: 0,
+                order: {
+                    products: {
+                        pivot: {
+                            total: 0,
+                            price: 0,
+                            customer_discount: 0,
+                            representative_discount: 0,
+                            representative_commission: 0,
+                            total_discount: 0,
+
+                        },
                         price: 0.00,
                         photo: '',
-                    }
-                },
-                order: {
+                    },
                     comment: '',
                     status_id: 1,
                     representative_discount: 0.00,
@@ -260,18 +272,13 @@
                 }
             },
             'order.status_id': function (val, oldVal) {
-                if (val != oldVal) {
+                if ((val != oldVal) && (val != null)) {
                     _Order.setStatus();
                 }
             },
             'order.representative_discount': function (val, oldVal) {
                 if (val != oldVal) {
                     _Order.setRepresentativeDiscount();
-                }
-            },
-            'products': function (val, oldVal) {
-                if (val != oldVal) {
-                    _Order.getOrder();
                 }
             }
 
@@ -285,7 +292,7 @@
         },
         ready(){
             window._Order = this;
-            _Order.getProducts();
+
             _Order.getOrder();
         },
         methods: {
@@ -295,7 +302,7 @@
             getProducts(){
                 this.$http.get('/shopping-cart/get-products')
                         .then(response => {
-                            _Order.products = response.json();
+                            _Order.order.products = response.json();
                         })
                         .catch(response => {
                             toastr.error('No fué possible cargar los productos');
@@ -310,6 +317,16 @@
                             toastr.error('No fué posible cargar el pedido');
                         });
             },
+            updateOrder(){
+                this.$http.post('/shopping-cart/update-order', _Order.order)
+                        .then(response => {
+                            _Order.order = response.json();
+                            console.log('pedido salvo');
+                        })
+                        .catch(response => {
+                            console.log('pedido não salvo');
+                        });
+            },
             calculateProductValue(product_id){
                 this.$http.get('/shopping-cart/calculate-product/' + product_id)
                         .then(response => {
@@ -318,14 +335,10 @@
 
                 });
             },
-            deleteProduct(product_id){
-                this.$http.get('/shopping-cart/delete-product/' + product_id)
-                        .then(response => {
-                            _Order.getProducts();
-                        })
-                        .catch(response => {
-                            toastr.error('No fué posible eliminar el producto');
-                        });
+            deleteProduct(product){
+                _Order.order.products.splice(product.$index, 1);
+                console.log(product.$index);
+                this.updateOrder();
             },
             getRepresentative(){
                 this.$http.post('/shopping-cart/get-representative')
@@ -351,88 +364,42 @@
                 _OrderAddCustomer.openWindow();
             },
             setComment(){
-                this.$http.post('/shopping-cart/set-comment', _Order.order)
-                        .then(response => {
-                            console.log('Comments saved');
-                        })
-                        .catch(response => {
-                            console.log("Comments didn't save");
-                        });
+                this.updateOrder();
             },
             setCustomerDiscount(){
-                this.$http.post('/shopping-cart/set-customer-discount/', _Order.order)
-                        .then(response => {
-                            _Order.order.customer_discount = response.json();
-                            _Order.getProducts();
-                            console.log('Disconto atualizado');
-                        })
-                        .catch(response => {
-                            console.log('Disconto não atualizado');
-                        });
+                this.updateOrder();
             },
             setRepresentativeDiscount(){
-                this.$http.post('/shopping-cart/set-representative-discount/', _Order.order)
-                        .then(response => {
-                            _Order.order.representative_discount = response.json();
-                            _Order.getProducts();
-                            console.log('Disconto atualizado');
-                        })
-                        .catch(response => {
-                            console.log('Disconto não atualizado');
-                        });
+                this.updateOrder();
             },
-            setProductAmount(product_id){
-                var product = _.find(_Order.products, function (obj) {
-                    return obj.product.id === product_id;
+            findProduct(product_id, grid_id){
+                return _.find(_Order.order.products, function (obj) {
+                    return (obj.id === product_id && obj.pivot.grid_id === grid_id);
                 });
-                this.$http.post('/shopping-cart/set-product-amount', product)
-                        .then(response => {
-                            product.product.amount = response.json();
-                            _Order.getProducts();
-                        })
-                        .catch(response => {
-                            toastr.error('No se aplicó el descuento');
-                        });
+            },
+            setProductAmount(product_id, grid_id){
+                this.updateOrder();
             },
             setProductCustomerDiscount(product_id){
-                var product = _.find(_Order.products, function (obj) {
-                    return obj.product.id === product_id;
-                });
-                this.$http.post('/shopping-cart/set-product-customer-discount', product)
-                        .then(response => {
-                            product.product.discount = response.json();
-                            _Order.getProducts();
-                        })
-                        .catch(response => {
-                            toastr.error('No se aplicó el descuento');
-                        });
+                this.updateOrder();
             },
             setProductRepresentativeDiscount(product_id){
-                var product = _.find(_Order.products, function (obj) {
-                    return obj.product.id === product_id;
-                });
-                this.$http.post('/shopping-cart/set-product-representative-discount', product)
-                        .then(response => {
-                            product.product.representative_discount = response.json();
-                            _Order.getProducts();
-                        })
-                        .catch(response => {
-                            toastr.error('No se aplicó el descuento');
-                        });
+                this.updateOrder();
             },
             setStatus(){
-                this.$http.post('/shopping-cart/set-status', _Order.order)
-                        .then(response => {
-                            _Order.order.status_id = response.json();
-                        }).catch(response => {
-                    toastr.error('No fué posible atualizar el status del pedido');
-                });
+                this.updateOrder();
             },
             getStatus(){
             },
-
+            cancelOrder(){
+                this.$http.post('/shopping-cart/stop-shopping')
+                        .then( response => {
+                            _Order.getOrder();
+                        }).catch(response => {
+                            toastr.error('No fué possible cancelar el pedido');
+                        });
+            },
             save(){
-                alert('ué');
                 this.$http.post('/shopping-cart/save', _Order.order)
                         .then(response => {
                             toastr.success('Pedido guardado');

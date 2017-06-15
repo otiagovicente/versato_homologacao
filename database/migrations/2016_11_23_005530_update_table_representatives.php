@@ -13,10 +13,10 @@ class UpdateTableRepresentatives extends Migration
      */
     public function up()
     {
-        Schema::table('representatives', function ($table) {
-            $table->boolean('manager');
-            $table->integer('macroregion_id');
-        });
+//        Schema::table('representatives', function ($table) {
+//            $table->boolean('manager');
+//            $table->integer('macroregion_id');
+//        });
     }
 
     /**
@@ -26,9 +26,9 @@ class UpdateTableRepresentatives extends Migration
      */
     public function down()
     {
-        Schema::table('representatives', function($table) {
-            $table->dropColumn('manager');
-            $table->dropColumn('macroregion_id');
-        });
+//        Schema::table('representatives', function($table) {
+//            $table->dropColumn('manager');
+//            $table->dropColumn('macroregion_id');
+//        });
     }
 }

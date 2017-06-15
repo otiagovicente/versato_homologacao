@@ -1,7 +1,7 @@
 <?php
 
 use App\Mail\NewOrderMail;
-
+use App\Order;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +22,8 @@ Auth::routes();
 
 Route::get('/representatives/qrcode', 'RepresentativesController@createTokenQRCode');
 Route::get('/enviamail/{id}','OrdersController@sendNewOrderMail');
+Route::get('/orders/getOrdersByCustomer/{dtInicio}/{dtFim}', 'OrdersController@api_getOrdersByCustomer');
+
 Route::get('/resizeimage', function(){
 
 	$file = "https://s3-sa-east-1.amazonaws.com/sistema-versato/products/96ce32aeac4385131c0a4bab7ba0b9ed.jpeg";
@@ -120,6 +122,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/shopping-cart/add-product', 'ShoppingCartController@addProduct');
 	Route::get('/shopping-cart/get-products', 'ShoppingCartController@getProducts');
 	Route::get('/shopping-cart/get-order', 'ShoppingCartController@getOrder');
+	Route::post('/shopping-cart/update-order', 'ShoppingCartController@updateOrder');
+
+
 	Route::get('/shopping-cart/delete-product/{product}', 'ShoppingCartController@deleteProduct');
 	Route::post('/shopping-cart/set-customer/{customer}', 'ShoppingCartController@setCustomer');
 	Route::get('/shopping-cart/get-customer', 'ShoppingCartController@getCustomer');
@@ -134,9 +139,23 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/shopping-cart/set-representative/{representative}', 'ShoppingCartController@setRepresentative');
 	Route::post('/shopping-cart/get-representative', 'ShoppingCartController@getRepresentative');
 
+	Route::get('/shopping-cart/load-order/{id}','ShoppingCartController@loadOrder');
+	Route::get('/shopping-cart/order/{order_id}','ShoppingCartController@loadOrder');
+
+
 	Route::post('/shopping-cart/set-status','ShoppingCartController@setStatus');
 	Route::get('/shopping-cart/get-status','ShoppingCartController@getStatus');
 	Route::post('/shopping-cart/save','ShoppingCartController@save');
+	Route::post('/shopping-cart/stop-shopping','ShoppingCartController@stopShopping');
 
 	Route::resource('reports','ReportsController',['parameters' => 'singular']);
+	
+	Route::get('imports/customer','ImportsController@customer');
+	Route::get('imports/customer/downloadExcel/{type}', 'ImportsController@downloadExcel');
+	Route::post('imports/customer/importExcel', 'ImportsController@importExcel');
+
+	Route::get('exports/orders', 'ExportsController@order');
+
+	Route::get('/orders/exportOrdersByDate/{dtInicio}/{dtFim}/', 'OrdersController@api_exportOrdersByDate');
+
 });
