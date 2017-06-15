@@ -73,10 +73,10 @@ class UsersController extends Controller
         ]);
 
         //Faz upload da imagem para o Driver AWS S3
-        $image = $request->file('photo')->store('users','s3');
+        $image = $request->file('photo')->store('users','gcs');
 
         //Torna acessível publicamente a imagem
-        Storage::disk('s3')->setVisibility($image, 'public');
+        Storage::disk('gcs')->setVisibility($image, 'public');
 
         /*
          * Espera 5 segundos para garantir que a visibilidade do
@@ -86,7 +86,7 @@ class UsersController extends Controller
         sleep(5);
 
         //Retorna a url completa da imagem que será salva no campo photo do produto
-        return Storage::disk('s3')->url($image);
+        return Storage::disk('gcs')->url($image);
 
     }
 

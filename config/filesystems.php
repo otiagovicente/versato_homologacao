@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'cloud' => 's3',
+    'cloud' => 'gcs',
 
     /*
     |--------------------------------------------------------------------------
@@ -54,12 +54,23 @@ return [
             'visibility' => 'public',
         ],
 
-        's3' => [
+        /*'s3' => [
             'driver' => 's3',
             'key' => env('S3_KEY', 'AKIAIMIP246HE23324MQ'),
             'secret' => env('S3_SECRET', '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'),
             'region' => env('S3_REGION', 'sa-east-1'),
             'bucket' => env('S3_BUCKET', 'sistema-versato'),
+        ],*/
+
+        'gcs' => [
+            'driver' => 'gcs',
+            'credentials' => storage_path('app/credentials-gcs.json'),
+			//'key' => env('GCS_KEY', 'GOOG4G5JS34QA7LM6AHJ'),
+            //'secret' => env('GCS_SECRET', '5vr9e/hfRxLXRSLvwRT4twTZjUtc8SsCfbrHa2+M'),
+			'project_id' => 'versato-170818',
+			//'region' => 'sa-east-1',
+            'bucket' => env('GCS_BUCKET', 'versato-images'),
+            //'base_url' => env('GCS_BASE_URL', 'https://storage.googleapis.com'),
         ],
 
     ],

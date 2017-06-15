@@ -164,9 +164,9 @@ class ProductsController extends Controller
         ]);
 
         //Faz upload da imagem para o Driver AWS S3
-        $image = $request->file('photo')->store('products','s3');
+        $image = $request->file('photo')->store('products','gcs');
         //Torna acessível publicamente a imagem
-        Storage::disk('s3')->setVisibility($image, 'public');
+        Storage::disk('gcs')->setVisibility($image, 'public');
 
 
 //        Espera 5 segundos para garantir que a visibilidade do
@@ -175,7 +175,7 @@ class ProductsController extends Controller
 //        sleep(5);
 
         //Retorna a url completa da imagem que será salva no campo photo do produto
-        return Storage::disk('s3')->url($image);
+        return Storage::disk('gcs')->url($image);
 
     }
 
