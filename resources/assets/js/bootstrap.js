@@ -51,7 +51,7 @@ import Echo from "laravel-echo"
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = require('vue');
+window.Vue = require('vue/dist/vue.js');
 window.VueResource = require('vue-resource');
 window.EventBus = new Vue({});
 Vue.use(VueResource);

@@ -157,9 +157,9 @@
         components: {
             vSelect: VueStrap.select,
             vOption: VueStrap.option,
-            Map,
+            gmap: Map,
             load,
-            Marker,
+            gmarker: Marker,
             InfoWindow
         },
 
