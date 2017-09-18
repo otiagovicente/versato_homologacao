@@ -132,6 +132,14 @@ class LinesController extends Controller
 
 	    return response()->json($products);
     }
+    public function api_index(Request $request){
+        $lines = Line::where('brand_id', 1)
+        ->where('description', 'like', '%'. $request->input('search') .'%')
+        ->orWhere('code', 'like', '%'. $request->input('search') .'%' )
+        ->orderBy($request->input('campo'), $request->input('sequence'))
+        ->paginate($request->input('entries'));
+        return response()->json($lines);
+    }
 
 
 }

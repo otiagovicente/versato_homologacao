@@ -1,485 +1,367 @@
 <template>
-    <div class="content-fluid" style="padding:20px;">
+    <div>
         <div class="row">
-            <div class="col-md-12">
-                <div class="page-bar">
-                    <div class="col-md-6">
-                        <ul class="page-breadcrumb">
-                            <li>
-                                <i class="fa fa-home"></i>
-                                <a href="/">Home</a>
-                                <i class="fa fa-angle-right"></i>
-                            </li>
-                            <li>
-                                <a href="/orders">Pedidos</a>
-                                <i class="fa fa-angle-right"></i>
-                            </li>
-                            <li>
-                                <a href="/orders">Buscar</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="page-toolbar col-md-12">
-                            <div class="btn-group col-md-9 pull-right">
-                                <date-range-picker v-bind:start_date.sync="filters.start_date" v-bind:end_date.sync="filters.end_date"></date-range-picker>
-                            </div>
+            <div class="md-col-12">
+                <div class="col-md-12">
+                    <div class="form-group form-line-input search">
+                        <h4>Buscar</h4>
+                        <div class="input-icon input-icon-lg right">
+                            <i class="fa fa-search font-green"></i>
+                            <input id="search-input" class="form-control input-lg" type="text" v-model="search">
                         </div>
                     </div>
-
                 </div>
-                <h1>Pedidos</h1>
-
+                <div class="col-md-5 pull-right">
+                </div>
             </div>
-
         </div>
-        <br>
-
-
         <div class="row">
-            <div class="portlet light bordered">
-                <div class="portlet-title">
-                    <div class="caption font-green-sharp">
-                        <i class="icon-speech font-green-sharp"></i>
-                        <span class="caption-subject bold uppercase"> Pedidos</span>
-                        <span class="caption-helper">Filtros...</span>
-                    </div>
-                    <div class="actions">
-                        <a href="javascript:;" class="btn btn-circle btn-default btn-sm">
-                            <i class="fa fa-pencil"></i> Edit </a>
-                        <a href="javascript:;" class="btn btn-circle btn-default btn-sm">
-                            <i class="fa fa-plus"></i> Add </a>
-
-                        <a href="javascript:;" v-on:click="paginate(orders.prev_page_url)" v-show="orders.prev_page_url" class="btn btn-circle btn-default btn-sm">
-                            <i class="fa fa-long-arrow-left"></i></a>
-
-                        <a  v-for="page in paginationlinks" track-by="$index" href="javascript:;" v-on:click="paginate(page['0'])" class="btn btn-circle btn-default btn-sm">
-                            {{ page['1'] }} </a>
-
-
-                        <a href="javascript:;" v-on:click="paginate(orders.next_page_url)" v-show="orders.next_page_url" class="btn btn-circle btn-default btn-sm">
-                            <i class="fa fa-long-arrow-right"></i></a>
-
-                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-md-7 col-sm-7 col-xs-7">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group form-line-input search ">
-                                        <div class="input-icon input-icon right">
-                                            <i class="fa fa-search font-blue"></i>
-                                            <input id="search-input" class="form-control input" placeholder="Buscar" type="text" v-model="filters.search" v-on:keyup.enter="searchOrders()">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 form-group">
-                                    <button v-if="representative.id" class="btn blue" v-on:click="emptyRepresentativeFilter()">{{ representative.code+' - '+representative.user.name+' '+representative.user.lastname }}</button>
-                                    <button v-else class="btn btn-outline grey" v-on:click="filterRepresentative()">Filtrar Representante</button>
-
-                                    <button v-if="customer.id" class="btn blue" v-on:click="emptyCustomerFilter()">{{ customer.name+' - '+customer.company}}</button>
-                                    <button v-else class="btn btn-outline grey" v-on:click="filterCustomer()" style="margin-right:10px;">Filtrar Cliente</button>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5 col-sm-5 col-xs-5">
-
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <div class="btn-group pull-right">
-                                            <color-button :data="statuses" :option.sync="filters.status" v-on:update="searchOrders()"></color-button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+            <div class="md-col-12">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select class="form-control" v-model="entries" v-on:change="getOrders()">
+                                <option>10</option>
+                                <option>15</option>
+                                <option>25</option>
+                                <option>50</option>
+                                <option>100</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <hr>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="status_select" :value.sync="status_id"
+                                placeholder="Status" class="form-control"
+                                id="status-input" name="status"
+                                search justified required close-on-select>
+                            </v-select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="order mt-element-ribbon" v-for="order in orders.data">
-                                <hr v-show="$index > 0">
-                                <div class="ribbon ribbon-shadow blue-madison"><strong>#{{ order.id }}</strong></div>
-
-                                <div class="cutomer-info">
-                                    <h3>{{order.customer.name}}</h3>
-                                    <h5>{{order.customer.company}}</h5>
-                                    <div class="customer-discount-info">
-                                        <div class="customer-discount-slider">
-                                            <slider-component :slider_value.sync="order.customer_discount" :slider_width="50" :slider_max="10"></slider-component>
-                                        </div>
-                                        <div class="customer-discount-amount">
-                                            <span class="h4">{{order.customer_discount | currency '$'}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="representative-info">
-
-                                    <div class="representative-info-photo">
-                                        <img v-bind:src="order.representative.user.photo" class="representative-photo">
-                                    </div>
-                                    <div class="representative-name">
-                                        <span class="small">{{ order.representative.user.name+' '+order.representative.user.lastname }}</span>
-                                    </div>
-                                    <div class="representative-discount-info">
-                                        <div class="representative-discount-slider">
-                                            <slider-component :slider_value.sync="order.representative_discount" :slider_width="50" :slider_max="10"></slider-component>
-
-                                        </div>
-                                        <div class="representative-discount-amount">
-                                            <span class="h4">{{order.representative_commission_discount | currency '$'}}</span>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                        <div class="values-info">
-                                                <span class="h2"><strong>{{order.total | currency '$'}}</strong></span><br>
-                                                <span class="h5 font-red"><s>{{order.price | currency '$'}}</s></span><br>
-                                                <span class="small font-grey">- {{order.overalldiscount | currency '$'}}</span><br>
-                                                <span class="small"> {{order.amount}} modelos.</span>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-
-                            </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="brands_select" :value.sync="brand_id"
+                                placeholder="Marca" class="form-control"
+                                id="brand-input" name="brand"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="macroregions_select" :value.sync="macroregion_id"
+                                placeholder="Macro regiones" class="form-control"
+                                id="macroregion-input" name="macroregion"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="regions_select" :value.sync="region_id"
+                                placeholder="Regiones" class="form-control"
+                                id="region-input" name="region"
+                                search justified required close-on-select>
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group v-select">
+                            <v-select
+                                v-bind:options.sync="representatives_select" :value.sync="representative_id"
+                                placeholder="Representante" class="form-control"
+                                id="representative-input" name="representative"
+                                search justified required close-on-select>
+                            </v-select>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-    <filter-add-customer v-bind:customer_id.sync="filters.customer_id"></filter-add-customer>
-    <filter-add-representative v-bind:representative_id.sync="filters.representative_id"></filter-add-representative>
+        </div>
+        <hr>
+        <div class="content-fluid" style="padding:20px;">
+		<div class="row">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th><a v-on:click="setCampo('id')">Pedido</a></th>
+                    <th><a>Representante</a></th>
+                    <th><a>Cliente</a></th>
+                    <th><a v-on:click="setCampo('cost')">Costo</a></th>
+                    <th><a v-on:click="setCampo('price')">Precio</a></th>
+                    <th><a v-on:click="setCampo('company_discount')">Desc.</a></th>
+                    <th><a v-on:click="setCampo('representative_discount')">Desc. Representante</a></th>
+                    <th><a v-on:click="setCampo('products_amount')">Qtd. Productos</a></th>
+                    <th><a v-on:click="setCampo('total')">Total</a></th>
+                    <th><a>Acciones</a></th>
+                </tr>
+                </thead>
+                <tbody v-for="order in orders.data.data">
+                    <tr>
+                        <td>{{order.id}}</td>
+                        <td>{{order.representative.user.name}}</td>
+                        <td>{{order.customer.name}}</td>
+                        <td>{{order.cost}}</td>
+                        <td>{{order.price}}</td>
+                        <td>{{order.company_discount}}</td>
+                        <td>{{order.representative_discount}}</td>
+                        <td>{{order.products_amount}}</td>
+                        <td>{{order.total}}</td>
+                        <td>
+                            <a class="btn blue btn-outline sbold" v-on:click="goToOrder(order.id)">Editar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row">
+              <ul class="pagination">
+                <li><a v-on:click="setPage(page - 1)">Previous</a></li>
+              </ul>
+              <ul class="pagination" v-for="n in orders.data.last_page">
+                  <li><a v-on:click="setPage(n+1)">{{ n+1 }}</a></li>
+              </ul>
+              <ul class="pagination">
+              <li><a v-on:click="setPage(page + 1)">Next</a></li>
+            </ul>
+            </div>
+        </div>
+        <div class="hide form-excel">
+            <form action='/orders/generate-sheet' method="post" class="hide">
+                <input type="hidden" name="search" :value.sync="search"/>
+                <input type="hidden" name="campo" :value.sync="campo"/>
+                <input type="hidden" name="sequence" :value.sync="sequence"/>
+                <input type="hidden" name="brand" :value.sync="brand_id"/>
+                <input type="hidden" name="representative" :value.sync="representative_id"/>
+                <input type="hidden" name="macroregion" :value.sync="macroregion_id"/>
+                <input type="hidden" name="region" :value.sync="region_id"/>
+                <input type="hidden" name="status_id" :value.sync="status_id"/>
+                <input type="submit" />
+            </form>
+        </div>
+    </div>
 </template>
+
 <style scoped>
 
-
-    .order{
+    .search-box{
         width:100%;
-        height: 200px;
-        position: relative;
-        color: #3598DC;
-        display : flex;
-        align-items : center;
-        justify-content : space-between;
-        padding : 20px;
+        margin-bottom: 40px;
     }
-    .order:hover{
-        color : #FFFFFF;
-        background-color: #3598DC;
-        cursor: pointer;
+    .list-customer-index-list-photo{
+
+        width: 100%;
 
     }
 
+    .list-customer-index-product-box{
 
-    .order .ribbon {
-        background-color : #eaeaea !important;
-    }
-    .order .representative-info{
-        width: auto;
-        height: auto;
-    }
-    .order .representative-info .representative-name{
-        display : inline;
-        position : relative;
-        left : 10px;
-    }
-
-    .order .representative-info .representative-info-photo{
-        display : inline;
-        text-align : center;
-    }
-    .order .representative-info .representative-info-photo .representative-photo{
-        clip-path: circle(25px at center);
-        width: auto;
-        height:50px;
-        position : relative;
-    }
-    .order .representative-info .representative-discount-info{
-        position : relative;
-        padding-top : 10px;
-        /*top: 60px;*/
-    }
-    .order .representative-info .representative-discount-info .representative-discount-slider{
-        width : 60px;
-        position : relative;
-    }
-    .order .representative-info .representative-discount-info .representative-discount-amount{
-        position : relative;
-        left : 70px;
-    }
+        background-color: #FFFFFF;
+        border: 3px solid #ebeef0;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        text-align: center;
 
 
-    .order .cutomer-info{
-         width: 200px;
-        height: auto;
-    }
 
-    .order .cutomer-info h3{
-        font-weight: bold;
-    }
-    .order .cutomer-info h5{
-
-    }
-    .order .cutomer-info .customer-discount-info{
-        position : relative;
-    }
-    .order .cutomer-info .customer-discount-info .customer-discount-slider{
-        width: 60px;
-        position : relative;
-    }
-        .order .cutomer-info .customer-discount-info .customer-discount-amount{
-        position : relative;
-        left : 70px;
-    }
-
-    .order .order-id{
-        top : 40px;
-    }
-
-    .order .values-info{
-        text-align: right;
-    }
-    @media (max-width: 600px) {
-      .order {
-        background-color : #FFF;
-      }
     }
 
 </style>
 <script type="text/babel">
-
-    import FilterAddCustomer from './FilterAddCustomer.vue'
-    import FilterAddRepresentative from './FilterAddRepresentative.vue'
-    import ColorButton from './../general/buttons/ColorButton.vue'
-    import DateRangePicker from './../general/dates/daterangepicker.vue'
-    import Slider from '../general/sliders/Slider.vue'
-
+    import VueStrap from 'vue-strap';
+    
     export default{
+        components: {
+            vSelect: VueStrap.select,
+            vOption: VueStrap.option
+        },
         data(){
             return{
-                orders: {},
-                url : '',
-                paginationlinks : [],
-                statuses : [],
-                filters : {
-                    customer_id : null,
-                    representative_id : null,
-                    brand_id: Versato.brand_id ,
-                    status_id: 1,
-                    status: {},
-                    start_date : moment().subtract('days', 29),
-                    end_date : moment(),
-                    search: ''
+                brands_select:[],
+                macroregions_select:[],
+                regions_select:[],
+                representatives_select:[],
+                status_select: [
+                    { value: 1, label: 'Abierto' },
+                    { value: 2, label: 'Aprovado' },
+                    { value: 3, label: 'Reprovado' },
+                    { value: 4, label: 'Faturado' },
+                    { value: 5, label: 'Enviado' },
+                    { value: 6, label: 'Recebido' },
+                ],/*
+                <option value="1">Abierto</option>
+                                <option value="2">Aprovado</option>
+                                <option value="3">Reprovado</option>
+                                <option value="4">Faturado</option>
+                                <option value="5">Enviado</option>
+                                <option value="6">Recebido</option>
+                */
+                orders: {
+                    data: {
+                      data: [],
+                  },
                 },
-                customer : {
-                    name : '',
-                    company : ''
-                },
-                representative: {
-                    code : '',
-                    user : {
-                        name : '',
-                        lastname : ''
-                    }
-                }
+                search: '',
+                entries: 10,
+                page: 1,
+                campo: 'id',
+                sequence: 'asc',
+                brand_id: null,
+                macroregion_id: null,
+                region_id: null,
+                representative_id: null,
+                status_id: null,
             }
         },
         watch: {
-            'filters.customer_id': function (val) {
-                if (val) {
-                    _ListOrders.getCustomer();
-                }else{
-                    _ListOrders.customer = null;
-                    _ListOrders.searchOrders();
-                }
+            'brand_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
             },
-            'filters.representative_id': function (val) {
-                if (val) {
-                    _ListOrders.getRepresentative();
-                }else{
-                    _ListOrders.representative = null;
-                    _ListOrders.searchOrders();
-                }
+            'macroregion_id': function (val) {
+                _listOrders.getRegions(val, doIt => _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id));
             },
-            'filters.start_date': function (val) {
-                if (val) {
-                    _ListOrders.searchOrders();
-                }else{
-                    _ListOrders.start_date = moment().subtract('days', 29);
-                    _ListOrders.searchOrders();
-                }
+            'region_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
             },
-            'filters.end_date': function (val) {
-                if (val) {
-                    _ListOrders.searchOrders();
-                }else{
-                    _ListOrders.end_date = moment();
-                    _ListOrders.searchOrders();
-                }
+            'representative_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
             },
-            'filters.status_id': function (val) {
-                if (val != null){
-                    _ListOrders.searchOrders();
-                }
+            'status_id': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
+            },
+            'search': function (val) {
+                _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
+            },
+            'orders.data.last_page': function (val) {
+               if(_listOrders.page > val){
+                 _listOrders.setPage(val);
+               }
 
-            },
-            'filters.status': function(val){
-                if (val != null) {
-                    _ListOrders.filters.status_id = val.id;
-                }
             }
         },
-        components:{
-            'filter-add-customer' : FilterAddCustomer,
-            'filter-add-representative' : FilterAddRepresentative,
-            'color-button' : ColorButton,
-            'date-range-picker' : DateRangePicker,
-            'slider-component': Slider,
-        },
         ready(){
-            window._ListOrders = this;
-            _ListOrders.getStatuses();
-            _ListOrders.getOrders();
+            window._listOrders = this;
+            _listOrders.getBrands();
+            _listOrders.getMacroregions();
+            //_listOrders.getRegions();
+            _listOrders.getRepresentatives();
+            _listOrders.getOrders();
+
+            _listOrders.$parent.$on('fromRoot', () => _listOrders.methodMeiLoco());
         },
-        methods : {
-            getUrl(){
-                return window.location.pathname;
+        methods:{
+            methodMeiLoco: function() {
+                /*var brand = _listOrders.brand_id || '';
+                var representative = _listOrders.representative_id || '';
+                var macroRegion = _listOrders.macroregion_id || '';
+                var region = _listOrders.region_id || '';
+                var _this = this;
+                _this.$http.post('/api/orders/generate-sheet', {
+                    campo : _listOrders.campo,
+                    sequence : _listOrders.sequence,
+                    brand : brand,
+                    representative : representative,
+                    macroregion : macroRegion,
+                    region : region,
+                    search :_listOrders.search
+                })
+                .then(response => {
+                    _this.brands_select = response.json();
+                });*/
+                $('input[type="hidden"][name="_token"]').appendTo($('.form-excel form'));
+                $('.form-excel form input[type=submit]').click();
             },
-            loadOrder(order_id){
-                this.$http.get('/shopping-cart/order/'+order_id)
-                        .then(response => {
-                            toastr.success('Cargo el pedido!');
-                            // window.location.href = "/orders/create";
-                        }).catch(response => {
-                            toastr.error('No fué possible cargar el pedido');
-                        });
-            },
-            getOrders(){
-                _ListOrders.reload();
-                _ListOrders.url = '/api/orders/search';
-                _ListOrders.paginate('/api/orders/search');
-            },
-            getStatuses(){
-                this.$http.get('/api/orderstatus')
-                        .then(response => {
-                            _ListOrders.statuses = response.json();
-                        })
-                        .catch(response => {
-                            toastr.error('No fué possible cargar los status');
-                        });
-            },
-            getCustomer(){
-                this.$http.get('/api/customers/'+_ListOrders.filters.customer_id)
-                        .then(response => {
-                            _ListOrders.customer = response.json();
-                        }).catch(response => {
-                    toastr.error('No fué possible cargar el Cliente');
+            getBrands: function(){
+                var _this = this;
+                _this.$http.get('/api/brands/selectlist')
+                .then(response => {
+                    _this.brands_select = response.json();
                 });
-                _ListOrders.searchOrders();
             },
-            filterCustomer(){
-                _FilterAddCustomer.openWindow();
-            },
-            emptyCustomerFilter(){
-                _ListOrders.filters.customer_id = null;
-            },
-            getRepresentative(){
-                this.$http.get('/api/representatives/'+_ListOrders.filters.representative_id)
-                        .then(response => {
-                            _ListOrders.representative = response.json();
-                        }).catch(response => {
-                    toastr.error('No fué possible cargar el Cliente');
+            getMacroregions: function(){
+                var _this = this;
+                _this.$http.get('/api/macroregions/selectlist')
+                .then(response => {
+                    _this.macroregions_select = response.json();
                 });
-                _ListOrders.searchOrders();
             },
-            filterRepresentative(){
-                _FilterAddRepresentative.openWindow();
-            },
-            emptyRepresentativeFilter(){
-                _ListOrders.filters.representative_id = null;
-            },
-            setStatus(status_id){
+            getRegions: function(macroRegion, cb){
+                var _this = this;
 
-                $('#status_id li').removeClass('active');
-                $('#status-'+status_id).addClass('active');
-                _ListOrders.filters.status_id = status_id;
-                _ListOrders.searchOrders();
-            },
-            buildpaginationlinks(){
-                _ListOrders.paginationlinks = [];
+                if (!!_this.region_id)
+                    _this.region_id = null;
 
-                var arr = [];
-                for (var i = 0; i < _ListOrders.orders.last_page; i++) {
-                    arr.push(_ListOrders.url+'?page='+(i + 1));
-                    arr.push((i+1));
-                    _ListOrders.paginationlinks.push(arr);
-                    arr = [];
-
+                if (!macroRegion) {
+                    _this.regions_select = [];
+                    cb();
+                    return;
                 }
 
+                _this.$http.get('/api/macroregions/'+macroRegion+'/regionsselectlist')
+                .then(response => {
+                    cb();
+                    _this.regions_select = response.json();
+                });
             },
-            searchOrders(){
-                _ListOrders.url = '/api/orders/search';
-                _ListOrders.paginate('/api/orders/search');
+            getRepresentatives: function(){
+                var _this = this;
+                _this.$http.get('/api/representatives/selectlistsimple')
+                .then(response => {
+                    _this.representatives_select = response.json();
+                });
             },
-            paginate(paginationUrl){
+            getOrders: function(brand, representative){
+                var brand = brand || '';
+                var representative = representative || '';
+                var macroRegion = _listOrders.macroregion_id || '';
+                var region = _listOrders.region_id || '';
+                var status = _listOrders.status_id || '';
 
-                this.$http.post(paginationUrl, _ListOrders.filters)
-                        .then(response => {
-                            _ListOrders.orders = response.json();
-                            _ListOrders.buildpaginationlinks();
-                        })
-                        .catch(response => {
-                            toastr.error('no fue possible cargar los pedidos');
-                        });
+                this.$http.get('/api/orders/listIndex?page=' + _listOrders.page +
+                '&entries=' + _listOrders.entries  +
+                '&campo='+_listOrders.campo +
+                '&sequence='+_listOrders.sequence +
+                '&brand='+ brand +
+                '&representative='+ representative +
+                '&macroregion='+ macroRegion +
+                '&region='+ region +
+                '&status_id='+ status +
+                '&search='+_listOrders.search)
+                    .then((response) => {
 
+                        _listOrders.orders = response;
+
+                    }).catch((response) => {
+                        toastr.error('No fué posible conectar al servidor');
+                    });
             },
-            reload(){
-
-                _ListOrders.$data = {
-                    orders: {},
-                    statuses: [],
-                    url : '',
-                    paginationlinks : [],
-                    filters : {
-                        customer_id : null,
-                        representative_id : null,
-                        brand_id: null,
-                        search: ''
-                    },
-                    customer : {
-                        name : '',
-                        company : ''
-                    },
-                    representative: {
-                        code : '',
-                        user : {
-                            name : '',
-                            lastname : ''
-                        }
-                    }
-                };
+            goToOrder(order_id){
+              this.$http.post('/shopping-cart/stop-shopping');
+              window.location.href = '/orders/'+order_id+'/edit';
+            },
+            setPage(n){
+              if (n < 1){
+                n = 1;
+              }
+              if (n > _listOrders.orders.data.last_page){
+                n = _listOrders.orders.data.last_page;
+              }
+              
+              _listOrders.page=n;
+              _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
+            },
+            setCampo(cp){
+              if (_listOrders.campo != cp){
+                _listOrders.sequence = 'asc';
+              }else{
+                _listOrders.sequence = 'desc';
+              }
+              _listOrders.campo = cp;
+              _listOrders.getOrders(_listOrders.brand_id, _listOrders.representative_id);
             }
         }
     }

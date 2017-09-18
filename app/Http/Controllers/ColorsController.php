@@ -106,11 +106,18 @@ class ColorsController extends Controller
     }
 
    public function api_index(Request $request, $brand_id){
-       $colors = Color::where('brand_id', $brand_id)->get();
-       return $colors;
+       $colors = Color::where('brand_id', $brand_id)
+       ->where('description', 'like', '%'. $request->input('search') .'%')
+       ->orWhere('code', 'like', '%'. $request->input('search') .'%' )
+       ->orderBy($request->input('campo'), $request->input('sequence'))
+       ->paginate($request->input('entries'));
+       return response()->json($colors);
    }
-   public function api_list(){
-        $colors = Color::all();
+   public function api_list(Request $request){
+        $colors = Color::select()
+            ->where('description', 'like', '%'. $request->input('search') .'%')
+            ->orWhere('code', 'like', '%'. $request->input('search') .'%' )
+            ->paginate(20);
         return $colors;
     }
 

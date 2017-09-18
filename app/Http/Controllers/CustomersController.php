@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CustomerRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests;
-use Illuminate\Support\Facades\DB;
 
 use App\Customer;
-use App\ImportCustomer;
 
 class CustomersController extends Controller
 {
@@ -21,8 +19,8 @@ class CustomersController extends Controller
      */
     public function index()
     {
-        $customers = Customer::paginate(10);
-        
+        $customers = Customer::orderBy('name')->take(10)->get();
+
         return view('customers.index', compact('customers'));
     }
 
@@ -105,25 +103,23 @@ class CustomersController extends Controller
         ]);
 
         //Faz upload da imagem para o Driver AWS S3
-        $image = $request->file('photo')->store('customers','s3');
+        $image = $request->file('photo')->store('customers','gcs');
         //Torna acessível publicamente a imagem
-        Storage::disk('s3')->setVisibility($image, 'public');
+        Storage::disk('gcs')->setVisibility($image, 'public');
 //        Espera 5 segundos para garantir que a visibilidade do
 //        arquivo no driver S3 seja público para que a imagem
 //        seja exibida
         sleep(5);
 
         //Retorna a url completa da imagem que será salva no campo photo do produto
-        return Storage::disk('s3')->url($image);
+        return Storage::disk('gcs')->url($image);
     }
 
-
-
-
-
-
-    public function api_index(){
-        $customers = Customer::all();
+    public function api_index(Request $request){
+        $customers = Customer::where('name', 'like', '%'. $request->input('search') .'%')
+        ->orWhere('company', 'like', '%'. $request->input('search') .'%' )
+        ->orderBy($request->input('campo'), $request->input('sequence'))
+        ->paginate($request->input('entries'));
         return response()->json($customers);
     }
 
@@ -133,7 +129,7 @@ class CustomersController extends Controller
 
     public function api_selectList(){
         $listAll = Customer::all();
-        
+
         foreach($listAll as $item){
             $selectItem['value'] = $item->id;
             $selectItem['label'] = $item->name;
@@ -141,6 +137,9 @@ class CustomersController extends Controller
         }
         return response()->json($selectList);
     }
+
+
+
 
     public function api_getShops(Customer $customer){
         return $customer->shops()->get();
@@ -162,18 +161,12 @@ class CustomersController extends Controller
     }
 
     public function api_search(Request $request){
+
+
 	    $customers = Customer::search($request->search)->get();
+
 	    return response()->json($customers);
-    }
-    
-    public function api_getImportedCustomers(){
-        return 'bla bla';
-        
-        $importCustomers = DB::table('importcustomers')->get();
-        return response()->json($importCustomers);
-    }
-    public function api_getImportedCustomersBySearch(Request $request){
-        $importCustomers = DB::table('importcustomers')->search($request->search)->get();
-        return response()->json($importCustomers);
+
+
     }
 }

@@ -20,10 +20,8 @@
                     <button class="btn green-jungle pull-right" style="margin-right:10px;" v-on:click="save()">Guardar Pedido</button>
                    <a href="/products"><button class="btn blue pull-right" style="margin-right:10px;">Adicionar Producto</button></a>
                    <button class="btn red" style="margin-right:10px;" v-on:click="cancelOrder()">Cancelar Pedido</button>
-
                 </div>
             </div>
-
             <br>
 
             <div class="portlet light bordered">
@@ -52,28 +50,26 @@
 
                 </div>
                 <div class="portlet-body">
-
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="col-md-3 col-sm-3 col-xs-3 block-center">
                                 <h2 v-show="customer.id" class="font-blue" style="cursor:pointer;" v-on:click="addCustomer()" >{{customer.name}}</h2>
                                 <small v-show="customer.id">{{customer.company}} - cuit: {{customer.cuit}}</small>
                                 <button v-show="!customer.id" class="btn blue" v-on:click="addCustomer()">Agregar Cliente</button>
-
-
                             </div>
                             <div class="col-md-3 col-sm-3 col-xs-3">
                                 <h3>Descuento:</h3>
-                                <slider-component :slider_width="180" :slider_max="10" :slider_value.sync="order.customer_discount"></slider-component>
+                                <slider-component :slider_width="180" :slider_max="10" :slider_value.sync="order.company_discount"></slider-component>
                             </div>
 
                             <div class="col-md-3 col-sm-3 col-xs-3">
                                 <h3>Descuento Rep.:</h3>
+
                                 <slider-component :slider_width="180" :slider_max="5" :slider_value.sync="order.representative_discount"></slider-component>
                             </div>
                             <div class="col-md-3 col-sm-3 col-xs-3 pull-right">
                                 <h3 class="font-blue">Total <strong>{{order.total | currency '$ '}}</strong></h3>
-                                <h4 class="font-blue"><s> {{order.price | currency '$ '}}</s></h4>
+                                <h4 class="font-blue"><s> {{order.total_without_discount | currency '$ '}}</s></h4>
                                 <hr>
                                 <h2 v-show="representative.id" class="font-blue" v-on:click="addRepresentative()" style="cursor:pointer;">{{representative.user.name+' '+representative.user.lastname}}</h2>
                                 <small v-show="representative.id">{{representative.user.email}} - code: {{representative.code}}</small>
@@ -136,15 +132,15 @@
                                             <div class="col-md-12 col-sm-12 col-xs-12">
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
                                                     <div class="input-group">
-                                                        <slider-component :slider_value.sync="product.pivot.amount" v-on:update="setProductAmount(product.id)" :slider_max="250"></slider-component>
+                                                        <slider-component :slider_value.sync="product.pivot.products_amount" v-on:update="updateOrder()" :slider_max="250"></slider-component>
                                                         <!--<input class="form-control" type="number" min="0" v-model="product.amount" aria-label="Cantidad">-->
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
-                                                    <slider-component :slider_value.sync="product.pivot.discount"  v-on:update="setProductCustomerDiscount(product.id)" :slider_max="10" slider_fgcolor="#8bed8c"></slider-component>
+                                                    <slider-component :slider_value.sync="product.pivot.company_discount"  v-on:update="updateOrder()" :slider_max="10" slider_fgcolor="#8bed8c"></slider-component>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
-                                                    <slider-component :slider_value.sync="product.pivot.representative_discount" v-on:update="setProductRepresentativeDiscount(product.id)" :slider_max="5" slider_fgcolor="#8bed8c"></slider-component>
+                                                    <slider-component :slider_value.sync="product.pivot.representative_discount" v-on:update="updateOrder()" :slider_max="5" slider_fgcolor="#8bed8c"></slider-component>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3 col-xs-3">
                                                     <h4 class="font-blue">Tarea <strong>{{ product.pivot.total | currency '$' }}</strong></h4>
@@ -164,7 +160,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>
@@ -216,6 +211,9 @@
             'order-add-customer': OrderAddCustomer,
             'order-add-representative': OrderAddRepresentative
         },
+        props:[
+            'porder'
+        ],
         data(){
             return {
                 customer: {
@@ -234,21 +232,41 @@
                 order: {
                     products: {
                         pivot: {
-                            total: 0,
-                            price: 0,
-                            customer_discount: 0,
+                            products_amount: 0,
+                            grids_amount: 0,
+                            company_discount: 0,
                             representative_discount: 0,
-                            representative_commission: 0,
-                            total_discount: 0,
-
+                            representative_commission_total: 0,
+                            representative_commission_price: 0,
+                            representative_commission_percentage: 0,
+                            representative_commission_descont: 0,
+                            total_without_discount: 0,
+                            total: 0,
+                            company_total_discount:0,
+                            grid_id:0,
                         },
+                        cost: 0.00,
                         price: 0.00,
                         photo: '',
                     },
+                    id: 0,
+                    cost: 0,
+                    price: 0,
+                    representative_discount: 0,
+                    company_discount: 0,
+                    representative_commission_total: 0,
+                    representative_commission_discount: 0,
+                    representative_commission_price: 0,
+                    representative_commission_percentage: 0.00,
+                    company_total_discount: 0,
+                    company_real_discount: 0,
+                    products_amount: 0,
+                    grids_amount: 0,
+                    total_without_discount: 0,
+                    total: 0,
+                    total_discount: 0,
                     comment: '',
                     status_id: 1,
-                    representative_discount: 0.00,
-                    customer_discount: 0.00
                 }
             }
         },
@@ -263,25 +281,16 @@
                     _Order.getRepresentative();
                 }
             },
-            'order.comment': function (val) {
-                _Order.setComment();
+            'order.representative_discount': function (val) {
+              if (val) {
+                  _Order.updateOrder();
+              }
             },
-            'order.customer_discount': function (val, oldVal) {
-                if (val) {
-                    _Order.setCustomerDiscount();
-                }
+            'order.company_discount': function (val) {
+              if (val) {
+                  _Order.updateOrder();
+              }
             },
-            'order.status_id': function (val, oldVal) {
-                if ((val != oldVal) && (val != null)) {
-                    _Order.setStatus();
-                }
-            },
-            'order.representative_discount': function (val, oldVal) {
-                if (val != oldVal) {
-                    _Order.setRepresentativeDiscount();
-                }
-            }
-
         },
         computed: {},
         events: {
@@ -292,10 +301,24 @@
         },
         ready(){
             window._Order = this;
-
+            if (_Order.porder){
+                _Order.loadOrder();
+                _Order.porder = null;
+            }
             _Order.getOrder();
         },
         methods: {
+            loadOrder: function(){
+              _Order.order = _Order.porder;
+              this.$http.post('/shopping-cart/load-order', _Order.order)
+                      .then(response => {
+                          _Order.order = response.json();
+                          console.log('pedido salvo');
+                      })
+                      .catch(response => {
+                          console.log('pedido não salvo');
+                      });
+            },
             getUrl(){
                 return window.location.pathname;
             },
@@ -327,14 +350,6 @@
                             console.log('pedido não salvo');
                         });
             },
-            calculateProductValue(product_id){
-                this.$http.get('/shopping-cart/calculate-product/' + product_id)
-                        .then(response => {
-
-                        }).catch(response => {
-
-                });
-            },
             deleteProduct(product){
                 _Order.order.products.splice(product.$index, 1);
                 console.log(product.$index);
@@ -363,33 +378,10 @@
             addCustomer(){
                 _OrderAddCustomer.openWindow();
             },
-            setComment(){
-                this.updateOrder();
-            },
-            setCustomerDiscount(){
-                this.updateOrder();
-            },
-            setRepresentativeDiscount(){
-                this.updateOrder();
-            },
             findProduct(product_id, grid_id){
                 return _.find(_Order.order.products, function (obj) {
                     return (obj.id === product_id && obj.pivot.grid_id === grid_id);
                 });
-            },
-            setProductAmount(product_id, grid_id){
-                this.updateOrder();
-            },
-            setProductCustomerDiscount(product_id){
-                this.updateOrder();
-            },
-            setProductRepresentativeDiscount(product_id){
-                this.updateOrder();
-            },
-            setStatus(){
-                this.updateOrder();
-            },
-            getStatus(){
             },
             cancelOrder(){
                 this.$http.post('/shopping-cart/stop-shopping')

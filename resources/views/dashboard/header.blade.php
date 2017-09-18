@@ -1,21 +1,3 @@
-
-<div class="navbar-fixed">
-    <nav>
-        <div class="nav-wrapper">
-            <a href="/" class="brand-logo">
-                <img src="/images/versato-logo-white.png" alt="logo" class="logo-default sidebar-logo"/>
-            </a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="sass.html">Sass</a></li>
-                <li><a href="badges.html">Components</a></li>
-            </ul>
-        </div>
-    </nav>
-</div>
-
-
-
-
 <!-- BEGIN HEADER -->
 <div class="page-header navbar page-content-white">
     <!-- BEGIN HEADER INNER -->

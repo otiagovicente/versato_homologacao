@@ -1,6 +1,7 @@
-
 window._ = require('lodash');
 
+window.moment = require('moment');
+require('moment/locale/es');
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -8,44 +9,26 @@ window._ = require('lodash');
  */
 
 window.$ = window.jQuery = require('jquery');
-
 require('bootstrap-sass');
-require('materialize-css');
+require('bootstrap-switch');
+window.cookie = require('js-cookie');
+require('jquery-slimscroll');
 
 window.toastr = require('toastr');
+
 window.algoliasearch = require('algoliasearch');
 window.autocomplete = require('autocomplete.js');
 window.jQueryKnob = require('jquery-knob');
 
 window.jQueryBridget = require('jquery-bridget');
-require('daterangepicker');
 window.Masonry = require('masonry-layout');
 window.imagesLoaded = require('imagesloaded');
 
 // make Masonry a jQuery plugin
-jQueryBridget('masonry', Masonry, $);
+jQueryBridget( 'masonry', Masonry, $);
 imagesLoaded.makeJQueryPlugin($);
 
 window.bootbox = require('bootbox');
-/**
- * Vue is a modern JavaScript library for building interactive web interfaces
- * using reactive data binding and reusable components. Vue's API is clean
- * and simple, leaving you to focus on building your next great project.
- */
-
-window.Vue = require('vue');
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = require('axios');
-
-window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest'
-};
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -55,9 +38,40 @@ window.axios.defaults.headers.common = {
 
 import Echo from "laravel-echo"
 
-window.Echo = new Echo({
+/*window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '6c3dd34a782803571d89'
+});*/
+
+
+
+/**
+ * Vue is a modern JavaScript library for building interactive web interfaces
+ * using reactive data binding and reusable components. Vue's API is clean
+ * and simple, leaving you to focus on building your next great project.
+ */
+
+window.Vue = require('vue');
+window.VueResource = require('vue-resource');
+window.EventBus = new Vue({});
+Vue.use(VueResource);
+
+/**
+ * We'll register a HTTP interceptor to attach the "CSRF" header to each of
+ * the outgoing requests issued by this application. The CSRF middleware
+ * included with Laravel will automatically verify the header's value.
+ */
+
+Vue.http.interceptors.push((request, next) => {
+    request.headers['X-CSRF-TOKEN'] = Laravel.csrfToken;
+    next();
 });
 
-require('./MagnaLibrary');
+
+/*Vue.http.interceptors.push((request, next)  => {
+    next((response) => {
+        response.data = JSON.parse(response.data);
+    });
+});
+*/
+

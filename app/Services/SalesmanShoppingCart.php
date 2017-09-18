@@ -34,8 +34,8 @@ class SalesmanShoppingCart implements ShoppingCart{
 		Session::put('ShoppingCart', null);
 	}
 
-	public function loadOrder($order_id){
-		return $this->setOrder($this->conformer->order($order_id)->get());
+	public function loadOrder($order){
+		return $this->setOrder($this->conformer->order($order)->get());
 	}
 	public function setOrder($order){
 		Session::put('ShoppingCart.order', collect($order)->toArray());
@@ -75,13 +75,14 @@ class SalesmanShoppingCart implements ShoppingCart{
 	}
 
 	public function getProducts(){
-		return $this->conformer->order($this->getOrder())->getProducts();
+        return collect(Session::get('ShoppingCart.products'));
+		//return $this->conformer->order($this->getOrder())->getProducts();
 
 	}
-	public function addProduct($product_id, $grid_id ,$amount = 1, $customer_discount = 0.00, $representative_discount = 0.00){
+    public function addProduct($product_id, $grid_id ,$products_amount = 1, $grids_amount, $company_discount = 0.00, $representative_discount = 0.00, $representative_commission_total = 0.00, $representative_commission_price = 0.00, $representative_commission_company = 0.00 ){
 
 //		if($this->conformer->order(Order::with('products', 'representative.brands', 'customer')->first()->toArray())->addProduct($product_id, $grid_id ,$amount, $discount, $representative_discount)){
-		if($this->conformer->order($this->getOrder())->addProduct($product_id, $grid_id ,$amount, $customer_discount, $representative_discount)){
+		if($this->conformer->order($this->getOrder())->addProduct($product_id, $grid_id ,$products_amount, $grids_amount, $company_discount, $representative_discount, $representative_commission_total, $representative_commission_company)){
 			$this->setOrder($this->conformer->get());
 		}
 		return false;

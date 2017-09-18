@@ -98,8 +98,8 @@ class ShoppingCartController extends Controller
 		return $shoppingCart->getStatus();
 	}
 
-	public function loadOrder($order_id, ShoppingCart $shoppingCart){
-		return response()->json($shoppingCart->loadOrder($order_id));
+	public function loadOrder(Request $request, ShoppingCart $shoppingCart){
+		return $shoppingCart->loadOrder($request);
 	}
 	public function updateOrder(Request $request, ShoppingCart $shoppingCart){
 		return $shoppingCart->updateOrder($request);

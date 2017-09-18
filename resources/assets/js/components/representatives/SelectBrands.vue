@@ -1,88 +1,95 @@
 <template>
     <div>
 
-        <div class="modal fade" id="select-brands" tabindex="-1" role="select-brands" aria-hidden="true"
-             style="display: none;">
+        <div class="modal fade s" id="select-brands" tabindex="-1" role="select-brands" aria-hidden="true" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h3 class="font-blue uppercase">Marcas</h3>
-                    </div>
                     <div class="modal-body">
 
-                        <div style="height:400px; overflow-y: scroll;">
-                            <div v-for="brand in brands" class="brand"
-                                 v-bind:class="{ 'selected-brand': brand.selected }"
-                                 @click="chooseBrand(brand)">
-                                <span class="brand-name">{{ brand.name }}</span>
-                                <span class="check"><i class="fa fa-check"></i></span>
+
+                        <div class="portlet light" >
+                            <div class="portlet-title">
+                                <div class="caption font-blue">
+                                    <i class="fa fa-map-pin font-blue"></i>Marcas
+                                </div>
+                            </div>
+                            <div class="portlet-body form">
+
+                                <div class="row search-box">
+                                    <div class="col-lg-12">
+                                        <div class="input-icon input-icon-sm right">
+                                            <i class="fa fa-search font-green"></i>
+                                            <input id="search-input" class="form-control input-sm" type="text" v-model="search" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="height:400px; overflow-y: scroll;">
+                                    <div v-for="brand in brands | filterBy search" class="row">
+                                        <div class="col-md-12 brand" v-bind:class="{ 'selected-brand': brand.selected }" >
+
+                                            <img v-bind:src="brand.image" />
+
+                                            <div class="form-group form-line-input comission" id="comission">
+                                                <small>Comissión</small>
+                                                <input class="form-control input-sm comission-input" type="number" v-model="brand.comission">
+                                                <div class="select-button">
+                                                    <button class="btn blue" @click="chooseBrand(brand)">Eligir</button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
                     </div>
-
-
+                    <div class="modal-footer">
+                          <button class="btn blue" data-dismiss="modal">Cerrar</button>  
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 <style>
-
     .brand{
+
+    }
+
+    .comission{
+        position: absolute;
+        right: 50px;
+        bottom: 30px;
+    }
+    .comission .comission-input{
+        width: 50px;
+    }
+    .comission .select-button{
+        width:70px;
+    }
+    .brand img{
         width:100%;
-        height: 100px;
-        position: relative;
-        color: #000;
-        display : flex;
-        align-items : center;
-        justify-content : space-between;
-        margin-bottom: 15px;
-        cursor : pointer;
-        padding : 20px 10px 20px 10px;
-        transition:all 0.5s ease;
-
     }
 
-    .brand .brand-name {
-        font-family : Roboto, sans-serif;
-        font-weight: 200;
-        font-size: 26px;
+    .selected-brand img{
+        border-radius: 10px;
+        border: 3px solid #3598DC;
     }
-
-    .brand:hover .brand-name{
-        color : #3598dc;
-    }
-    .brand:active .brand-name{
-        color : #4276A4;
-    }
-
-    .brand .check{
-        color : #eaeaea;
-        font-size: 26px;
-    }
-    .brand:active .check{
-        color: #4276A4;
-    }
-    .selected-brand .check{
-        color : #3598dc;
-    }
-
-
-
-
-
-
 
 
 </style>
 <script type="text/babel">
     export default{
         data(){
-            return {
+            return{
                 search: '',
-                brands: {}
+                brands: []
             }
         },
         ready(){
@@ -99,50 +106,57 @@
             $("#select-brands").on("hide.bs.modal", function (e) {
                 console.log(e);
 
-                if (_SelectBrands.validateComission) {
+                if(_SelectBrands.validateComission){
                     // $('#select-brands').modal('hide');
-                } else {
+                }else{
                     // toastr.error('');
                 }
 
             });
             return true;
         },
-        computed: {
-            selected_brands: function () {
-                return _.filter(_SelectBrands.brands, function (brand) {
-                    return brand.selected;
-                });
+        computed:{
+            selected_brands: function(){
+                return _.filter(_SelectBrands.brands, function(brand) { return brand.selected; });
+            },
+            validateComission: function () {
+
+                var selected_withoutcomission = _.filter(_SelectBrands.brands, function(brand){ return (brand.selected && brand.comission <= 0)});
+                if(!selected_withoutcomission){
+                    return true;
+                }else{
+                    return false;
+                }
             }
         },
-        methods: {
+        methods:{
             /*
              * Funcões de Janela
              */
 
             openWindow: function (brands = null) {
-                if (brands) {
+                if(brands){
                     _SelectBrands.syncBrands(brands);
                 }
                 $('#select-brands').modal();
             },
             closeWindow: function () {
 
-                if (_SelectBrands.validateComission) {
+                if(_SelectBrands.validateComission){
                     $('#select-brands').modal('hide');
-                } else {
+                }else{
                     toastr.error('');
                 }
 
 
             },
-            getBrands: function () {
+            getBrands: function(){
                 this.$http.get('/api/brands')
                         .then(response => {
                             _SelectBrands.brands = [];
-                            _.forEach(response.json(), function (brand) {
+                            _.forEach(response.json(), function(brand) {
                                 brand.selected = false;
-                                brand.comission = 0.00;
+                                brand.comission = 0.00 ;
                                 _SelectBrands.brands.push(brand);
                             });
                         })
@@ -151,21 +165,18 @@
                         });
 
             },
-            chooseBrand: function (brand) {
+            chooseBrand: function (brand){
 
-                if (brand.selected) {
-
+                if(brand.selected){
                     brand.selected = false;
-
                 }
-                else {
+                else{
                     brand.selected = true;
                 }
 
                 _CreateRepresentative.brands = _SelectBrands.selected_brands;
             },
-
-            syncBrands: function (brands) {
+            syncBrands: function(brands){
                 _.forEach(brands, function (brand) {
                     var index = _.findIndex(_SelectBrands.brands, function (item) {
                         return item.id == brand.id;

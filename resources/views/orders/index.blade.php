@@ -1,7 +1,12 @@
 @extends('layouts.dashboard')
 
 @section('content')
-
-    <list-orders></list-orders>
-
+	@include('orders.partials.header',[
+		'pageTitle' => 'Pedidos',
+		'url' => '/orders',
+		'actions' => []
+	])
+<div class="container-fluid"> 
+			<list-orders></list-orders>
+</div>
 @stop

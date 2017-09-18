@@ -36,10 +36,6 @@
                 <th>Marca</>
                 <th>Total Pedidos</th>
                 <th>Valor Total de Pedidos</th>
-<<<<<<< HEAD
-=======
-                <th>Aciones</th>
->>>>>>> 9db5c1bc97c2bfe08339dca5aeb120c81be4919a
             </tr>
         </thead>
         <tbody>
@@ -47,82 +43,9 @@
                 <td>{{m.name}}</td>
                 <td>{{m.qtd_pedidos}}</td>
                 <td>{{m.Total | currency}}</td>
-<<<<<<< HEAD
             </tr>
         </tbody>
     </table>
-=======
-                <td>
-                    <button type="button" @click="loadListOrders" class="btn blue" data-toggle="modal" 
-                        data-target="#myModal"
-                    >Pedidos</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-<div id="myModal" class="modal fade .modal-lg" role="dialog">
-  
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Pedidos</h4>
-      </div>
-      <div class="modal-body">
-          <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Pedido</th>
-                    <th>Representante</th>
-                    <th>Costo</th>
-                    <th>Precio</th>
-                    <th>Desc. Cliente</th>
-                    <th>Desc. Representante
-                    <th>Qtd. Productos</th>
-                    <th>Total</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="order in lstOrders">
-                    <td>#{{ order.id}}</td>
-                    <td>
-                        {{order.representative.user.name}}
-                    </td>
-                    <td>${{order.cost}}</td>
-                    <td>${{order.price}}</td>
-                    <td>{{order.client_discount}}</td>
-                    <td>{{order.representative_discount}}</td>
-                    <td>{{order.products.length}}</td>
-                    <td>${{order.total}}</td>
-                    <td>
-                        <a class="btn blue btn-outline sbold"
-                           data-toggle="modal"
-                           href="#"
-                           v-on:click="alert('bla bla bla')"
-                        >
-                            Editar
-                        </a>
-
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-
->>>>>>> 9db5c1bc97c2bfe08339dca5aeb120c81be4919a
 </template>
 
 <script>
@@ -153,19 +76,11 @@
                 marcas:   new Array(),
                 labels:   new Array(),
                 datasets: new Array(),
-<<<<<<< HEAD
-=======
-                lstOrders:new Array(),
->>>>>>> 9db5c1bc97c2bfe08339dca5aeb120c81be4919a
             }
         },
         
         ready: function () {
             this.loadChart();
-<<<<<<< HEAD
-=======
-            this.export();
->>>>>>> 9db5c1bc97c2bfe08339dca5aeb120c81be4919a
         },
         
         methods:{
@@ -227,22 +142,6 @@
                 }
                 this.marcas = marcas;
             },
-<<<<<<< HEAD
-=======
-            
-            loadListOrders(brand){
-                this.$http.get('/api/orders/getOrdersListByBrand/'+ this.toDate(this.dtInicial, 'ini') + '/' + this.toDate(this.dtFinal) + '/01')
-                .then(response => {
-                    this.lstOrders = response.json();
-                    console.log(this.lstOrders);
-                });
-            },
-            
-            export(){
-                var url = ('/orders/exportOrdersByDate/'+ this.toDate(this.dtInicial, 'ini') + '/' + this.toDate(this.dtFinal));
-                window.open(url);
-            },
->>>>>>> 9db5c1bc97c2bfe08339dca5aeb120c81be4919a
         },
         watch:{
             'tipo': function (val, oldVal) {

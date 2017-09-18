@@ -47,7 +47,15 @@ class NewOrderPlaced extends Notification
     public function toMail($notifiable)
     {
 
-        return (new NewOrderMail($this->order_id));
+
+        $order = Order::find($id)->with('products', 'representative', 'customer');
+
+        Mail::to('tiago@magnaestrategia.com')->send(new NewOrderMail($order));
+
+        return (new MailMessage)
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', 'https://laravel.com')
+                    ->line('Thank you for using our application!');
     }
 
     /**

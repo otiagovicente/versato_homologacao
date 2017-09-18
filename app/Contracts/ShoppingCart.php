@@ -38,7 +38,7 @@ interface ShoppingCart{
 	public function isClosed();
 	public function getProducts();
 	public function getProduct($product_id, $grid_id);
-	public function addProduct($product_id, $grid_id ,$amount = 1, $customer_discount = 0.00, $representative_discount = 0.00);
+    public function addProduct($product_id, $grid_id ,$products_amount = 1, $grids_amount, $company_discount = 0.00, $representative_discount = 0.00, $representative_commission_total = 0.00, $representative_commission_price = 0.00, $representative_commission_company = 0.00 );
 	public function deleteProduct($product_id, $grid_id);
 
 	public function getProductAmount($product_id, $grid_id);

@@ -7,7 +7,6 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use App\Order;
 
 class NewOrderMail extends Mailable
 {
@@ -21,11 +20,8 @@ class NewOrderMail extends Mailable
 
     public $order;
 
-    public function __construct($order_id)
+    public function __construct($order)
     {
-	    $order = Order::
-	    with('products', 'representative', 'customer')
-		    ->find($order_id);
         $this->order = $order;
     }
 

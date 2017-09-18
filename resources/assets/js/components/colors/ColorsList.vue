@@ -1,73 +1,87 @@
 <template>
-    <div class="content-fluid">
-        <div class="row">
-            <div class="form-group form-line-input search">
-                <h4>Buscar</h4>
-
-                <div class="input-icon input-icon-lg right">
-                    <i class="fa fa-search font-green"></i>
-                    <input id="search-input" class="form-control input-lg" type="text" v-model="search" />
+    <div class="row">
+        <div class="md-col-12">
+            <div class="col-md-12">
+                <div class="form-group form-line-input search">
+                    <h4>Buscar</h4>
+                    <div class="input-icon input-icon-lg right">
+                        <i class="fa fa-search font-green"></i>
+                        <input id="search-input" class="form-control input-lg" type="text" v-model="search">
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="row">
-            <ul class="colors-list">
-                <li v-for="color in colors | filterBy search" class="colors-list-item" @click="showColor(color.id)">
-                    <div class="colors-list-item-div" style="background-color:{{color.color}};">
-                        <span class="colors-list-item-description">{{color.description}}</span>
-                        <span class="colors-list-item-code">{{color.code}}</span>
-                    </div>
-                </li>
-            </ul>
+            <div class="col-md-5 pull-right">
+            </div>
         </div>
     </div>
+    <div class="content-fluid" style="padding:20px;">
+		<div class="row">
+				<a class="color-holder" v-for="color in colors | filterBy search" @click="goToColor(color.id)">
+					<div class="col-md-3 color-card">
+
+							<div class="color-color" v-bind:style="{ 'background-color': color.color }">&nbsp;</div>
+							<hr>
+							<div style="text-align:right;">
+							<span>
+								<span><small>{{ color.description }}</small></span>
+								<span class="h2" style="padding-left:10px;">{{ color.code }}</span>
+								
+							</span>
+							 <br><br>
+							</div>
+							<div>
+								<div class="color-pantone">{{ color.pantone }}</div>
+							</div>
+
+					</div>
+				</a>
+
+		</div>
+        <div class="row">
+              <ul class="pagination">
+                <li><a v-on:click="setPage(page - 1)">Previous</a></li>
+              </ul>
+              <ul class="pagination" v-for="n in pagination.last_page">
+                  <li><a v-on:click="setPage(n+1)">{{ n+1 }}</a></li>
+              </ul>
+              <ul class="pagination">
+              <li><a v-on:click="setPage(page + 1)">Next</a></li>
+            </ul>
+            </div>
+	</div>
 
 </template>
-<style>
+
+<style scoped>
+
     .search{
         position: relative;
         width: 95%;
         /*float: right;*/
         margin-left: 25px;
-        margin-bottom: 15px;
     }
-    .colors-list{
-        list-style-type: none;
-        text-decoration: none;
-        padding-left: 0px;
-    }
-    .colors-list-item{
-        margin-bottom: 10px;
-        cursor: pointer;
 
+    .color-holder {
+        color:black;
+        text-decoration:none!important;
     }
-    .colors-list-item-div {
-        position: relative;
-        border-radius: 8px;
-        /*background-color: rgb(254, 238, 0);*/
-        /*box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.43),inset 0px 3px 7px 0px rgba(0, 0, 0, 0.35);*/
-        width: 95%;
-        margin-left:20px;
-        height: 100px;
-        z-index: 2;
-        color: #ececec;
-    }
-    .colors-list-item-description{
-        position: absolute;
-        right: 40px;
-        top: 20px;
-        font-weight: bolder;
-        font-style: italic;
-        font-size: 24pt;
 
+    .color-card {
+        padding-top:20px;
+        padding-bottom:20px;
+        margin:10px;
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
     }
-    .colors-list-item-code{
-        position: absolute;
-        right: 40px;
-        top: 60px;
-        font-style: italic;
-        font-size: 12pt;
+
+    .color-pantone {
+        display:block;
+        text-align:right;
+        padding-right:5px;
+    }
+
+    .color-color {
+        width:100%;
+        height:180px;
     }
 
 </style>
@@ -75,26 +89,41 @@
     export default{
         data(){
             return{
-                colors: [],
+                colors:{},
+                pagination: {},
+                page: 1,
                 search: ''
             }
         },
+        components:{
+        },
         ready(){
             window._this = this;
-            _this.getColors();
+            _this.getColors(); 
         },
-        methods:{
-            getColors: function(){
-                this.$http.get('/api/colors/'+Versato.brand_id)
+        methods : {
+            getColors: function () {
+                var _this = this;
+                this.$http.get('/api/colors/list?page='+this.page
+                    +'&search='+encodeURIComponent(this.search))
                         .then(response => {
-                            _this.colors = response.json();
-                            console.log(response.json());
+                            _this.colors = response.json().data;
+                            _this.pagination = response.json();
                         });
-
             },
-            showColor: function(color_id){
-                window.location.href = '/colors/'+color_id;
-            }
+            goToColor: function(color){
+                window.location.href = '/colors/'+color;
+            },
+            setPage(n){
+                if (n < 1){
+                    n = 1;
+                }
+                if (n > this.pagination.last_page){
+                    n = this.pagination.last_page;
+                }
+                this.page=n;
+                this.getColors();
+            },
         }
     }
 </script>

@@ -336,7 +336,7 @@ body .container.body .right_col {
 body {
   color: #eeeee8;
   background: rgba(37, 37, 37, 0.95);
-  font-family: Roboto, "Helvetica Neue", Arial, "Droid Sans", sans-serif;
+  font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
   font-size: 13px;
   font-weight: 100;
   line-height: 1.471;
@@ -4808,3 +4808,10 @@ ul.notifications {
   border: 1px solid #e5e5e5;
 }
 /** /Dropzone.js **/
+
+.list-customer-index-product-box h3, .list-customer-index-product-box h5 {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

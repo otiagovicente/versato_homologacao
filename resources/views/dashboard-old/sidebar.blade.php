@@ -1,4 +1,4 @@
-<!-- BEGIN SIDEBAR -->
+                <!-- BEGIN SIDEBAR -->
                 <div class="page-sidebar-wrapper">
                     <!-- BEGIN SIDEBAR -->
                     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
@@ -11,9 +11,7 @@
                         <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
                         <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
                         <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                        <ul class="page-sidebar-menu page-sidebar-menu-light page-header-fixed " 
-                            data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" 
-                            style="padding-top: 0px">
+                        <ul class="page-sidebar-menu page-sidebar-menu-light page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 0px">
                             <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
                             <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
                             <li class="sidebar-toggler-wrapper hide">
@@ -48,9 +46,10 @@
                                             <span class="title">Dashboard de Productos</span>
                                         </a>
                                     </li>
+
                                 </ul>
                             </li>
-                            <li class="nav-item ">
+                             <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-trademark"></i>
                                     <span class="title">Marcas</span>
@@ -72,35 +71,145 @@
                                             <span class="selected"></span>
                                         </a>
                                     </li>
+                                    
+                                 
+                              
+                     
                                 </ul>
                             </li>
-
-                            <li class="nav-item ">
+                            <li class="heading">
+                                <h3 class="uppercase">Produtos</h3>
+                            </li>
+                          
+                           <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-trademark"></i>
-                                    <span class="title">Gerenciais</span>
+                                    <i class="fa fa-sitemap"></i>
+                                    <span class="title">Linhas</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="{{ url('/reports') }}" class="nav-link nav-toggle">
+                                        <a href="{{ url('/lines') }}" class="nav-link nav-toggle">
                                             <i class="fa fa-bars"></i>
-                                            <span class="title">Pedidos</span>
+                                            <span class="title">Mostrar Todas</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('/lines/create') }}" class="nav-link nav-toggle">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="title">Criar Linha</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    
+                                 
+                              
+                     
                                 </ul>
                             </li>
-                            <li class="heading">
-                                <h3 class="uppercase">Productos</h3>
+
+
+
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-barcode"></i>
+                                    <span class="title">Referências</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/references" class="nav-link nav-toggle">
+                                            <i class="fa fa-bars"></i>
+                                            <span class="title">Ver Todas</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/references/create" class="nav-link nav-toggle">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="title">Criar Referência</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+
+                                </ul>
                             </li>
-                          
+
+
+
+                           <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-diamond"></i>
+                                    <span class="title">Materiais</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/materials" class="nav-link nav-toggle">
+                                            <i class="fa fa-bars"></i>
+                                            <span class="title">Ver Todos</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/materials/create" class="nav-link nav-toggle">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="title">Criar Material</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                     
+                                </ul>
+                            </li>
+
+
+
+
+
+                            <li class="nav-item ">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-eyedropper"></i>
+                                    <span class="title">Cores</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+
+                                    <li class="nav-item">
+                                        <a href="{{ url('/colors') }}" class="nav-link nav-toggle">
+                                            <i class="fa fa-bars"></i>
+                                            <span class="title">Ver todas</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('/colors/create') }}" class="nav-link nav-toggle">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="title">Criar Cor</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+
+
+
+
+
+
+
+
 
                            <li class="nav-item ">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="fa fa-tags"></i>
-                                    <span class="title">Productos</span>
+                                    <span class="title">Produtos</span>
                                     <span class="selected"></span>
                                     <span class="arrow"></span>
                                 </a>
@@ -115,151 +224,17 @@
                                     <li class="nav-item">
                                         <a href="/products/create" class="nav-link nav-toggle">
                                             <i class="fa fa-plus"></i>
-                                            <span class="title">Crear Producto</span>
+                                            <span class="title">Criar Produto</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
-                                    <li class="nav-item ">
-                                        <a href="javascript:;" class="nav-link nav-toggle">
-                                            <i class="fa fa-sitemap"></i>
-                                            <span class="title">Líneas</span>
-                                            <span class="selected"></span>
-                                            <span class="arrow"></span>
-                                        </a>
-                                        <ul class="sub-menu">
-                                            <li class="nav-item">
-                                                <a href="{{ url('/lines') }}" class="nav-link nav-toggle">
-                                                    <i class="fa fa-bars"></i>
-                                                    <span class="title">Mostrar Todas</span>
-                                                    <span class="selected"></span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="{{ url('/lines/create') }}" class="nav-link nav-toggle">
-                                                    <i class="fa fa-plus"></i>
-                                                    <span class="title">Crear Línea</span>
-                                                    <span class="selected"></span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="nav-item ">
-                                        <a href="javascript:;" class="nav-link nav-toggle">
-                                            <i class="fa fa-diamond"></i>
-                                            <span class="title">Materiales</span>
-                                            <span class="selected"></span>
-                                            <span class="arrow"></span>
-                                        </a>
-                                        <ul class="sub-menu">
-                                            <li class="nav-item">
-                                                <a href="/materials" class="nav-link nav-toggle">
-                                                    <i class="fa fa-bars"></i>
-                                                    <span class="title">Ver Todos</span>
-                                                    <span class="selected"></span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="/materials/create" class="nav-link nav-toggle">
-                                                    <i class="fa fa-plus"></i>
-                                                    <span class="title">Crear Material</span>
-                                                    <span class="selected"></span>
-                                                </a>
-                                            </li>
-
-                                        </ul>
-                                    </li>
-
-                                    <li class="nav-item ">
-                                        <a href="javascript:;" class="nav-link nav-toggle">
-                                            <i class="fa fa-eyedropper"></i>
-                                            <span class="title">Colores</span>
-                                            <span class="selected"></span>
-                                            <span class="arrow"></span>
-                                        </a>
-                                        <ul class="sub-menu">
-
-                                            <li class="nav-item">
-                                                <a href="{{ url('/colors') }}" class="nav-link nav-toggle">
-                                                    <i class="fa fa-bars"></i>
-                                                    <span class="title">Ver todas</span>
-                                                    <span class="selected"></span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="{{ url('/colors/create') }}" class="nav-link nav-toggle">
-                                                    <i class="fa fa-plus"></i>
-                                                    <span class="title">Crear Cor</span>
-                                                    <span class="selected"></span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-
-                            <li class="heading">
-                                <h3 class="uppercase">Clientes</h3>
-                            </li>
-
-                            <li class="nav-item ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-black-tie"></i>
-                                    <span class="title">Clientes</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item">
-                                        <a href="{{ url('/customers') }}" class="nav-link nav-toggle">
-                                            <i class="fa fa-bars"></i>
-                                            <span class="title">Mostrar Todos</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ url('/customers/create') }}" class="nav-link nav-toggle">
-                                            <i class="fa fa-plus"></i>
-                                            <span class="title">Crear Cliente</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-
+                     
                                 </ul>
                             </li>
 
 
 
 
-                            <li class="heading">
-                                <h3 class="uppercase">Representantes</h3>
-                            </li>
-
-                            <li class="nav-item ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-users"></i>
-                                    <span class="title">Representantes</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item">
-                                        <a href="/representatives" class="nav-link nav-toggle">
-                                            <i class="fa fa-users"></i>
-                                            <span class="title">Ver Todos</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/representatives/create" class="nav-link nav-toggle">
-                                            <i class="icon-user-follow"></i>
-                                            <span class="title">Agregar a usuario</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
 
 
 
@@ -278,7 +253,14 @@
                                     <li class="nav-item">
                                         <a href="/macroregions" class="nav-link nav-toggle">
                                             <i class="fa fa-map"></i>
-                                            <span class="title">Editar</span>
+                                            <span class="title">Ver Todos</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/macroregions/create" class="nav-link nav-toggle">
+                                            <i class="fa fa-map"></i>
+                                            <span class="title">Crear</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
@@ -296,41 +278,27 @@
                                     <li class="nav-item">
                                         <a href="/regions" class="nav-link nav-toggle">
                                             <i class="fa fa-map-marker"></i>
-                                            <span class="title">Editar</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li class="heading">
-                                <h3 class="uppercase">Ventas</h3>
-                            </li>
-
-                            <li class="nav-item ">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-map"></i>
-                                    <span class="title">Pedidos</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li class="nav-item">
-                                        <a href="/orders" class="nav-link nav-toggle">
-                                            <i class="fa fa-map"></i>
                                             <span class="title">Ver Todos</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/orders/create" class="nav-link nav-toggle">
-                                            <i class="fa fa-map"></i>
+                                        <a href="/regions/create" class="nav-link nav-toggle">
+                                            <i class="fa fa-map-marker"></i>
                                             <span class="title">Crear</span>
                                             <span class="selected"></span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
+
+
+
+
+
+
+
+
 
 
                             <li class="heading">
@@ -345,13 +313,6 @@
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
-                                    <li class="nav-item">
-                                        <a href="/users" class="nav-link nav-toggle">
-                                            <i class="fa fa-bars"></i>
-                                            <span class="title">Ver Todos</span>
-                                            <span class="selected"></span>
-                                        </a>
-                                    </li>
                                     <li class="nav-item">
                                         <a href="/profile" class="nav-link nav-toggle">
                                             <i class="icon-user-follow"></i>
@@ -414,10 +375,11 @@
                                             <span class="selected"></span>
                                         </a>
                                     </li>
+
+
+
                                 </ul>
                             </li>
-
-
 
 
 

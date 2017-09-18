@@ -5,14 +5,14 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta content="" name="description" />
     <meta content="" name="author" />
-    <meta id="_token" value="{{ csrf_token() }}"> 
 @yield('metatags')
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
     <link href="/dashboard/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="/dashboard/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="/dashboard/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
-    <link href="/dashboard/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
+    {{--<link href="/dashboard/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />--}}
+    {{--<link href="/dashboard/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />--}}
+    {{--<link href="/dashboard/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />--}}
     <link rel="stylesheet" href="/css/app.css" type="text/css"/>
 
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -28,7 +28,7 @@
     <!-- BEGIN PAGE STYLES -->
 @yield('styles')
 <!-- END PAGE STYLES -->
-    <link rel="shortcut icon" href="/images/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
 
     @yield('scripts.header')
 </head>

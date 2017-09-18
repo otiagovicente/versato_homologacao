@@ -30,12 +30,12 @@
                                                 <div class="mt-overlay">
                                                     <ul class="mt-info">
                                                         <li>
-                                                            <a target="_blank" class="btn default btn-outline" href="/users/{{$user->id}}">
+                                                            <a  class="btn default btn-outline" href="/users/{{$user->id}}">
                                                                 <i class="icon-magnifier"></i>
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a target="_blank" class="btn default btn-outline" href="/users/{{$user->id}}">
+                                                            <a  class="btn default btn-outline" href="/users/{{$user->id}}">
                                                                 <i class="icon-link"></i>
                                                             </a>
                                                         </li>

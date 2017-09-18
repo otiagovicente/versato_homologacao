@@ -172,13 +172,12 @@ class RepresentativesController extends Controller
 
     public function api_show(Representative $representative){
 
-    	     $representative->load('user', 'regions');
         return response()->json($representative);
 
     }
 
     public function api_brands(Representative $representative){
-	    $brands = [];
+        $brands = [];
         foreach ($representative->brands()->get() as $brand) {
             $brand['comission'] = $brand->pivot->comission;
             $brands[] = $brand;
@@ -206,9 +205,22 @@ class RepresentativesController extends Controller
 
     public function api_selectList(){
 
-        $representatives = Representative::select(['id as value', 'code as label'])->get();
+        $representatives = Representative::with('user', 'regions')->paginate(20);
 
         return response()->json($representatives);
+    }
+    
+    public function api_selectListSimple(){
+        $representatives = Representative::with('user')->get();
+        $selectList = [];
+        
+        foreach($representatives as $representative){
+            $selectItem['value'] = $representative->id;
+            $selectItem['label'] = $representative->user->name;
+            $selectList[] = $selectItem;
+        }
+
+        return response()->json($selectList);
     }
 
 	public function api_search(Request $request){

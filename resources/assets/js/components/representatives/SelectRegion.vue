@@ -8,7 +8,7 @@
 
                         <div class="portlet light" >
                             <div class="portlet-title">
-                                <div class="caption font-blue"x>
+                                <div class="caption font-blue">
                                     <i class="fa fa-map-pin font-blue"></i>Regiones
                                 </div>
                             </div>
@@ -31,7 +31,7 @@
                                 </div>
 
 
-                                <div class="row search-box">
+                                <div class="row search-box hide">
                                     <div class="col-lg-12">
                                         <div class="input-icon input-icon-sm right">
                                             <i class="fa fa-search font-green"></i>
@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                                 <div style="height:400px; overflow-y: scroll;">
-                                    <div v-for="region in regions | filterBy macroregion" class="row">
+                                    <div v-for="region in regions | filterBy macroregion in 'macroregion_id'" class="row">
                                         <div class="col-md-12 ">
                                             <div class="region-box col-md-12" style="padding-top:5px;" v-bind:class="{ 'selected': region.selected }" @click="chooseRegion(region)">
                                                     <h3 > <strong>{{region.description}} </strong></h3>

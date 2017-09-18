@@ -15,11 +15,36 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="md-col-12">
+                <div class="col-md-12">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <select class="form-control" v-model="entries" v-on:change="getCustomers()">
+                        <option>10</option>
+                        <option>15</option>
+                        <option>25</option>
+                        <option>50</option>
+                        <option>100</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <select class="form-control" v-model="cp" v-on:change="setCampo(cp)">
+                        <option>name</option>
+                        <option>company</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
         <hr>
         <div class="container-fluid">
             <div class="row">
 
-                <div v-for="customer in customers | filterBy search">
+                <div v-for="customer in customers.data.data">
 
                     <a @click="goToCustomer(customer.id)">
                         <div class="col-md-3">
@@ -42,6 +67,17 @@
 
                 </div>
 
+            </div>
+            <div class="row">
+              <ul class="pagination">
+                <li><a v-on:click="setPage(page - 1)">Previous</a></li>
+              </ul>
+              <ul class="pagination" v-for="n in customers.data.last_page">
+                  <li><a v-on:click="setPage(n+1)">{{ n+1 }}</a></li>
+              </ul>
+              <ul class="pagination">
+              <li><a v-on:click="setPage(page + 1)">Next</a></li>
+            </ul>
             </div>
         </div>
 
@@ -74,13 +110,33 @@
     }
 
 </style>
-<script type="text/babel">
+<script>
 
     export default{
         data(){
             return{
-                customers:[],
-                search: ''
+                customers: {
+                  data: {
+                    data: [],
+                  },
+                },
+                search: '',
+                entries: 10,
+                page: 1,
+                campo: 'name',
+                cp: '',
+                sequence: 'asc',
+            }
+        },
+        watch: {
+            'search': function (val) {
+                _listCustomers.getCustomers();
+            },
+            'customers.data.last_page': function (val) {
+               if(_listCustomers.page > val){
+                 _listCustomers.setPage(val);
+               }
+
             }
         },
         ready(){
@@ -90,10 +146,14 @@
         },
         methods:{
             getCustomers: function(){
-                this.$http.get('/api/customers')
+                this.$http.get('/api/customers?page=' + _listCustomers.page +
+                '&entries=' + _listCustomers.entries +
+                '&campo='+_listCustomers.campo +
+                '&sequence='+_listCustomers.sequence +
+                '&search='+_listCustomers.search)
                     .then((response) => {
 
-                        this.customers = response.json();
+                        this.customers = response;
 
                     }).catch((response) => {
                         toastr.error('No fué posible conectar al servidor');
@@ -101,6 +161,25 @@
             },
             goToCustomer(customer_id){
                 window.location.href = '/customers/'+customer_id;
+            },
+            setPage(n){
+              if (n < 1){
+                n = 1;
+              }
+              if (n > _listCustomers.customers.data.last_page){
+                n = _listCustomers.customers.data.last_page;
+              }
+              _listCustomers.page=n;
+              this.getCustomers();
+            },
+            setCampo(cp){
+              if (_listCustomers.campo != cp){
+                _listCustomers.sequence = 'asc';
+              }else{
+                _listCustomers.sequence = 'desc';
+              }
+              _listCustomers.campo = cp;
+              _listCustomers.getCustomers();
             }
         }
     }

@@ -5,11 +5,10 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
-use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, Searchable;
+    use HasApiTokens, Notifiable;
     //adicionei o Passport
 
     /**
@@ -31,7 +30,7 @@ class User extends Authenticatable
     ];
 
     public function representative(){
-        return $this->hasOne('App\Representative')->with('brands');
+        return $this->hasOne('App\Representative');
     }
 
 

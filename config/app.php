@@ -169,6 +169,7 @@ return [
          */
 
 //        AlgoliaSearch\Laravel\AlgoliaServiceProvider::class,
+        App\Providers\GoogleCloudStorageServiceProvider::class,
         App\Providers\SearchServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,

@@ -122,6 +122,18 @@ class MacroregionsController extends Controller
     }
 
     public function api_regions(Macroregion $macroregion){
-        return response()->json($macroregion->regions()->get());
+        return response()->json();
+    }
+
+    public function api_regionsSelectList(Macroregion $macroregion){
+        $regions = $macroregion->regions()->get();
+        $selectList = [];
+        
+        foreach($regions as $region){
+            $selectItem['value'] = $region->id;
+            $selectItem['label'] = $region->description;
+            $selectList[] = $selectItem;
+        }
+        return response()->json($selectList);
     }
 }

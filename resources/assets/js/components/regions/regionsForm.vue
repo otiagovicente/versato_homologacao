@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    
+    <div class="map" v-el:regionmap style="width:100%;height:800px;"></div>
     
 <!-- MODAL  -->
     <div id="region-modal" class="modal fade" role="dialog">
@@ -93,23 +93,6 @@
       </div>
     </div>
   </div>
-
-<!-- BEGIN Portlet PORTLET-->
-<div class="portlet light">
-    <div class="portlet-title">
-        <div class="caption">
-        </div>
-        <div class="actions">
-            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"> </a>
-        </div>
-    </div>
-    <div class="portlet-body">
-        <div class="scroller" style="height:100%" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
-            <div class="map" v-el:regionmap style="width:100%;height:1000px;"></div>
-        </div>
-    </div>
-</div>
-<!-- END Portlet PORTLET-->
 </template>
 
 <script>

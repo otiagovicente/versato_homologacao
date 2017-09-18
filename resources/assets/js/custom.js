@@ -14,8 +14,15 @@ var CURRENT_URL = window.location.href.split('?')[0],
     $NAV_MENU = $('.nav_menu'),
     $FOOTER = $('footer');
 
+//import { EventBus } from './event-bus';
+
 // Sidebar
 $(document).ready(function() {
+    /*$(document).on('click', 'a.export-data-excel', function(e) {
+        e.preventDefault();
+        window.app.$broadcast('fromRoot', e);
+        return;
+    });*/
     // TODO: This is some kind of easy fix, maybe we can improve this
     var setContentHeight = function () {
         // reset height

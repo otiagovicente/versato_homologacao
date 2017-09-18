@@ -21,10 +21,14 @@
                     </button>
                     <ul class="dropdown-menu pull-right" role="menu">
                         <li>
-                            <a href="{{ url('/order') }}">Ver Todos</a>
+                            <a href="{{ url('/orders') }}">Ver Todos</a>
                         </li>
+                        @if($exportToExcel != null)
+                              {{ csrf_field() }}
+                            <export-data></export-data>
+                        @endif
                         <li>
-                            <a href="{{ url('/order/create') }}">Criar Material </a>
+                            <a href="{{ url('/orders/create') }}">Criar Pedido</a>
                         </li>
                         @if($actions != null)
                             @foreach($actions as $action => $url)

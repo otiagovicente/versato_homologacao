@@ -30,19 +30,11 @@ class SalesmanOrderConformer implements OrderConformer {
 	protected $products;
 
 	public function order($order = null){
-		switch ($order){
+        if($order == null)
+            $this->create();
+	    else
+	        $this->setOrder($order);
 
-			case ($order === null):
-				$this->create();
-			break;
-			case (is_array($order)):
-				$this->setOrder($order);
-			break;
-			case (is_integer($order)):
-				$this->open($order);
-			break;
-
-		}
 
 		if(!isset($this->order['brands'])){
 			$this->order['brands'] = [];
@@ -51,12 +43,11 @@ class SalesmanOrderConformer implements OrderConformer {
 			$this->order['products'] = [];
 		}
 
-//		$this->conform($order);
+		$this->conform($order);
 		return $this;
 	}
 
 	public function create(){
-
 		if($this->isClosed()) {
 
 			$order = new Order();
@@ -66,7 +57,7 @@ class SalesmanOrderConformer implements OrderConformer {
 			$this->updateOrder($order);
 
 		}else{
-			$this->calculateProductsValues();
+			$this->calculateValues();
 		}
 
 		return $this;
@@ -74,7 +65,7 @@ class SalesmanOrderConformer implements OrderConformer {
 
 	private function open($order_id){
 
-		$order =  Order::with('products', 'customer', 'representative', 'representative.brands')->find($order_id);
+		$order =  Order::find($order_id);
 
 		$this->close();
 		if(!isset($order['products'])){
@@ -82,8 +73,8 @@ class SalesmanOrderConformer implements OrderConformer {
 		}
 
 		$this->setOrder($order);
-		$this->calculateProductsValues();
-		return $this;
+		$this->calculateValues();
+		//return $this;
 	}
 
 	public function save(){
@@ -101,11 +92,11 @@ class SalesmanOrderConformer implements OrderConformer {
 			$this->saveProducts($order);
 		}
 
-		$representative = Representative::find($this->get()['representative_id']);
-		$representative->notify(new NewOrderPlaced($order['id']));
+		//$representative = Representative::find($this->get()['representative_id']);
+		//$representative->notify(new NewOrderPlaced($order['id']));
 
-		$customer = Customer::find($this->get()['customer_id']);
-		$customer->notify(new NewOrderPlaced($order['id']));
+		//$customer = Customer::find($this->get()['customer_id']);
+		//$customer->notify(new NewOrderPlaced($order['id']));
 
 		return $this;
 
@@ -114,20 +105,23 @@ class SalesmanOrderConformer implements OrderConformer {
 
 	public function conform()
 	{
-		$this->calculateProductsValues();
+		$this->calculateValues();
 		return $this;
 	}
 
-
 	private function setOrder($order){
-		$this->order = collect($order)->toArray();
+		if(!isset($order['products']) and $order['id'] != null){
+			 $order['products'] = Order::find($order['id'])->products;
+		}
 
+		$this->order = collect($order)->toArray();
+		return $this;
 	}
 
 	private function updateOrder($order)
 	{
 		$this->setOrder($order);
-		$this->calculateProductsValues();
+		$this->calculateValues();
 		return $this->get();
 	}
 
@@ -155,8 +149,9 @@ class SalesmanOrderConformer implements OrderConformer {
 			unset($product['pivot']['grid']);
 			$saveableProducts[$key] = $product['pivot'];
 		}
-		DB::table('order_product')->where('order_id', '=', $order['id'])->delete();
-		return $order->products()->attach($saveableProducts);
+		//DB::table('order_product')->where('order_id', '=', $order['id'])->delete();
+		return $order->products()->sync($saveableProducts);
+		//return $order->products()->attach($saveableProducts);
 
 	}
 
@@ -209,39 +204,53 @@ class SalesmanOrderConformer implements OrderConformer {
 		$this->order['products'] = collect($products)->toArray();
 	}
 	public function getProducts(){
-		return collect($this->order['products'])->toArray();
+        //return collect(Session::get('ShoppingCart.products'));
+
+        return collect($this->order['products'])->toArray();
 	}
-	public function addProduct($product_id, $grid_id ,$amount = 1, $customer_discount = 0.00, $representative_discount = 0.00){
+  public function addProduct($product_id, $grid_id ,$products_amount = 1, $grids_amount, $company_discount = 0.00, $representative_discount = 0.00, $representative_commission_total = 0.00, $representative_commission_price = 0.00, $representative_commission_company = 0.00 ){
+
 
 		$brand_id = Product::find($product_id)->brand->id;
-		$this->addBrand($brand_id);
-		if(!$this->checkBrand($product_id)){
-			return false;
-		}
+		//$this->addBrand($brand_id);
+		//if(!$this->checkBrand($product_id)){
+			//return false;
+		//}
+
 
 		if($this->productExists($product_id, $grid_id)){
-			dd('é que cai aqui');
 			$product = $this->getProduct($product_id, $grid_id);
-			$product['pivot']['amount'] += $amount;
+			$product['pivot']['products_amount'] += $products_amount;
 			$this->updateProduct($product);
-			$this->calculateProductsValues();
+			$this->calculateValues();
 			return $product;
 		}
 
+
 		$product = Product::find($product_id)->toArray();
+		if (isset($this->order['id'])){
+			$product['pivot']['order_id'] = $this->order['id'];
+		}
 		$product['pivot']['product_id'] = $product_id;
 		$product['pivot']['grid_id'] = $grid_id;
-		$product['pivot']['grid'] = Grid::find($grid_id);
-		$product['pivot']['customer_discount'] = $customer_discount;
-		$product['pivot']['amount'] = $amount;
+		//$product['pivot']['grid'] = Grid::find($grid_id);
+		$product['pivot']['company_discount'] = $company_discount;
+		$product['pivot']['products_amount'] = $products_amount;
+    $product['pivot']['grids_amount'] = $grids_amount;
 		$product['pivot']['representative_discount'] = $representative_discount;
-		$product['pivot']['grid']['total'] = $product['pivot']['grid']->total;
+		$product['pivot']['representative_commission_total'] = $representative_commission_total;
+    $product['pivot']['representative_commission_price'] = $representative_commission_price;
+    $product['pivot']['representative_commission_company'] = 5;//Representative::find($this->order['representative_id'])->brands->find($brand_id)->pivot['commission'];
+    $product['pivot']['representative_commission_percentage'] = 0;
 
-		$order = $this->get();
+    $order = $this->get();
+
 		$order['products'][] = $product;
 		$this->setOrder($order);
 
-		$this->calculateProductsValues();
+    Session::push('ShoppingCart.products', $product);
+
+		$this->calculateValues();
 
 		return $product;
 	}
@@ -275,7 +284,7 @@ class SalesmanOrderConformer implements OrderConformer {
 
 		$this->updateProduct($product);
 
-		$this->calculateProductsValues();
+		$this->calculateValues();
 	}
 	public function getProductCustomerDiscount($product_id, $grid_id){
 
@@ -290,7 +299,7 @@ class SalesmanOrderConformer implements OrderConformer {
 
 		$this->updateProduct($product);
 
-		$this->calculateProductsValues();
+		$this->calculateValues();
 
 
 	}
@@ -307,69 +316,118 @@ class SalesmanOrderConformer implements OrderConformer {
 
 		$this->updateProduct($product);
 
-		$this->calculateProductsValues();
+		$this->calculateValues();
 
 	}
-	public function calculateProductsValues(){
+	public function calculateValues(){
+
+        if (!isset($this->order['representative_discount'])){
+            $this->order['representative_discount'] = 0;
+        }
+
+        if (!isset($this->order['company_discount'])){
+            $this->order['company_discount'] = 0;
+        }
 
 
-		$total = 0.00; /* Total do pedido a ser pago*/
-		$price = 0.00; /* Total do pedido sem descontos*/
-		$overalliscount = 0.00; /* Valor total de descontos */
-		$cost = 0.00; /* Custo para a empresa do pedido */
-		$representativeCommission = 0.00; /* Total de comissão do representante */
-		$representativeCommissionDiscount = 0.00; /* Total de comissão perdida no desconto */
-		$reoresentativePercentage = 0.00; /* Percentual ganho de comissão no pedido */
+        //Declarando order
+        $this->order['cost'] = 0; // é a soma do custo de todos os produtos
+        $this->order['price'] = 0; // é a soma do preço de totos os produtos
+        $this->order['representative_commission_total'] = 0; // total à receber pelo representante
+        $this->order['representative_commission_discount'] = 0; // valor total sedido pelo representate
+        $this->order['representative_commission_percentage'] = 0; // porcentagem ganha pelo representante
+        $this->order['representative_commission_price'] = 0; // total sem desconto
+        $this->order['grids_amount'] = 0; //
+        $this->order['products_amount'] = 0; // soma de todas as quantidades
+        $this->order['representative_commission_company'] = 0;
+        $this->order['total_without_discount'] = 0; //total sem desconto
+        $this->order['total'] = 0; //valor total
+        $this->order['company_total_discount'] = 0; // valor total de desconto da empresa
+        $this->order['total_discount'] = 0; //soma dos descontos
+        $this->order['company_real_discount'] = 0; //porcentagem real de desconto
 
-		$brands = $this->getBrands();
-		foreach($brands as $brand){
-			$updatedBrand = $this->calculateBrand($brand['id']);
 
-		}
+        $products = $this->order['products'];
+	    for ($i=0; $i< count($products); $i++){
 
+            //pegando representative_discount geral se o do produto estiver nulo
+            if ($products[$i]['pivot']['representative_discount'] == null){
+                $products[$i]['pivot']['representative_discount'] = $this->order['representative_discount'];
+            }
 
-		$this->order['total'] = $total;
-		$this->order['price'] = $price;
-		$this->order['representative_commission'] = $representativeCommission;
-		$this->order['overalldiscount'] = $overalliscount;
-		$this->order['cost'] = $cost;
-		$this->order['representative_commission_discount'] = $representativeCommissionDiscount;
-		$this->order['representative_percentage'] = $reoresentativePercentage;
+            //pegando company_discount geral se o do produto estiver nulo
+            if ($products[$i]['pivot']['company_discount'] == null){
+                $products[$i]['pivot']['company_discount'] = $this->order['company_discount'];
+            }
 
-	}
+            //calculos basicos
+            $products[$i]['pivot']['total_without_discount'] = $products[$i]['price'] * $products[$i]['pivot']['products_amount'];
+            $products[$i]['pivot']['representative_commission_percentage'] = $products[$i]['pivot']['representative_commission_company'] - $products[$i]['pivot']['representative_discount'];
+            $products[$i]['pivot']['representative_commission_total'] = $products[$i]['pivot']['total_without_discount'] * $products[$i]['pivot']['representative_commission_percentage']/100;
+            $products[$i]['pivot']['representative_commission_discount'] = $products[$i]['pivot']['total_without_discount'] * $products[$i]['pivot']['representative_discount']/100;
+            $products[$i]['pivot']['representative_commission_price'] = $products[$i]['pivot']['total_without_discount'] * $products[$i]['pivot']['representative_commission_company']/100;
+            $products[$i]['pivot']['company_total_discount'] = $products[$i]['pivot']['total_without_discount'] * $products[$i]['pivot']['company_discount']/100;
+            $products[$i]['pivot']['cost'] = $products[$i]['cost'] * $products[$i]['pivot']['products_amount'];
+            $products[$i]['pivot']['price'] = $products[$i]['price'] * $products[$i]['pivot']['products_amount'];
+            $products[$i]['pivot']['total'] = $products[$i]['pivot']['total_without_discount'] - $products[$i]['pivot']['company_total_discount'] - $products[$i]['pivot']['representative_commission_discount'];
+
+            //soma de produtos pra ordem
+            $this->order['cost'] = $this->order['cost'] + $products[$i]['pivot']['cost'];
+            $this->order['price'] = $this->order['price'] + $products[$i]['pivot']['price'];
+            $this->order['representative_commission_total'] = $this->order['representative_commission_total'] + $products[$i]['pivot']['representative_commission_total'];
+            $this->order['representative_commission_discount'] = $this->order['representative_commission_discount'] + $products[$i]['pivot']['representative_commission_discount'];
+            $this->order['representative_commission_price'] = $this->order['representative_commission_price'] + $products[$i]['pivot']['representative_commission_price'];
+            $this->order['products_amount'] = $this->order['products_amount'] + $products[$i]['pivot']['products_amount'];
+            $this->order['total_without_discount'] = $this->order['total_without_discount'] + $products[$i]['pivot']['total_without_discount'];;
+            $this->order['total'] = $this->order['total'] + $products[$i]['pivot']['total'];
+            $this->order['company_total_discount'] = $this->order['company_total_discount'] + $products[$i]['pivot']['company_total_discount'];
+
+	        // maximo de desconto possivel
+	        if($products[$i]['pivot']['representative_commission_company'] >= $this->order['representative_commission_company'])
+                $this->order['representative_commission_company'] = $products[$i]['pivot']['representative_commission_company'];
+         }
+
+        //calculos basicos ordem
+        if ($this->order['total_without_discount'] != 0) {
+            $this->order['representative_commission_percentage'] = $this->order['representative_commission_total'] * 100 / $this->order['total_without_discount'];
+            $this->order['total_discount'] = $this->order['representative_commission_discount'] + $this->order['company_total_discount'];
+            $this->order['company_real_discount'] = $this->order['company_total_discount'] * 100 / $this->order['total_without_discount'];
+            $this->order['products'] = $products;
+        }
+    }
 	public function calculateBrand($brand_id){
 
 		$products = $this->getBrandProducts($brand_id);
 		$brand['total'] = 0.00;
 		$brand['price'] = 0.00;
-		$brand['discount'] = 0.00;
-		$brand['overalldiscount'] = 0.00;
 		$brand['cost'] = 0.00;
-		$brand['representative_commission'] = 0.00;
+		$brand['representative_discount'] = 0.00;
+		$brand['representative_commission_total'] = 0.00;
 		$brand['representative_commission_discount'] = 0.00;
-		$brand['representative_percentage'] = 0.00;
-		$brand['amount'] = 0;
+		$brand['representative_commission_price'] = 0.00;
+		$brand['representative_commission_percentage'] = 0.00;
+		$brand['representative_commission_company'] = 0.00;
+		$brand['grids_amount'] = 0;
+		$brand['products_amount'] = 0;
 
 		foreach ($products as $index => $product) {
 			$updated_product = $this->calculateProductValue($product['id'], $product['pivot']['grid_id']);
 
-			$brand['total'] += $updated_product['pivot']['total'];
+			$brand['total'] += $updated_product['pivot']['total'];;
 			$brand['price'] += $updated_product['pivot']['price'];
-			$brand['overalldiscount'] += $updated_product['pivot']['total_discount'];
-			$brand['cost'] += $updated_product['pivot']['cost'];
-			$brand['representative_commission'] += $updated_product['pivot']['representative_commission'];
+            $brand['cost'] += $updated_product['pivot']['cost'];
+			$brand['representative_discount'] += $updated_product['pivot']['representative_discount'];
+			$brand['representative_commission_total'] += $updated_product['pivot']['representative_commission_total'];
 			$brand['representative_commission_discount'] += $updated_product['pivot']['representative_commission_discount'];
-			$brand['discount'] += $updated_product['pivot']['customer_discount'];
-			$brand['amount'] += $updated_product['pivot']['amount'];
+            $brand['representative_commission_price'] += $updated_product['pivot']['representative_commission_price'];
+			$brand['representative_commission_percentage'] += $updated_product['pivot']['representative_commission_percentage'];
+			$brand['grids_amount'] += $updated_product['pivot']['grids_amount'];
+            $brand['products_amount'] += $updated_product['pivot']['products_amount'];
+            $brand['representative_commission_company'] = $updated_product['pivot']['representative_commission_company'];
 
 		}
 
-		$representativePercentage = 0.00;
-		$brand['discount'] = 0.00;
-		$brand['customer_discount'] = 0.00;
-		$brand['representative_percentage'] = $representativePercentage;
-		$brand['representative_commission_percentage'] = $representativePercentage;
-
+        return $brand;
 	}
 	public function calculateProductValue($product_id, $grid_id){
 
@@ -382,30 +440,32 @@ class SalesmanOrderConformer implements OrderConformer {
 		}
 
 
-		$productRepresentativeDiscount = $product['pivot']['representative_discount'];
+		$representativeDiscount = $product['pivot']['representative_discount'];
 
-		if($productRepresentativeDiscount <= 0){
+		if($representativeDiscount <= 0){
 			if($this->getRepresentativeDiscount()) {
-				$productRepresentativeDiscount = $this->getRepresentativeDiscount();
+				$representativeDiscount = $this->getRepresentativeDiscount();
 			}else{
-				$productRepresentativeDiscount = 0;
+				$representativeDiscount = 0;
 			}
 
 		}
 
-		$productCustomerDiscount = $product['pivot']['customer_discount'];
-		if($productCustomerDiscount <= 0){
-			if($this->getCustomerDiscount()){
-				$productCustomerDiscount = $this->getCustomerDiscount();
+		$companyDiscount = $product['pivot']['company_discount'];
+		if($companyDiscount <= 0){
+			if($this->getCompanyDiscount()){
+                $companyDiscount = $this->getCompanyDiscount();
 			}else{
-				$productCustomerDiscount = 0;
+                $companyDiscount = 0;
 			}
 
 		}
 
-		$productAmount = $product['pivot']['amount'];
-		$representativeBrandCommission = Representative::find($product['pivot']['representative_id'])->brands()->wherePivot('brand_id', $product['brand_id'])->first()['pivot']['commission'];
-		$product['pivot']['representative_commission_percentage'] = $representativeBrandCommission - $productRepresentativeDiscount;
+		$productAmount = $product['pivot']['grids_amount'];
+
+        $product['pivot']['representative_commission_company'] = Representative::find($product['pivot']['representative_id'])->brands()->wherePivot('brand_id', $product['brand_id']);
+        //dd($product['pivot']['representative_commission_company']);
+		//$product['pivot']['representative_commission_percentage'] =  - $representativeDiscount;
 
 		$productCost = $product['cost'];
 		$productPrice = $product['price'];
@@ -417,10 +477,10 @@ class SalesmanOrderConformer implements OrderConformer {
 
 		$product['pivot']['cost'] = (($productCost * $gridTotal) * $productAmount);
 		$product['pivot']['price'] = (($productPrice * $gridTotal) * $productAmount);
-		$product['pivot']['discount'] = ($product['pivot']['price'] * ($productCustomerDiscount / 100));
-		$product['pivot']['representative_commission_discount'] = $product['pivot']['price'] * ($productRepresentativeDiscount / 100);
-		$product['pivot']['representative_commission_percentage'] = $product['pivot']['price'] * ($productRepresentativeDiscount / 100);
-		$product['pivot']['total_discount'] = $product['pivot']['representative_commission'] + $product['pivot']['discount'];
+		$product['pivot']['discount'] = ($product['pivot']['price'] * ($companyDiscount / 100));
+		$product['pivot']['representative_commission_discount'] = $product['pivot']['price'] * ($representativeDiscount / 100);
+		$product['pivot']['representative_commission_percentage'] = $product['pivot']['price'] * ($representativeDiscount / 100);
+		$product['pivot']['total_discount'] = $product['pivot']['representative_commission_discount'] + $product['pivot']['discount'];
 
 		$product['pivot']['strLine'] = Line::find($product['line_id'])['description'];
 		$product['pivot']['strMaterial'] = Material::find($product['material_id'])['description'];
@@ -464,7 +524,7 @@ class SalesmanOrderConformer implements OrderConformer {
 		$products = collect($this->getProducts());
 		$products->pull($this->productExists($product_id, $grid_id));
 		$this->setProducts($products->toArray());
-		$this->calculateProductsValues();
+		$this->calculateValues();
 		return $this;
 
 	}
@@ -575,17 +635,17 @@ class SalesmanOrderConformer implements OrderConformer {
 	}
 
 
-	public function getCustomerDiscount(){
-		if(isset($this->order['customer_discount'])){
-			return $this->order['customer_discount'];
+	public function getCompanyDiscount(){
+		if(isset($this->order['company_discount'])){
+			return $this->order['company_discount'];
 		}
 		return 0.00;
 
 	}
-	public function setCustomerDiscount($value){
+	public function setCompanyDiscount($value){
 
-		$this->order['customer_discount'] = $value;
-		$this->calculateProductsValues();
+		$this->order['company_discount'] = $value;
+		$this->calculateValues();
 
 		return $this;
 	}
@@ -598,7 +658,7 @@ class SalesmanOrderConformer implements OrderConformer {
 	}
 	public function setRepresentativeDiscount($value){
 		$this->order['representative_discount'] = $value;
-		$this->calculateProductsValues();
+		$this->calculateValues();
 
 		return $this;
 	}

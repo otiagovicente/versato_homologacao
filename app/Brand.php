@@ -15,20 +15,15 @@ class Brand extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     public function products(){
-    	return $this->hasMany('App\Product')->with('brand', 'line', 'material', 'color', 'grids');
+    	return $this->hasMany('App\Product');
     }
 
     public function retrieveProducts(){
-    	     return $this->products()->with('brand', 'line', 'material', 'color', 'grids');
-
+    	return $this->products()->with('brand')->with('line')->with('reference')->with('material')->with('color')->with('grids');
     }
 
     public function representatives(){
-	    return $this->belongsToMany('App\Representative')->withPivot( 'brand_id', 'representative_id', 'commission')->withTimestamps();
+        return $this->belongsToMany('App\Representative')->withPivot( 'brand_id', 'representative_id', 'commission')->withTimestamps();
     }
 
-    public function orders(){
-	    return $this->belongsToMany(Order::class)->withPivot('cost', 'price', 'discount', 'brand_id', 'customer_discount', 'representative_commission', 'representative_commission_discount', 'representative_commission_percentage', 'representative_discount', 'total', 'overalldiscount', 'amount')
-		    ->withTimestamps();
-    }
 }

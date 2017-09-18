@@ -22,7 +22,7 @@
                         </li>
 
                         <li v-for="page in paginationLinks">
-                            <a v-on:click="paginate(page.url)">{{ page.page }}1</a>
+                            <a v-on:click="paginate(page.url)">{{ page.page }}</a>
                         </li>
 
                         <li>
@@ -147,7 +147,7 @@
                 url : '',
                 products: {},
                 pagination : {},
-                paginationLinks : {},
+                paginationLinks : [],
             }
         },
         components:{
@@ -212,13 +212,15 @@
             },
             buildPaginationLinks(){
                 var o = {};
+                
                 for (var i = 0; i < _ListProducts.pagination.last_page; i++) {
+                    var o = {};
                     o.url = _ListProducts.url+'?page='+(i + 1);
                     o.page = (i+1);
-                    _ListProducts.paginationLinks[i] = o;
+                    this.paginationLinks.push(o);
                 }
 
-
+                console.log(this.paginationLinks);
             },
             paginate(paginationUrl){
 

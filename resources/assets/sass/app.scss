@@ -1,27 +1,27 @@
 
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-@import url(https://fonts.googleapis.com/css?family=Roboto);
-@import url(http://fonts.googleapis.com/icon?family=Material+Icons);
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all);
-// Bootstrap
-@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css);
-//@import "~materialize-css";
-//@import url(https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css);
 //@import "/node_modules/font-awesome/scss/font-awesome";
 //@import "/node_modules/simple-line-icons/scss/simple-line-icons";
 
 // Variables
 //@import "variables";
 
-
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 .sidebar-logo {
   margin-top: 7px;
   width: 150px;
   height: auto;
 }
-.vertical-center {
-  vertical-align: middle;
+.list-customer-index-product-box h3, .list-customer-index-product-box h5 {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.form-group.v-select .form-control {
   height: auto;
 }
