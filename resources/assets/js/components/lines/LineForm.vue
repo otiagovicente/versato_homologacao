@@ -1,66 +1,56 @@
-
 <template>
-    <div id="code-input" class="form-group" >
-        <label class="col-md-3 control-label">Nome</label>
-        <div class="col-md-7" id="code">                
-            <input type="text" 
-            name="code"
-            class="form-control" 
-            placeholder="Nome"
-            v-model="line.code"
-            >
+
+    <div class="portlet-body form">
+
+        <div class="form-body form-horizontal">
+            <div class="row">
+                <div class="col-md-7">
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Código</label>
+                        <div class="col-md-7" id="code">
+                            <input type="text" name="code" class="form-control" placeholder="Código" v-model="line.code">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Descripción</label>
+                        <div class="col-md-7" id="description">
+                            <input type="text" name="code" class="form-control" placeholder="Descripción" v-model="line.description">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
+
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <a href="/lines/">
+                            <button type="button" class="btn grey-salsa btn-outline" v-show="canedit">Cancelar</button>
+                        </a>
+                        <button v-show="canedit" type="button" @click="submitData()" class="btn blue">
+                                Salvar
+                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div id="code-input" class="form-group" >
-        <label class="col-md-3 control-label">Descrição</label>
-        <div class="col-md-7" id="description">                
-            <input type="text" 
-            name="code"
-            class="form-control" 
-            placeholder="Descrição"
-            v-model="line.description"
-            >
-        </div>
-    </div>
-  
-  <div class="row">
-    <br/>
-    <hr>
-    
-    <div class="container-fluid" >
-      <div class="col-md-3 pull-right">
-        <div class="form-group">
-          <button 
-            v-show="canedit"
-            type="button" 
-            @click="submitData()" 
-            class="btn blue btn-block"
-          >
-            Salvar
-          </button>
-        </div>
-      </div>  
-      
-      <div class="col-md-3 pull-right" >
-        <div class="form-group">
-          <a href="/lines/">
-              <button type="button" class="btn grey btn-block" v-show="canedit">Cancel</button>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </template>
 
 <script>
-    import toastr from 'toastr'
+import toastr from 'toastr'
 
 export default{
     
-    
     components: {
-           
     },
+    
     props: ['pline'],
     
     data(){
@@ -114,12 +104,17 @@ export default{
         },
         
         showErrors: function(data){
-          $.each(data, function (key, value) {
-            toastr.warning('Atención', value);
-            $('#'+key).addClass('has-error');
-          }); 
+            $.each(data, function (key, value) {
+                toastr.warning('Atención', value);
+                $('#'+key).addClass('has-error');
+            }); 
+        },
+
+        goToList(){
+            window.location.href = '/lines';
         },
     },
+
     filters: {
 
     }
