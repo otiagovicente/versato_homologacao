@@ -73,6 +73,7 @@
         },
         methods:{
             getOrder(){
+                console.log('chamado!')
                 this.$http.get('/shopping-cart/get-order')
                         .then(response => {
                             _OrderHeaderBar.order = response.json();
