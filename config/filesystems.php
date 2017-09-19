@@ -54,14 +54,13 @@ return [
             'visibility' => 'public',
         ],
 
-        's3' => [
-            'driver' => 's3',
+        /*'s3' => [
+           'driver' => 's3',
             'key' => env('S3_KEY', 'AKIAIMIP246HE23324MQ'),
             'secret' => env('S3_SECRET', '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'),
             'region' => env('S3_REGION', 'sa-east-1'),
             'bucket' => env('S3_BUCKET', 'sistema-versato'),
-        ],
-
+        ],*/
         'gcs' => [
             'driver' => 'gcs',
             'credentials' => storage_path('app/credentials-gcs.json'),

@@ -305,7 +305,7 @@ Vue.component(
 
 
 window.app = new Vue({
-    el: 'body',
+    el: '#app-vue',
     methods: {
         initMap: function(){
             this.$broadcast('MapsApiLoaded');

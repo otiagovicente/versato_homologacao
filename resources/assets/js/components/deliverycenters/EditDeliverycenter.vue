@@ -81,12 +81,12 @@
 
                         <hr>
                         <div class="map">
-                            <map style="width: 100%; height: 150px;"
+                            <gmap style="width: 100%; height: 150px;"
                                         v-bind:center.sync="map.center"
                                         v-bind:zoom.sync="map.zoom"
                             >
 
-                                <marker
+                                <gmarker
                                         v-for="m in map.markers"
                                         :position.sync="m.position"
                                         :clickable.sync="m.clickable"
@@ -160,9 +160,9 @@
             vSelect: VueStrap.select,
             vOption: VueStrap.option,
             datepicker: VueStrap.datepicker,
-            Map,
+            gmap: Map,
             load,
-            Marker,
+         gmarker: Marker,
             InfoWindow
         },
         props:['pcustomer'],

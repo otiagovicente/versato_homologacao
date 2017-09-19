@@ -1,0 +1,19 @@
+/node_modules
+<<<<<<< HEAD
+node_modules
+=======
+>>>>>>> a4c57fcdc06eab6fdb2fce73b42725736e264902
+/public/storage
+/vendor
+/.idea
+Homestead.json
+Homestead.yaml
+/.env
+.env
+/storage/oauth-private.key
+/storage/oauth-public.key
+<<<<<<< HEAD
+app/Facades/
+resources/assets/js/components/products/asdf.vue
+=======
+>>>>>>> a4c57fcdc06eab6fdb2fce73b42725736e264902

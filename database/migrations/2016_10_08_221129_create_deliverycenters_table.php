@@ -13,20 +13,20 @@ class CreateDeliverycentersTable extends Migration
      */
     public function up()
     {
-//        Schema::create('deliverycenters', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('name');
-//            $table->string('description')->nullable();
-//            $table->string('address');
-//            $table->string('city');
-//            $table->string('state');
-//            $table->string('zip');
-//            $table->string('geo');
-//            $table->integer('customer_id')->unsigned();
-//            $table->foreign('customer_id')->references('id')->on('customers');
-//            $table->timestamps();
-//            $table->softDeletes();
-//        });
+        Schema::create('deliverycenters', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->string('address');
+            $table->string('city');
+            $table->string('state');
+            $table->string('zip');
+            $table->string('geo');
+            $table->integer('customer_id')->unsigned();
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -36,6 +36,6 @@ class CreateDeliverycentersTable extends Migration
      */
     public function down()
     {
-//        Schema::dropIfExists('deliverycenters');
+        Schema::dropIfExists('deliverycenters');
     }
 }

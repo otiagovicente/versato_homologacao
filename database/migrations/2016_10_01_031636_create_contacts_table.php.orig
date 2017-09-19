@@ -1,0 +1,53 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateContactsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+
+<<<<<<< HEAD
+//        Schema::create('contacts', function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->jsonb('vcard')->nullable();
+//            $table->integer('contactable_id')->unsigned();
+//            $table->string('contactable_type');
+//            $table->timestamps();
+//            $table->softDeletes();
+//        });
+=======
+        Schema::create('contacts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->jsonb('vcard')->nullable();
+            $table->integer('contactable_id')->unsigned();
+            $table->string('contactable_type');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+>>>>>>> a4c57fcdc06eab6fdb2fce73b42725736e264902
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+
+<<<<<<< HEAD
+//        Schema::drop('contacts');
+=======
+        Schema::drop('contacts');
+>>>>>>> a4c57fcdc06eab6fdb2fce73b42725736e264902
+    }
+}

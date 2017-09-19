@@ -21,7 +21,7 @@
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="top-menu">
             <ul class="nav navbar-nav pull-right">
-                <!-- BEGIN NOTIFICATION DROPDOWN -->
+                <!-- BEGIN NOTIFICATION DROPDOWN 
                 <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                     <i class="icon-bell"></i>
@@ -125,10 +125,10 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>-->
                 <!-- END NOTIFICATION DROPDOWN -->
-                <!-- BEGIN INBOX DROPDOWN -->
-                <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+                <!-- BEGIN INBOX DROPDOWN 
+                <li class="dropdown dropdown-extended dropdown-inbox hide" id="header_inbox_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                     <i class="icon-envelope-open"></i>
                     <span class="badge badge-default">
@@ -225,7 +225,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>-->
                 <!-- END INBOX DROPDOWN -->
 
                 <!-- BEGIN ORDER HEADER BAR-->

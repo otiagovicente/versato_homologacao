@@ -14,14 +14,14 @@ class CreateContactsTable extends Migration
     public function up()
     {
 
-//        Schema::create('contacts', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->jsonb('vcard')->nullable();
-//            $table->integer('contactable_id')->unsigned();
-//            $table->string('contactable_type');
-//            $table->timestamps();
-//            $table->softDeletes();
-//        });
+        Schema::create('contacts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->jsonb('vcard')->nullable();
+            $table->integer('contactable_id')->unsigned();
+            $table->string('contactable_type');
+            $table->timestamps();
+            $table->softDeletes();
+        });
 
     }
 
@@ -33,6 +33,6 @@ class CreateContactsTable extends Migration
     public function down()
     {
 
-//        Schema::drop('contacts');
+        Schema::drop('contacts');
     }
 }
