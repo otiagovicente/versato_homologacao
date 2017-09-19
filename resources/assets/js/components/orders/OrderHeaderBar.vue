@@ -67,7 +67,8 @@
             }
         },
         mounted() {
-            this.$on('addProduct', () => this.getOrder());
+            console.log('asd');
+            this.$bus.$on('addProduct', () => this.getOrder());
         },
         ready(){
             window._OrderHeaderBar = this;

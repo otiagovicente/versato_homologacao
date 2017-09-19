@@ -54,6 +54,15 @@ import Echo from "laravel-echo"
 window.Vue = require('vue/dist/vue.js');
 window.VueResource = require('vue-resource');
 window.EventBus = new Vue({});
+
+Object.defineProperties(Vue.prototype, {
+    $bus: {
+        get: function () {
+            return window.EventBus;
+        }
+    }
+}
+
 Vue.use(VueResource);
 
 /**
