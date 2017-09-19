@@ -2,17 +2,18 @@
 
 @section('content')
 
-@include('lines.partials.header', [
-    'pageTitle' => 'Editar Linha',
-    'url' => '/lines/'.$line->id.'/edit',
-    'actions' => []
-])
+    <div class="portlet light">
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-10">
-            <line-form :pline="{{$line}}"> </line-form>
+        <div class="portlet-title">
+            <div class="caption font-blue">
+                <i class="fa fa-plus font-blue"></i>Editar Línea
+            </div>
         </div>
+
+        <div class="portlet-body form">
+            <line-form :pline="{{$line}}"></line-form>
+        </div>
+
     </div>
-</div>
+
 @endsection
