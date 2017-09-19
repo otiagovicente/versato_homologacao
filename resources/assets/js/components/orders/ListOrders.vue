@@ -332,7 +332,7 @@
                 '&status_id='+ status +
                 '&search='+_listOrders.search)
                     .then((response) => {
-
+                        console.log(response);
                         _listOrders.orders = response;
 
                     }).catch((response) => {
