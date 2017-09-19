@@ -66,13 +66,18 @@
                 return 0;
             }
         },
+        mounted() {
+            console.log('asd');
+            this.$bus.$on('addProduct', () => this.getOrder());
+        },
         ready(){
             window._OrderHeaderBar = this;
             _OrderHeaderBar.getOrder();
-            _OrderHeaderBar.$parent.$on('addProduct', () => _OrderHeaderBar.getOrder());
+            //_OrderHeaderBar.$parent.$on('addProduct', () => _OrderHeaderBar.getOrder());
         },
         methods:{
             getOrder(){
+                console.log('chamado!')
                 this.$http.get('/shopping-cart/get-order')
                         .then(response => {
                             _OrderHeaderBar.order = response.json();
