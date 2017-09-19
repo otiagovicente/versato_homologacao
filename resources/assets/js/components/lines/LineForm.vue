@@ -7,16 +7,16 @@
                 <div class="col-md-7">
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Nome</label>
+                        <label class="col-md-3 control-label">Código</label>
                         <div class="col-md-7" id="code">
-                            <input type="text" name="code" class="form-control" placeholder="Nome" v-model="line.code">
+                            <input type="text" name="code" class="form-control" placeholder="Código" v-model="line.code">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Descrição</label>
+                        <label class="col-md-3 control-label">Descripción</label>
                         <div class="col-md-7" id="description">
-                            <input type="text" name="code" class="form-control" placeholder="Descrição" v-model="line.description">
+                            <input type="text" name="code" class="form-control" placeholder="Descripción" v-model="line.description">
                         </div>
                     </div>
 
@@ -28,12 +28,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="pull-right">
+                        <a href="/lines/">
+                            <button type="button" class="btn grey-salsa btn-outline" v-show="canedit">Cancelar</button>
+                        </a>
                         <button v-show="canedit" type="button" @click="submitData()" class="btn blue">
                                 Salvar
                             </button>
-                        <a href="/lines/">
-                            <button type="button" class="btn grey" v-show="canedit">Cancel</button>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -109,7 +109,12 @@ export default{
                 $('#'+key).addClass('has-error');
             }); 
         },
+
+        goToList(){
+            window.location.href = '/lines';
+        },
     },
+
     filters: {
 
     }

@@ -99,7 +99,7 @@ export default{
       insertData: function(){
         this.$http.post('/colors', this.color)
         .then((response) => {
-          toastr.success('Sucesso!','Macro Região incluída com sucesso');
+          toastr.success('Sucesso!','Color incluída com sucesso');
         }, (response) => { 
           this.showErrors(response.data); 
         }); 
@@ -108,7 +108,7 @@ export default{
       updateData: function(){
         this.$http.put('/colors/'+this.color.id, this.color)
         .then((response) => {
-          toastr.success('Sucesso!','Macro Região atualizada com sucesso');
+          toastr.success('Sucesso!','Color atualizada com sucesso');
         }, (response) => { 
           this.showErrors(response.data); 
         }); 
