@@ -332,8 +332,8 @@
                 '&status_id='+ status +
                 '&search='+_listOrders.search)
                     .then((response) => {
-                        console.log(response.data);
-                        _listOrders.orders.data = response.data;
+                        console.log(JSON.parse(response.data));
+                        _listOrders.orders.data = JSON.parse(response.data);
 
                     }).catch((response) => {
                         toastr.error('No fué posible conectar al servidor');
