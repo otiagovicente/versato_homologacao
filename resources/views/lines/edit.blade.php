@@ -21,11 +21,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="portlet-body form">
-            <line-form :pline="{{$line}}"></line-form>
-        </div>
-
     </div>
 
 @endsection
