@@ -61,7 +61,7 @@ Object.defineProperties(Vue.prototype, {
             return window.EventBus;
         }
     }
-}
+});
 
 Vue.use(VueResource);
 
