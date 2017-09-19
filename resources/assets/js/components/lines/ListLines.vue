@@ -46,7 +46,7 @@
         <div class="container-fluid">
 
       			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" v-for="line in lines.data.data">
-      				<a class="dashboard-stat dashboard-stat-v2 grey" v-on:click="getlines(line.id)"="">
+      				<a class="dashboard-stat dashboard-stat-v2 grey" v-on:click="goToline(line.id)">
       					<div class="visual">
       						<i class="fa fa-sitemap"></i>
       					</div>
