@@ -69,6 +69,7 @@
         ready(){
             window._OrderHeaderBar = this;
             _OrderHeaderBar.getOrder();
+            _OrderHeaderBar.$parent.$on('addProduct', () => _OrderHeaderBar.getOrder());
         },
         methods:{
             getOrder(){
