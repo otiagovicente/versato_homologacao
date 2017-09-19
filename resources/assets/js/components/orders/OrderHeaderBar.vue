@@ -66,10 +66,13 @@
                 return 0;
             }
         },
+        mounted() {
+            this.$on('addProduct', () => this.getOrder());
+        },
         ready(){
             window._OrderHeaderBar = this;
             _OrderHeaderBar.getOrder();
-            _OrderHeaderBar.$parent.$on('addProduct', () => _OrderHeaderBar.getOrder());
+            //_OrderHeaderBar.$parent.$on('addProduct', () => _OrderHeaderBar.getOrder());
         },
         methods:{
             getOrder(){

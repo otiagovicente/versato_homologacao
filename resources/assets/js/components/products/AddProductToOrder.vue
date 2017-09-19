@@ -194,7 +194,7 @@
                             // console.log('deu certo');
                             // response.json();
                             toastr.success(_AddProductToOrder.product.line.description+' '+_AddProductToOrder.product.material.description+' '+_AddProductToOrder.product.color.description+ ' agregado');
-                            _AddProductToOrder.$parent.$emit('addProduct');
+                            this.$emit('addProduct');
                             _AddProductToOrder.closeWindow();
                         })
                         .catch(response => {
