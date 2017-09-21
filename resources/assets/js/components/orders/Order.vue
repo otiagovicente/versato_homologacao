@@ -345,6 +345,7 @@
                         .then(response => {
                             _Order.order = response.json();
                             console.log('pedido salvo');
+                            this.$bus.$emit('syncCart');
                         })
                         .catch(response => {
                             console.log('pedido não salvo');

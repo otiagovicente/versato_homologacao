@@ -219,8 +219,6 @@
                     o.page = (i+1);
                     this.paginationLinks.push(o);
                 }
-
-                console.log(this.paginationLinks);
             },
             paginate(paginationUrl){
 
