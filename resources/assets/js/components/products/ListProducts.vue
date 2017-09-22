@@ -12,7 +12,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-12">
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
                         <li>
@@ -21,7 +21,7 @@
                             </a>
                         </li>
 
-                        <li v-for="page in paginationLinks">
+                        <li v-for="page in paginationLinks" v-bind:class="{ 'active': isActive(page.page) }">
                             <a v-on:click="paginate(page.url)">{{ page.page }}</a>
                         </li>
 
@@ -150,6 +150,7 @@
                 paginationLinks : [],
             }
         },
+
         components:{
             'add-product-to-order': AddProductToOrder,
         },
@@ -161,6 +162,10 @@
 
         },
         methods: {
+
+            isActive(page) {
+                return this.pagination && this.pagination.current_page == page;
+            },
 
             getProducts(){
 
@@ -211,20 +216,19 @@
 
             },
             buildPaginationLinks(){
-                var o = {};
-                
-                for (var i = 0; i < _ListProducts.pagination.last_page; i++) {
-                    var o = {};
-                    o.url = _ListProducts.url+'?page='+(i + 1);
-                    o.page = (i+1);
-                    this.paginationLinks.push(o);
+                var links = [];
+                for (var i = 1; i <= _ListProducts.pagination.last_page; i++) {
+                    links.push({ url: _ListProducts.url+'?page='+(i) , page: i});
                 }
+                this.paginationLinks = links;
             },
+
             paginate(paginationUrl){
 
                 this.$http.get(paginationUrl)
                         .then(response => {
-                            _ListProducts.pagination = response.json();
+                            this.pagination = response.json();
+                            _ListProducts.pagination = this.pagination;
                             _ListProducts.pagination.data = null;
                             _ListProducts.products = response.json().data;
                             _ListProducts.buildPaginationLinks();
