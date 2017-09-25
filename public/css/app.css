@@ -7688,4 +7688,22 @@ button.close {
   height: auto;
 }
 
+.crop-c {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.crop-c img.c {
+  display: block;
+  min-width: 100%;
+  min-height: 100%;
+  margin: auto;
+  position: absolute;
+  top: -100%;
+  right: -100%;
+  bottom: -100%;
+  left: -100%;
+}
+
 /*# sourceMappingURL=app.css.map */
