@@ -25,3 +25,21 @@
 .form-group.v-select .form-control {
   height: auto;
 }
+
+.crop-c {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  
+  img.c {
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
+    margin: auto;
+    position: absolute;
+    top: -100%;
+    right: -100%;
+    bottom: -100%;
+    left: -100%;
+  }
+}

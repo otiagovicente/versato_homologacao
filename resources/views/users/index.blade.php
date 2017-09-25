@@ -44,7 +44,7 @@
                                             </div>
                                             <div class="mt-card-content">
                                                 <h3 class="mt-card-name">{{ $user->name.' '.$user->lastname }}</h3>
-                                                <p class="mt-card-desc font-grey-mint">{{$user->occupation}}</p>
+                                                <p class="mt-card-desc font-grey-mint">{{$user->occupation?:"&nbsp;"}}</p>
                                                 <div class="mt-card-social">
                                                     <ul>
                                                         <li>

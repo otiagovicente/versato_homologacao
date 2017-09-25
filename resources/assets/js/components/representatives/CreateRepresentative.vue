@@ -43,7 +43,7 @@
                                                 {{brand.name}}
                                             </div>
                                             <div class="col-md-2">
-                                                {{brand.comission}}%
+                                                {{brand.comission||brand.pivot.commission}}%
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +196,13 @@
             getBrands: function () {
                 this.$http.get('/api/representatives/' + _CreateRepresentative.prepresentativeid + '/brands')
                         .then(response => {
-                            _CreateRepresentative.brands = response.json();
+                            var _brands = response.json(),
+                                _newBrands = [];
+                            _.each(_brands, function(brand) {
+                                brand.comission = brand.comission || brand.pivot.commission;
+                                _newBrands.push(brand);
+                            })
+                            _CreateRepresentative.brands = _newBrands;
                         })
                         .catch(response => {
                             console.log(response.json());
@@ -226,7 +232,10 @@
                 if (!_CreateRepresentative.representative.id) {
                     _CreateRepresentative.store();
                 } else {
-                    _CreateRepresentative.update();
+                    _CreateRepresentative.update(() => {
+                        _CreateRepresentative.getBrands();
+                        _CreateRepresentative.getRegions();
+                    });
                 }
 
             },
@@ -242,7 +251,8 @@
                             _CreateRepresentative.brands = null;
                         })
                         .catch(response => {
-                            $.each(response.data, function (key, value) {
+                            var d = JSON.parse(response.data);
+                            $.each(d, function (key, value) {
                                 toastr.error(value);
                                 $('#' + key).addClass('has-error');
                             });
@@ -280,7 +290,7 @@
                     if(blAdd) _CreateRepresentative.representative.brands.push({brand_id: brand.id, commision:brand.comission});
                 });
             },
-            update: function () {
+            update: function (cb) {
                 _CreateRepresentative.loadBrandsToData();
                 _CreateRepresentative.loadRegionsToData();
 
@@ -290,6 +300,9 @@
                             toastr.success('Representante guardado con exito');
                             _CreateRepresentative.regions = null;
                             _CreateRepresentative.brands = null;
+
+                            if (!!cb)
+                                cb();
                         })
                         .catch(response => {
                             $.each(response.data, function (key, value) {

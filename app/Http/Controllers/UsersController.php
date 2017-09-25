@@ -11,7 +11,9 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\PasswordRequest;
 use Auth;
 use Hash;
-
+use Image;
+use File;
+use Illuminate\Http\UploadedFile;
 
 class UsersController extends Controller
 {
@@ -66,17 +68,25 @@ class UsersController extends Controller
     }
 
     public function addPhoto(Request $request){
-
-
-        $this->validate($request,[
+        $this->validate($request, [
             'photo' => 'required|mimes:jpg,png,jpeg'
         ]);
 
-        //Faz upload da imagem para o Driver AWS S3
-        $image = $request->file('photo')->store('users','gcs');
+        /* we are generating a SQUARE thumbnail */
+        $image = $request->file('photo');
+        $input['photo'] = time().'.'.$image->getClientOriginalExtension();
+        $destinationPath = public_path('thumbnail');
+        $img = Image::make($image);
+        $thumbnail = $destinationPath.'/'.$input['photo'];
+        $finalImage = $img->fit(500, 500)->save($thumbnail);
+
+        //Faz upload da imagem para o Driver GCS (no longer AWS S3)
+        $image = (new UploadedFile($thumbnail, $input['photo']))->store('users', 'gcs');
 
         //Torna acessível publicamente a imagem
         Storage::disk('gcs')->setVisibility($image, 'public');
+
+        File::delete($thumbnail);
 
         /*
          * Espera 5 segundos para garantir que a visibilidade do
