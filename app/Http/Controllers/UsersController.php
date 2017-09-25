@@ -23,8 +23,9 @@ class UsersController extends Controller
         $roles = [
             1 => 'SuperAdmin',
             2 => 'Admin',
-            3 => 'Editor',
-            4 => 'Representante'
+            3 => 'Gestor',
+            4 => 'Editor',
+            5 => 'Representante'
         ];
 
         $usersgroup = User::all()->groupBy('role_id');
