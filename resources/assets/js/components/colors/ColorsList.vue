@@ -24,7 +24,7 @@
 
                     <div class="color-color" v-bind:style="{ 'background-color': color.color }">&nbsp;</div>
                         <hr />
-                        <div style="text-align:right;">
+                        <div class="color-caption">
                         <span>
                             <span><small>{{ color.description }}</small></span>
                             <span class="h2" style="padding-left:10px;">{{ color.code }}</span>
@@ -76,6 +76,12 @@
         height:180px;
     }
 
+    .color-caption {
+        text-align: right;
+        height: 52px;
+        overflow: hidden;
+    }
+
 </style>
 <script>
     export default{
@@ -103,6 +109,7 @@
                             _this.page = page
                             _this.colors = response.json().data;
                             _this.pagination = response.json();
+                            _this.scrollTop();
                         });
             },
             goToColor: function(color){
@@ -118,6 +125,9 @@
                 this.page=n;
                 this.getColors();
             },
+            scrollTop() {
+                $("html, body").animate({scrollTop:0}, 500);
+            }
         }
     }
 </script>
