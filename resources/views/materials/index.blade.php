@@ -17,7 +17,7 @@
 								<img src="{{ $material->sample }}" alt="{{ $material->description }}" style="width:100%; height:100%">
 							</div>
 							<hr>
-							<div style="text-align:right;">
+							<div style="text-align:right; overflow: hidden; height: 52px;">
 							<span>
 								<span><small>{{ $material->description }}</small></span>
 								<span class="h2" style="padding-left:10px;">{{ $material->code }}</span>
