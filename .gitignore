@@ -8,3 +8,7 @@ Homestead.yaml
 .env
 /storage/oauth-private.key
 /storage/oauth-public.key
+public/js/app.js
+public/css/app.css.map
+public/css/all.css.map
+public/css/all.css

@@ -16,6 +16,8 @@
                         <li v-for="product in order.products" class="order-header-bar-product-box">
                             <a href="#">
                                 <img v-bind:src="product.photo" />
+                                <span class="order-product-description">{{product.line.description}} {{product.material.description}}</span>
+                                <span class="order-product-color">{{product.color.description}} x{{product.pivot.products_amount}}</span>
                             </a>
                         </li>
 
@@ -42,9 +44,19 @@
         left: 10px;
     }
 
+    .order-product-color, .order-product-description {
+        display: block;
+    }
+
+    .order-product-color {
+        font-size: 10px;
+    }
+
     .order-header-bar-product-box img{
         height: 50px;
         width: auto;
+        float: left;
+        margin-right: 10px;
     }
 </style>
 <script type="text/babel">
@@ -66,13 +78,12 @@
                 return 0;
             }
         },
-        mounted() {
-            console.log('asd');
-            this.$bus.$on('addProduct', () => this.getOrder());
-        },
         ready(){
             window._OrderHeaderBar = this;
+
             _OrderHeaderBar.getOrder();
+
+            this.$bus.$on('syncCart', () => this.getOrder());
             //_OrderHeaderBar.$parent.$on('addProduct', () => _OrderHeaderBar.getOrder());
         },
         methods:{
@@ -81,6 +92,7 @@
                 this.$http.get('/shopping-cart/get-order')
                         .then(response => {
                             _OrderHeaderBar.order = response.json();
+                            console.log(_OrderHeaderBar.order.products);
                         })
                         .catch(response => {
                             toastr.error('No fué posible cargar el pedido');

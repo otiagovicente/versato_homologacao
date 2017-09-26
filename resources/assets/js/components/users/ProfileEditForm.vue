@@ -112,6 +112,11 @@
 
                                         </div>
                                     </div>
+                                    <hr>
+                                    <div class="margin-top-10">
+                                        <a href="javascript:;" v-on:click="submitData" class="btn green"> Guardar </a>
+                                        <a href="/users" class="btn default"> Cancel </a>
+                                    </div>
                                 </form>
 
                             </div>
