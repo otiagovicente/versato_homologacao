@@ -45,7 +45,7 @@
 
         <div class="container-fluid">
 
-      			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" v-for="line in lines.data.data">
+      			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" v-for="line in lines.data">
       				<a class="dashboard-stat dashboard-stat-v2 grey" v-on:click="getlines(line.id)"="">
       					<div class="visual">
       						<i class="fa fa-sitemap"></i>
@@ -68,7 +68,7 @@
                 <ul class="pagination">
                   <li><a v-on:click="setPage(page - 1)">Previous</a></li>
                 </ul>
-                <ul class="pagination" v-for="n in lines.data.last_page">
+                <ul class="pagination" v-for="n in lines.last_page">
                   <li><a v-on:click="setPage(n+1)">{{ n+1 }}</a></li>
                 </ul>
                 <ul class="pagination">
@@ -111,9 +111,7 @@
         data(){
             return{
                 lines: {
-                    data: {
-                      data: [],
-                  },
+                    data: [],
                 },
                 search: '',
                 entries: 10,
@@ -148,7 +146,7 @@
                 '&search='+_listlines.search)
                     .then((response) => {
 
-                        _listlines.lines = response;
+                        _listlines.lines = response.json();
 
                     }).catch((response) => {
                         toastr.error('No fué posible conectar al servidor');
@@ -161,8 +159,8 @@
               if (n < 1){
                 n = 1;
               }
-              if (n > _listlines.lines.data.last_page){
-                n = _listlines.lines.data.last_page;
+              if (n > _listlines.lines.last_page){
+                n = _listlines.lines.last_page;
               }
               _listlines.page=n;
               _listlines.getlines();
