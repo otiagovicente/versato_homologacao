@@ -19,7 +19,20 @@
             'Crear Color' => '/colors/create',
         ]
     ])
-    <div class="container-fluid">
-        <color-form :pcolor="{{$color}}"/>
+
+    <div class="container">
+        <div class="row col-md-10">
+            <div class="portlet light">
+                <div class="portlet-title">
+                    <div class="caption font-blue">
+                        <i class="fa fa-plus font-blue"></i>Editar Color
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <color-form :pcolor="{{$color}}"/>
+                </div>
+            </div>
+        </div>
     </div>
+
 @stop

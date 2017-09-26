@@ -18,7 +18,21 @@
             'Mostrar Todos' => '/colors',
         ]
     ])
-    <div class="container-fluid">
-        <color-form/>
+
+    <div class="container">
+        <div class="row col-md-10">
+            <div class="portlet light">
+                <div class="portlet-title">
+                    <div class="caption font-blue">
+                        <i class="fa fa-plus font-blue"></i>Crear Color
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <color-form/>
+                </div>
+            </div>
+        </div>
     </div>
+
+
 @stop
