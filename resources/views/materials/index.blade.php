@@ -7,6 +7,10 @@
     'actions' => []
 ])
 
+
+<materials-list></materials-list>
+
+<!--
 	<div class="content-fluid" style="padding:20px;">
 		<div class="row">
 				@foreach($materials as $material)
@@ -32,7 +36,7 @@
 
 		</div>
 	</div>
-
+-->
 
 
 

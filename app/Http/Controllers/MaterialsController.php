@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\MaterialRequest;
 use App\Material;
+
 class MaterialsController extends Controller
 {
 
@@ -133,6 +134,21 @@ class MaterialsController extends Controller
 
 
     }
+
+    public function api_paginate(Request $request)
+    {
+        $like = '%'. $request->input('search') .'%';
+        $materials = Material::where(function($query) use ($like) {
+            $query->where('description', 'like', $like)
+            ->orWhere('code', 'like', $like);
+        })
+        ->orderBy('description')
+        ->orderBy('code')
+        ->paginate(20);
+        return response()->json($materials);
+    }
+
+
     public function api_products(Material $material){
         $products = $material->products()->with('brand')
 	        ->with('line')

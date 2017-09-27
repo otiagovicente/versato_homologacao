@@ -156,7 +156,13 @@ Vue.component(
     require('./components/lines/ListLines.vue')
 );
 
-
+/*
+ * Componentes de Materiais
+ */
+Vue.component(
+    'materials-list',
+    require('./components/materials/MaterialsList.vue')
+);
 
 
 /*
