@@ -16,6 +16,8 @@ Route::get('/user', function (Request $request) {
     return $request->user()->load('representative');
 })->middleware('auth:api');
 
+Route::post('/resetPassword', 'Auth\LoginController@resetPassword');
+    
 Route::group(['middleware' => 'auth:api'], function () {
 
     //Rotas dedicadas às marcas
@@ -105,6 +107,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //Rotas dedicadas a materiais
     Route::get('/materials/list', 'MaterialsController@api_list');
+    Route::get('/materials/paginate', 'MaterialsController@api_paginate');
     Route::get('/materials/{material}/products', 'MaterialsController@api_products');
 
     //Rotas dedicadas a cores

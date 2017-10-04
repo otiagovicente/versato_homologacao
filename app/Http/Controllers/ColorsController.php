@@ -100,7 +100,7 @@ class ColorsController extends Controller
     public function search(Request $request){
         $query = $request->get('search');
         $results = Color::where('code', 'like', "%$query%")->orWhere('description', 'like', "%$query%")->get();
-
+        
         return response()->json($results);
     //    return response()->json(Color::all());
     }
@@ -117,6 +117,8 @@ class ColorsController extends Controller
         $colors = Color::select()
             ->where('description', 'like', '%'. $request->input('search') .'%')
             ->orWhere('code', 'like', '%'. $request->input('search') .'%' )
+            ->orderBy('description')
+            ->orderBy('code')
             ->paginate(20);
         return $colors;
     }
